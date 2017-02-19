@@ -17,15 +17,16 @@ public class Main {
 
     private static Socket sock;
     private static final Scanner MOCK_INPUT = new Scanner(System.in);
-    private static PrintStream OUTPUT;
-    private static BufferedReader INPUT;
+    private static PrintStream output;
+    private static BufferedReader input;
     private static boolean hasFinished = false;
 
     public static void main(String[] args) {
         try {
-            initResources();
+            sock = new Socket("10.42.0.138", ConnectionManager.DEFAULT_SOCK_PORT);
             System.out.println("Connection to server OK");
             while (!hasFinished) {
+                initResources();
                 sendRequest(MOCK_INPUT.nextLine());
                 receiveResponse();
             }
@@ -37,14 +38,14 @@ public class Main {
     }
     
     private static void initResources() throws IOException {
-        sock = new Socket("10.42.0.138", ConnectionManager.DEFAULT_SOCK_PORT);
-        INPUT = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-        OUTPUT = new PrintStream(sock.getOutputStream());
+        input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+        output = new PrintStream(sock.getOutputStream());
     }
 
     private static void receiveResponse() throws IOException {
         String line;
-        while ((line = INPUT.readLine()) != null) {
+        System.out.println("Waiting for server response...");
+        while ((line = input.readLine()) != null) {
             System.out.println(line);
         }
     }
@@ -54,6 +55,6 @@ public class Main {
             hasFinished = true;
             return;
         }
-        OUTPUT.println(mock_request);
+        output.println(mock_request);
     }
 }
