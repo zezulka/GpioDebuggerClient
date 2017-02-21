@@ -1,13 +1,13 @@
 package gpiodebuggerui;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
 import net.ConnectionManager;
+import net.ProtocolMessages;
 
 /**
  *
@@ -17,16 +17,17 @@ public class Main {
 
     private static Socket sock;
     private static final Scanner MOCK_INPUT = new Scanner(System.in);
-    private static PrintStream output;
-    private static BufferedReader input;
+    private static PrintWriter output;
+    private static InputStream input;
     private static boolean hasFinished = false;
 
     public static void main(String[] args) {
         try {
             sock = new Socket("10.42.0.138", ConnectionManager.DEFAULT_SOCK_PORT);
-            System.out.println("Connection to server OK");
+            initResources();
+            System.out.println(ProtocolMessages.C_CONNECTION_OK.getMessage());
             while (!hasFinished) {
-                initResources();
+                System.out.println(ProtocolMessages.C_SERVER_READY.getMessage());
                 sendRequest(MOCK_INPUT.nextLine());
                 receiveResponse();
             }
@@ -38,16 +39,19 @@ public class Main {
     }
     
     private static void initResources() throws IOException {
-        input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-        output = new PrintStream(sock.getOutputStream());
+        //input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+        input = sock.getInputStream();
+        output = new PrintWriter(sock.getOutputStream(), true); //autoflushing enabled
     }
 
     private static void receiveResponse() throws IOException {
-        String line;
-        System.out.println("Waiting for server response...");
-        while ((line = input.readLine()) != null) {
-            System.out.println(line);
+        System.out.println(ProtocolMessages.C_RESPONSE_WAIT.getMessage());
+        int c;
+        StringBuilder response = new StringBuilder();
+        while((c = input.read()) != '\n' && c != -1) { //VERY PRONE TO ERROR!
+            response = response.append((char)c);
         }
+        System.out.println(response.toString());
     }
 
     private static void sendRequest(String mock_request) throws IOException {
