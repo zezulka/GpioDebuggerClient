@@ -1,8 +1,5 @@
 package gpiodebuggerui;
 
-/*AGENT*/
-import core.Agent;
-
 /*BULLDOG*/
 import io.silverspoon.bulldog.core.pin.Pin;
 
@@ -10,32 +7,29 @@ import io.silverspoon.bulldog.core.pin.Pin;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import java.util.List;
-
-import javax.swing.JButton;
-
 /**
  *
  * @author miloslav
  */
 public class GUI extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-                List<Pin> pins = Agent.BOARD.getPins();
-                for(Pin p : pins) {
-                    JButton button = new JButton(p.getName());
-                    getContentPane().add(button);
-                }
-            }
-        });
+        super.setVisible(true);
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new GUI().setVisible(true);
+//                List<Pin> pins = Agent.BOARD.getPins();
+//                for(Pin p : pins) {
+//                    JButton button = new JButton(p.getName());
+//                    getContentPane().add(button);
+//                }
+//            }
+//        });
     }
 
     /**
