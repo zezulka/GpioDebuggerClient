@@ -26,6 +26,7 @@ public class Main {
             sock = new Socket("10.42.0.138", ConnectionManager.DEFAULT_SOCK_PORT);
             initResources();
             System.out.println(ProtocolMessages.C_CONNECTION_OK.getMessage());
+            GUI gui = new GUI();
             while (!hasFinished) {
                 System.out.println(ProtocolMessages.C_SERVER_READY.getMessage());
                 sendRequest(MOCK_INPUT.nextLine());

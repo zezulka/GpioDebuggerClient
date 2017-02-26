@@ -7,9 +7,10 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>0</groupId>
             <artifactId>GpioDebuggerAgent</artifactId>
-            <version>${project.version}</version>
+            <version>0.9</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <properties>
