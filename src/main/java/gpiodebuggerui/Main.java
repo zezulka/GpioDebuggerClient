@@ -1,8 +1,10 @@
 package gpiodebuggerui;
 
+import io.silverspoon.bulldog.core.platform.Board;
+import io.silverspoon.bulldog.core.platform.BoardFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -17,10 +19,12 @@ import protocol.ProtocolMessages;
 public class Main {
 
     private static Socket sock;
-    private static final Scanner MOCK_INPUT = new Scanner(System.in);
-    public static final int DEFAULT_SOCK_PORT = 1024;
     private static PrintWriter output;
     private static BufferedReader input;
+    private static Board currentDevice;
+    
+    private static final Scanner MOCK_INPUT = new Scanner(System.in);
+    public static final int DEFAULT_SOCK_PORT = 1024;
     private static boolean hasFinished = false;
 
     public static void main(String[] args) {
@@ -41,10 +45,15 @@ public class Main {
         }
     }
     
+    public static Board getBoard() {
+        return Main.currentDevice;
+    }
+    
     private static void initResources() throws IOException {
         //input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         output = new PrintWriter(sock.getOutputStream(), true);
+        
     }
 
     private static void receiveResponse() throws IOException {
