@@ -4,6 +4,7 @@ package layouts;
 import io.silverspoon.bulldog.core.pin.Pin;
 
 import java.util.List;
+import javax.swing.JButton;
 
 
 /**
@@ -12,4 +13,5 @@ import java.util.List;
  */
 public interface PinLayout {
     List<Pin> getPins();
+    List<JButton> getButtons();
 }

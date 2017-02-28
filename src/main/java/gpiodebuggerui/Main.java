@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import protocol.BoardType;
 
 import protocol.ProtocolMessages;
 
@@ -31,6 +32,7 @@ public class Main {
         try {
             sock = new Socket("10.42.0.138", Main.DEFAULT_SOCK_PORT);
             initResources();
+            setDeviceType();
             System.out.println(ProtocolMessages.C_CONNECTION_OK.getMessage());
             GUI gui = new GUI();
             while (!hasFinished) {
@@ -49,11 +51,30 @@ public class Main {
         return Main.currentDevice;
     }
     
+    public static BoardType getBoardType() {
+        return Enum.valueOf(BoardType.class, Main.currentDevice.getName());
+    }
+    
     private static void initResources() throws IOException {
-        //input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         output = new PrintWriter(sock.getOutputStream(), true);
         
+    }
+    
+    /**
+     * 
+     * @throws IOException input 
+     * @throws IllegalArgumentException in case given input is not convertable to enum
+     */
+    private static void setDeviceType() throws IOException { 
+        switch(Enum.valueOf(BoardType.class, input.readLine())) {
+            case RASPBERRY_PI: Main.currentDevice = 
+                                      Devices.RASPBERRY_PI; break;
+            case BEAGLEBONEBLACK : Main.currentDevice = 
+                                      Devices.BEAGLEBONE_BLACK; break;
+            case CUBIEBOARD : Main.currentDevice = 
+                                      Devices.CUBIEBOARD; break;
+        }
     }
 
     private static void receiveResponse() throws IOException {
