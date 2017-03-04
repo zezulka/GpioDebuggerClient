@@ -1,13 +1,8 @@
 package layouts;
 
-
-import io.silverspoon.bulldog.core.pin.Pin;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.JButton;
-
-
 
 /**
  *
@@ -15,29 +10,28 @@ import javax.swing.JButton;
  */
 public abstract class AbstractPinLayout implements PinLayout {
     
-    private List<JButton> buttons;
-    private List<Pin> pins;
+    private List<ClientPin> pins;
     
-    public AbstractPinLayout(List<Pin> pins) {
-        this.buttons = new ArrayList<>();
-        this.pins = new ArrayList<>(pins);
-        this.createButtonsFromPins();
-    }
-    
-    private void createButtonsFromPins() {
-        for(Pin p : pins) {
-            buttons.add(new JButton(p.getName()));
+    protected AbstractPinLayout(List<ClientPin> pins) {
+        if(pins == null) {
+            throw new UnsupportedOperationException("not supported yet.");
         }
-    }
-    
-    @Override
-    public List<Pin> getPins() {
-        return Collections.unmodifiableList(this.pins);
+        this.pins = new ArrayList<>(pins);
     }
     
     @Override 
-    public List<JButton> getButtons() {
-        return Collections.unmodifiableList(this.buttons);
+    public List<ClientPin> getPins() {
+        return Collections.unmodifiableList(this.pins);
+    }
+    
+    @Override
+    public ClientPin getPinFromIndex(int i) {
+        for(ClientPin pin : pins) {
+            if(pin.getPort() == i) {
+                return pin;
+            }
+        }
+        throw new IllegalArgumentException("index not found: " + i);
     }
 
 }

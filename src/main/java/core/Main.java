@@ -1,14 +1,16 @@
-package gpiodebuggerui;
+package core;
 
-import io.silverspoon.bulldog.core.platform.Board;
-import io.silverspoon.bulldog.core.platform.BoardFactory;
-
+import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Application;
+import layouts.controllers.Raspi;
 import protocol.BoardType;
 
 import protocol.ProtocolMessages;
@@ -22,21 +24,26 @@ public class Main {
     private static Socket sock;
     private static PrintWriter output;
     private static BufferedReader input;
-    private static Board currentDevice;
+    private static BoardType deviceName;
     
     private static final Scanner MOCK_INPUT = new Scanner(System.in);
     public static final int DEFAULT_SOCK_PORT = 1024;
     private static boolean hasFinished = false;
 
     public static void main(String[] args) {
+        EventQueue.invokeLater(() -> {
+                Application.launch(Raspi.class, args);
+        });
         try {
             sock = new Socket("10.42.0.138", Main.DEFAULT_SOCK_PORT);
             initResources();
-            setDeviceType();
-            System.out.println(ProtocolMessages.C_CONNECTION_OK.getMessage());
-            GUI gui = new GUI();
+            Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_CONNECTION_OK.getMessage());
+            receiveInitResponse();
+            EventQueue.invokeLater(() -> {
+                Application.launch(Client.class, args);
+            });
             while (!hasFinished) {
-                System.out.println(ProtocolMessages.C_SERVER_READY.getMessage());
+                Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_SERVER_READY.getMessage());
                 sendRequest(MOCK_INPUT.nextLine());
                 receiveResponse();
             }
@@ -47,12 +54,16 @@ public class Main {
         }
     }
     
-    public static Board getBoard() {
-        return Main.currentDevice;
+    public static PrintWriter getOutput() {
+        return Main.output;
     }
     
-    public static BoardType getBoardType() {
-        return Enum.valueOf(BoardType.class, Main.currentDevice.getName());
+    public static BufferedReader getInput() {
+        return Main.input;
+    }
+    
+    public static BoardType getDeviceName() {
+        return Main.deviceName;
     }
     
     private static void initResources() throws IOException {
@@ -61,27 +72,22 @@ public class Main {
         
     }
     
-    /**
-     * 
-     * @throws IOException input 
-     * @throws IllegalArgumentException in case given input is not convertable to enum
-     */
-    private static void setDeviceType() throws IOException { 
-        switch(Enum.valueOf(BoardType.class, input.readLine())) {
-            case RASPBERRY_PI: Main.currentDevice = 
-                                      Devices.RASPBERRY_PI; break;
-            case BEAGLEBONEBLACK : Main.currentDevice = 
-                                      Devices.BEAGLEBONE_BLACK; break;
-            case CUBIEBOARD : Main.currentDevice = 
-                                      Devices.CUBIEBOARD; break;
+    private static void receiveInitResponse() throws IOException {
+        String name = input.readLine();
+        if(name == null){
+            hasFinished = true;
         }
+        Logger.getAnonymousLogger().log(Level.INFO, name);
+        deviceName = BoardType.parse(name);
     }
 
     private static void receiveResponse() throws IOException {
-        System.out.println(ProtocolMessages.C_RESPONSE_WAIT.getMessage());
+        Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_RESPONSE_WAIT.getMessage());
         String response = input.readLine();
-        System.out.println(response);
-        Main.hasFinished = response == null;
+        if(response == null) {
+            Main.hasFinished = true;
+        }
+        Logger.getAnonymousLogger().log(Level.INFO, response);
     }
 
     private static void sendRequest(String mock_request) throws IOException {

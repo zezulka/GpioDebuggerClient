@@ -1,6 +1,9 @@
 package protocol;
 
-import io.silverspoon.bulldog.raspberrypi.RaspberryPiBoardFactory;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -23,6 +26,15 @@ public enum BoardType {
     
     @Override
     public String toString() {
-        return this.name;
+        return getName();
+    }
+    
+    public static BoardType parse(String name) {
+        for(BoardType t : BoardType.values()) {
+            if(t.getName().equals(name)) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException(name + " is not a BoardType!");
     }
 }
