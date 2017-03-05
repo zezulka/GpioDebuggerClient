@@ -10,7 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Tool used for generating GUI (more specifically, this tool creates fxml files representing
+ * user interface).
  * @author Miloslav Zezulka, 2017
  */
 public class GeneratorTool {

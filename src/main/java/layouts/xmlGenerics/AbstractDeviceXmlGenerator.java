@@ -42,17 +42,30 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         this.type = type;
         this.docName = docName;
     }
-    
+
     private static void addImports(Document doc) {
-        Node[] imports = {   doc.createProcessingInstruction("import", "javafx.scene.control.Button"),
-                             doc.createProcessingInstruction("import", "javafx.scene.layout.AnchorPane"),
-                             doc.createProcessingInstruction("import", "javafx.scene.layout.ColumnConstraints"),
-                             doc.createProcessingInstruction("import", "javafx.scene.layout.GridPane"),
-                             doc.createProcessingInstruction("import", "javafx.scene.layout.RowConstraints")
-                          };
-        for(Node node : imports) {
+        Node[] imports = {doc.createProcessingInstruction("import", "javafx.scene.control.Button"),
+            doc.createProcessingInstruction("import", "javafx.scene.layout.AnchorPane"),
+            doc.createProcessingInstruction("import", "javafx.scene.layout.ColumnConstraints"),
+            doc.createProcessingInstruction("import", "javafx.scene.layout.GridPane"),
+            doc.createProcessingInstruction("import", "javafx.scene.layout.RowConstraints")
+        };
+        for (Node node : imports) {
             doc.appendChild(node);
         }
+    }
+
+    public Node createButton(Document doc, int row, int col) {
+        Element button = doc.createElement("Button");
+        ClientPin currentPin = PinLayoutFactory.getInstance(type).
+                getPinFromIndex(row * 2 + 1 + col);
+        button.setAttribute("mnemonicParsing", "false");
+        button.setAttribute("onMouseClicked", "#handleMouseClick");
+        button.setAttribute("disable", Boolean.toString(currentPin.isGpio()));
+        button.setAttribute("text", currentPin.getName());
+        button.setAttribute("GridPane.columnIndex", Integer.toString(col));
+        button.setAttribute("GridPane.rowIndex", Integer.toString(row));
+        return button;
     }
 
     @Override
@@ -62,7 +75,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document doc = docBuilder.newDocument();
-            
+
             addImports(doc);
             //root element
             Element rootElement = doc.createElement("AnchorPane");
@@ -104,20 +117,12 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             }
 
             gridPane.appendChild(rowConstraints);
-            
+
             //buttons
             Element buttons = doc.createElement("children");
             for (int col = 0; col < width; col++) {
                 for (int row = 0; row < height; row++) {
-                    Element button = doc.createElement("Button");
-                    ClientPin currentPin = PinLayoutFactory.getInstance(type).
-                            getPinFromIndex(row * 2 + 1 + col);
-                    button.setAttribute("mnemonicParsing", "false");
-                    button.setAttribute("disable", Boolean.toString(currentPin.isGpio()));
-                    button.setAttribute("text", currentPin.getName());
-                    button.setAttribute("GridPane.columnIndex", Integer.toString(col));
-                    button.setAttribute("GridPane.rowIndex", Integer.toString(row));
-                    buttons.appendChild(button);
+                    buttons.appendChild(this.createButton(doc, row, col));
                 }
             }
 
@@ -128,10 +133,10 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             Transformer transformer = transformerFactory.newTransformer();
             doc.normalizeDocument();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("./src/main/resources/fxml/"+docName));
-            
+            StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + docName));
+
             //transformer formatting magic... taken from StackOverflow
-            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,"yes");
+            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);

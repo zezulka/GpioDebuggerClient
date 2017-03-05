@@ -15,7 +15,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.net.URL;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -24,10 +27,20 @@ import javafx.stage.Stage;
 public class Raspi extends Application {
 
     @FXML
-    protected void handleMouseClick() {
-        Main.getOutput().println("gpio:write:");
+    protected void handleMouseClick(MouseEvent event) {
+        if (event.getSource() instanceof Button) {
+            Button buttonClicked = (Button) event.getSource();
+            if (Main.getOutput() == null) {
+                Logger.getAnonymousLogger().log(Level.WARNING, "Device is not connected to agent...");
+                return;
+            }
+            Main.getOutput().println("gpio:write:" + buttonClicked.getText());
+        } else {
+            Logger.getAnonymousLogger().log(Level.WARNING, "The clicked entity is not of Button type, ignoring...");
+        }
+
     }
-    
+
     @Override
     public void start(Stage primaryStage) {
         try {
