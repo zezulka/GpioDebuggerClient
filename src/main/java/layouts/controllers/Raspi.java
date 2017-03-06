@@ -6,6 +6,7 @@
 package layouts.controllers;
 
 import core.Main;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,11 +15,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.net.URL;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.w3c.dom.Node;
+import protocol.ProtocolMessages;
 
 /**
  *
@@ -27,16 +29,26 @@ import org.w3c.dom.Node;
 public class Raspi extends Application {
 
     @FXML
+    public void exitApplication(ActionEvent event) {
+        Platform.exit();
+    }
+
+    @Override
+    public void stop() {
+        Main.closeConnection();
+    }
+
+    @FXML
     protected void handleMouseClick(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button buttonClicked = (Button) event.getSource();
             if (Main.getOutput() == null) {
-                Logger.getAnonymousLogger().log(Level.WARNING, "Device is not connected to agent...");
+                Logger.getAnonymousLogger().log(Level.WARNING, ProtocolMessages.C_ERR_NOT_CONNECTED.toString());
                 return;
             }
             Main.getOutput().println("gpio:write:" + buttonClicked.getText());
         } else {
-            Logger.getAnonymousLogger().log(Level.WARNING, "The clicked entity is not of Button type, ignoring...");
+            Logger.getAnonymousLogger().log(Level.WARNING, ProtocolMessages.C_ERR_NOT_BUTTON.toString());
         }
 
     }
@@ -50,7 +62,7 @@ public class Raspi extends Application {
             stage.setScene(new Scene(root, 1280, 720));
             stage.show();
         } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "error initializing GUI" + e.getMessage());
+            Logger.getAnonymousLogger().log(Level.SEVERE, "error initializing GUI", e.getMessage());
         }
     }
 }
