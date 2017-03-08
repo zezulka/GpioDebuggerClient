@@ -38,19 +38,23 @@ public class Raspi extends Application {
         Main.closeConnection();
     }
 
+    /**
+     * Returns String containing Button title which caused this event to happen.
+     * The Button title is equivalent to the one in bulldog naming. (i.e.
+     * RaspiNames etc.)
+     *
+     * @param event
+     * @throws IllegalArgumentException in case event is not of Button instance
+     */
     @FXML
-    protected void handleMouseClick(MouseEvent event) {
+    protected void getButtonTitle(MouseEvent event) {
         if (event.getSource() instanceof Button) {
             Button buttonClicked = (Button) event.getSource();
-            if (Main.getOutput() == null) {
-                Logger.getAnonymousLogger().log(Level.WARNING, ProtocolMessages.C_ERR_NOT_CONNECTED.toString());
-                return;
-            }
             Main.getOutput().println("gpio:write:" + buttonClicked.getText());
         } else {
-            Logger.getAnonymousLogger().log(Level.WARNING, ProtocolMessages.C_ERR_NOT_BUTTON.toString());
+            Logger.getAnonymousLogger().log(Level.SEVERE, ProtocolMessages.C_ERR_NOT_BUTTON.toString());
+            throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
         }
-
     }
 
     @Override

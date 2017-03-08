@@ -37,12 +37,12 @@ public class Main {
             Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_CONNECTION_OK.toString());
             receiveInitResponse();
             while (!sock.isClosed()) {
-                Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_SERVER_READY.toString());
                 receiveResponse();
             }
         } catch (IOException ex) {
             System.err.println("Error has occured: \n" + ex);
             ex.printStackTrace(System.err);
+            closeConnection();
         }
     }
     
@@ -77,13 +77,13 @@ public class Main {
     private static void initResources() throws IOException {
         input = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         output = new PrintWriter(sock.getOutputStream(), true);
-        
     }
     
     private static void receiveInitResponse() throws IOException {
         String name = input.readLine();
         if(name == null){
             closeConnection();
+            return;
         }
         Logger.getAnonymousLogger().log(Level.INFO, name);
         deviceName = BoardType.parse(name);

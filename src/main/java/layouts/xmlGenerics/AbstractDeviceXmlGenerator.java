@@ -57,14 +57,15 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
     public Node createButton(Document doc, int row, int col) {
         Element button = doc.createElement("Button");
+        int index = row * 2 + 1 + col;
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
-                getPinFromIndex(row * 2 + 1 + col);
+                getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#handleMouseClick");
+        button.setAttribute("onMouseClicked", "#getButtonTitle");
         button.setAttribute("disable", Boolean.toString(currentPin.isGpio()));
         button.setAttribute("text", currentPin.getName());
-        button.setAttribute("GridPane.columnIndex", Integer.toString(col));
-        button.setAttribute("GridPane.rowIndex", Integer.toString(row));
+        button.setAttribute("GridPane.columnIndex", Integer.toString(col+1));
+        button.setAttribute("GridPane.rowIndex", Integer.toString(row+1));
         return button;
     }
 
