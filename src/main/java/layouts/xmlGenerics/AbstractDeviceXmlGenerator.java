@@ -7,8 +7,7 @@ package layouts.xmlGenerics;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,12 +17,17 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import layouts.ClientPin;
 import layouts.PinLayoutFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import protocol.BoardType;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import protocol.BoardType;
+
 
 /**
  *
@@ -35,6 +39,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private final int width;
     private final BoardType type;
     private final String docName;
+    private final Logger xmlLogger = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
 
     protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String docName) {
         this.height = height;
@@ -143,9 +148,9 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             transformer.transform(source, result);
 
         } catch (ParserConfigurationException pce) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, pce.getMessage());
+            xmlLogger.error("parsing error:", pce);
         } catch (TransformerException tfe) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, tfe.getMessage());
+            xmlLogger.error("transformer error:", tfe);
         }
     }
 }

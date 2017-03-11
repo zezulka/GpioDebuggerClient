@@ -6,8 +6,9 @@
 package layouts.xmlGenerics;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * Tool used for generating GUI (more specifically, this tool creates fxml files representing
@@ -16,12 +17,13 @@ import java.util.logging.Logger;
  */
 public class GeneratorTool {
     public static void main(String[] args) {
+        final Logger toolLogger = LoggerFactory.getLogger(GeneratorTool.class);
         try {
             RaspiXmlGenerator.getInstance().createXml();
             //BeagleBoneBlackXmlGenerator.getInstance().createXml();
             //CubieBoardXmlGenerator.getInstance().createXml();
         } catch (IOException ex) {
-            Logger.getLogger(GeneratorTool.class.getName()).log(Level.SEVERE, null, ex);
+            toolLogger.error("I/O error:", ex);
         }
     }
 }

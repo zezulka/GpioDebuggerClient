@@ -5,11 +5,8 @@
  */
 package layouts.controllers;
 
-import core.Main;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +17,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import core.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import protocol.ProtocolMessages;
 
 /**
@@ -28,6 +29,8 @@ import protocol.ProtocolMessages;
  */
 public class Raspi extends Application {
 
+    private final Logger raspiLogger = LoggerFactory.getLogger(Raspi.class);
+    
     @FXML
     public void exitApplication(ActionEvent event) {
         Platform.exit();
@@ -36,6 +39,7 @@ public class Raspi extends Application {
     @Override
     public void stop() {
         Main.closeConnection();
+        System.exit(0);
     }
 
     /**
@@ -52,7 +56,7 @@ public class Raspi extends Application {
             Button buttonClicked = (Button) event.getSource();
             Main.getOutput().println("gpio:write:" + buttonClicked.getText());
         } else {
-            Logger.getAnonymousLogger().log(Level.SEVERE, ProtocolMessages.C_ERR_NOT_BUTTON.toString());
+            raspiLogger.error(ProtocolMessages.C_ERR_NOT_BUTTON.toString());
             throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
         }
     }
@@ -66,7 +70,7 @@ public class Raspi extends Application {
             stage.setScene(new Scene(root, 1280, 720));
             stage.show();
         } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "error initializing GUI", e.getMessage());
+            raspiLogger.error(ProtocolMessages.C_ERR_GUI.toString(), e);
         }
     }
 }

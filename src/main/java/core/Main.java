@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import layouts.controllers.Raspi;
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import protocol.BoardType;
 
 import protocol.ProtocolMessages;
@@ -24,6 +25,7 @@ public class Main {
     private static PrintWriter output;
     private static BufferedReader input;
     private static BoardType deviceName;
+    private static final Logger MAIN_LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static final int DEFAULT_SOCK_PORT = 1024;
 
@@ -34,13 +36,13 @@ public class Main {
         try {
             sock = new Socket("10.42.0.138", Main.DEFAULT_SOCK_PORT);
             initResources();
-            Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_CONNECTION_OK.toString());
+            MAIN_LOGGER.info(ProtocolMessages.C_CONNECTION_OK.toString());
             receiveInitResponse();
             while (!sock.isClosed()) {
                 receiveResponse();
             }
         } catch (IOException ex) {
-            System.err.println("Error has occured: \n" + ex);
+            MAIN_LOGGER.error(ProtocolMessages.C_ERR_NOT_CONNECTED.toString(), ex);
             ex.printStackTrace(System.err);
             closeConnection();
         }
@@ -53,12 +55,13 @@ public class Main {
      */
     public static void closeConnection() {
         try {
-            if(sock.isClosed()) {
-                Logger.getAnonymousLogger().log(Level.SEVERE, "Cannot close connection to server: already closed");
+            if(sock == null || sock.isClosed()) {
+                MAIN_LOGGER.error(ProtocolMessages.C_ERR_ALREADY_CLOSED.toString());
+            } else {
+                sock.close();
             }
-            sock.close();
         } catch (IOException ex) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Cannot close connection to server", ex);
+            MAIN_LOGGER.error(ProtocolMessages.C_CONNECTION_NOK.toString());
         }
     }
     
@@ -85,16 +88,16 @@ public class Main {
             closeConnection();
             return;
         }
-        Logger.getAnonymousLogger().log(Level.INFO, name);
+        MAIN_LOGGER.info(name);
         deviceName = BoardType.parse(name);
     }
 
     private static void receiveResponse() throws IOException {
-        Logger.getAnonymousLogger().log(Level.INFO, ProtocolMessages.C_RESPONSE_WAIT.toString());
+        MAIN_LOGGER.info(ProtocolMessages.C_RESPONSE_WAIT.toString());
         String response = input.readLine();
         if(response == null) {
             closeConnection();
         }
-        Logger.getAnonymousLogger().log(Level.INFO, response);
+        MAIN_LOGGER.info(response);
     }
 }
