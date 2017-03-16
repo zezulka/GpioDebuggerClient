@@ -16,9 +16,12 @@ public enum ProtocolMessages {
     C_RESPONSE_WAIT("Waiting for server to response..."),
     
     C_ERR_NOT_CONNECTED("Proper connection has not been established with server."),
+    C_ERR_NO_BOARD("No device is currently binded to this session!"),
     C_ERR_NOT_BUTTON("The clicked entity is not of Button type, ignoring..."),
     C_ERR_ALREADY_CLOSED("Cannot close connection to server: already closed"),
-    C_ERR_GUI("GUI error");
+    C_ERR_GUI("GUI error"),
+    C_ERR_GUI_NOT_BUTTON("error in MouseEvent: entity clicked is not of Button instance"),
+    C_ERR_GUI_FXML("cannot load fxml file");
     
     private final String msg;
     

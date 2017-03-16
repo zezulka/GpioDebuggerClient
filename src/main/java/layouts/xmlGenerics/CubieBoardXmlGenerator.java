@@ -16,7 +16,7 @@ public class CubieBoardXmlGenerator extends AbstractDeviceXmlGenerator {
     private static final CubieBoardXmlGenerator INSTANCE = new CubieBoardXmlGenerator();
     
     public CubieBoardXmlGenerator() {
-        super(0, 0, BoardType.CUBIEBOARD, "CubieBoard.fxml");
+        super(0, 0, BoardType.CUBIEBOARD, "CubieBoard");
     }
     
     public static CubieBoardXmlGenerator getInstance() {

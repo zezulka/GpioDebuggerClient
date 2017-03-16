@@ -38,14 +38,15 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private final int height;
     private final int width;
     private final BoardType type;
-    private final String docName;
+    private final String deviceName;
     private final Logger xmlLogger = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
-
-    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String docName) {
+    public static final String EXTENSION = ".fxml";
+    
+    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) {
         this.height = height;
         this.width = width;
         this.type = type;
-        this.docName = docName;
+        this.deviceName = deviceName;
     }
 
     private static void addImports(Document doc) {
@@ -88,7 +89,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             rootElement.setAttribute("id", "AnchorPane");
             rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
             rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
-            rootElement.setAttribute("fx:controller", "layouts.controllers.Raspi");
+            rootElement.setAttribute("fx:controller", "layouts.controllers." + deviceName + "Controller");
             doc.appendChild(rootElement);
 
             Element children = doc.createElement("children");
@@ -139,7 +140,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             Transformer transformer = transformerFactory.newTransformer();
             doc.normalizeDocument();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + docName));
+            StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + deviceName + EXTENSION));
 
             //transformer formatting magic... taken from StackOverflow
             transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");

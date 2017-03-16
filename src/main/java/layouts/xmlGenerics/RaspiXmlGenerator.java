@@ -16,7 +16,7 @@ public class RaspiXmlGenerator extends AbstractDeviceXmlGenerator {
     private static final RaspiXmlGenerator INSTANCE = new RaspiXmlGenerator();
     
     private RaspiXmlGenerator() {
-        super(20, 2, BoardType.RASPBERRY_PI, "Raspi.fxml");
+        super(20, 2, BoardType.RASPBERRY_PI, "Raspi");
     }
     
     public static RaspiXmlGenerator getInstance() {
