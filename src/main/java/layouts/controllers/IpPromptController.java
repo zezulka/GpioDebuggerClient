@@ -5,14 +5,13 @@
  */
 package layouts.controllers;
 
-import core.ConnectionManager;
-import core.GuiEntryPoint;
 import core.Main;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -23,32 +22,33 @@ import org.apache.commons.validator.routines.InetAddressValidator;
  * @author Miloslav
  */
 public class IpPromptController implements Initializable {
-    @FXML private TextField ipValue;
-    
+
+    @FXML
+    private TextField ipValue;
+    @FXML
+    private Label status;
+
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
-    
+
     @FXML
     public void clickHandler(MouseEvent event) {
+        Button button = (Button)event.getSource();
         String ip = ipValue.getText();
-        if(ip == null || "".equals(ip) || !InetAddressValidator.getInstance().isValid(ip)) {
+        if (ip == null || "".equals(ip) || !InetAddressValidator.getInstance().isValid(ip)) {
+            status.setText("ERROR: IP not valid");
             return;
         }
-        synchronized(ConnectionManager.getInstance().getIpAddress()) {
-            ConnectionManager.getInstance().setIpAddress(ip);
-            ConnectionManager.getInstance().getIpAddress().notify();
-        }
-        try {
-            GuiEntryPoint.getInstance().switchToCurrentDevice();
-        } catch (IOException ex) {
-            GuiEntryPoint.writeErrorToLoggerWithClass(getClass(), ex);
-        }
+        Main.connectToDevice(ip);
+        button.setDisable(true);
+        status.setText("connection established!");
     }
 
 }

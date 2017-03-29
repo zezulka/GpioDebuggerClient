@@ -28,7 +28,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-
 /**
  *
  * @author miloslav
@@ -41,7 +40,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private final String deviceName;
     private final Logger xmlLogger = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
     public static final String EXTENSION = ".fxml";
-    
+
     protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) {
         this.height = height;
         this.width = width;
@@ -52,27 +51,50 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private static void addImports(Document doc) {
         Node[] imports = {doc.createProcessingInstruction("import", "javafx.scene.control.Button"),
             doc.createProcessingInstruction("import", "javafx.scene.layout.AnchorPane"),
+            doc.createProcessingInstruction("import", "javafx.scene.layout.BorderPane"),
             doc.createProcessingInstruction("import", "javafx.scene.layout.ColumnConstraints"),
             doc.createProcessingInstruction("import", "javafx.scene.layout.GridPane"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.RowConstraints")
+            doc.createProcessingInstruction("import", "javafx.scene.layout.RowConstraints"),
+            doc.createProcessingInstruction("import", "javafx.scene.control.Label"),
+            doc.createProcessingInstruction("import", "javafx.scene.text.Font"),
+            doc.createProcessingInstruction("import", "javafx.scene.control.RadioButton"),
+            doc.createProcessingInstruction("import", "javafx.scene.control.ToggleGroup")
         };
         for (Node node : imports) {
             doc.appendChild(node);
         }
     }
 
-    public Node createButton(Document doc, int row, int col) {
+    private Node createButton(Document doc, int row, int col) {
         Element button = doc.createElement("Button");
         int index = row * 2 + 1 + col;
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#getButtonTitle");
-        button.setAttribute("disable", Boolean.toString(currentPin.isGpio()));
-        button.setAttribute("text", currentPin.getName());
-        button.setAttribute("GridPane.columnIndex", Integer.toString(col+1));
-        button.setAttribute("GridPane.rowIndex", Integer.toString(row+1));
+        button.setAttribute("onMouseClicked", "#sendGpioRequest");
+        button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
+        button.setAttribute("text", (currentPin.isGpio())
+                ? currentPin.getName() : currentPin.getName());
+        button.setAttribute("GridPane.columnIndex", Integer.toString(col + 1));
+        button.setAttribute("GridPane.rowIndex", Integer.toString(row + 1));
         return button;
+    }
+
+    private Node createInterfaceButton(Document doc, String interfc, int col) {
+        Element button = doc.createElement("Button");
+        button.setAttribute("mnemonicParsing", "false");
+        button.setAttribute("onMouseClicked", "#sendInterfaceRequest");
+        button.setAttribute("text", interfc);
+        button.setAttribute("GridPane.rowIndex", Integer.toString(col));
+        return button;
+    }
+
+    private Node createToggleGroup(Document doc, String groupName) {
+        Element toggleGroup = doc.createElement("toggleGroup");
+        Element toggleGroupInner = doc.createElement("ToggleGroup");
+        toggleGroupInner.setAttribute("fx:id", groupName);
+        toggleGroup.appendChild(toggleGroupInner);
+        return toggleGroup;
     }
 
     @Override
@@ -133,7 +155,33 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
                 }
             }
 
+            String[] interfaces = new String[] {"i2c", "spi", "uart"};
+            for(int i = 0; i < interfaces.length; i++) {
+                buttons.appendChild(createInterfaceButton(doc, interfaces[i], 
+                        this.height - interfaces.length + i));
+            }
             gridPane.appendChild(buttons);
+            String radioButtonGroup = "operation";
+            buttons.appendChild(createStatusBar(doc));
+            Element rButton1 = doc.createElement("RadioButton");
+            Element rButton2 = doc.createElement("RadioButton");
+            rButton1.setAttribute("ellipsisString", "W");
+            rButton1.setAttribute("mnemonicParsing", "false");
+            rButton1.setAttribute("text", "WRITE");
+            rButton1.setAttribute("GridPane.rowIndex", "3");
+            rButton1.setAttribute("fx:id", "writeRadioButton");
+            rButton1.appendChild(createToggleGroup(doc, radioButtonGroup));
+
+            rButton2.setAttribute("ellipsisString", "R");
+            rButton2.setAttribute("mnemonicParsing", "false");
+            rButton2.setAttribute("toggleGroup", "$ops");
+            rButton2.setAttribute("text", "READ");
+            rButton2.setAttribute("GridPane.rowIndex", "2");
+            rButton2.setAttribute("selected", "true");
+            rButton2.setAttribute("fx:id", "readRadioButton");
+            rButton2.setAttribute("toggleGroup", '$' + radioButtonGroup);
+            buttons.appendChild(rButton1);
+            buttons.appendChild(rButton2);
 
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -153,5 +201,25 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         } catch (TransformerException tfe) {
             xmlLogger.error("transformer error:", tfe);
         }
+    }
+
+    private Node createStatusBar(Document doc) {
+        Element el = doc.createElement("BorderPane");
+        Element left = doc.createElement("left");
+        Element label = doc.createElement("Label");
+        label.setAttribute("fx:id", "statusBar");
+        label.setAttribute("alignment", "BOTTOM_LEFT");
+        label.setAttribute("contentDisplay", "TEXT_ONLY");
+        label.setAttribute("text", "OK");
+        label.setAttribute("textAlignment", "LEFT");
+        label.setAttribute("BorderPane.alignment", "CENTER");
+        Element font = doc.createElement("font");
+        Element fontInner = doc.createElement("Font");
+        fontInner.setAttribute("size", "18.0");
+        font.appendChild(fontInner);
+        label.appendChild(font);
+        left.appendChild(label);
+        el.appendChild(left);
+        return el;
     }
 }

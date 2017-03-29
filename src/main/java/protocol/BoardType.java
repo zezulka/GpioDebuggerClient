@@ -25,6 +25,9 @@ public enum BoardType {
     }
     
     public static BoardType parse(String name) {
+        if(name == null) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
         for(BoardType t : BoardType.values()) {
             if(t.getName().equals(name)) {
                 return t;

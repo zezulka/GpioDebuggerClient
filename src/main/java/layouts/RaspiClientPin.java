@@ -72,7 +72,7 @@ public enum RaspiClientPin implements ClientPin {
 
     @Override
     public boolean isGpio() {
-        return !getName().startsWith("P");
+        return getName().startsWith("P1");
     }
     
     

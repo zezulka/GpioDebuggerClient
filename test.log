@@ -1,764 +1,788 @@
-09:23:13,706 ERROR Main:59 - Cannot close connection to server: already closed
-14:53:01,041 ERROR Main:48 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:40)
-14:53:01,046 ERROR Main:62 - Cannot close connection to server: already closed
-15:04:43,827 ERROR IpPromptController:65 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
+14:33:07,744  INFO Main:176 - Connection to server OK
+14:40:47,744  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+14:40:47,893  INFO GuiEntryPoint:73 - load successful!
+14:40:54,206 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+14:40:54,337  INFO Main:174 - done connecting to server
+14:40:54,337  INFO Main:176 - Connection to server OK
+15:12:40,450  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:12:42,475  INFO GuiEntryPoint:73 - load successful!
+15:12:51,018 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:12:51,147  INFO Main:174 - done connecting to server
+15:12:51,148  INFO Main:176 - Connection to server OK
+15:13:02,075  INFO Main:174 - done connecting to server
+15:13:02,075  INFO Main:176 - Connection to server OK
+15:13:02,084  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:13:02,202  INFO GuiEntryPoint:73 - load successful!
+15:13:50,579  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:13:50,730  INFO GuiEntryPoint:73 - load successful!
+15:14:00,440 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:14:00,560  INFO Main:174 - done connecting to server
+15:14:00,560  INFO Main:176 - Connection to server OK
+15:16:17,936  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:16:18,093  INFO GuiEntryPoint:73 - load successful!
+15:16:23,290 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:16:23,424  INFO Main:174 - done connecting to server
+15:16:23,424  INFO Main:176 - Connection to server OK
+15:16:31,350  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:16:31,354  INFO Main:174 - done connecting to server
+15:16:31,355  INFO Main:176 - Connection to server OK
+15:16:31,424  INFO GuiEntryPoint:73 - load successful!
+15:24:19,386  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:24:19,543  INFO GuiEntryPoint:73 - load successful!
+15:24:47,795 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:24:47,923  INFO Main:174 - done connecting to server
+15:24:47,923  INFO Main:176 - Connection to server OK
+15:30:27,350  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:30:27,494  INFO GuiEntryPoint:73 - load successful!
+15:30:34,621 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:30:34,745  INFO Main:173 - done connecting to server
+15:30:34,745  INFO Main:175 - Connection to server OK
+15:31:37,292  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:31:37,444  INFO GuiEntryPoint:73 - load successful!
+15:31:42,562 DEBUG GuiEntryPoint:98 - cannot view device controller, no device available
+15:31:42,678  INFO Main:173 - done connecting to server
+15:31:42,679  INFO Main:175 - Connection to server OK
+15:37:51,028  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:37:51,179  INFO GuiEntryPoint:73 - load successful!
+15:38:00,277  INFO Main:178 - done connecting to server
+15:38:00,278  INFO Main:180 - Connection to server OK
+15:38:00,294  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:38:00,350  INFO GuiEntryPoint:73 - load successful!
+15:39:13,115  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:39:13,268  INFO GuiEntryPoint:73 - load successful!
+15:39:19,728  INFO Main:178 - done connecting to server
+15:39:19,729  INFO Main:180 - Connection to server OK
+15:39:19,746  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:39:19,803  INFO GuiEntryPoint:73 - load successful!
+15:43:16,854  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:43:17,007  INFO GuiEntryPoint:73 - load successful!
+15:43:23,536  INFO Main:178 - done connecting to server
+15:43:23,537  INFO Main:180 - Connection to server OK
+15:43:23,554  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:43:23,611  INFO GuiEntryPoint:73 - load successful!
+15:46:24,384  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:46:24,531  INFO GuiEntryPoint:73 - load successful!
+15:46:48,142  INFO Main:178 - done connecting to server
+15:46:48,142  INFO Main:180 - Connection to server OK
+15:46:48,158  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:46:48,213  INFO GuiEntryPoint:73 - load successful!
+15:36:38,114  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:36:38,309  INFO GuiEntryPoint:73 - load successful!
+15:36:45,427  INFO Main:178 - done connecting to server
+15:36:45,428  INFO Main:180 - Connection to server OK
+15:36:45,446  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:36:45,506  INFO GuiEntryPoint:73 - load successful!
+16:17:24,784  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:17:24,939  INFO GuiEntryPoint:73 - load successful!
+16:17:30,911  INFO Main:180 - done connecting to server
+16:17:30,912  INFO Main:182 - Connection to server OK
+16:17:30,932  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:17:30,989  INFO GuiEntryPoint:73 - load successful!
+16:20:02,202  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:20:02,350  INFO GuiEntryPoint:73 - load successful!
+16:20:08,318  INFO Main:180 - done connecting to server
+16:20:08,319  INFO Main:182 - Connection to server OK
+16:20:08,336  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:20:08,390  INFO GuiEntryPoint:73 - load successful!
+16:47:00,412  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:47:00,561  INFO GuiEntryPoint:73 - load successful!
+16:47:06,262  INFO Main:184 - done connecting to server
+16:47:06,262  INFO Main:186 - Connection to server OK
+16:47:06,280  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:47:06,336  INFO GuiEntryPoint:73 - load successful!
+16:56:05,431  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:56:05,566  INFO GuiEntryPoint:73 - load successful!
+16:56:12,361  INFO Main:188 - done connecting to server
+16:56:12,362  INFO Main:190 - Connection to server OK
+16:56:12,379  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:56:12,435  INFO GuiEntryPoint:73 - load successful!
+16:57:03,433  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:57:03,570  INFO GuiEntryPoint:73 - load successful!
+16:57:11,766  INFO Main:188 - done connecting to server
+16:57:11,767  INFO Main:190 - Connection to server OK
+16:57:11,783  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:57:11,837  INFO GuiEntryPoint:73 - load successful!
+16:58:53,874  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:58:54,014  INFO GuiEntryPoint:73 - load successful!
+16:58:59,687  INFO Main:189 - done connecting to server
+16:58:59,687  INFO Main:191 - Connection to server OK
+16:58:59,704  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:58:59,759  INFO GuiEntryPoint:73 - load successful!
+16:59:54,250  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:59:54,390  INFO GuiEntryPoint:73 - load successful!
+16:59:59,349  INFO Main:189 - done connecting to server
+16:59:59,349  INFO Main:191 - Connection to server OK
+16:59:59,369  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:59:59,425  INFO GuiEntryPoint:73 - load successful!
+17:10:23,333  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:10:23,483  INFO GuiEntryPoint:73 - load successful!
+17:10:29,110  INFO Main:189 - done connecting to server
+17:10:29,111  INFO Main:191 - Connection to server OK
+17:10:29,128  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:10:29,183  INFO GuiEntryPoint:73 - load successful!
+17:14:27,455  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:14:27,591  INFO GuiEntryPoint:73 - load successful!
+17:14:33,705  INFO Main:193 - done connecting to server
+17:14:33,706  INFO Main:195 - Connection to server OK
+17:14:33,724  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:14:33,778  INFO GuiEntryPoint:73 - load successful!
+17:20:13,032  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:20:13,182  INFO GuiEntryPoint:73 - load successful!
+17:20:54,253  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:20:54,389  INFO GuiEntryPoint:73 - load successful!
+17:21:02,777  INFO Main:195 - done connecting to server
+17:21:02,778  INFO Main:197 - Connection to server OK
+17:21:02,795  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:21:02,849  INFO GuiEntryPoint:73 - load successful!
+08:42:37,713  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:42:38,002  INFO GuiEntryPoint:73 - load successful!
+08:42:44,956  INFO Main:195 - done connecting to server
+08:42:44,957  INFO Main:197 - Connection to server OK
+08:42:44,976  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:42:45,158  INFO GuiEntryPoint:73 - load successful!
+08:44:24,872  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:44:25,021  INFO GuiEntryPoint:73 - load successful!
+08:44:30,594  INFO Main:195 - done connecting to server
+08:44:30,594  INFO Main:197 - Connection to server OK
+08:44:30,613  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:44:30,670  INFO GuiEntryPoint:73 - load successful!
+08:50:48,814  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:50:48,951  INFO GuiEntryPoint:73 - load successful!
+08:50:55,754  INFO Main:195 - done connecting to server
+08:50:55,754  INFO Main:197 - Connection to server OK
+08:50:55,772  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:50:55,827  INFO GuiEntryPoint:73 - load successful!
+08:54:22,284  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:54:22,431  INFO GuiEntryPoint:73 - load successful!
+08:54:38,489  INFO Main:193 - done connecting to server
+08:54:38,490  INFO Main:195 - Connection to server OK
+08:54:38,507  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:54:38,563  INFO GuiEntryPoint:73 - load successful!
+08:58:03,970  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:58:04,112  INFO GuiEntryPoint:73 - load successful!
+08:58:09,202  INFO Main:193 - done connecting to server
+08:58:09,203  INFO Main:195 - Connection to server OK
+08:58:09,220  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:58:09,281  INFO GuiEntryPoint:73 - load successful!
+08:58:56,909  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:58:57,090  INFO GuiEntryPoint:73 - load successful!
+08:59:02,976  INFO Main:193 - done connecting to server
+08:59:02,977  INFO Main:195 - Connection to server OK
+08:59:02,995  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:59:03,118  INFO GuiEntryPoint:73 - load successful!
+09:04:15,519  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:04:15,655  INFO GuiEntryPoint:73 - load successful!
+09:04:21,213  INFO Main:194 - done connecting to server
+09:04:21,213  INFO Main:196 - Connection to server OK
+09:04:21,232  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:04:21,287  INFO GuiEntryPoint:73 - load successful!
+09:11:08,544  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:11:08,692  INFO GuiEntryPoint:73 - load successful!
+09:11:16,283  INFO Main:193 - done connecting to server
+09:11:16,284  INFO Main:195 - Connection to server OK
+09:11:16,300  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:11:16,354  INFO GuiEntryPoint:73 - load successful!
+09:12:10,676  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:12:10,830  INFO GuiEntryPoint:73 - load successful!
+09:12:19,870  INFO Main:193 - done connecting to server
+09:12:19,871  INFO Main:195 - Connection to server OK
+09:12:19,888  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:12:19,947  INFO GuiEntryPoint:73 - load successful!
+09:14:18,436  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:14:18,603  INFO GuiEntryPoint:73 - load successful!
+09:14:26,586  INFO Main:193 - done connecting to server
+09:14:26,587  INFO Main:195 - Connection to server OK
+09:15:04,286  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:15:05,119  INFO GuiEntryPoint:73 - load successful!
+09:18:15,053  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:18:15,215  INFO GuiEntryPoint:73 - load successful!
+09:23:17,327  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:23:17,474  INFO GuiEntryPoint:73 - load successful!
+09:23:23,259  INFO Main:193 - done connecting to server
+09:23:23,260  INFO Main:195 - Connection to server OK
+09:23:23,275  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:23:23,331  INFO GuiEntryPoint:73 - load successful!
+09:26:53,440  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:26:53,588  INFO GuiEntryPoint:73 - load successful!
+09:27:00,904  INFO Main:192 - done connecting to server
+09:27:00,905  INFO Main:194 - Connection to server OK
+09:27:00,922  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:27:00,976  INFO GuiEntryPoint:73 - load successful!
+09:34:24,026  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:34:24,184  INFO GuiEntryPoint:73 - load successful!
+09:34:33,860  INFO Main:192 - done connecting to server
+09:34:33,860  INFO Main:194 - Connection to server OK
+09:34:33,877  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:34:33,934  INFO GuiEntryPoint:73 - load successful!
+09:40:53,801  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:40:53,949  INFO GuiEntryPoint:73 - load successful!
+09:41:03,691  INFO Main:192 - done connecting to server
+09:41:03,691  INFO Main:194 - Connection to server OK
+09:41:03,708  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:41:03,763  INFO GuiEntryPoint:73 - load successful!
+09:56:47,943  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:56:48,090  INFO GuiEntryPoint:73 - load successful!
+09:56:54,908  INFO Main:193 - done connecting to server
+09:56:54,908  INFO Main:195 - Connection to server OK
+09:56:54,927  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:56:54,984  INFO GuiEntryPoint:73 - load successful!
+10:09:03,739  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:09:03,895  INFO GuiEntryPoint:73 - load successful!
+10:09:09,567  INFO Main:193 - done connecting to server
+10:09:09,568  INFO Main:195 - Connection to server OK
+10:09:09,584  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:09:09,639  INFO GuiEntryPoint:73 - load successful!
+10:21:47,990  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:21:48,134  INFO GuiEntryPoint:73 - load successful!
+10:21:53,576  INFO Main:193 - done connecting to server
+10:21:53,577  INFO Main:195 - Connection to server OK
+10:21:53,594  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:21:53,650  INFO GuiEntryPoint:73 - load successful!
+10:30:30,242  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:30:30,388  INFO GuiEntryPoint:73 - load successful!
+10:30:36,379  INFO Main:191 - done connecting to server
+10:30:36,379  INFO Main:193 - Connection to server OK
+10:36:48,662  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:36:48,813  INFO GuiEntryPoint:73 - load successful!
+10:37:06,703  INFO Main:195 - done connecting to server
+10:37:06,704  INFO Main:197 - Connection to server OK
+10:41:57,027  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:41:57,184  INFO GuiEntryPoint:73 - load successful!
+10:42:02,241  INFO Main:195 - done connecting to server
+10:42:02,242  INFO Main:197 - Connection to server OK
+10:43:56,568  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:43:56,736  INFO GuiEntryPoint:73 - load successful!
+10:44:01,988  INFO Main:195 - done connecting to server
+10:44:01,989  INFO Main:197 - Connection to server OK
+10:57:14,360  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:57:14,498  INFO GuiEntryPoint:73 - load successful!
+10:57:23,618  INFO Main:195 - done connecting to server
+10:57:23,619  INFO Main:197 - Connection to server OK
+10:57:23,634  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:57:23,691  INFO GuiEntryPoint:73 - load successful!
+11:39:03,464  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:39:03,614  INFO GuiEntryPoint:73 - load successful!
+11:39:08,706  INFO Main:195 - done connecting to server
+11:39:08,707  INFO Main:197 - Connection to server OK
+11:39:08,726  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:39:08,784  INFO GuiEntryPoint:73 - load successful!
+11:45:51,741  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:45:51,878  INFO GuiEntryPoint:73 - load successful!
+11:45:58,982  INFO Main:195 - done connecting to server
+11:45:58,982  INFO Main:197 - Connection to server OK
+11:45:59,001  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:45:59,054  INFO GuiEntryPoint:73 - load successful!
+11:49:46,981  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:49:47,133  INFO GuiEntryPoint:73 - load successful!
+11:50:03,227  INFO Main:195 - done connecting to server
+11:50:03,229  INFO Main:197 - Connection to server OK
+11:50:03,243  INFO GuiEntryPoint:73 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:50:03,298  INFO GuiEntryPoint:73 - load successful!
+12:12:34,629  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:12:34,771  INFO GuiEntryPoint:82 - load successful!
+12:12:40,563  INFO Main:195 - done connecting to server
+12:12:40,563  INFO Main:197 - Connection to server OK
+12:12:40,582  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:12:40,635  INFO GuiEntryPoint:82 - load successful!
+12:25:08,091  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:25:08,256  INFO GuiEntryPoint:82 - load successful!
+12:25:23,692  INFO Main:195 - done connecting to server
+12:25:23,693  INFO Main:197 - Connection to server OK
+12:25:23,712  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:25:23,766  INFO GuiEntryPoint:82 - load successful!
+12:29:04,606  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:29:04,743  INFO GuiEntryPoint:82 - load successful!
+12:29:27,216  INFO Main:195 - done connecting to server
+12:29:27,216  INFO Main:197 - Connection to server OK
+12:29:27,234  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:29:27,290  INFO GuiEntryPoint:82 - load successful!
+12:30:49,101  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:30:49,253  INFO GuiEntryPoint:82 - load successful!
+12:30:54,343  INFO Main:195 - done connecting to server
+12:30:54,345  INFO Main:197 - Connection to server OK
+12:30:54,361  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:30:54,416  INFO GuiEntryPoint:82 - load successful!
+12:42:09,988  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:42:10,141  INFO GuiEntryPoint:82 - load successful!
+12:42:16,819  INFO Main:195 - done connecting to server
+12:42:16,820  INFO Main:197 - Connection to server OK
+12:42:16,841  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:42:16,895  INFO GuiEntryPoint:82 - load successful!
+19:13:45,144  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:13:45,527  INFO GuiEntryPoint:82 - load successful!
+19:13:50,816  INFO Main:195 - done connecting to server
+19:13:50,817  INFO Main:197 - Connection to server OK
+19:13:50,986  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:13:51,044  INFO GuiEntryPoint:82 - load successful!
+19:20:07,007  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:20:07,156  INFO GuiEntryPoint:82 - load successful!
+19:20:12,623  INFO Main:195 - done connecting to server
+19:20:12,624  INFO Main:197 - Connection to server OK
+19:20:12,643  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:20:12,700  INFO GuiEntryPoint:82 - load successful!
+19:26:59,903  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:27:00,053  INFO GuiEntryPoint:82 - load successful!
+19:27:10,779  INFO Main:195 - done connecting to server
+19:27:10,780  INFO Main:197 - Connection to server OK
+19:27:10,797  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:27:10,851  INFO GuiEntryPoint:82 - load successful!
+19:31:17,583  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:31:17,735  INFO GuiEntryPoint:82 - load successful!
+19:31:23,951  INFO Main:195 - done connecting to server
+19:31:23,952  INFO Main:197 - Connection to server OK
+19:31:23,969  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:31:24,026  INFO GuiEntryPoint:82 - load successful!
+19:34:16,092  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:34:16,260  INFO GuiEntryPoint:82 - load successful!
+19:43:25,021  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:43:25,176  INFO GuiEntryPoint:82 - load successful!
+19:43:30,033  INFO Main:195 - done connecting to server
+19:43:30,034  INFO Main:197 - Connection to server OK
+19:43:30,051  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:43:30,107  INFO GuiEntryPoint:82 - load successful!
+19:50:23,675  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:50:23,825  INFO GuiEntryPoint:82 - load successful!
+19:52:58,864  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:52:59,016  INFO GuiEntryPoint:82 - load successful!
+19:53:04,207  INFO Main:195 - done connecting to server
+19:53:04,208  INFO Main:197 - Connection to server OK
+19:53:04,227  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:53:04,285  INFO GuiEntryPoint:82 - load successful!
+19:55:11,753  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:55:11,907  INFO GuiEntryPoint:82 - load successful!
+19:55:18,264  INFO Main:195 - done connecting to server
+19:55:18,264  INFO Main:197 - Connection to server OK
+19:55:18,282  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:55:18,337  INFO GuiEntryPoint:82 - load successful!
+20:15:23,600  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:15:23,745  INFO GuiEntryPoint:82 - load successful!
+20:15:30,198  INFO Main:194 - done connecting to server
+20:15:30,199  INFO Main:196 - Connection to server OK
+20:15:30,217  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:15:30,272  INFO GuiEntryPoint:82 - load successful!
+20:18:27,372  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:18:27,516  INFO GuiEntryPoint:82 - load successful!
+20:18:35,196  INFO Main:194 - done connecting to server
+20:18:35,197  INFO Main:196 - Connection to server OK
+20:18:35,214  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:18:35,268  INFO GuiEntryPoint:82 - load successful!
+07:28:39,084  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:28:39,406  INFO GuiEntryPoint:82 - load successful!
+07:28:45,757 ERROR Main:68 - Init I/O error
+java.net.SocketException: Permission denied: connect
+	at sun.nio.ch.Net.connect0(Native Method)
+	at sun.nio.ch.Net.connect(Net.java:454)
+	at sun.nio.ch.Net.connect(Net.java:446)
+	at sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:648)
+	at core.ClientConnectionManager.initManager(ClientConnectionManager.java:66)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:104)
+	at java.lang.Thread.run(Thread.java:745)
+07:30:39,724  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:30:39,873  INFO GuiEntryPoint:82 - load successful!
+07:30:45,395  INFO Main:194 - done connecting to server
+07:30:45,504  INFO Main:196 - Connection to server OK
+07:30:45,544  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+07:30:45,626  INFO GuiEntryPoint:82 - load successful!
+07:37:50,340  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:37:50,493  INFO GuiEntryPoint:82 - load successful!
+07:37:56,877  INFO Main:194 - done connecting to server
+07:37:56,879  INFO Main:196 - Connection to server OK
+07:37:56,896  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+07:37:56,953  INFO GuiEntryPoint:82 - load successful!
+08:01:42,289  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:01:42,439  INFO GuiEntryPoint:82 - load successful!
+08:03:47,034  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:03:47,179  INFO GuiEntryPoint:82 - load successful!
+08:07:31,509  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:07:31,657  INFO GuiEntryPoint:82 - load successful!
+08:09:08,267  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:09:08,431  INFO GuiEntryPoint:82 - load successful!
+08:12:59,764  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:12:59,907  INFO GuiEntryPoint:82 - load successful!
+08:13:06,423  INFO Main:206 - done connecting to server
+08:13:06,423  INFO Main:208 - Connection to server OK
+08:13:06,442  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:13:06,498  INFO GuiEntryPoint:82 - load successful!
+08:15:52,925  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:15:53,071  INFO GuiEntryPoint:82 - load successful!
+08:15:58,042  INFO Main:207 - done connecting to server
+08:15:58,043  INFO Main:209 - Connection to server OK
+08:15:58,061  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:15:58,119  INFO GuiEntryPoint:82 - load successful!
+08:17:33,205  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:17:33,352  INFO GuiEntryPoint:82 - load successful!
+08:17:38,398  INFO Main:205 - done connecting to server
+08:17:38,399  INFO Main:207 - Connection to server OK
+08:17:38,417  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:17:38,470  INFO GuiEntryPoint:82 - load successful!
+08:20:15,660  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:20:15,806  INFO GuiEntryPoint:82 - load successful!
+08:20:22,765  INFO Main:206 - done connecting to server
+08:20:22,766  INFO Main:208 - Connection to server OK
+08:20:22,785  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:20:22,841  INFO GuiEntryPoint:82 - load successful!
+08:20:31,798 ERROR Main:179 - Nothing was read from server
+08:21:50,151  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:21:50,302  INFO GuiEntryPoint:82 - load successful!
+08:21:57,032  INFO Main:206 - done connecting to server
+08:21:57,033  INFO Main:208 - Connection to server OK
+08:21:57,050  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:21:57,109  INFO GuiEntryPoint:82 - load successful!
+08:22:07,134 ERROR Main:179 - Nothing was read from server
+09:44:01,685  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:44:01,824  INFO GuiEntryPoint:82 - load successful!
+09:44:06,515  INFO Main:206 - done connecting to server
+09:44:06,516  INFO Main:208 - Connection to server OK
+09:44:06,541  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:44:06,595  INFO GuiEntryPoint:82 - load successful!
+09:44:31,411 ERROR Main:179 - Nothing was read from server
+20:52:47,902  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:52:48,081  INFO GuiEntryPoint:82 - load successful!
+20:52:54,663  INFO Main:205 - done connecting to server
+20:52:54,664  INFO Main:207 - Connection to server OK
+20:52:54,937  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:52:54,996  INFO GuiEntryPoint:82 - load successful!
+20:53:04,697 ERROR Main:179 - Nothing was read from server
+20:54:17,286  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:54:17,423  INFO GuiEntryPoint:82 - load successful!
+20:54:22,315  INFO Main:205 - done connecting to server
+20:54:22,315  INFO Main:207 - Connection to server OK
+20:54:22,593  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:54:22,652  INFO GuiEntryPoint:82 - load successful!
+21:02:26,157  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+21:02:26,295  INFO GuiEntryPoint:82 - load successful!
+21:02:33,958  INFO Main:205 - done connecting to server
+21:02:33,959  INFO Main:207 - Connection to server OK
+21:02:34,232  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+21:02:34,293  INFO GuiEntryPoint:82 - load successful!
+21:26:57,242  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+21:26:57,378  INFO GuiEntryPoint:82 - load successful!
+21:27:04,841  INFO Main:205 - done connecting to server
+21:27:04,842  INFO Main:207 - Connection to server OK
+21:27:05,120  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+21:27:05,177  INFO GuiEntryPoint:82 - load successful!
+21:27:13,143 ERROR Main:179 - Nothing was read from server
+09:20:02,115  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:20:02,306  INFO GuiEntryPoint:82 - load successful!
+09:20:07,997  INFO Main:205 - done connecting to server
+09:20:08,117  INFO Main:207 - Connection to server OK
+09:20:08,284  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:20:08,385 ERROR GuiEntryPoint:74 - core.ClientConnectionManager
+javafx.fxml.LoadException: ToggleGroup is not a valid type.
+/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:83
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2597)
+	at javafx.fxml.FXMLLoader.createElement(FXMLLoader.java:2774)
+	at javafx.fxml.FXMLLoader.processStartElement(FXMLLoader.java:2704)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2527)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
 	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at layouts.controllers.IpPromptController.start(IpPromptController.java:63)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:134)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:90)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:123)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:134)
 	at java.lang.Thread.run(Thread.java:745)
-15:06:04,740 ERROR IpPromptController:65 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
+09:24:54,387  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:24:54,525  INFO GuiEntryPoint:82 - load successful!
+09:24:59,870  INFO Main:205 - done connecting to server
+09:24:59,871  INFO Main:207 - Connection to server OK
+09:25:00,146  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:25:00,206  INFO GuiEntryPoint:82 - load successful!
+09:33:42,826  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:33:42,966  INFO GuiEntryPoint:82 - load successful!
+09:33:47,978  INFO Main:205 - done connecting to server
+09:33:47,979  INFO Main:207 - Connection to server OK
+09:33:48,258  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:33:48,313 ERROR GuiEntryPoint:74 - core.ClientConnectionManager
+javafx.fxml.LoadException: 
+/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:81
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2601)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2579)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
 	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at layouts.controllers.IpPromptController.start(IpPromptController.java:63)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:134)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:90)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:123)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:134)
 	at java.lang.Thread.run(Thread.java:745)
-09:16:25,118 ERROR IpPromptController:65 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
+Caused by: java.lang.IllegalArgumentException: Unable to coerce ops to class javafx.scene.control.ToggleGroup.
+	at com.sun.javafx.fxml.BeanAdapter.coerce(BeanAdapter.java:496)
+	at com.sun.javafx.fxml.BeanAdapter.put(BeanAdapter.java:258)
+	at com.sun.javafx.fxml.BeanAdapter.put(BeanAdapter.java:54)
+	at javafx.fxml.FXMLLoader$Element.applyProperty(FXMLLoader.java:512)
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:363)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:325)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:235)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:767)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2823)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2532)
+	... 12 more
+09:39:08,621  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:39:08,758  INFO GuiEntryPoint:82 - load successful!
+09:39:18,396  INFO Main:205 - done connecting to server
+09:39:18,397  INFO Main:207 - Connection to server OK
+09:39:18,669  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:39:18,728  INFO GuiEntryPoint:82 - load successful!
+09:39:31,120 ERROR Main:179 - Nothing was read from server
+09:43:33,012  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:43:33,158  INFO GuiEntryPoint:82 - load successful!
+09:43:40,149  INFO Main:205 - done connecting to server
+09:43:40,150  INFO Main:207 - Connection to server OK
+09:43:40,443  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:43:40,507  INFO GuiEntryPoint:82 - load successful!
+09:43:54,312 ERROR Main:179 - Nothing was read from server
+09:58:17,724  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:58:17,873  INFO GuiEntryPoint:82 - load successful!
+09:58:24,008  INFO Main:205 - done connecting to server
+09:58:24,009  INFO Main:207 - Connection to server OK
+09:58:24,278  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:58:24,338  INFO GuiEntryPoint:82 - load successful!
+10:12:45,348  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:12:45,484  INFO GuiEntryPoint:82 - load successful!
+10:12:51,420  INFO Main:205 - done connecting to server
+10:12:51,421  INFO Main:207 - Connection to server OK
+10:12:51,695  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:12:51,752  INFO GuiEntryPoint:82 - load successful!
+10:13:35,494 ERROR Main:179 - Nothing was read from server
+10:14:18,616  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:14:18,758  INFO GuiEntryPoint:82 - load successful!
+10:14:26,125  INFO Main:205 - done connecting to server
+10:14:26,125  INFO Main:207 - Connection to server OK
+10:14:26,402  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:14:26,480  INFO GuiEntryPoint:82 - load successful!
+10:15:08,043 ERROR Main:179 - Nothing was read from server
+10:52:53,934  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:52:54,070  INFO GuiEntryPoint:82 - load successful!
+10:53:01,977  INFO Main:205 - done connecting to server
+10:53:01,977  INFO Main:207 - Connection to server OK
+10:53:02,222  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:53:02,284  INFO GuiEntryPoint:82 - load successful!
+10:53:12,775 ERROR Main:179 - Nothing was read from server
+11:00:02,959  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:00:03,097  INFO GuiEntryPoint:82 - load successful!
+11:00:09,133  INFO Main:205 - done connecting to server
+11:00:09,133  INFO Main:207 - Connection to server OK
+11:00:09,391  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:00:09,452  INFO GuiEntryPoint:82 - load successful!
+11:00:40,179 ERROR Main:179 - Nothing was read from server
+11:04:31,665  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:04:31,805  INFO GuiEntryPoint:82 - load successful!
+11:04:37,809  INFO Main:205 - done connecting to server
+11:04:37,809  INFO Main:207 - Connection to server OK
+11:04:38,079  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:04:38,138  INFO GuiEntryPoint:82 - load successful!
+11:04:47,299 ERROR Main:179 - Nothing was read from server
+11:13:53,711  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:13:53,852  INFO GuiEntryPoint:82 - load successful!
+11:14:14,473  INFO Main:205 - done connecting to server
+11:14:14,474  INFO Main:207 - Connection to server OK
+11:14:14,752  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:14:14,812  INFO GuiEntryPoint:82 - load successful!
+11:14:29,631 ERROR Main:179 - Nothing was read from server
+14:45:37,623  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+14:45:37,761  INFO GuiEntryPoint:82 - load successful!
+14:45:42,169  INFO Main:205 - done connecting to server
+14:45:42,169  INFO Main:207 - Connection to server OK
+14:45:42,428  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+14:45:42,490  INFO GuiEntryPoint:82 - load successful!
+14:46:34,296 ERROR Main:179 - Nothing was read from server
+15:02:49,145  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:02:49,286  INFO GuiEntryPoint:82 - load successful!
+15:02:55,878  INFO Main:205 - done connecting to server
+15:02:55,878  INFO Main:207 - Connection to server OK
+15:02:56,152  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:02:56,211  INFO GuiEntryPoint:82 - load successful!
+15:03:12,565 ERROR Main:179 - Nothing was read from server
+15:13:27,004  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:13:27,148  INFO GuiEntryPoint:82 - load successful!
+15:13:32,701  INFO Main:205 - done connecting to server
+15:13:32,702  INFO Main:207 - Connection to server OK
+15:13:32,959  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:13:33,018  INFO GuiEntryPoint:82 - load successful!
+16:10:06,361  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:10:06,536  INFO GuiEntryPoint:82 - load successful!
+16:10:11,961  INFO Main:205 - done connecting to server
+16:10:11,961  INFO Main:207 - Connection to server OK
+16:10:12,269  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:10:12,288 ERROR GuiEntryPoint:74 - core.ClientConnectionManager
+javafx.fxml.LoadException: Error resolving onMouseClicked='#getButtonTitle', either the event handler is not in the Namespace or there is an error in the script.
+/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:32
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2597)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:103)
+	at javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:610)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:770)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2823)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2532)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
 	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
 	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at layouts.controllers.IpPromptController.start(IpPromptController.java:63)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:134)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:90)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:123)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:134)
 	at java.lang.Thread.run(Thread.java:745)
-10:08:52,694 ERROR GuiEntryPoint:73 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:55)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:70)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+16:11:22,606  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+16:11:22,742  INFO GuiEntryPoint:82 - load successful!
+16:11:31,439  INFO Main:205 - done connecting to server
+16:11:31,439  INFO Main:207 - Connection to server OK
+16:11:31,693  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+16:11:31,753  INFO GuiEntryPoint:82 - load successful!
+16:13:27,877 ERROR Main:179 - Nothing was read from server
+15:52:59,278  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:52:59,487  INFO GuiEntryPoint:82 - load successful!
+15:53:05,728  INFO Main:205 - done connecting to server
+15:53:05,729  INFO Main:207 - Connection to server OK
+15:53:06,131  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:53:06,207  INFO GuiEntryPoint:82 - load successful!
+11:07:08,916  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:07:09,128  INFO GuiEntryPoint:82 - load successful!
+11:07:19,060  INFO Main:205 - done connecting to server
+11:07:19,061  INFO Main:207 - Connection to server OK
+11:07:19,816  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:07:19,885  INFO GuiEntryPoint:82 - load successful!
+11:24:15,487  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:24:15,633  INFO GuiEntryPoint:82 - load successful!
+11:24:23,689 ERROR Main:156 - I/O error
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at core.ClientConnectionManager.connect(ClientConnectionManager.java:204)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:124)
 	at java.lang.Thread.run(Thread.java:745)
-10:13:56,497 ERROR GuiEntryPoint:73 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:55)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:70)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+11:51:43,169  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:51:43,312  INFO GuiEntryPoint:82 - load successful!
+11:51:51,483 ERROR Main:162 - I/O error
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at core.ClientConnectionManager.connect(ClientConnectionManager.java:210)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:130)
 	at java.lang.Thread.run(Thread.java:745)
-10:20:08,541 ERROR GuiEntryPoint:73 - I/O exception
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:55)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:70)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
+11:55:34,446  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:55:34,584  INFO GuiEntryPoint:82 - load successful!
+12:00:37,381  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:00:37,527  INFO GuiEntryPoint:82 - load successful!
+12:01:56,907  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:01:57,049  INFO GuiEntryPoint:82 - load successful!
+12:02:02,135  INFO Main:213 - done connecting to server
+12:02:02,136  INFO Main:215 - Connection to server OK
+12:02:02,837  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:02:02,909  INFO GuiEntryPoint:82 - load successful!
+12:10:09,501  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:10:09,650  INFO GuiEntryPoint:82 - load successful!
+12:10:15,078  INFO Main:213 - done connecting to server
+12:10:15,079  INFO Main:215 - Connection to server OK
+12:10:15,685  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:10:15,747  INFO GuiEntryPoint:82 - load successful!
+12:12:40,424  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:12:40,586  INFO GuiEntryPoint:82 - load successful!
+12:12:45,925  INFO Main:213 - done connecting to server
+12:12:45,926  INFO Main:215 - Connection to server OK
+12:12:46,514  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:12:46,579  INFO GuiEntryPoint:82 - load successful!
+12:23:29,502  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:23:29,663  INFO GuiEntryPoint:82 - load successful!
+12:24:58,387  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:24:58,546  INFO GuiEntryPoint:82 - load successful!
+12:25:51,897  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:25:52,055  INFO GuiEntryPoint:82 - load successful!
+12:26:38,394  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:26:38,543  INFO GuiEntryPoint:82 - load successful!
+12:27:06,899  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:27:07,042  INFO GuiEntryPoint:82 - load successful!
+12:27:12,694 ERROR Main:77 - Init I/O error
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at sun.nio.ch.SocketAdaptor.connect(SocketAdaptor.java:111)
+	at core.ClientConnectionManager.initManager(ClientConnectionManager.java:71)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:113)
 	at java.lang.Thread.run(Thread.java:745)
-10:23:03,956 ERROR GuiEntryPoint:74 - cannot load fxml file
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:56)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:71)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-10:23:53,026 ERROR GuiEntryPoint:75 - cannot load fxml file
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:57)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:72)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-10:23:54,050 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-10:23:54,052 ERROR Main:57 - Cannot close connection to server: already closed
-10:32:26,087  INFO GuiEntryPoint:57 - attempting to load file://D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:32:30,637 ERROR GuiEntryPoint:53 - cannot load fxml file
-java.net.UnknownHostException: D
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at sun.net.ftp.impl.FtpClient.doConnect(FtpClient.java:957)
-	at sun.net.ftp.impl.FtpClient.tryConnect(FtpClient.java:917)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:1012)
-	at sun.net.ftp.impl.FtpClient.connect(FtpClient.java:998)
-	at sun.net.www.protocol.ftp.FtpURLConnection.connect(FtpURLConnection.java:294)
-	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:393)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:66)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:82)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-10:32:31,653 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-10:32:31,656 ERROR Main:57 - Cannot close connection to server: already closed
-10:39:02,212 ERROR GuiEntryPoint:44 - Malformed URL:
-java.net.URISyntaxException: Illegal character in authority at index 7: file://D:\NetBeansProjects\GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml
-	at java.net.URI$Parser.fail(URI.java:2848)
-	at java.net.URI$Parser.parseAuthority(URI.java:3186)
-	at java.net.URI$Parser.parseHierarchical(URI.java:3097)
-	at java.net.URI$Parser.parse(URI.java:3053)
-	at java.net.URI.<init>(URI.java:588)
-	at core.GuiEntryPoint.<init>(GuiEntryPoint.java:41)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$161(LauncherImpl.java:819)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-10:46:28,015  INFO GuiEntryPoint:68 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi;src;main;resources;fxml;IpPrompt.fxml ...
-10:46:28,025 ERROR GuiEntryPoint:64 - cannot load fxml file
-java.io.FileNotFoundException: D:\NetBeansProjects\GpioDebuggerUi;src;main;resources;fxml;IpPrompt.fxml (The system cannot find the file specified)
-	at java.io.FileInputStream.open0(Native Method)
-	at java.io.FileInputStream.open(FileInputStream.java:195)
-	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-	at java.io.FileInputStream.<init>(FileInputStream.java:93)
-	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
-	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:77)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:93)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-10:46:29,045 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-10:46:29,047 ERROR Main:57 - Cannot close connection to server: already closed
-10:47:22,852  INFO GuiEntryPoint:68 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:47:23,015  INFO GuiEntryPoint:68 - load successful!
-10:47:34,206 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-10:47:34,210 ERROR Main:57 - Cannot close connection to server: already closed
-11:20:11,257  INFO GuiEntryPoint:69 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxmlIpPrompt.fxml ...
-11:20:11,272 ERROR GuiEntryPoint:65 - cannot load fxml file
-java.io.FileNotFoundException: D:\NetBeansProjects\GpioDebuggerUi\src\main\resources\fxmlIpPrompt.fxml (The system cannot find the file specified)
-	at java.io.FileInputStream.open0(Native Method)
-	at java.io.FileInputStream.open(FileInputStream.java:195)
-	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-	at java.io.FileInputStream.<init>(FileInputStream.java:93)
-	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
-	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:99)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:115)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-11:20:12,287 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-11:20:12,289 ERROR Main:57 - Cannot close connection to server: already closed
-11:22:56,660  INFO GuiEntryPoint:67 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxmlIpPrompt.fxml ...
-11:22:56,671 ERROR GuiEntryPoint:63 - cannot load fxml file
-java.io.FileNotFoundException: D:\NetBeansProjects\GpioDebuggerUi\src\main\resources\fxmlIpPrompt.fxml (The system cannot find the file specified)
-	at java.io.FileInputStream.open0(Native Method)
-	at java.io.FileInputStream.open(FileInputStream.java:195)
-	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-	at java.io.FileInputStream.<init>(FileInputStream.java:93)
-	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
-	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:97)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:113)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-11:22:57,687 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-11:22:57,689 ERROR Main:57 - Cannot close connection to server: already closed
-11:23:17,987  INFO GuiEntryPoint:67 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxmlIpPrompt.fxml ...
-11:23:17,997 ERROR GuiEntryPoint:63 - cannot load fxml file
-java.io.FileNotFoundException: D:\NetBeansProjects\GpioDebuggerUi\src\main\resources\fxmlIpPrompt.fxml (The system cannot find the file specified)
-	at java.io.FileInputStream.open0(Native Method)
-	at java.io.FileInputStream.open(FileInputStream.java:195)
-	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-	at java.io.FileInputStream.<init>(FileInputStream.java:93)
-	at sun.net.www.protocol.file.FileURLConnection.connect(FileURLConnection.java:90)
-	at sun.net.www.protocol.file.FileURLConnection.getInputStream(FileURLConnection.java:188)
-	at java.net.URL.openStream(URL.java:1045)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2440)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
-	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
-	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
-	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:97)
-	at core.GuiEntryPoint.start(GuiEntryPoint.java:113)
-	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$162(LauncherImpl.java:863)
-	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$175(PlatformImpl.java:326)
-	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-11:23:19,013 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-11:23:19,014 ERROR Main:57 - Cannot close connection to server: already closed
-11:24:10,290  INFO GuiEntryPoint:67 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:24:10,413  INFO GuiEntryPoint:67 - load successful!
-11:24:15,903 ERROR Main:43 - Proper connection has not been established with server.
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.main(Main.java:35)
-11:24:15,909 ERROR Main:57 - Cannot close connection to server: already closed
-11:30:22,870  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:30:23,007  INFO GuiEntryPoint:74 - load successful!
-11:30:27,040 ERROR Main:61 - Cannot close connection to server: already closed
-11:30:35,156  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:30:35,290  INFO GuiEntryPoint:74 - load successful!
-11:30:42,480 ERROR Main:61 - Cannot close connection to server: already closed
-11:31:42,678  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:31:42,808  INFO GuiEntryPoint:74 - load successful!
-11:31:54,139 ERROR Main:61 - Cannot close connection to server: already closed
-11:31:59,599  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:31:59,726  INFO GuiEntryPoint:74 - load successful!
-11:32:23,736 ERROR Main:61 - Cannot close connection to server: already closed
-11:32:46,809  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:32:46,942  INFO GuiEntryPoint:74 - load successful!
-11:36:29,925  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:36:30,051  INFO GuiEntryPoint:74 - load successful!
-11:42:14,319  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:42:14,446  INFO GuiEntryPoint:74 - load successful!
-11:42:40,454 ERROR Main:61 - Cannot close connection to server: already closed
-11:55:54,992  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:55:55,159  INFO GuiEntryPoint:74 - load successful!
-11:58:30,297  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-11:58:30,421  INFO GuiEntryPoint:74 - load successful!
-11:58:51,612 ERROR Main:70 - I/O exception:
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.initResources(Main.java:87)
-	at core.Main.setIpAddressRoutine(Main.java:66)
-	at layouts.controllers.IpPromptController.clickHandler(IpPromptController.java:42)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
-	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
-	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
-	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
-	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
-	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.event.Event.fireEvent(Event.java:198)
-	at javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3470)
-	at javafx.scene.Scene$ClickGenerator.access$8100(Scene.java:3398)
-	at javafx.scene.Scene$MouseHandler.process(Scene.java:3766)
-	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
-	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
-	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:381)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:417)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:416)
-	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
-	at com.sun.glass.ui.View.notifyMouse(View.java:937)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-06:46:29,890  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-06:46:30,051  INFO GuiEntryPoint:74 - load successful!
-06:46:54,023  INFO Main:73 - Connection to server OK
-06:54:13,498  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-06:54:13,622  INFO GuiEntryPoint:74 - load successful!
-06:55:11,477  INFO Main:74 - Connection to server OK
-06:56:56,848  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-06:56:56,973  INFO GuiEntryPoint:74 - load successful!
-06:57:14,485  INFO Main:74 - Connection to server OK
-07:03:23,813  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-07:03:23,940  INFO GuiEntryPoint:74 - load successful!
-07:03:45,882 ERROR Main:77 - I/O exception:
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.initResources(Main.java:94)
-	at core.Main.setIpAddressRoutine(Main.java:73)
-	at layouts.controllers.IpPromptController.clickHandler(IpPromptController.java:42)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
-	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
-	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
-	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
-	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
-	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.event.Event.fireEvent(Event.java:198)
-	at javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3470)
-	at javafx.scene.Scene$ClickGenerator.access$8100(Scene.java:3398)
-	at javafx.scene.Scene$MouseHandler.process(Scene.java:3766)
-	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
-	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
-	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:381)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:417)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:416)
-	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
-	at com.sun.glass.ui.View.notifyMouse(View.java:937)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-07:03:48,264 ERROR Main:77 - I/O exception:
-java.net.ConnectException: Connection refused: connect
-	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
-	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
-	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
-	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
-	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
-	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
-	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
-	at java.net.Socket.connect(Socket.java:589)
-	at java.net.Socket.connect(Socket.java:538)
-	at java.net.Socket.<init>(Socket.java:434)
-	at java.net.Socket.<init>(Socket.java:211)
-	at core.Main.initResources(Main.java:94)
-	at core.Main.setIpAddressRoutine(Main.java:73)
-	at layouts.controllers.IpPromptController.clickHandler(IpPromptController.java:42)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
-	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:498)
-	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
-	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
-	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
-	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
-	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
-	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
-	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
-	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
-	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
-	at javafx.event.Event.fireEvent(Event.java:198)
-	at javafx.scene.Scene$ClickGenerator.postProcess(Scene.java:3470)
-	at javafx.scene.Scene$ClickGenerator.access$8100(Scene.java:3398)
-	at javafx.scene.Scene$MouseHandler.process(Scene.java:3766)
-	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
-	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
-	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:381)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:295)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:417)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
-	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:416)
-	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
-	at com.sun.glass.ui.View.notifyMouse(View.java:937)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$null$148(WinApplication.java:191)
-	at java.lang.Thread.run(Thread.java:745)
-07:03:54,570 ERROR Main:61 - Cannot close connection to server: already closed
-07:06:32,634  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-07:06:32,764  INFO GuiEntryPoint:74 - load successful!
-07:08:10,877  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-07:08:11,002  INFO GuiEntryPoint:74 - load successful!
-07:08:28,217  INFO Main:74 - Connection to server OK
-07:11:41,823  INFO GuiEntryPoint:74 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-07:11:41,945  INFO GuiEntryPoint:74 - load successful!
-07:12:00,443  INFO Main:74 - Connection to server OK
+12:28:08,855  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:28:09,002  INFO GuiEntryPoint:82 - load successful!
+12:29:49,815  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:29:49,965  INFO GuiEntryPoint:82 - load successful!
+12:35:32,176  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:35:32,322  INFO GuiEntryPoint:82 - load successful!
+12:35:39,075  INFO Main:207 - done connecting to server
+12:35:39,076  INFO Main:209 - Connection to server OK
+12:35:39,677  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:35:39,740  INFO GuiEntryPoint:82 - load successful!
+15:06:37,731  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:06:38,045  INFO GuiEntryPoint:82 - load successful!
+15:06:43,505  INFO Main:207 - done connecting to server
+15:06:43,506  INFO Main:209 - Connection to server OK
+15:06:43,895  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:06:43,970  INFO GuiEntryPoint:82 - load successful!
+15:17:09,663  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+15:17:09,803  INFO GuiEntryPoint:82 - load successful!
+15:17:22,088  INFO Main:207 - done connecting to server
+15:17:22,088  INFO Main:209 - Connection to server OK
+15:17:22,346  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+15:17:22,407  INFO GuiEntryPoint:82 - load successful!
+15:17:49,294 ERROR Main:181 - Nothing was read from server
+10:34:48,931  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:34:49,269  INFO GuiEntryPoint:82 - load successful!
+10:35:22,554  INFO Main:207 - done connecting to server
+10:35:22,555  INFO Main:209 - Connection to server OK
+10:35:23,254  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:35:23,316  INFO GuiEntryPoint:82 - load successful!
+10:39:21,914  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:39:22,328  INFO GuiEntryPoint:82 - load successful!
+10:39:29,840  INFO Main:207 - done connecting to server
+10:39:29,840  INFO Main:209 - Connection to server OK
+10:39:30,246  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:39:30,347  INFO GuiEntryPoint:82 - load successful!
+08:34:17,632  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:34:17,998  INFO GuiEntryPoint:82 - load successful!
+08:34:26,439  INFO Main:207 - done connecting to server
+08:34:26,445  INFO Main:209 - Connection to server OK
+08:34:26,981  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:34:27,071  INFO GuiEntryPoint:82 - load successful!
+08:46:04,798  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:46:04,946  INFO GuiEntryPoint:82 - load successful!
+08:46:10,717  INFO Main:207 - done connecting to server
+08:46:10,718  INFO Main:209 - Connection to server OK
+08:46:10,979  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:46:11,053  INFO GuiEntryPoint:82 - load successful!
+08:49:32,416  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:49:32,570  INFO GuiEntryPoint:82 - load successful!
+08:49:36,927  INFO Main:207 - done connecting to server
+08:49:36,928  INFO Main:209 - Connection to server OK
+08:49:37,242  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:49:37,324  INFO GuiEntryPoint:82 - load successful!
+08:53:17,908  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:53:18,061  INFO GuiEntryPoint:82 - load successful!
+08:53:26,185  INFO Main:207 - done connecting to server
+08:53:26,186  INFO Main:209 - Connection to server OK
+08:53:26,450  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:53:26,517  INFO GuiEntryPoint:82 - load successful!
+08:53:41,745 ERROR Main:181 - Nothing was read from server
+08:54:15,506  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:54:15,655  INFO GuiEntryPoint:82 - load successful!
+08:54:20,906  INFO Main:207 - done connecting to server
+08:54:20,906  INFO Main:209 - Connection to server OK
+08:54:21,174  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:54:21,244  INFO GuiEntryPoint:82 - load successful!
+08:56:46,808  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+08:56:46,967  INFO GuiEntryPoint:82 - load successful!
+08:56:51,804  INFO Main:207 - done connecting to server
+08:56:51,804  INFO Main:209 - Connection to server OK
+08:56:52,134  INFO GuiEntryPoint:82 - attempting to load file:/D:/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+08:56:52,209  INFO GuiEntryPoint:82 - load successful!

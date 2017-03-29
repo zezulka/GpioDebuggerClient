@@ -15,9 +15,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import layouts.controllers.DeviceControllerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import protocol.BoardType;
 import protocol.ProtocolMessages;
+import layouts.controllers.DeviceController;
 
 /**
  *
@@ -25,7 +28,9 @@ import protocol.ProtocolMessages;
  */
 public final class GuiEntryPoint extends Application {
 
-    private Stage stage;
+    private static Stage stage;
+    private static DeviceController currentController;
+    
     private static final Logger GUI_LOGGER = LoggerFactory.getLogger(GuiEntryPoint.class);
     private static final GuiEntryPoint INSTANCE = new GuiEntryPoint();
     private static final File PATH_TO_FXML_DIR = new File(System.getProperty("user.dir")
@@ -48,6 +53,10 @@ public final class GuiEntryPoint extends Application {
         } catch (MalformedURLException ex) {
             GUI_LOGGER.error("Malformed URL:", ex);
         }
+    }
+    
+    public static void provideFeedback(String msg) {
+        currentController.setStatus(msg);
     }
 
     @Override
@@ -78,7 +87,7 @@ public final class GuiEntryPoint extends Application {
     }
 
     private void switchToRaspi() throws IOException {
-        switchScene(raspiController);
+        switchScene(raspiController);   
     }
 
     private void switchToBBB() throws IOException {
@@ -90,15 +99,33 @@ public final class GuiEntryPoint extends Application {
     }
 
     public void switchToCurrentDevice() throws IOException {
-        switch (ConnectionManager.getInstance().getBoardType()) {
-            case BEAGLEBONEBLACK:
+        if (ClientConnectionManager.getInstance() == null) {
+            GUI_LOGGER.debug("manager not ready!");
+            return;
+        }
+        BoardType board = ClientConnectionManager.getInstance().getBoardType();
+        
+        if (board == null) {
+            GUI_LOGGER.debug("cannot view device controller, no device available");
+            return;
+        }
+        currentController = DeviceControllerFactory.getController(board);
+        switch (board) {
+            case BEAGLEBONEBLACK: {
                 switchToBBB();
-            case CUBIEBOARD:
+                break;
+            }
+            case CUBIEBOARD: {
                 switchToCubieBoard();
-            case RASPBERRY_PI:
+                break;
+            }
+            case RASPBERRY_PI: {
                 switchToRaspi();
+                break;
+            }
             default:
-                throw new IllegalStateException(ProtocolMessages.C_ERR_NO_BOARD.toString());
+                throw new IllegalStateException(
+                        ProtocolMessages.C_ERR_NO_BOARD.toString());
         }
     }
 
@@ -108,12 +135,12 @@ public final class GuiEntryPoint extends Application {
         GuiEntryPoint.writeInfoToLogger("load successful!");
         Scene scene = stage.getScene();
         if (scene == null) {
-            scene = new Scene(newParent, 700, 450);
+            scene = new Scene(newParent);
             stage.setScene(scene);
         } else {
             stage.getScene().setRoot(newParent);
         }
-        stage.sizeToScene();
+        //stage.sizeToScene();
     }
 
     @Override

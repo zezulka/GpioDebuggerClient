@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="302.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
    <children>
-      <Button layoutX="319.0" layoutY="255.0" mnemonicParsing="false" text="Submit" onMouseClicked="#clickHandler"/>
-      <TextField id="ipValue" fx:id="ipValue" layoutX="142.0" layoutY="119.0" prefHeight="31.0" prefWidth="244.0"/>
+      <Button layoutX="319.0" layoutY="185.0" mnemonicParsing="false" onMouseClicked="#clickHandler" text="Submit" />
+      <TextField id="ipValue" fx:id="ipValue" layoutX="142.0" layoutY="119.0" prefHeight="31.0" prefWidth="244.0" />
       <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="124.0" prefHeight="21.0" prefWidth="106.0" text="IP adress:" textAlignment="RIGHT" underline="true" />
+      <BorderPane prefHeight="31.0" prefWidth="422.0">
+         <left>
+            <Label fx:id="status" alignment="BOTTOM_LEFT" contentDisplay="TEXT_ONLY" text="OK" textAlignment="RIGHT" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </left>
+      </BorderPane>
    </children>
 </Pane>

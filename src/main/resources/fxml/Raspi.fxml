@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?import javafx.scene.control.Button?><?import javafx.scene.layout.AnchorPane?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.RowConstraints?><AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.RaspiController" id="AnchorPane">
+<?import javafx.scene.control.Button?><?import javafx.scene.layout.AnchorPane?><?import javafx.scene.layout.BorderPane?><?import javafx.scene.layout.ColumnConstraints?><?import javafx.scene.layout.GridPane?><?import javafx.scene.layout.RowConstraints?><?import javafx.scene.control.Label?><?import javafx.scene.text.Font?><?import javafx.scene.control.RadioButton?><?import javafx.scene.control.ToggleGroup?><AnchorPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.RaspiController" id="AnchorPane">
     <children>
         <GridPane layoutX="0.0" layoutY="0.0">
             <columnConstraints>
@@ -29,46 +29,64 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="3.3V"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="2" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_3"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="3" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_5"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="4" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_7"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="5" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="6" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_11"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="7" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_13"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="8" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_15"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="3.3V"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="10" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_19"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="11" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_21"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="12" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_23"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="13" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="14" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="ID_SD"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="15" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_29"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="16" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_31"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="17" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_33"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="18" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_35"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="19" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_37"/>
-                <Button GridPane.columnIndex="1" GridPane.rowIndex="20" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="1" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="5V"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="2" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="5V"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="3" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="4" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_8"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="5" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_10"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="6" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_12"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="7" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="8" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_16"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="9" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_18"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="10" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="11" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_22"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="12" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_24"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="13" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_26"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="14" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="ID_SC"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="15" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="16" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_32"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="17" disable="true" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="GROUND"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="18" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_36"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="19" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_38"/>
-                <Button GridPane.columnIndex="2" GridPane.rowIndex="20" disable="false" mnemonicParsing="false" onMouseClicked="#getButtonTitle" text="P1_40"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="3.3V"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="2" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_3"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="3" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_5"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="4" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_7"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="5" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="6" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_11"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="7" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_13"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="8" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_15"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="3.3V"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="10" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_19"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="11" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_21"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="12" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_23"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="13" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="14" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="ID_SD"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="15" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_29"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="16" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_31"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="17" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_33"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="18" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_35"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="19" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_37"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="20" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="1" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="5V"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="2" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="5V"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="3" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="4" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_8"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="5" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_10"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="6" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_12"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="7" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="8" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_16"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="9" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_18"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="10" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="11" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_22"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="12" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_24"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="13" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_26"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="14" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="ID_SC"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="15" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="16" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_32"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="17" disable="true" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="GROUND"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="18" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_36"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="19" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_38"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="20" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" text="P1_40"/>
+                <Button GridPane.rowIndex="17" mnemonicParsing="false" onMouseClicked="#sendInterfaceRequest" text="i2c"/>
+                <Button GridPane.rowIndex="18" mnemonicParsing="false" onMouseClicked="#sendInterfaceRequest" text="spi"/>
+                <Button GridPane.rowIndex="19" mnemonicParsing="false" onMouseClicked="#sendInterfaceRequest" text="uart"/>
+                <BorderPane>
+                    <left>
+                        <Label BorderPane.alignment="CENTER" alignment="BOTTOM_LEFT" contentDisplay="TEXT_ONLY" fx:id="statusBar" text="OK" textAlignment="LEFT">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                        </Label>
+                    </left>
+                </BorderPane>
+                <RadioButton GridPane.rowIndex="3" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="operation"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton GridPane.rowIndex="2" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$operation"/>
             </children>
         </GridPane>
     </children>
