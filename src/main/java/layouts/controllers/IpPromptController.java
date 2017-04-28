@@ -48,7 +48,6 @@ public class IpPromptController implements Initializable {
         }
         Main.connectToDevice(ip);
         button.setDisable(true);
-        status.setText("connection established!");
     }
 
 }

@@ -8,7 +8,6 @@ package layouts.xmlGenerics;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -30,7 +29,7 @@ import org.w3c.dom.Node;
 
 /**
  *
- * @author miloslav
+ * @author Miloslav Zezulka
  */
 public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
@@ -40,34 +39,47 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private final String deviceName;
     private final Logger xmlLogger = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
     public static final String EXTENSION = ".fxml";
+    private static final int WIDTH_OFFSET_FOR_TEXT_AREA = 6;
+    private static final String PREF_WIDTH_BUTTON = "120";
+    private static final String PREF_HEIGHT_BUTTON = "25";
+    private final Document DOC;
 
-    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) {
+    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) throws InstantiationException {
         this.height = height;
         this.width = width;
         this.type = type;
         this.deviceName = deviceName;
-    }
-
-    private static void addImports(Document doc) {
-        Node[] imports = {doc.createProcessingInstruction("import", "javafx.scene.control.Button"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.AnchorPane"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.BorderPane"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.ColumnConstraints"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.GridPane"),
-            doc.createProcessingInstruction("import", "javafx.scene.layout.RowConstraints"),
-            doc.createProcessingInstruction("import", "javafx.scene.control.Label"),
-            doc.createProcessingInstruction("import", "javafx.scene.text.Font"),
-            doc.createProcessingInstruction("import", "javafx.scene.control.RadioButton"),
-            doc.createProcessingInstruction("import", "javafx.scene.control.ToggleGroup")
-        };
-        for (Node node : imports) {
-            doc.appendChild(node);
+        try {
+            DOC = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        } catch (ParserConfigurationException ex) {
+            throw new InstantiationException(ex.getMessage());
         }
     }
 
-    private Node createButton(Document doc, int row, int col) {
-        Element button = doc.createElement("Button");
+    private void addImports() {
+        String importString = "import";
+        Node[] imports = {DOC.createProcessingInstruction(importString, "javafx.scene.control.Button"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.layout.AnchorPane"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.layout.BorderPane"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.layout.ColumnConstraints"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.layout.GridPane"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.layout.RowConstraints"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.control.Label"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.text.Font"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.control.RadioButton"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.control.ToggleGroup"),
+            DOC.createProcessingInstruction(importString, "javafx.scene.control.TextArea")
+        };
+        for (Node node : imports) {
+            DOC.appendChild(node);
+        }
+    }
+
+    private Node createButton(int row, int col) {
+        Element button = DOC.createElement("Button");
+        int rowOffset = 2;
         int index = row * 2 + 1 + col;
+        col += col % 2 == 0 ? 0 : 1;
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
@@ -75,59 +87,52 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
         button.setAttribute("text", (currentPin.isGpio())
                 ? currentPin.getName() : currentPin.getName());
-        button.setAttribute("GridPane.columnIndex", Integer.toString(col + 1));
-        button.setAttribute("GridPane.rowIndex", Integer.toString(row + 1));
+        button.setAttribute("GridPane.columnIndex", Integer.toString(col));
+        button.setAttribute("GridPane.rowIndex", Integer.toString(row + rowOffset));
+        button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
+        button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
         return button;
     }
 
-    private Node createInterfaceButton(Document doc, String interfc, int col) {
-        Element button = doc.createElement("Button");
+    private Node createInterfaceButton(String interfc, String row) {
+        Element button = DOC.createElement("Button");
         button.setAttribute("mnemonicParsing", "false");
         button.setAttribute("onMouseClicked", "#sendInterfaceRequest");
         button.setAttribute("text", interfc);
-        button.setAttribute("GridPane.rowIndex", Integer.toString(col));
+        button.setAttribute("GridPane.columnIndex", row);
+        button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
+        button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
         return button;
     }
 
-    private Node createToggleGroup(Document doc, String groupName) {
-        Element toggleGroup = doc.createElement("toggleGroup");
-        Element toggleGroupInner = doc.createElement("ToggleGroup");
-        toggleGroupInner.setAttribute("fx:id", groupName);
-        toggleGroup.appendChild(toggleGroupInner);
-        return toggleGroup;
-    }
 
     @Override
     public void createXml() throws IOException {
         try {
 
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            Document doc = docBuilder.newDocument();
-
-            addImports(doc);
+            addImports();
             //root element
-            Element rootElement = doc.createElement("AnchorPane");
+            Element rootElement = DOC.createElement("AnchorPane");
             rootElement.setAttribute("id", "AnchorPane");
             rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
             rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
             rootElement.setAttribute("fx:controller", "layouts.controllers." + deviceName + "Controller");
-            doc.appendChild(rootElement);
+            DOC.appendChild(rootElement);
 
-            Element children = doc.createElement("children");
+            Element children = DOC.createElement("children");
             rootElement.appendChild(children);
             //grid pane
-            Element gridPane = doc.createElement("GridPane");
+            Element gridPane = DOC.createElement("GridPane");
             gridPane.setAttribute("layoutX", "0.0");
             gridPane.setAttribute("layoutY", "0.0");
             children.appendChild(gridPane);
 
             //column constraints
-            Element columnConstraints = doc.createElement("columnConstraints");
+            Element columnConstraints = DOC.createElement("columnConstraints");
 
-            for (int i = 0; i < width; i++) {
-                Element columnConstraint = doc.createElement("ColumnConstraints");
-                columnConstraint.setAttribute("hgrow", "SOMETIMES");
+            for (int i = 0; i < width + WIDTH_OFFSET_FOR_TEXT_AREA; i++) {
+                Element columnConstraint = DOC.createElement("ColumnConstraints");
+                columnConstraint.setAttribute("hgrow", "ALWAYS");
                 columnConstraint.setAttribute("minWidth", "10.0");
                 columnConstraint.setAttribute("prefWidth", "100.0");
                 columnConstraints.appendChild(columnConstraint);
@@ -135,59 +140,42 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             gridPane.appendChild(columnConstraints);
 
             //row constraints
-            Element rowConstraints = doc.createElement("rowConstraints");
+            Element rowConstraints = DOC.createElement("rowConstraints");
 
-            for (int i = 0; i < height; i++) {
-                Element rowConstraint = doc.createElement("RowConstraints");
+            for (int i = 0; i < height + 1; i++) {
+                Element rowConstraint = DOC.createElement("RowConstraints");
                 rowConstraint.setAttribute("minHeight", "10.0");
                 rowConstraint.setAttribute("prefHeight", "30.0");
-                rowConstraint.setAttribute("vgrow", "SOMETIMES");
+                rowConstraint.setAttribute("vgrow", "ALWAYS");
                 rowConstraints.appendChild(rowConstraint);
             }
 
             gridPane.appendChild(rowConstraints);
 
-            //buttons
-            Element buttons = doc.createElement("children");
+            //buttons for GPIO 
+            Element gridPaneChildren = DOC.createElement("children");
             for (int col = 0; col < width; col++) {
                 for (int row = 0; row < height; row++) {
-                    buttons.appendChild(this.createButton(doc, row, col));
+                    gridPaneChildren.appendChild(this.createButton(row, col));
                 }
             }
-
-            String[] interfaces = new String[] {"i2c", "spi", "uart"};
-            for(int i = 0; i < interfaces.length; i++) {
-                buttons.appendChild(createInterfaceButton(doc, interfaces[i], 
-                        this.height - interfaces.length + i));
+            //buttons for interfaces
+            String[] interfaces = new String[]{"i2c", "spi"};
+            for (int col = 0; col < interfaces.length; col++) {
+                gridPaneChildren.appendChild(createInterfaceButton(interfaces[col],
+                        String.valueOf(col)));
             }
-            gridPane.appendChild(buttons);
-            String radioButtonGroup = "operation";
-            buttons.appendChild(createStatusBar(doc));
-            Element rButton1 = doc.createElement("RadioButton");
-            Element rButton2 = doc.createElement("RadioButton");
-            rButton1.setAttribute("ellipsisString", "W");
-            rButton1.setAttribute("mnemonicParsing", "false");
-            rButton1.setAttribute("text", "WRITE");
-            rButton1.setAttribute("GridPane.rowIndex", "3");
-            rButton1.setAttribute("fx:id", "writeRadioButton");
-            rButton1.appendChild(createToggleGroup(doc, radioButtonGroup));
+            gridPaneChildren.appendChild(createOutputArea());
+            gridPane.appendChild(gridPaneChildren);
 
-            rButton2.setAttribute("ellipsisString", "R");
-            rButton2.setAttribute("mnemonicParsing", "false");
-            rButton2.setAttribute("toggleGroup", "$ops");
-            rButton2.setAttribute("text", "READ");
-            rButton2.setAttribute("GridPane.rowIndex", "2");
-            rButton2.setAttribute("selected", "true");
-            rButton2.setAttribute("fx:id", "readRadioButton");
-            rButton2.setAttribute("toggleGroup", '$' + radioButtonGroup);
-            buttons.appendChild(rButton1);
-            buttons.appendChild(rButton2);
+            gridPaneChildren.appendChild(createWriteRadioButton());
+            gridPaneChildren.appendChild(createReadRadioButton());
 
             // write the content into xml file
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
-            doc.normalizeDocument();
-            DOMSource source = new DOMSource(doc);
+            DOC.normalizeDocument();
+            DOMSource source = new DOMSource(DOC);
             StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + deviceName + EXTENSION));
 
             //transformer formatting magic... taken from StackOverflow
@@ -196,30 +184,48 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);
 
-        } catch (ParserConfigurationException pce) {
-            xmlLogger.error("parsing error:", pce);
         } catch (TransformerException tfe) {
             xmlLogger.error("transformer error:", tfe);
         }
     }
 
-    private Node createStatusBar(Document doc) {
-        Element el = doc.createElement("BorderPane");
-        Element left = doc.createElement("left");
-        Element label = doc.createElement("Label");
-        label.setAttribute("fx:id", "statusBar");
-        label.setAttribute("alignment", "BOTTOM_LEFT");
-        label.setAttribute("contentDisplay", "TEXT_ONLY");
-        label.setAttribute("text", "OK");
-        label.setAttribute("textAlignment", "LEFT");
-        label.setAttribute("BorderPane.alignment", "CENTER");
-        Element font = doc.createElement("font");
-        Element fontInner = doc.createElement("Font");
-        fontInner.setAttribute("size", "18.0");
-        font.appendChild(fontInner);
-        label.appendChild(font);
-        left.appendChild(label);
-        el.appendChild(left);
+    private Node createOutputArea() {
+        Element el = DOC.createElement("TextArea");
+        el.setAttribute("editable", "false");
+        el.setAttribute("wrapText", "true");
+        el.setAttribute("fx:id", "feedbackArea");
+        el.setAttribute("GridPane.columnSpan", Integer.toString(Integer.MAX_VALUE));
+        el.setAttribute("GridPane.rowSpan", Integer.toString(Integer.MAX_VALUE));
+        el.setAttribute("GridPane.rowIndex", Integer.toString(0));
+        el.setAttribute("GridPane.columnIndex", Integer.toString(width + 1));
+        el.setAttribute("GridPane.rowIndex", "1");
         return el;
+    }
+
+    private Node createWriteRadioButton() {
+        Element rButton1 = DOC.createElement("RadioButton");
+        rButton1.setAttribute("ellipsisString", "W");
+        rButton1.setAttribute("mnemonicParsing", "false");
+        rButton1.setAttribute("text", "WRITE");
+        rButton1.setAttribute("GridPane.columnIndex", "3");
+        rButton1.setAttribute("fx:id", "writeRadioButton");
+        Element padding = DOC.createElement("toggleGroup");
+        Element inset = DOC.createElement("ToggleGroup");
+        inset.setAttribute("fx:id", "op");
+        padding.appendChild(inset);
+        rButton1.appendChild(padding);
+        return rButton1;
+    }
+
+    private Node createReadRadioButton() {
+        Element rButton2 = DOC.createElement("RadioButton");
+        rButton2.setAttribute("ellipsisString", "R");
+        rButton2.setAttribute("mnemonicParsing", "false");
+        rButton2.setAttribute("text", "READ");
+        rButton2.setAttribute("GridPane.columnIndex", "4");
+        rButton2.setAttribute("selected", "true");
+        rButton2.setAttribute("fx:id", "readRadioButton");
+        rButton2.setAttribute("toggleGroup", "$op");
+        return rButton2;
     }
 }

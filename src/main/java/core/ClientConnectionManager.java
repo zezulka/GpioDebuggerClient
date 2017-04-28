@@ -145,7 +145,12 @@ public class ClientConnectionManager implements Runnable {
                             continue;
                         }
                         keys.remove();
-                        GuiEntryPoint.provideFeedback(this.receivedMessage);
+                        if (this.receivedMessage.length() < 1024) {
+                            Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
+                        } else {
+                            Platform.runLater(() -> GuiEntryPoint.providePopupFeedback(receivedMessage));
+                        }
+
                     }
                 }
 

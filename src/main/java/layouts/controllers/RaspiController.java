@@ -22,10 +22,8 @@ import protocol.ProtocolMessages;
  *
  * @author miloslav
  */
-public class RaspiController implements Initializable, DeviceController {
+public class RaspiController implements DeviceController, Initializable {
 
-    @FXML
-    private Label statusBar;
     @FXML
     private RadioButton readRadioButton;
 
@@ -65,18 +63,6 @@ public class RaspiController implements Initializable, DeviceController {
             GuiEntryPoint.writeErrorToLoggerWithoutCause(ProtocolMessages.C_ERR_GUI_NOT_BUTTON.toString());
             throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
         }
-    }
-
-    @Override
-    public void setStatus(String msg) {
-        if (msg == null) {
-            throw new IllegalArgumentException("msg cannot be null");
-        }
-        //if (statusBar == null) {
-        //    throw new IllegalStateException("status has not been initialized yet!");
-        //}
-        //statusBar.setText(msg);
-        System.out.println(msg);
     }
 
     @Override
