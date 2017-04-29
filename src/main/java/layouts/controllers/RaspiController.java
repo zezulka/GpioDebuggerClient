@@ -7,14 +7,16 @@ package layouts.controllers;
 
 import core.ClientConnectionManager;
 import core.GuiEntryPoint;
+import java.io.IOException;
 import java.net.URL;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import protocol.ProtocolMessages;
 
@@ -42,9 +44,16 @@ public class RaspiController implements DeviceController, Initializable {
     }
 
     @FXML
-    protected void sendInterfaceRequest(MouseEvent event) {
-        String op = readRadioButton.isSelected() ? "read" : "write";
-        sendRequest(event, getButtonTitle(event) + ":" + op);
+    protected void createNewInterfaceForm(MouseEvent event) {
+        if(readRadioButton.isSelected()) {
+            try {
+                GuiEntryPoint.getInstance().createNewI2cForm();
+            } catch (IOException ex) {
+                Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            //write part here
+        }
     }
 
     private String getButtonTitle(MouseEvent event) {

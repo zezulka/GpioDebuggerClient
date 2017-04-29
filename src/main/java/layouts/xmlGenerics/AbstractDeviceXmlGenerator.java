@@ -42,9 +42,9 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private static final int WIDTH_OFFSET_FOR_TEXT_AREA = 6;
     private static final String PREF_WIDTH_BUTTON = "120";
     private static final String PREF_HEIGHT_BUTTON = "25";
-    private final Document DOC;
+    private static Document DOC;
 
-    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) throws InstantiationException {
+    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) {
         this.height = height;
         this.width = width;
         this.type = type;
@@ -52,7 +52,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         try {
             DOC = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         } catch (ParserConfigurationException ex) {
-            throw new InstantiationException(ex.getMessage());
+            System.exit(1);
         }
     }
 
