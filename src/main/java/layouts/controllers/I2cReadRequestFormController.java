@@ -61,6 +61,9 @@ public class I2cReadRequestFormController implements Initializable {
         slaveAddressField.setText(cachedSlaveAddress);
         if(cachedMode != null) {
              this.modeList.getSelectionModel().select(cachedMode);
+             if(MODES.get(cachedMode).equals(Operation.READ)) {
+                 registerAddressField.setDisable(false);
+             }
         }
         this.modeList.valueProperty().addListener(
                 new ChangeListener<String>() {

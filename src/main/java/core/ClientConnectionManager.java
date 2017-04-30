@@ -8,6 +8,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.logging.Level;
 import javafx.application.Platform;
 
 import org.slf4j.Logger;
@@ -42,11 +43,27 @@ public class ClientConnectionManager implements Runnable {
     private ClientConnectionManager() {
     }
 
+    private void resetResources() {
+        try {
+            channel.close();
+            selector.close();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ClientConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        selector = null;
+        ipAddress = null;
+        channel = null;
+    }
+
     public boolean isAlive() {
         return channel != null && channel.isConnected();
     }
 
     public boolean initManager() {
+        if (selector != null || channel != null) {
+            resetResources();
+            return false;
+        }
         if (ipAddress == null) {
             throw new IllegalStateException("Cannot initialize server,"
                     + " ip address has not been set yet!");
@@ -63,7 +80,10 @@ public class ClientConnectionManager implements Runnable {
             }
             InetAddress inetAddress = InetAddress.getByAddress(ipAddr);
             if (!inetAddress.isReachable(TIMEOUT)) {
-                System.err.println("host could not be reached...");
+                Platform.runLater(() -> {
+                        GuiEntryPoint.provideFeedback(String.format("Host %s could not be reached.", ipAddress));
+                    });
+                resetResources();
                 return false;
             }
             channel.configureBlocking(false);
@@ -71,6 +91,7 @@ public class ClientConnectionManager implements Runnable {
             channel.connect(new InetSocketAddress(ipAddress, DEFAULT_SOCK_PORT));
         } catch (IOException ex) {
             MAIN_LOGGER.error("Init I/O error", ex);
+            resetResources();
             return false;
         }
         return true;
@@ -105,59 +126,63 @@ public class ClientConnectionManager implements Runnable {
 
     @Override
     public void run() {
-        try {
-            if (!initManager()) {
-                System.out.println("could not instantiate manager...");
-                return;
-            }
-            System.out.println("Connection to server OK");
-            while (!Thread.interrupted()) {
-                selector.select(TIMEOUT);
-                Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
+        while (true) {
+            try {
+                if (!initManager()) {
+                    Platform.runLater(() -> {
+                        GuiEntryPoint.provideFeedback("Cannot connect to manager");
+                    });
+                    return;
+                }
+                while (!Thread.interrupted()) {
+                    selector.select(TIMEOUT);
+                    Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
-                while (keys.hasNext()) {
-                    SelectionKey key = keys.next();
-                    if (!key.isValid()) {
-                        keys.remove();
-                        continue;
-                    }
-                    if (key.isConnectable()) {
-                        keys.remove();
-                        connect(key);
-                    }
-                    if (this.messageToSend != null && key.isWritable()) {
-                        keys.remove();
-                        write(key);
-                    }
-                    if (key.isReadable() && this.boardType == null) {
-                        keys.remove();
-                        readInitMessage(key);
-                        try {
-                            GuiEntryPoint.getInstance().switchToCurrentDevice();
-                        } catch (IOException ex) {
-                            GuiEntryPoint.writeErrorToLoggerWithClass(getClass(), ex);
-                        }
-                        continue;
-                    }
-                    if (key.isReadable()) {
-                        read(key);
-                        if (this.receivedMessage == null) {
+                    while (keys.hasNext()) {
+                        SelectionKey key = keys.next();
+                        if (!key.isValid()) {
+                            keys.remove();
                             continue;
                         }
-                        keys.remove();
-                        Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
+                        if (key.isConnectable()) {
+                            keys.remove();
+                            if (!connect(key)) {
+                                break;
+                            }
+                        }
+                        if (this.messageToSend != null && key.isWritable()) {
+                            keys.remove();
+                            write(key);
+                        }
+                        if (key.isReadable() && this.boardType == null) {
+                            keys.remove();
+                            readInitMessage(key);
+                            try {
+                                GuiEntryPoint.getInstance().switchToCurrentDevice();
+                            } catch (IOException ex) {
+                                GuiEntryPoint.writeErrorToLoggerWithClass(getClass(), ex);
+                            }
+                            continue;
+                        }
+                        if (key.isReadable()) {
+                            read(key);
+                            if (this.receivedMessage == null) {
+                                continue;
+                            }
+                            keys.remove();
+                            Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
+                        }
+                    }
+
+                    if (!isAlive()) {
+                        break;
                     }
                 }
-
-                if (!isAlive()) {
-                    Platform.exit();
-                    System.exit(0);
-                }
+            } catch (IOException ex) {
+                MAIN_LOGGER.error(null, ex);
+            } finally {
+                close();
             }
-        } catch (IOException ex) {
-            MAIN_LOGGER.error("I/O error", ex);
-        } finally {
-            close();
         }
     }
 
@@ -202,12 +227,19 @@ public class ClientConnectionManager implements Runnable {
         this.setMessageToSend(null);
     }
 
-    private void connect(SelectionKey key) throws IOException {
-        if (channel.isConnectionPending() && channel.finishConnect()) {
-            MAIN_LOGGER.info("done connecting to server");
+    private boolean connect(SelectionKey key) {
+        try {
+            if (channel.isConnectionPending() && channel.finishConnect()) {
+                MAIN_LOGGER.info("done connecting to server");
+            }
+            MAIN_LOGGER.info(ProtocolMessages.C_CONNECTION_OK.toString());
+            channel.configureBlocking(false);
+            key.interestOps(SelectionKey.OP_READ);
+
+        } catch (IOException ex) {
+            MAIN_LOGGER.error("Could not connect to server", ex);
+            return false;
         }
-        MAIN_LOGGER.info(ProtocolMessages.C_CONNECTION_OK.toString());
-        channel.configureBlocking(false);
-        key.interestOps(SelectionKey.OP_READ);
+        return true;
     }
 }

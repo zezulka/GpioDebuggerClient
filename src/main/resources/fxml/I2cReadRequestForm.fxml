@@ -22,7 +22,7 @@
         </rowConstraints>
          <children>
             <TextField id="slaveAddressField" fx:id="slaveAddressField" prefHeight="45.0" prefWidth="184.0" GridPane.columnIndex="1" />
-            <Label prefHeight="48.0" prefWidth="19.0" text="0x" textAlignment="RIGHT" GridPane.halignment="RIGHT">
+            <Label alignment="BASELINE_RIGHT" prefHeight="48.0" prefWidth="38.0" text="0x" textAlignment="RIGHT" GridPane.halignment="RIGHT">
                <font>
                   <Font size="18.0" />
                </font>
@@ -45,7 +45,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Label>
-            <Label text="0x" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <Label alignment="BASELINE_RIGHT" prefHeight="41.0" prefWidth="33.0" text="0x" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" />
                </font>

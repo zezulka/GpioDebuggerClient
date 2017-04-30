@@ -9,19 +9,23 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputControl;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import layouts.controllers.DeviceControllerFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import protocol.BoardType;
 import protocol.ProtocolMessages;
 
@@ -63,7 +67,8 @@ public final class GuiEntryPoint extends Application {
     }
 
     public static void provideFeedback(String msg) {
-        ((TextArea) stage.getScene().lookup("#feedbackArea")).setText(msg);
+        TextInputControl text = (TextInputControl) stage.getScene().lookup("#feedbackArea");
+        text.setText('<' + LocalTime.now().format(DateTimeFormatter.ISO_TIME) + "> " + msg + '\n' + text.getText());
     }
 
     @Override
@@ -172,7 +177,8 @@ public final class GuiEntryPoint extends Application {
         try {
             stage = primaryStage;
             switchScene(ipPrompt);
-            primaryStage.show();
+            stage.setTitle("Debugger for ARM-based devices");
+            stage.show();
         } catch (IOException ex) {
             GuiEntryPoint.writeErrorToLoggerWithMessage(ProtocolMessages.C_ERR_GUI_FXML.toString(), ex);
             Platform.exit();
