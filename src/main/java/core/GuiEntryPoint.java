@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -36,6 +35,7 @@ import protocol.ProtocolMessages;
 public final class GuiEntryPoint extends Application {
 
     private static Stage stage;
+    private static final int RESPONSE_STRING_CAP_LEN = 1 << 12;
 
     private static final Logger GUI_LOGGER = LoggerFactory.getLogger(GuiEntryPoint.class);
     private static final GuiEntryPoint INSTANCE = new GuiEntryPoint();
@@ -68,7 +68,14 @@ public final class GuiEntryPoint extends Application {
 
     public static void provideFeedback(String msg) {
         TextInputControl text = (TextInputControl) stage.getScene().lookup("#feedbackArea");
-        text.setText('<' + LocalTime.now().format(DateTimeFormatter.ISO_TIME) + "> " + msg + '\n' + text.getText());
+        
+        text.setText(
+                '<' + LocalTime.now().format(DateTimeFormatter.ISO_TIME) 
+                    + "> " 
+                    + msg 
+                    + '\n'
+                    + (text.getText().length() < RESPONSE_STRING_CAP_LEN ? text.getText()
+                      : ""));
     }
 
     @Override
