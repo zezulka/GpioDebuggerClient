@@ -355,3 +355,302 @@ java.net.ConnectException: Connection refused
 16:53:24,984  INFO Main:235 - Connection to server OK
 16:53:25,265  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
 16:53:25,391  INFO GuiEntryPoint:101 - load successful!
+07:54:14,192  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:54:14,388  INFO GuiEntryPoint:101 - load successful!
+07:54:20,004  INFO Main:233 - done connecting to server
+07:54:20,005  INFO Main:235 - Connection to server OK
+07:54:20,261  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+07:54:20,334  INFO GuiEntryPoint:101 - load successful!
+13:51:28,111  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+13:51:28,312  INFO GuiEntryPoint:101 - load successful!
+13:51:37,570  INFO Main:233 - done connecting to server
+13:51:37,571  INFO Main:235 - Connection to server OK
+13:51:37,817  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+13:51:37,908  INFO GuiEntryPoint:101 - load successful!
+13:52:14,776 ERROR Main:206 - Nothing was read from server
+17:15:37,529  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:15:37,720  INFO GuiEntryPoint:101 - load successful!
+17:15:47,444  INFO Main:233 - done connecting to server
+17:15:47,446  INFO Main:235 - Connection to server OK
+17:15:47,689  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:15:47,781  INFO GuiEntryPoint:101 - load successful!
+17:16:33,348  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:16:33,520  INFO GuiEntryPoint:101 - load successful!
+17:16:38,341  INFO Main:233 - done connecting to server
+17:16:38,342  INFO Main:235 - Connection to server OK
+17:16:38,348  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:16:38,427  INFO GuiEntryPoint:101 - load successful!
+17:16:50,790 ERROR Main:206 - Nothing was read from server
+17:21:06,202  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:21:06,366  INFO GuiEntryPoint:101 - load successful!
+17:21:12,679  INFO Main:233 - done connecting to server
+17:21:12,680  INFO Main:235 - Connection to server OK
+17:21:12,939  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:21:13,039  INFO GuiEntryPoint:101 - load successful!
+17:21:28,672 ERROR Main:206 - Nothing was read from server
+17:24:44,369  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+17:24:44,538  INFO GuiEntryPoint:101 - load successful!
+17:24:53,230  INFO Main:233 - done connecting to server
+17:24:53,232  INFO Main:235 - Connection to server OK
+17:24:53,471  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+17:24:53,569  INFO GuiEntryPoint:101 - load successful!
+22:04:25,319  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:04:25,492  INFO GuiEntryPoint:101 - load successful!
+22:04:32,591  INFO Main:233 - done connecting to server
+22:04:32,593  INFO Main:235 - Connection to server OK
+22:04:32,879  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:04:32,969  INFO GuiEntryPoint:101 - load successful!
+22:12:09,554  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:12:09,726  INFO GuiEntryPoint:101 - load successful!
+22:12:14,285  INFO Main:233 - done connecting to server
+22:12:14,286  INFO Main:235 - Connection to server OK
+22:12:14,499  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:12:14,599  INFO GuiEntryPoint:101 - load successful!
+22:14:16,744  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:14:16,927  INFO GuiEntryPoint:101 - load successful!
+22:14:21,961  INFO Main:233 - done connecting to server
+22:14:21,963  INFO Main:235 - Connection to server OK
+22:14:22,180  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:14:22,275  INFO GuiEntryPoint:101 - load successful!
+22:32:09,981  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:32:10,151  INFO GuiEntryPoint:101 - load successful!
+22:32:18,166  INFO Main:233 - done connecting to server
+22:32:18,167  INFO Main:235 - Connection to server OK
+22:32:18,422  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:32:18,526  INFO GuiEntryPoint:101 - load successful!
+22:40:38,208  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:40:38,372  INFO GuiEntryPoint:101 - load successful!
+22:40:45,621  INFO Main:233 - done connecting to server
+22:40:45,622  INFO Main:235 - Connection to server OK
+22:40:45,631  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:40:45,712  INFO GuiEntryPoint:101 - load successful!
+22:42:02,685  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+22:42:02,852  INFO GuiEntryPoint:101 - load successful!
+22:42:08,999  INFO Main:233 - done connecting to server
+22:42:09,000  INFO Main:235 - Connection to server OK
+22:42:09,012  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+22:42:09,092  INFO GuiEntryPoint:101 - load successful!
+22:42:55,694 ERROR Main:206 - Nothing was read from server
+07:12:23,557  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:12:23,769  INFO GuiEntryPoint:101 - load successful!
+07:12:28,429 ERROR Main:240 - Could not connect to server
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at core.ClientConnectionManager.connect(ClientConnectionManager.java:232)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:149)
+	at java.lang.Thread.run(Thread.java:745)
+07:12:56,903  INFO Main:233 - done connecting to server
+07:12:56,905  INFO Main:235 - Connection to server OK
+07:12:57,164  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+07:12:57,270  INFO GuiEntryPoint:101 - load successful!
+07:13:29,139 ERROR Main:206 - Nothing was read from server
+07:52:52,349  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+07:52:52,517  INFO GuiEntryPoint:101 - load successful!
+07:52:58,462  INFO Main:233 - done connecting to server
+07:52:58,464  INFO Main:235 - Connection to server OK
+07:52:58,708  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+07:52:58,802  INFO GuiEntryPoint:101 - load successful!
+07:53:15,897 ERROR Main:206 - Nothing was read from server
+19:16:56,988  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:16:57,206  INFO GuiEntryPoint:101 - load successful!
+19:17:05,228  INFO Main:233 - done connecting to server
+19:17:05,234  INFO Main:235 - Connection to server OK
+19:17:05,510  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:17:05,621 ERROR GuiEntryPoint:93 - core.ClientConnectionManager
+javafx.fxml.LoadException: Error resolving onMouseClicked='#sendInterfaceRequest', either the event handler is not in the Namespace or there is an error in the script.
+/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:79
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2597)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:103)
+	at javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:610)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:770)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2823)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2532)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:110)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:122)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:154)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:161)
+	at java.lang.Thread.run(Thread.java:745)
+19:17:46,530  INFO Main:233 - done connecting to server
+19:17:46,531  INFO Main:235 - Connection to server OK
+19:17:52,045  INFO Main:233 - done connecting to server
+19:17:52,045  INFO Main:235 - Connection to server OK
+19:17:52,877  INFO Main:233 - done connecting to server
+19:17:52,877  INFO Main:235 - Connection to server OK
+19:17:53,248  INFO Main:233 - done connecting to server
+19:17:53,248  INFO Main:235 - Connection to server OK
+19:18:06,927  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:18:07,109  INFO GuiEntryPoint:101 - load successful!
+19:18:12,394  INFO Main:233 - done connecting to server
+19:18:12,396  INFO Main:235 - Connection to server OK
+19:18:12,403  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:18:12,498 ERROR GuiEntryPoint:93 - core.ClientConnectionManager
+javafx.fxml.LoadException: Error resolving onMouseClicked='#sendInterfaceRequest', either the event handler is not in the Namespace or there is an error in the script.
+/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:79
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2597)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:103)
+	at javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:610)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:770)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2823)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2532)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:110)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:122)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:154)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:161)
+	at java.lang.Thread.run(Thread.java:745)
+19:18:18,325  INFO Main:233 - done connecting to server
+19:18:18,326  INFO Main:235 - Connection to server OK
+19:18:20,519  INFO Main:233 - done connecting to server
+19:18:20,519  INFO Main:235 - Connection to server OK
+19:19:04,349  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:19:04,508  INFO GuiEntryPoint:101 - load successful!
+19:19:08,797  INFO Main:233 - done connecting to server
+19:19:08,798  INFO Main:235 - Connection to server OK
+19:19:08,803  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:19:08,868 ERROR GuiEntryPoint:93 - core.ClientConnectionManager
+javafx.fxml.LoadException: Error resolving onMouseClicked='#sendInterfaceRequest', either the event handler is not in the Namespace or there is an error in the script.
+/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml:79
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2597)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:103)
+	at javafx.fxml.FXMLLoader$Element.processEventHandlerAttributes(FXMLLoader.java:610)
+	at javafx.fxml.FXMLLoader$ValueElement.processEndElement(FXMLLoader.java:770)
+	at javafx.fxml.FXMLLoader.processEndElement(FXMLLoader.java:2823)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2532)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3214)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3175)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3148)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3124)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:3104)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:3097)
+	at core.GuiEntryPoint.switchScene(GuiEntryPoint.java:110)
+	at core.GuiEntryPoint.switchToRaspi(GuiEntryPoint.java:122)
+	at core.GuiEntryPoint.switchToCurrentDevice(GuiEntryPoint.java:154)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:161)
+	at java.lang.Thread.run(Thread.java:745)
+19:23:45,664  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:23:45,823  INFO GuiEntryPoint:101 - load successful!
+19:23:51,963  INFO Main:233 - done connecting to server
+19:23:51,963  INFO Main:235 - Connection to server OK
+19:23:52,211  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:23:52,300  INFO GuiEntryPoint:101 - load successful!
+19:26:09,589  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:26:09,744  INFO GuiEntryPoint:101 - load successful!
+19:26:14,334  INFO Main:233 - done connecting to server
+19:26:14,335  INFO Main:235 - Connection to server OK
+19:26:14,340  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:26:14,412  INFO GuiEntryPoint:101 - load successful!
+19:50:45,990  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+19:50:46,173  INFO GuiEntryPoint:101 - load successful!
+19:50:58,174  INFO Main:233 - done connecting to server
+19:50:58,175  INFO Main:235 - Connection to server OK
+19:50:58,456  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+19:50:58,529  INFO GuiEntryPoint:101 - load successful!
+19:51:29,619 ERROR Main:206 - Nothing was read from server
+20:04:25,991  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:04:26,170  INFO GuiEntryPoint:101 - load successful!
+20:04:31,364  INFO Main:233 - done connecting to server
+20:04:31,365  INFO Main:235 - Connection to server OK
+20:04:31,613  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:04:31,698  INFO GuiEntryPoint:101 - load successful!
+20:05:08,825 ERROR Main:206 - Nothing was read from server
+20:06:18,801  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:06:18,983  INFO GuiEntryPoint:101 - load successful!
+20:06:26,743  INFO Main:233 - done connecting to server
+20:06:26,743  INFO Main:235 - Connection to server OK
+20:06:26,966  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:06:27,051  INFO GuiEntryPoint:101 - load successful!
+20:06:55,335 ERROR Main:206 - Nothing was read from server
+20:14:59,098  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:14:59,268  INFO GuiEntryPoint:101 - load successful!
+20:15:05,375  INFO Main:233 - done connecting to server
+20:15:05,376  INFO Main:235 - Connection to server OK
+20:15:05,610  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:15:05,709  INFO GuiEntryPoint:101 - load successful!
+20:15:18,321 ERROR Main:206 - Nothing was read from server
+20:29:02,188  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:29:02,361  INFO GuiEntryPoint:101 - load successful!
+20:29:07,175  INFO Main:233 - done connecting to server
+20:29:07,176  INFO Main:235 - Connection to server OK
+20:29:07,405  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:29:07,496  INFO GuiEntryPoint:101 - load successful!
+20:29:20,651 ERROR Main:206 - Nothing was read from server
+20:35:32,183  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:35:32,814  INFO GuiEntryPoint:101 - load successful!
+20:35:45,980  INFO Main:233 - done connecting to server
+20:35:45,982  INFO Main:235 - Connection to server OK
+20:35:46,241  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:35:46,550  INFO GuiEntryPoint:101 - load successful!
+20:35:57,456 ERROR Main:206 - Nothing was read from server
+20:40:47,524  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+20:40:48,038  INFO GuiEntryPoint:101 - load successful!
+20:40:57,366  INFO Main:233 - done connecting to server
+20:40:57,368  INFO Main:235 - Connection to server OK
+20:40:57,619  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+20:40:57,844  INFO GuiEntryPoint:101 - load successful!
+09:40:31,278  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:40:31,454  INFO GuiEntryPoint:101 - load successful!
+09:41:06,175  INFO Main:233 - done connecting to server
+09:41:06,176  INFO Main:235 - Connection to server OK
+09:41:06,462  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:41:06,533  INFO GuiEntryPoint:101 - load successful!
+09:49:36,422  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:49:36,585  INFO GuiEntryPoint:101 - load successful!
+09:49:42,051  INFO Main:233 - done connecting to server
+09:49:42,053  INFO Main:235 - Connection to server OK
+09:49:42,305  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:49:42,383  INFO GuiEntryPoint:101 - load successful!
+09:58:52,955  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:58:53,139  INFO GuiEntryPoint:101 - load successful!
+09:58:58,785  INFO Main:233 - done connecting to server
+09:58:58,786  INFO Main:235 - Connection to server OK
+09:58:59,023  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:58:59,112  INFO GuiEntryPoint:101 - load successful!
+09:59:58,080 ERROR Main:206 - Nothing was read from server
+10:10:11,004  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:10:11,176  INFO GuiEntryPoint:101 - load successful!
+10:10:16,832  INFO Main:233 - done connecting to server
+10:10:16,833  INFO Main:235 - Connection to server OK
+10:10:17,080  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:10:17,176  INFO GuiEntryPoint:101 - load successful!
+11:08:02,386  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:08:02,929  INFO GuiEntryPoint:101 - load successful!
+11:08:08,251  INFO Main:233 - done connecting to server
+11:08:08,253  INFO Main:235 - Connection to server OK
+11:08:08,496  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:08:08,726  INFO GuiEntryPoint:101 - load successful!
+11:13:02,269  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:13:02,779  INFO GuiEntryPoint:101 - load successful!
+11:13:09,564  INFO Main:233 - done connecting to server
+11:13:09,566  INFO Main:235 - Connection to server OK
+11:13:09,777  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:13:10,011  INFO GuiEntryPoint:101 - load successful!
+11:18:36,441  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:18:36,951  INFO GuiEntryPoint:101 - load successful!
+11:18:42,057  INFO Main:233 - done connecting to server
+11:18:42,059  INFO Main:235 - Connection to server OK
+11:18:42,298  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:18:42,524  INFO GuiEntryPoint:101 - load successful!
+11:23:51,876  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:23:52,394  INFO GuiEntryPoint:101 - load successful!
+11:23:57,414  INFO Main:233 - done connecting to server
+11:23:57,415  INFO Main:235 - Connection to server OK
+11:23:57,676  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:23:57,921  INFO GuiEntryPoint:101 - load successful!

@@ -10,5 +10,24 @@ package layouts.controllers;
  * @author Miloslav
  */
 public enum Operation {
-    READALL, READ, WRITE;
+    READRANGE("read from range of registers"), READ("read from register"),
+    WRITERANGE("write to range of registers"), WRITE("write to register");
+    
+    private String op;
+    
+    Operation(String op) {
+        this.op = op;
+    }
+    
+    public String getOp() {
+        return this.op;
+    }
+    
+    public static boolean isReadOperation(Operation op) {
+        return op.equals(Operation.READ) || op.equals(Operation.READRANGE);
+    }
+    
+    public static boolean isWriteOperation(Operation op) {
+        return !isReadOperation(op);
+    }
 }

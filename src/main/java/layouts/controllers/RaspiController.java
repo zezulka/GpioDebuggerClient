@@ -38,7 +38,7 @@ public class RaspiController implements DeviceController, Initializable {
      * @throws IllegalArgumentException in case event is not of Button instance
      */
     @FXML
-    protected void sendGpioRequest(MouseEvent event) {
+    protected void sendInterfaceRequest(MouseEvent event) {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
     }

@@ -83,7 +83,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#sendGpioRequest");
+        button.setAttribute("onMouseClicked", "#sendInterfaceRequest");
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
         button.setAttribute("text", (currentPin.isGpio())
                 ? currentPin.getName() : currentPin.getName());
@@ -97,7 +97,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private Node createInterfaceButton(String interfc, String row) {
         Element button = DOC.createElement("Button");
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#sendInterfaceRequest");
+        button.setAttribute("onMouseClicked", "#createNewInterfaceForm");
         button.setAttribute("text", interfc);
         button.setAttribute("GridPane.columnIndex", row);
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
@@ -207,7 +207,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton1.setAttribute("ellipsisString", "W");
         rButton1.setAttribute("mnemonicParsing", "false");
         rButton1.setAttribute("text", "WRITE");
-        rButton1.setAttribute("GridPane.columnIndex", "3");
+        rButton1.setAttribute("GridPane.rowIndex", "4");
+        rButton1.setAttribute("GridPane.columnIndex", "1");
         rButton1.setAttribute("fx:id", "writeRadioButton");
         Element padding = DOC.createElement("toggleGroup");
         Element inset = DOC.createElement("ToggleGroup");
@@ -222,7 +223,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton2.setAttribute("ellipsisString", "R");
         rButton2.setAttribute("mnemonicParsing", "false");
         rButton2.setAttribute("text", "READ");
-        rButton2.setAttribute("GridPane.columnIndex", "4");
+        rButton2.setAttribute("GridPane.rowIndex", "5");
+        rButton2.setAttribute("GridPane.columnIndex", "1");
         rButton2.setAttribute("selected", "true");
         rButton2.setAttribute("fx:id", "readRadioButton");
         rButton2.setAttribute("toggleGroup", "$op");

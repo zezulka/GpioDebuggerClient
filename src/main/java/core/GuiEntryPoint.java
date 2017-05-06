@@ -59,7 +59,7 @@ public final class GuiEntryPoint extends Application {
             ipPrompt = pathToFxml.toURI().toURL();
             pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "Raspi" + ".fxml");
             raspiController = pathToFxml.toURI().toURL();
-            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "I2cReadRequestForm" + ".fxml");
+            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "I2cRequestForm" + ".fxml");
             i2cReadRequestForm = pathToFxml.toURI().toURL();
         } catch (MalformedURLException ex) {
             GUI_LOGGER.error("Malformed URL:", ex);
