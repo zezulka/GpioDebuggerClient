@@ -45,14 +45,19 @@ public class ClientConnectionManager implements Runnable {
 
     private void resetResources() {
         try {
-            channel.close();
-            selector.close();
+            if(channel != null) {
+                channel.close();
+            }
+            if(selector != null) {
+                selector.close();
+            }
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(ClientConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         selector = null;
         ipAddress = null;
         channel = null;
+        boardType = null;
     }
 
     public boolean isAlive() {
@@ -129,8 +134,10 @@ public class ClientConnectionManager implements Runnable {
         while (true) {
             try {
                 if (!initManager()) {
+                    GuiEntryPoint.getInstance().switchToIpPrompt();
+                    resetResources();
                     Platform.runLater(() -> {
-                        GuiEntryPoint.provideFeedback("Cannot connect to manager");
+                        GuiEntryPoint.provideFeedback("Cannot connect to manager. \nPlease make sure that agent instance is running on the specified address.");
                     });
                     return;
                 }
