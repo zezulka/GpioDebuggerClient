@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.controllers;
 
 import core.ClientConnectionManager;
@@ -22,7 +17,7 @@ import protocol.ProtocolMessages;
 
 /**
  *
- * @author miloslav
+ * @author Miloslav Zezulka
  */
 public class RaspiController implements DeviceController, Initializable {
 
@@ -38,21 +33,17 @@ public class RaspiController implements DeviceController, Initializable {
      * @throws IllegalArgumentException in case event is not of Button instance
      */
     @FXML
-    protected void sendInterfaceRequest(MouseEvent event) {
+    protected void sendGpioRequest(MouseEvent event) {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
     }
 
     @FXML
     protected void createNewInterfaceForm(MouseEvent event) {
-        if(readRadioButton.isSelected()) {
-            try {
-                GuiEntryPoint.getInstance().createNewI2cForm();
-            } catch (IOException ex) {
-                Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            //write part here
+        try {
+            GuiEntryPoint.getInstance().createNewI2cForm();
+        } catch (IOException ex) {
+            Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

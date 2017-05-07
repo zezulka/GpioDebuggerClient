@@ -13,7 +13,7 @@ public enum Operation {
     READRANGE("read from range of registers"), READ("read from register"),
     WRITERANGE("write to range of registers"), WRITE("write to register");
     
-    private String op;
+    private final String op;
     
     Operation(String op) {
         this.op = op;
@@ -29,5 +29,9 @@ public enum Operation {
     
     public static boolean isWriteOperation(Operation op) {
         return !isReadOperation(op);
+    }
+    
+    public static boolean isRangeOpearation(Operation op) {
+        return op.equals(Operation.WRITERANGE) || op.equals(Operation.READRANGE);
     }
 }

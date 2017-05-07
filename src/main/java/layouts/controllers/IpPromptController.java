@@ -38,7 +38,7 @@ public class IpPromptController implements Initializable {
 
     @FXML
     public void clickHandler(MouseEvent event) {
-        String ip = ipValue.getText();
+        String ip = ipValue.getText().trim();
         if (ip == null || "".equals(ip) || !InetAddressValidator.getInstance().isValid(ip)) {
             Platform.runLater(() -> {
                 GuiEntryPoint.provideFeedback("IP is not valid!");

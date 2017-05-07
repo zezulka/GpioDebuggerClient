@@ -18,7 +18,6 @@ public class Main {
         EventQueue.invokeLater(() -> Application.launch(GuiEntryPoint.class, args));
     }
     
-    
     public static void connectToDevice(String ipAddress) {
         CM.setIpAddress(ipAddress);
         new Thread(CM).start();

@@ -63,7 +63,7 @@
                </font>
             </Label>
             <TextField id="registerAddressToField" fx:id="registerAddressToField" disable="true" prefHeight="43.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Value (write mode only)" GridPane.rowIndex="4">
+            <Label prefHeight="56.0" prefWidth="279.0" text="Value (write mode, values separated with ' ')" wrapText="true" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

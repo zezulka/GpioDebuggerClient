@@ -130,6 +130,11 @@ public final class GuiEntryPoint extends Application {
         switchScene(cubieBoardController);
     }
 
+    
+    public void switchToIpPrompt() throws IOException{
+        switchScene(ipPrompt);
+    }
+    
     public void switchToCurrentDevice() throws IOException {
         if (ClientConnectionManager.getInstance() == null) {
             GUI_LOGGER.debug("manager not ready!");

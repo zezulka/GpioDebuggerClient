@@ -83,7 +83,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#sendInterfaceRequest");
+        button.setAttribute("onMouseClicked", "#sendGpioRequest");
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
         button.setAttribute("text", (currentPin.isGpio())
                 ? currentPin.getName() : currentPin.getName());
