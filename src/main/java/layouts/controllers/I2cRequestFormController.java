@@ -159,9 +159,9 @@ public class I2cRequestFormController implements Initializable {
             this.statusBar.setText(String.format("Slave address must be an integer"));
             return null;
         }
-        msgBuilder = msgBuilder.append(gatherMessageFromField("Register address (lo) must be an integer", registerAddressFromField));
+        msgBuilder = msgBuilder.append(gatherNumericMessage("Register address (lo) must be an integer", registerAddressFromField));
         if (selectedOp.equals(Operation.READRANGE)) {
-            msgBuilder = msgBuilder.append(gatherMessageFromField("Register address (hi) must be an integer", registerAddressToField));
+            msgBuilder = msgBuilder.append(gatherNumericMessage("Register address (hi) must be an integer", registerAddressToField));
         }
         if (Operation.isReadOperation(selectedOp)) {
             return msgBuilder.toString();
@@ -181,7 +181,7 @@ public class I2cRequestFormController implements Initializable {
         return msgBuilder.toString();
     }
 
-    private String gatherMessageFromField(String errMessage, TextInputControl textField) {
+    private String gatherNumericMessage(String errMessage, TextInputControl textField) {
         String textFieldValue;
         int numericValueHex;
         try {
