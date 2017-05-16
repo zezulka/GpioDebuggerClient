@@ -5,25 +5,22 @@
  */
 package core;
 
-import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import protocol.ProtocolMessages;
 
 /**
  *
- * @author miloslav
+ * @author Miloslav Zezulka
  */
 public class JavaFXDummyApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/SpiReadRequestForm.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/SpiRequestForm.fxml"));
     
         Scene scene = new Scene(root, 300, 275);
     
