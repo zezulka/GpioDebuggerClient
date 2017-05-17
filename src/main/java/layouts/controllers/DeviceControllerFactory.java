@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.controllers;
 
 import protocol.BoardType;
 
 /**
  *
- * @author Miloslav
+ * @author Miloslav Zezulka, 2017
  */
 public class DeviceControllerFactory {
     public static DeviceController getController(BoardType board) {

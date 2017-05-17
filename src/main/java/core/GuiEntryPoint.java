@@ -91,27 +91,10 @@ public final class GuiEntryPoint extends Application {
         return INSTANCE;
     }
 
-    //this should be in separate class! single responsibility broken
-    public static void writeErrorToLoggerWithClass(Class<?> controllerClass, Throwable cause) {
-        GUI_LOGGER.error(controllerClass.getName(), cause);
-    }
-
-    public static void writeErrorToLoggerWithMessage(String msg, Throwable cause) {
-        GUI_LOGGER.error(msg, cause);
-    }
-
-    public static void writeInfoToLogger(String msg) {
-        GUI_LOGGER.info(msg);
-    }
-
-    public static void writeErrorToLoggerWithoutCause(String msg) {
-        GUI_LOGGER.error(msg);
-    }
-
     private void switchScene(URL fxml) throws IOException {
-        GuiEntryPoint.writeInfoToLogger("attempting to load " + fxml.toString() + " ...");
+        GUI_LOGGER.debug("Attempting to load " + fxml.toString() + " ...");
         Parent newParent = (Parent) FXMLLoader.load(fxml);
-        GuiEntryPoint.writeInfoToLogger("load successful!");
+        GUI_LOGGER.debug("Load successful.");
         Scene scene = stage.getScene();
         if (scene == null) {
             scene = new Scene(newParent, 1000, 800);
@@ -195,7 +178,7 @@ public final class GuiEntryPoint extends Application {
             stage.setTitle("Debugger for ARM-based devices");
             stage.show();
         } catch (IOException ex) {
-            GuiEntryPoint.writeErrorToLoggerWithMessage(ProtocolMessages.C_ERR_GUI_FXML.toString(), ex);
+            GUI_LOGGER.error(null, ex);
             Platform.exit();
         }
     }

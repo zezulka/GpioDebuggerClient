@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package core;
+package guiTest;
 
+import guiTest.JavaFXDummyApplication;
 import java.awt.EventQueue;
 import javafx.application.Application;
 

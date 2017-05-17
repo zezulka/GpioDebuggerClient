@@ -8,7 +8,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.logging.Level;
 import javafx.application.Platform;
 
 import org.slf4j.Logger;
@@ -43,16 +42,21 @@ public class ClientConnectionManager implements Runnable {
     private ClientConnectionManager() {
     }
 
+    public void connectToDevice(String ipAddress) {
+        setIpAddress(ipAddress);
+        new Thread(this).start();
+    }
+
     private void resetResources() {
         try {
-            if(channel != null) {
+            if (channel != null) {
                 channel.close();
             }
-            if(selector != null) {
+            if (selector != null) {
                 selector.close();
             }
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ClientConnectionManager.class.getName()).log(Level.SEVERE, null, ex);
+            MAIN_LOGGER.error(null, ex);
         }
         selector = null;
         ipAddress = null;
@@ -86,8 +90,8 @@ public class ClientConnectionManager implements Runnable {
             InetAddress inetAddress = InetAddress.getByAddress(ipAddr);
             if (!inetAddress.isReachable(TIMEOUT)) {
                 Platform.runLater(() -> {
-                        GuiEntryPoint.provideFeedback(String.format("Host %s could not be reached.", ipAddress));
-                    });
+                    GuiEntryPoint.provideFeedback(String.format("Host %s could not be reached.", ipAddress));
+                });
                 resetResources();
                 return false;
             }
@@ -167,7 +171,7 @@ public class ClientConnectionManager implements Runnable {
                             try {
                                 GuiEntryPoint.getInstance().switchToCurrentDevice();
                             } catch (IOException ex) {
-                                GuiEntryPoint.writeErrorToLoggerWithClass(getClass(), ex);
+                                MAIN_LOGGER.error(null, ex);
                             }
                             continue;
                         }

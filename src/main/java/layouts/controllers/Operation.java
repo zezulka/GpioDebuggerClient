@@ -10,8 +10,10 @@ package layouts.controllers;
  * @author Miloslav
  */
 public enum Operation {
-    READRANGE("read from range of registers"), READ("read from register"),
-    WRITERANGE("write to range of registers"), WRITE("write to register");
+    READ("read"),
+    WRITE("write"),
+    READRANGE("read multiple values"), 
+    WRITERANGE("write multiple values"); 
     
     private final String op;
     

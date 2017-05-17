@@ -5,6 +5,7 @@
  */
 package layouts.controllers;
 
+import core.ClientConnectionManager;
 import core.GuiEntryPoint;
 import core.Main;
 import java.net.URL;
@@ -45,7 +46,7 @@ public class IpPromptController implements Initializable {
             });
             return;
         }
-        Main.connectToDevice(ip);
+        ClientConnectionManager.getInstance().connectToDevice(ip);
     }
 
 }

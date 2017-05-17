@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package core;
+package guiTest;
 
 import java.io.IOException;
 import javafx.application.Application;
@@ -22,7 +22,7 @@ public class JavaFXDummyApplication extends Application {
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/SpiRequestForm.fxml"));
     
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root, 600, 1000);
     
         stage.setTitle("FXML Welcome");
         stage.setScene(scene);

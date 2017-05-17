@@ -2,17 +2,22 @@ package layouts.controllers;
 
 import core.ClientConnectionManager;
 import core.GuiEntryPoint;
+
 import java.io.IOException;
+
 import java.net.URL;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
+
+import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import protocol.ProtocolMessages;
 
 /**
@@ -21,6 +26,8 @@ import protocol.ProtocolMessages;
  */
 public class RaspiController implements DeviceController, Initializable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
+    
     @FXML
     private RadioButton readRadioButton;
 
@@ -43,7 +50,7 @@ public class RaspiController implements DeviceController, Initializable {
         try {
             GuiEntryPoint.getInstance().createNewSpiForm();
         } catch (IOException ex) {
-            Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(null, ex);
         }
     }
     
@@ -52,7 +59,7 @@ public class RaspiController implements DeviceController, Initializable {
         try {
             GuiEntryPoint.getInstance().createNewI2cForm();
         } catch (IOException ex) {
-            Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(null, ex);
         }
     }
 
@@ -69,13 +76,12 @@ public class RaspiController implements DeviceController, Initializable {
                     .getInstance()
                     .setMessageToSend(msg);
         } else {
-            GuiEntryPoint.writeErrorToLoggerWithoutCause(ProtocolMessages.C_ERR_GUI_NOT_BUTTON.toString());
+            LOGGER.error(ProtocolMessages.C_ERR_GUI_NOT_BUTTON.toString());
             throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
     }
 }
