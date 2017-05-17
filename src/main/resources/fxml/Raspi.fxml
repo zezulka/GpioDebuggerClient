@@ -76,8 +76,8 @@
                 <Button GridPane.columnIndex="2" GridPane.rowIndex="19" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" prefHeight="25" prefWidth="120" text="P1_36"/>
                 <Button GridPane.columnIndex="2" GridPane.rowIndex="20" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" prefHeight="25" prefWidth="120" text="P1_38"/>
                 <Button GridPane.columnIndex="2" GridPane.rowIndex="21" disable="false" mnemonicParsing="false" onMouseClicked="#sendGpioRequest" prefHeight="25" prefWidth="120" text="P1_40"/>
-                <Button GridPane.columnIndex="0" mnemonicParsing="false" onMouseClicked="#createNewInterfaceForm" prefHeight="25" prefWidth="120" text="i2c"/>
-                <Button GridPane.columnIndex="1" mnemonicParsing="false" onMouseClicked="#createNewInterfaceForm" prefHeight="25" prefWidth="120" text="spi"/>
+                <Button GridPane.columnIndex="0" mnemonicParsing="false" onMouseClicked="#createI2cForm" prefHeight="25" prefWidth="120" text="i2c"/>
+                <Button GridPane.columnIndex="1" mnemonicParsing="false" onMouseClicked="#createSpiForm" prefHeight="25" prefWidth="120" text="spi"/>
                 <TextArea GridPane.columnIndex="3" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" editable="false" fx:id="feedbackArea" wrapText="true"/>
                 <RadioButton GridPane.columnIndex="1" GridPane.rowIndex="4" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
                     <toggleGroup>

@@ -37,9 +37,18 @@ public class RaspiController implements DeviceController, Initializable {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
     }
-
+    
     @FXML
-    protected void createNewInterfaceForm(MouseEvent event) {
+    protected void createSpiForm(MouseEvent event) {
+        try {
+            GuiEntryPoint.getInstance().createNewSpiForm();
+        } catch (IOException ex) {
+            Logger.getLogger(RaspiController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML
+    protected void createI2cForm(MouseEvent event) {
         try {
             GuiEntryPoint.getInstance().createNewI2cForm();
         } catch (IOException ex) {

@@ -46,8 +46,9 @@ public final class GuiEntryPoint extends Application {
             + File.separator + "fxml");
     private static URL ipPrompt;
 
-    private static URL i2cReadRequestForm;
-
+    private static URL i2cRequestForm;
+    private static URL spiRequestForm;
+    
     private static URL raspiController;
     private static URL beagleBoneBlackController;
     private static URL cubieBoardController;
@@ -60,7 +61,9 @@ public final class GuiEntryPoint extends Application {
             pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "Raspi" + ".fxml");
             raspiController = pathToFxml.toURI().toURL();
             pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "I2cRequestForm" + ".fxml");
-            i2cReadRequestForm = pathToFxml.toURI().toURL();
+            i2cRequestForm = pathToFxml.toURI().toURL();
+            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "SpiRequestForm" + ".fxml");
+            spiRequestForm = pathToFxml.toURI().toURL();
         } catch (MalformedURLException ex) {
             GUI_LOGGER.error("Malformed URL:", ex);
         }
@@ -177,11 +180,11 @@ public final class GuiEntryPoint extends Application {
     }
 
     public void createNewI2cForm() throws IOException {
-        createNewInterfaceForm(i2cReadRequestForm);
+        createNewInterfaceForm(i2cRequestForm);
     }
 
     public void createNewSpiForm() throws IOException {
-        createNewInterfaceForm(null);
+        createNewInterfaceForm(spiRequestForm);
     }
 
     @Override
