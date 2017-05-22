@@ -37,7 +37,7 @@ public class SpiRequestFormController implements Initializable {
     @FXML
     private GridPane textFieldGridPane;
 
-    private static int numFields = 0;
+    private static int numFields;
     private static final int MAX_NUM_FIELDS = 16;
     private static final char SEPARATOR = ':';
     private static final String HEXA_PREFIX = "0x";
@@ -59,13 +59,13 @@ public class SpiRequestFormController implements Initializable {
         addAllChipSelectIndexes();
         chipSelectList.getSelectionModel().selectFirst();
         modeList.getSelectionModel().selectFirst();
+        numFields = 0;
     }
 
     @FXML
     private void sendSpiRequest(MouseEvent event) {
         Stage stage = (Stage) spiRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
-        System.out.println(msgToSend);
         if (msgToSend != null) {
             ClientConnectionManager
                     .getInstance()
