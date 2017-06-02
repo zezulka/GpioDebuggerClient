@@ -120,7 +120,7 @@ public class SpiRequestFormController implements Initializable {
                         + "Please fill in all the fields.");
                 return null;
             }
-            if(isStringNumericAndPositive(t)) {
+            if(isStringNumericAndPositive(HEXA_PREFIX + t)) {
                 resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
             } else {
                 showErrorDialogMessage(String.format("At least one field is"

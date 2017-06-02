@@ -7,15 +7,17 @@
 
 <Pane prefHeight="353.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
     <children>
-        <Button layoutX="278.0" layoutY="297.0" mnemonicParsing="false" onMouseClicked="#clickHandler" prefHeight="42.0" prefWidth="106.0" text="Submit">
-         <font>
-            <Font size="16.0" />
-         </font></Button>
+        <TextArea id="feedbackArea" fx:id="feedbackArea" focusTraversable="false" layoutX="14.0" layoutY="14.0" opacity="0.45" prefHeight="143.0" prefWidth="389.0" wrapText="true" />
         <TextField id="ipValue" fx:id="ipValue" layoutX="140.0" layoutY="244.0" prefHeight="31.0" prefWidth="244.0" />
         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="249.0" prefHeight="21.0" prefWidth="126.0" text="IP adress:" textAlignment="RIGHT">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font></Label>
-      <TextArea id="feedbackArea" fx:id="feedbackArea" layoutX="14.0" layoutY="14.0" opacity="0.45" prefHeight="143.0" prefWidth="389.0" wrapText="true" />
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <Button layoutX="278.0" layoutY="297.0" mnemonicParsing="false" onKeyTyped="#submitButtonPressed" onMouseClicked="#submitButtonPressed" prefHeight="42.0" prefWidth="106.0" text="Submit">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
     </children>
 </Pane>

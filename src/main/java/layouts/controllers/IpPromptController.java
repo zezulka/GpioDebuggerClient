@@ -7,13 +7,15 @@ package layouts.controllers;
 
 import core.ClientConnectionManager;
 import core.GuiEntryPoint;
-import core.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -26,6 +28,8 @@ public class IpPromptController implements Initializable {
 
     @FXML
     private TextField ipValue;
+    @FXML
+    private TextArea feedbackArea;
 
     /**
      * initialises the controller class.
@@ -37,8 +41,7 @@ public class IpPromptController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    @FXML
-    public void clickHandler(MouseEvent event) {
+    private void handler() {
         String ip = ipValue.getText().trim();
         if (ip == null || "".equals(ip) || !InetAddressValidator.getInstance().isValid(ip)) {
             Platform.runLater(() -> {
@@ -47,6 +50,16 @@ public class IpPromptController implements Initializable {
             return;
         }
         ClientConnectionManager.getInstance().connectToDevice(ip);
+    }
+
+    @FXML
+    private void submitButtonPressed(KeyEvent event) {
+        handler();
+    }
+
+    @FXML
+    private void submitButtonPressed(MouseEvent event) {
+        handler();
     }
 
 }
