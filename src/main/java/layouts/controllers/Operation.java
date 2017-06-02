@@ -11,9 +11,7 @@ package layouts.controllers;
  */
 public enum Operation {
     READ("read"),
-    WRITE("write"),
-    READRANGE("read multiple values"), 
-    WRITERANGE("write multiple values"); 
+    WRITE("write");
     
     private final String op;
     
@@ -26,14 +24,10 @@ public enum Operation {
     }
     
     public static boolean isReadOperation(Operation op) {
-        return op.equals(Operation.READ) || op.equals(Operation.READRANGE);
+        return op.equals(Operation.READ);
     }
     
     public static boolean isWriteOperation(Operation op) {
-        return !isReadOperation(op);
-    }
-    
-    public static boolean isRangeOpearation(Operation op) {
-        return op.equals(Operation.WRITERANGE) || op.equals(Operation.READRANGE);
+        return op.equals(Operation.WRITE);
     }
 }

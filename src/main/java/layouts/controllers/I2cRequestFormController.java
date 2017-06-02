@@ -1,30 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.controllers;
 
 import core.ClientConnectionManager;
-import java.net.URL;
-import java.util.Map;
 
+import java.net.URL;
+
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+
 import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import javafx.scene.Node;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+
 import javafx.scene.input.MouseEvent;
 
+import javafx.scene.layout.GridPane;
+
+import javafx.scene.paint.Color;
+
 import javafx.stage.Stage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FXML Controller class
@@ -38,26 +49,30 @@ public class I2cRequestFormController implements Initializable {
     @FXML
     private TextField slaveAddressField;
     @FXML
-    private TextField registerAddressToField;
-    @FXML
     private TextField registerAddressFromField;
-    @FXML
-    private TextField writeValue;
     @FXML
     private ComboBox<String> modeList;
     @FXML
-    private Label statusBar;
+    private GridPane textFieldGridPane;
+    @FXML
+    private Button addFieldButton;
+    @FXML
+    private Button removeFieldButton;
+    @FXML
+    private TextField lengthField;
+    @FXML
+    private Label values;
+    @FXML
+    private Label length;
 
-    private static final String ERR_SLAVE_RANGE = "Slave address (%d) out of bounds - <%d;%d>";
-    private static final int SLAVE_ADDR_LOWER_BOUND = 0x03;
-    private static final int SLAVE_ADDR_UPPER_BOUND = 0x77;
+    private static int numFields;
+    private static final int MAX_NUM_FIELDS = 16;
 
     private static final char SEPARATOR = ':';
-    private static String cachedSlaveAddress = "";
     private static final String HEXA_PREFIX = "0x";
-    private static Operation cachedOp = null;
 
     private static final Map<String, Operation> MODES = FXCollections.observableHashMap();
+    private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
 
     /**
      * initialises the controller class.
@@ -68,11 +83,8 @@ public class I2cRequestFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
-        slaveAddressField.setText(cachedSlaveAddress);
-        if (cachedOp != null) {
-            this.modeList.getSelectionModel().select(cachedOp.getOp());
-            initTextFieldDisableProperty(cachedOp);
-        }
+        modeList.getSelectionModel().selectFirst();
+        configTextFieldDisableProperty(MODES.get(modeList.getSelectionModel().getSelectedItem()));
         this.modeList.valueProperty().addListener(
                 new ChangeListener<String>() {
 
@@ -80,33 +92,29 @@ public class I2cRequestFormController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Operation op = MODES.get(newValue);
                 if (op != null) {
-                    initTextFieldDisableProperty(op);
+                    configTextFieldDisableProperty(op);
                 }
             }
         }
         );
     }
 
-    private void initTextFieldDisableProperty(Operation op) {
+    private void configTextFieldDisableProperty(Operation op) {
         switch (op) {
             case READ: {
-                registerAddressToField.setDisable(true);
-                writeValue.setDisable(true);
-                break;
-            }
-            case READRANGE: {
-                registerAddressToField.setDisable(false);
-                writeValue.setDisable(true);
+                values.setTextFill(Color.LIGHTGREY);
+                length.setTextFill(Color.BLACK);
+                lengthField.setDisable(false);
+                removeFieldButton.setDisable(true);
+                addFieldButton.setDisable(true);
                 break;
             }
             case WRITE: {
-                registerAddressToField.setDisable(true);
-                writeValue.setDisable(false);
-                break;
-            }
-            case WRITERANGE: {
-                registerAddressToField.setDisable(true);
-                writeValue.setDisable(false);
+                values.setTextFill(Color.BLACK);
+                length.setTextFill(Color.LIGHTGREY);
+                lengthField.setDisable(true);
+                removeFieldButton.setDisable(false);
+                addFieldButton.setDisable(false);
                 break;
             }
         }
@@ -135,78 +143,125 @@ public class I2cRequestFormController implements Initializable {
         this.modeList.setItems(FXCollections.observableArrayList(MODES.keySet()));
     }
 
+    private static void showErrorDialogMessage(String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("ERROR MESSAGE");
+        alert.setHeaderText("There has been an error processing the user input:");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     private String gatherMessageFromForm() {
-        int slaveAddress;
         StringBuilder msgBuilder = new StringBuilder("i2c");
         Operation selectedOp = MODES.get(this.modeList.getSelectionModel().getSelectedItem());
         if (selectedOp == null) {
-            this.statusBar.setText("Operation has not been selected");
+            showErrorDialogMessage("Operation has not been selected");
             return null;
-        } else {
-            cachedOp = selectedOp;
         }
-        msgBuilder = msgBuilder.append(SEPARATOR).append(selectedOp.toString());
-        try {
-            String textFieldValue = slaveAddressField.getText().trim();
-            slaveAddress = Integer.parseInt(textFieldValue);
-            if (slaveAddress < SLAVE_ADDR_LOWER_BOUND || slaveAddress > SLAVE_ADDR_UPPER_BOUND) {
-                this.statusBar.setText(String.format(ERR_SLAVE_RANGE, slaveAddress, SLAVE_ADDR_LOWER_BOUND, SLAVE_ADDR_UPPER_BOUND));
+        String slave = getTextFieldNumericContents(slaveAddressField,
+                "Slave address must be a positive integer");
+        if (slave == null) {
+            return null;
+        }
+        String register = getTextFieldNumericContents(registerAddressFromField,
+                "Register address must be a positive integer");
+        if (register == null) {
+            return null;
+        }
+        msgBuilder = msgBuilder
+                .append(SEPARATOR)
+                .append(selectedOp.toString())
+                .append(SEPARATOR)
+                .append(slave)
+                .append(SEPARATOR)
+                .append(register)
+                .append(SEPARATOR);
+
+        if (Operation.isReadOperation(selectedOp)) {
+            String length = getTextFieldNumericContents(lengthField,
+                    "Len must be a positive integer");
+            if (length == null) {
                 return null;
             }
-            cachedSlaveAddress = slaveAddress + "";
-            msgBuilder = msgBuilder.append(SEPARATOR).append(HEXA_PREFIX).append(slaveAddress);
-        } catch (NumberFormatException nfe) {
-            this.statusBar.setText(String.format("Slave address must be an integer"));
-            return null;
-        }
-        msgBuilder = msgBuilder.append(gatherNumericMessage("Register address (lo) must be an integer", registerAddressFromField));
-        if (selectedOp.equals(Operation.READRANGE)) {
-            msgBuilder = msgBuilder.append(gatherNumericMessage("Register address (hi) must be an integer", registerAddressToField));
-        }
-        if (Operation.isReadOperation(selectedOp)) {
+            msgBuilder = msgBuilder.append(length);
+            LOGGER.info(String.format("I2c request form has now "
+                    + "submitted the following request:\n %s"
+                    + "",
+                    msgBuilder.toString()));
             return msgBuilder.toString();
         }
-        String valueToWrite = null;
-        if(selectedOp.equals(Operation.WRITE)) {
-            valueToWrite = HEXA_PREFIX + writeValue.getText().trim();
-        } else if(selectedOp.equals(Operation.WRITERANGE)) {
-            valueToWrite = gatherMessageArrayFromField("Input must be numeric values separated by spaces", writeValue);
-        }
+        String valueToWrite = gatherMessageArrayFromField();
         if (valueToWrite == null || valueToWrite.isEmpty()) {
-            this.statusBar.setText(String.format("Value to write must be filled correctly"));
+            showErrorDialogMessage("Value to write must be filled correctly");
             return null;
         }
-        msgBuilder = msgBuilder.append(SEPARATOR).append(valueToWrite);
-        System.out.println(msgBuilder.toString());
+        msgBuilder = msgBuilder.append(valueToWrite);
+        LOGGER.info(String.format("I2c request form has now "
+                + "submitted the following request:\n %s"
+                + "",
+                msgBuilder.toString()));
         return msgBuilder.toString();
     }
 
-    private String gatherNumericMessage(String errMessage, TextInputControl textField) {
-        String textFieldValue;
-        int numericValueHex;
+    private boolean isStringNumericAndPositive(String errMessage, String input) {
         try {
-            textFieldValue = textField.getText().trim();
-            numericValueHex = Integer.parseInt(textFieldValue, 16);
-            return SEPARATOR + HEXA_PREFIX + numericValueHex;
+            if (input == null || input.isEmpty()) {
+                return false;
+            }
+            return Short.decode(input) >= 0;
         } catch (NumberFormatException nfe) {
-            this.statusBar.setText(String.format(errMessage));
+            showErrorDialogMessage(errMessage);
+            return false;
+        }
+    }
+
+    private String getTextFieldNumericContents(TextInputControl textInput, String errMessage) {
+        String contents = textInput.getText().trim();
+        if (isStringNumericAndPositive(errMessage, HEXA_PREFIX + contents)) {
+            return HEXA_PREFIX + contents;
+        } else {
             return null;
         }
     }
 
-    private String gatherMessageArrayFromField(String errMessage, TextInputControl textField) {
-        String[] textFieldValues;
-        try {
-            textFieldValues = textField.getText().trim().split(" ");
-            StringBuilder builder = new StringBuilder();
-            for (String textFieldValue : textFieldValues) {
-                builder = builder.append(HEXA_PREFIX).append(Integer.parseInt(textFieldValue, 16)).append(' ');
+    private String gatherMessageArrayFromField() {
+        StringBuilder resultBuilder = new StringBuilder();
+        for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
+            String t = ((TextField) it.next()).getText().trim();
+            if (t == null || t.isEmpty()) {
+                return null;
             }
-            builder = builder.deleteCharAt(builder.length() - 1);
-            return builder.toString();
-        } catch (NumberFormatException nfe) {
-            this.statusBar.setText(String.format(errMessage));
-            return null;
+            resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
+            if (it.hasNext()) {
+                resultBuilder = resultBuilder.append(' ');
+            }
         }
+        return resultBuilder.toString();
+    }
+
+    @FXML
+    private void addNewTextField(MouseEvent event) {
+        if (numFields >= MAX_NUM_FIELDS) {
+            showErrorDialogMessage(String.format("Maximum number of rows is %d", MAX_NUM_FIELDS));
+            return;
+        }
+
+        int size = textFieldGridPane.getChildren().size();
+        TextField tf = new TextField();
+        tf.setMaxHeight(20.0);
+        tf.setMaxWidth(100.0);
+
+        textFieldGridPane.add(tf, numFields % 2 == 1 ? 1 : 0, size - (numFields % 2 == 1 ? 1 : 0));
+        ++numFields;
+    }
+
+    @FXML
+    private void removeLastTextField(MouseEvent event) {
+        int index = textFieldGridPane.getChildren().size() - 1;
+        if (index < 0) {
+            return;
+        }
+        textFieldGridPane.getChildren().remove(index);
+        --numFields;
     }
 }

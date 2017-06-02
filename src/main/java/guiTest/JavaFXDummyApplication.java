@@ -20,11 +20,12 @@ public class JavaFXDummyApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/SpiRequestForm.fxml"));
+        String pathToFxml = "fxml/I2cRequestForm.fxml";
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(pathToFxml));
     
         Scene scene = new Scene(root, 600, 1000);
     
-        stage.setTitle("FXML Welcome");
+        stage.setTitle(pathToFxml);
         stage.setScene(scene);
         stage.show();
     }
