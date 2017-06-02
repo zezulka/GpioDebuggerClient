@@ -1,22 +1,32 @@
 package layouts.controllers;
 
 import core.ClientConnectionManager;
+
 import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import javafx.scene.input.MouseEvent;
+
 import javafx.scene.layout.GridPane;
+
 import javafx.stage.Stage;
 
 /**
@@ -100,19 +110,48 @@ public class SpiRequestFormController implements Initializable {
                 .append(chipSelectList.getSelectionModel().getSelectedItem())
                 .append(SEPARATOR);
         if (textFieldGridPane.getChildren().isEmpty()) {
+            showErrorDialogMessage("At least one byte must be sent!");
             return null;
         }
         for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
             String t = ((TextField) it.next()).getText().trim();
             if (t == null || t.isEmpty()) {
+                showErrorDialogMessage("At least one field is empty. "
+                        + "Please fill in all the fields.");
                 return null;
             }
-            resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
+            if(isStringNumericAndPositive(t)) {
+                resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
+            } else {
+                showErrorDialogMessage(String.format("At least one field is"
+                    + " not a valid input, found '%s'", t));
+                return null;
+            }
             if (it.hasNext()) {
                 resultBuilder = resultBuilder.append(' ');
             }
         }
+        System.out.println(resultBuilder.toString());
         return resultBuilder.toString();
+    }
+    
+    private boolean isStringNumericAndPositive(String input) {
+        try {
+            if (input == null || input.isEmpty()) {
+                return false;
+            }
+            return Short.decode(input) >= 0;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+    
+    private static void showErrorDialogMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR MESSAGE");
+        alert.setHeaderText("There has been an error processing user input:");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void addAllModes() {

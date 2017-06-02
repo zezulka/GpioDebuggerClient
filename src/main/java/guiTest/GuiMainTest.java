@@ -5,7 +5,7 @@ import javafx.application.Application;
 
 /**
  *
- * @author miloslav
+ * @author Miloslav Zezulka
  */
 public class GuiMainTest {
 

@@ -158,14 +158,14 @@ public class I2cRequestFormController implements Initializable {
             showErrorDialogMessage("Operation has not been selected");
             return null;
         }
-        String slave = getTextFieldNumericContents(slaveAddressField,
-                "Slave address must be a positive integer");
+        String slave = getTextFieldNumericContents(slaveAddressField);
         if (slave == null) {
+            showErrorDialogMessage("Slave address must be a positive integer");
             return null;
         }
-        String register = getTextFieldNumericContents(registerAddressFromField,
-                "Register address must be a positive integer");
+        String register = getTextFieldNumericContents(registerAddressFromField);
         if (register == null) {
+            showErrorDialogMessage("Register address must be a positive integer");
             return null;
         }
         msgBuilder = msgBuilder
@@ -178,12 +178,12 @@ public class I2cRequestFormController implements Initializable {
                 .append(SEPARATOR);
 
         if (Operation.isReadOperation(selectedOp)) {
-            String length = getTextFieldNumericContents(lengthField,
-                    "Len must be a positive integer");
-            if (length == null) {
+            String len = getTextFieldNumericContents(lengthField);
+            if (len == null) {
+                showErrorDialogMessage("Len must be a positive integer");
                 return null;
             }
-            msgBuilder = msgBuilder.append(length);
+            msgBuilder = msgBuilder.append(len);
             LOGGER.info(String.format("I2c request form has now "
                     + "submitted the following request:\n %s"
                     + "",
@@ -203,21 +203,20 @@ public class I2cRequestFormController implements Initializable {
         return msgBuilder.toString();
     }
 
-    private boolean isStringNumericAndPositive(String errMessage, String input) {
+    private boolean isStringNumericAndPositive(String input) {
         try {
             if (input == null || input.isEmpty()) {
                 return false;
             }
             return Short.decode(input) >= 0;
         } catch (NumberFormatException nfe) {
-            showErrorDialogMessage(errMessage);
             return false;
         }
     }
 
-    private String getTextFieldNumericContents(TextInputControl textInput, String errMessage) {
+    private String getTextFieldNumericContents(TextInputControl textInput) {
         String contents = textInput.getText().trim();
-        if (isStringNumericAndPositive(errMessage, HEXA_PREFIX + contents)) {
+        if (isStringNumericAndPositive(HEXA_PREFIX + contents)) {
             return HEXA_PREFIX + contents;
         } else {
             return null;
