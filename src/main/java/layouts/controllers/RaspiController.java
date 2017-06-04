@@ -14,6 +14,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
 
 import java.util.ResourceBundle;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,24 +30,24 @@ import protocol.ProtocolMessages;
 public class RaspiController implements DeviceController, Initializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-    
+
     @FXML
     private RadioButton readRadioButton;
 
-    /**
-     * String containing Button title which caused this event to happen. The
-     * Button title is equivalent to the one in bulldog naming. (i.e. RaspiNames
-     * etc.)
-     *
-     * @param event
-     * @throws IllegalArgumentException in case event is not of Button instance
-     */
     @FXML
-    protected void sendGpioRequest(MouseEvent event) {
+    protected void mouseClickedHandler(MouseEvent event) {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
     }
-    
+
+    @FXML
+    protected void keyPressedHandler(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            String op = readRadioButton.isSelected() ? "read" : "write";
+            sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
+        }
+    }
+
     @FXML
     protected void createSpiForm(MouseEvent event) {
         try {
@@ -53,7 +56,7 @@ public class RaspiController implements DeviceController, Initializable {
             LOGGER.error(null, ex);
         }
     }
-    
+
     @FXML
     protected void createI2cForm(MouseEvent event) {
         try {
@@ -63,14 +66,14 @@ public class RaspiController implements DeviceController, Initializable {
         }
     }
 
-    private String getButtonTitle(MouseEvent event) {
+    private String getButtonTitle(InputEvent event) {
         if (event == null) {
             return null;
         }
         return ((Button) event.getSource()).getText();
     }
 
-    private void sendRequest(MouseEvent event, String msg) {
+    private void sendRequest(InputEvent event, String msg) {
         if (event.getSource() instanceof Button) {
             ClientConnectionManager
                     .getInstance()

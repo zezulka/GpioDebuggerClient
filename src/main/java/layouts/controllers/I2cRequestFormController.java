@@ -158,12 +158,12 @@ public class I2cRequestFormController implements Initializable {
             showErrorDialogMessage("Operation has not been selected");
             return null;
         }
-        String slave = getTextFieldNumericContents(slaveAddressField);
+        String slave = getTextFieldNumericContents(slaveAddressField, 0);
         if (slave == null) {
             showErrorDialogMessage("Slave address must be a positive integer");
             return null;
         }
-        String register = getTextFieldNumericContents(registerAddressFromField);
+        String register = getTextFieldNumericContents(registerAddressFromField, 0);
         if (register == null) {
             showErrorDialogMessage("Register address must be a positive integer");
             return null;
@@ -178,7 +178,7 @@ public class I2cRequestFormController implements Initializable {
                 .append(SEPARATOR);
 
         if (Operation.isReadOperation(selectedOp)) {
-            String len = getTextFieldNumericContents(lengthField);
+            String len = getTextFieldNumericContents(lengthField, 1);
             if (len == null) {
                 showErrorDialogMessage("Len must be a positive integer");
                 return null;
@@ -203,22 +203,14 @@ public class I2cRequestFormController implements Initializable {
         return msgBuilder.toString();
     }
 
-    private boolean isStringNumericAndPositive(String input) {
+    private String getTextFieldNumericContents(TextInputControl textInput, int lowBound) {
         try {
-            if (input == null || input.isEmpty()) {
-                return false;
+            if (textInput == null) {
+                return null;
             }
-            return Short.decode(input) >= 0;
+            String result = textInput.getText().trim();
+            return Short.decode(result) >= lowBound ? HEXA_PREFIX + result : null;
         } catch (NumberFormatException nfe) {
-            return false;
-        }
-    }
-
-    private String getTextFieldNumericContents(TextInputControl textInput) {
-        String contents = textInput.getText().trim();
-        if (isStringNumericAndPositive(HEXA_PREFIX + contents)) {
-            return HEXA_PREFIX + contents;
-        } else {
             return null;
         }
     }

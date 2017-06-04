@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -53,8 +54,10 @@ public class IpPromptController implements Initializable {
     }
 
     @FXML
-    private void submitButtonPressed(KeyEvent event) {
-        handler();
+    private void keyTyped(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.ENTER)) {
+            handler();
+        }
     }
 
     @FXML
