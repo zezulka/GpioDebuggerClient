@@ -5,7 +5,6 @@ import core.ClientConnectionManager;
 import java.net.URL;
 
 import java.util.Iterator;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -51,7 +50,7 @@ public class I2cRequestFormController implements Initializable {
     @FXML
     private TextField registerAddressFromField;
     @FXML
-    private ComboBox<String> modeList;
+    private ComboBox<Operation> operationList;
     @FXML
     private GridPane textFieldGridPane;
     @FXML
@@ -71,7 +70,6 @@ public class I2cRequestFormController implements Initializable {
     private static final char SEPARATOR = ':';
     private static final String HEXA_PREFIX = "0x";
 
-    private static final Map<String, Operation> MODES = FXCollections.observableHashMap();
     private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
 
     /**
@@ -83,23 +81,22 @@ public class I2cRequestFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
-        modeList.getSelectionModel().selectFirst();
-        configTextFieldDisableProperty(MODES.get(modeList.getSelectionModel().getSelectedItem()));
-        this.modeList.valueProperty().addListener(
-                new ChangeListener<String>() {
+        operationList.getSelectionModel().selectFirst();
+        setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
+        this.operationList.valueProperty().addListener(
+                new ChangeListener<Operation>() {
 
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Operation op = MODES.get(newValue);
-                if (op != null) {
-                    configTextFieldDisableProperty(op);
+            public void changed(ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) {
+                if (newValue != null) {
+                    setComponentsDisableProperty(newValue);
                 }
             }
         }
         );
     }
 
-    private void configTextFieldDisableProperty(Operation op) {
+    private void setComponentsDisableProperty(Operation op) {
         switch (op) {
             case READ: {
                 values.setTextFill(Color.LIGHTGREY);
@@ -129,18 +126,18 @@ public class I2cRequestFormController implements Initializable {
         Stage stage = (Stage) i2cRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
+            System.out.println(msgToSend);
             ClientConnectionManager
                     .getInstance()
                     .setMessageToSend(msgToSend);
+            LOGGER.info(String.format("I2c request sent to client: %s", msgToSend));
             stage.close();
         }
     }
 
     private void addAllModes() {
-        for (Operation op : Operation.values()) {
-            MODES.put(op.getOp(), op);
-        }
-        this.modeList.setItems(FXCollections.observableArrayList(MODES.keySet()));
+        this.operationList
+                .setItems(FXCollections.observableArrayList(Operation.values()));
     }
 
     private static void showErrorDialogMessage(String message) {
@@ -152,32 +149,8 @@ public class I2cRequestFormController implements Initializable {
     }
 
     private String gatherMessageFromForm() {
-        StringBuilder msgBuilder = new StringBuilder("i2c");
-        Operation selectedOp = MODES.get(this.modeList.getSelectionModel().getSelectedItem());
-        if (selectedOp == null) {
-            showErrorDialogMessage("Operation has not been selected");
-            return null;
-        }
-        String slave = getTextFieldNumericContents(slaveAddressField, 0);
-        if (slave == null) {
-            showErrorDialogMessage("Slave address must be a positive integer");
-            return null;
-        }
-        String register = getTextFieldNumericContents(registerAddressFromField, 0);
-        if (register == null) {
-            showErrorDialogMessage("Register address must be a positive integer");
-            return null;
-        }
-        msgBuilder = msgBuilder
-                .append(SEPARATOR)
-                .append(selectedOp.toString())
-                .append(SEPARATOR)
-                .append(slave)
-                .append(SEPARATOR)
-                .append(register)
-                .append(SEPARATOR);
-
-        if (Operation.isReadOperation(selectedOp)) {
+        StringBuilder msgBuilder = getMessagePrefix();
+        if (Operation.isReadOperation(this.operationList.getSelectionModel().getSelectedItem())) {
             String len = getTextFieldNumericContents(lengthField, 1);
             if (len == null) {
                 showErrorDialogMessage("Len must be a positive integer");
@@ -196,11 +169,34 @@ public class I2cRequestFormController implements Initializable {
             return null;
         }
         msgBuilder = msgBuilder.append(valueToWrite);
-        LOGGER.info(String.format("I2c request form has now "
-                + "submitted the following request:\n %s"
-                + "",
-                msgBuilder.toString()));
         return msgBuilder.toString();
+    }
+
+    private StringBuilder getMessagePrefix() {
+        StringBuilder msgBuilder = new StringBuilder("i2c");
+        Operation selectedOp = this.operationList.getSelectionModel().getSelectedItem();
+        if (selectedOp == null) {
+            showErrorDialogMessage("Operation has not been selected");
+            return null;
+        }
+        String slave = getTextFieldNumericContents(slaveAddressField, 0);
+        if (slave == null) {
+            showErrorDialogMessage("Slave address must be a positive integer");
+            return null;
+        }
+        String register = getTextFieldNumericContents(registerAddressFromField, 0);
+        if (register == null) {
+            showErrorDialogMessage("Register address must be a positive integer");
+            return null;
+        }
+        return msgBuilder
+                .append(SEPARATOR)
+                .append(selectedOp.toString())
+                .append(SEPARATOR)
+                .append(slave)
+                .append(SEPARATOR)
+                .append(register)
+                .append(SEPARATOR);
     }
 
     private String getTextFieldNumericContents(TextInputControl textInput, int lowBound) {
@@ -243,7 +239,7 @@ public class I2cRequestFormController implements Initializable {
         tf.setMaxWidth(100.0);
 
         textFieldGridPane.add(tf, numFields % 2 == 1 ? 1 : 0, size - (numFields % 2 == 1 ? 1 : 0));
-        ++numFields;
+        numFields++;
     }
 
     @FXML
@@ -253,6 +249,6 @@ public class I2cRequestFormController implements Initializable {
             return;
         }
         textFieldGridPane.getChildren().remove(index);
-        --numFields;
+        numFields--;
     }
 }

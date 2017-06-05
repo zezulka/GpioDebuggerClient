@@ -30,4 +30,9 @@ public enum Operation {
     public static boolean isWriteOperation(Operation op) {
         return op.equals(Operation.WRITE);
     }
+    
+    @Override
+    public String toString() {
+        return this.getOp();
+    }
 }

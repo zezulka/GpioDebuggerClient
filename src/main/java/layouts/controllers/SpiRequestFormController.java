@@ -29,6 +29,9 @@ import javafx.scene.layout.GridPane;
 
 import javafx.stage.Stage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * FXML Controller class
  *
@@ -47,7 +50,7 @@ public class SpiRequestFormController implements Initializable {
     @FXML
     private GridPane textFieldGridPane;
 
-    private static int numFields;
+    private static int numFields = 0;
     private static final int MAX_NUM_FIELDS = 16;
     private static final char SEPARATOR = ':';
     private static final String HEXA_PREFIX = "0x";
@@ -57,6 +60,8 @@ public class SpiRequestFormController implements Initializable {
      * register.
      */
     private static final int MAX_CS_INDEX = 2;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpiRequestFormController.class);
 
     private static final Map<String, Operation> MODES = FXCollections.observableHashMap();
 
@@ -80,6 +85,7 @@ public class SpiRequestFormController implements Initializable {
             ClientConnectionManager
                     .getInstance()
                     .setMessageToSend(msgToSend);
+            LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
             stage.close();
         }
     }
@@ -96,45 +102,60 @@ public class SpiRequestFormController implements Initializable {
         tf.setMaxHeight(20.0);
         tf.setMaxWidth(100.0);
 
-        textFieldGridPane.add(tf, numFields % 2 == 1 ? 1 : 0, size - (numFields % 2 == 1 ? 1 : 0));
+        int columnIndex = numFields % 2 == 1 ? 1 : 0;
+        textFieldGridPane.add(tf, columnIndex, size - columnIndex);
         ++numFields;
     }
 
     private String gatherMessageFromForm() {
-        StringBuilder resultBuilder = new StringBuilder();
-        resultBuilder = resultBuilder
-                .append("SPI:")
-                .append(MODES.get(modeList.getSelectionModel().getSelectedItem()).toString())
-                .append(SEPARATOR)
-                .append(HEXA_PREFIX)
-                .append(chipSelectList.getSelectionModel().getSelectedItem())
-                .append(SEPARATOR);
+        StringBuilder resultBuilder = getMessagePrefix();
         if (textFieldGridPane.getChildren().isEmpty()) {
             showErrorDialogMessage("At least one byte must be sent!");
             return null;
         }
         for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
-            String t = ((TextField) it.next()).getText().trim();
-            if (t == null || t.isEmpty()) {
-                showErrorDialogMessage("At least one field is empty. "
-                        + "Please fill in all the fields.");
-                return null;
-            }
-            if(isStringNumericAndPositive(HEXA_PREFIX + t)) {
-                resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
-            } else {
-                showErrorDialogMessage(String.format("At least one field is"
-                    + " not a valid input, found '%s'", t));
+            if(!appendTextFieldContent((TextField) it.next(), resultBuilder)) {
                 return null;
             }
             if (it.hasNext()) {
                 resultBuilder = resultBuilder.append(' ');
             }
         }
-        System.out.println(resultBuilder.toString());
         return resultBuilder.toString();
     }
-    
+
+    private boolean appendTextFieldContent(TextField tf, StringBuilder builder) {
+        String t = tf.getText().trim();
+        if (t == null || t.isEmpty()) {
+            showErrorDialogMessage("At least one field is empty. "
+                    + "Please fill in all the fields.");
+            return false;
+        }
+        if (isStringNumericAndPositive(HEXA_PREFIX + t)) {
+            builder.append(HEXA_PREFIX).append(t);
+        } else {
+            showErrorDialogMessage(String.format("At least one field is"
+                    + " not a valid input, found '%s'", t));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Generates common prefix for all SPI requests: "SPI:<MODE>:0x<CHIP_INDEX>:"
+     *
+     * @return
+     */
+    private StringBuilder getMessagePrefix() {
+        return (new StringBuilder())
+                .append("SPI:")
+                .append(MODES.get(modeList.getSelectionModel().getSelectedItem()).toString())
+                .append(SEPARATOR)
+                .append(HEXA_PREFIX)
+                .append(chipSelectList.getSelectionModel().getSelectedItem())
+                .append(SEPARATOR);
+    }
+
     private boolean isStringNumericAndPositive(String input) {
         try {
             if (input == null || input.isEmpty()) {
@@ -145,11 +166,11 @@ public class SpiRequestFormController implements Initializable {
             return false;
         }
     }
-    
+
     private static void showErrorDialogMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("ERROR MESSAGE");
-        alert.setHeaderText("There has been an error processing user input:");
+        alert.setTitle("ERROR");
+        alert.setHeaderText("An error has occured while processing user input:");
         alert.setContentText(message);
         alert.showAndWait();
     }

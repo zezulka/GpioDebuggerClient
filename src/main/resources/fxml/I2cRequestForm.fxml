@@ -24,7 +24,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-             <ComboBox id="modeList" fx:id="modeList" prefHeight="31.0" prefWidth="284.0" promptText="select mode...." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+             <ComboBox id="operationList" fx:id="operationList" prefHeight="31.0" prefWidth="284.0" promptText="select mode...." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <TextField id="slaveAddressField" fx:id="slaveAddressField" prefHeight="45.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label alignment="BASELINE_RIGHT" prefHeight="48.0" prefWidth="38.0" text="0x" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <font>
