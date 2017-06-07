@@ -1,5 +1,6 @@
 package layouts;
 
+import protocol.ClientPin;
 import java.util.List;
 
 /**

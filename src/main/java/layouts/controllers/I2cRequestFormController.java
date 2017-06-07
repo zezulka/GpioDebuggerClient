@@ -140,20 +140,12 @@ public class I2cRequestFormController implements Initializable {
                 .setItems(FXCollections.observableArrayList(Operation.values()));
     }
 
-    private static void showErrorDialogMessage(String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("ERROR MESSAGE");
-        alert.setHeaderText("There has been an error processing the user input:");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
         if (Operation.isReadOperation(this.operationList.getSelectionModel().getSelectedItem())) {
             String len = getTextFieldNumericContents(lengthField, 1);
             if (len == null) {
-                showErrorDialogMessage("Len must be a positive integer");
+                ControllerUtils.showErrorDialogMessage("Len must be a positive integer");
                 return null;
             }
             msgBuilder = msgBuilder.append(len);
@@ -165,7 +157,7 @@ public class I2cRequestFormController implements Initializable {
         }
         String valueToWrite = gatherMessageArrayFromField();
         if (valueToWrite == null || valueToWrite.isEmpty()) {
-            showErrorDialogMessage("Value to write must be filled correctly");
+            ControllerUtils.showErrorDialogMessage("Value to write must be filled correctly");
             return null;
         }
         msgBuilder = msgBuilder.append(valueToWrite);
@@ -176,17 +168,17 @@ public class I2cRequestFormController implements Initializable {
         StringBuilder msgBuilder = new StringBuilder("i2c");
         Operation selectedOp = this.operationList.getSelectionModel().getSelectedItem();
         if (selectedOp == null) {
-            showErrorDialogMessage("Operation has not been selected");
+            ControllerUtils.showErrorDialogMessage("Operation has not been selected");
             return null;
         }
         String slave = getTextFieldNumericContents(slaveAddressField, 0);
         if (slave == null) {
-            showErrorDialogMessage("Slave address must be a positive integer");
+            ControllerUtils.showErrorDialogMessage("Slave address must be a positive integer");
             return null;
         }
         String register = getTextFieldNumericContents(registerAddressFromField, 0);
         if (register == null) {
-            showErrorDialogMessage("Register address must be a positive integer");
+            ControllerUtils.showErrorDialogMessage("Register address must be a positive integer");
             return null;
         }
         return msgBuilder
@@ -229,7 +221,7 @@ public class I2cRequestFormController implements Initializable {
     @FXML
     private void addNewTextField(MouseEvent event) {
         if (numFields >= MAX_NUM_FIELDS) {
-            showErrorDialogMessage(String.format("Maximum number of rows is %d", MAX_NUM_FIELDS));
+            ControllerUtils.showErrorDialogMessage(String.format("Maximum number of rows is %d", MAX_NUM_FIELDS));
             return;
         }
 

@@ -1,7 +1,6 @@
 package layouts.controllers;
 
 import core.ClientConnectionManager;
-import core.GuiEntryPoint;
 
 import java.io.IOException;
 
@@ -86,5 +85,14 @@ public class RaspiController implements DeviceController, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    @FXML
+    private void addNewListenerMouseClicked(MouseEvent event) {
+        try {
+            GuiEntryPoint.getInstance().createNewAddListenerForm();
+        } catch (IOException ex) {
+            LOGGER.error(null, ex);
+        }
     }
 }

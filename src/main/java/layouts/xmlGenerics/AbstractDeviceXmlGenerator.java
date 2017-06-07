@@ -17,7 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import layouts.ClientPin;
+import protocol.ClientPin;
 import layouts.PinLayoutFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

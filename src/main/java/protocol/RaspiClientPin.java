@@ -1,9 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package layouts;
+package protocol;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  *
@@ -74,6 +72,17 @@ public enum RaspiClientPin implements ClientPin {
     public boolean isGpio() {
         return getName().startsWith("P1");
     }
+
+    @Override
+    public String toString() {
+        return this.name; 
+    }
     
+    public static RaspiClientPin[] gpioValues() {
+        return Arrays
+                .stream(RaspiClientPin.values())
+                .filter(t -> t.isGpio())
+                .toArray(RaspiClientPin[]::new);
+    }
     
 }

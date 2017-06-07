@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -110,7 +109,7 @@ public class SpiRequestFormController implements Initializable {
     private String gatherMessageFromForm() {
         StringBuilder resultBuilder = getMessagePrefix();
         if (textFieldGridPane.getChildren().isEmpty()) {
-            showErrorDialogMessage("At least one byte must be sent!");
+            ControllerUtils.showErrorDialogMessage("At least one byte must be sent!");
             return null;
         }
         for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
@@ -127,14 +126,14 @@ public class SpiRequestFormController implements Initializable {
     private boolean appendTextFieldContent(TextField tf, StringBuilder builder) {
         String t = tf.getText().trim();
         if (t == null || t.isEmpty()) {
-            showErrorDialogMessage("At least one field is empty. "
+            ControllerUtils.showErrorDialogMessage("At least one field is empty. "
                     + "Please fill in all the fields.");
             return false;
         }
         if (isStringNumericAndPositive(HEXA_PREFIX + t)) {
             builder.append(HEXA_PREFIX).append(t);
         } else {
-            showErrorDialogMessage(String.format("At least one field is"
+            ControllerUtils.showErrorDialogMessage(String.format("At least one field is"
                     + " not a valid input, found '%s'", t));
             return false;
         }
@@ -165,14 +164,6 @@ public class SpiRequestFormController implements Initializable {
         } catch (NumberFormatException nfe) {
             return false;
         }
-    }
-
-    private static void showErrorDialogMessage(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("ERROR");
-        alert.setHeaderText("An error has occured while processing user input:");
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void addAllModes() {

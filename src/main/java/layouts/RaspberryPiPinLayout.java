@@ -5,6 +5,7 @@
  */
 package layouts;
 
+import protocol.RaspiClientPin;
 import java.util.Arrays;
 
 /**

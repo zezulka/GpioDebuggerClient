@@ -1,23 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package core;
+package layouts.controllers;
+
+import core.ClientConnectionManager;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 import javafx.scene.control.TextInputControl;
+
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -36,49 +39,76 @@ public final class GuiEntryPoint extends Application {
 
     private static Stage stage;
     private static final int RESPONSE_STRING_CAP_LEN = 1 << 12;
+    private static final String FXML_EXT = ".fxml";
 
     private static final Logger GUI_LOGGER = LoggerFactory.getLogger(GuiEntryPoint.class);
     private static final GuiEntryPoint INSTANCE = new GuiEntryPoint();
-    private static final File PATH_TO_FXML_DIR = new File(System.getProperty("user.dir")
-            + File.separator + "src"
-            + File.separator + "main"
-            + File.separator + "resources"
-            + File.separator + "fxml");
-    private static URL ipPrompt;
 
+    private static URL ipPrompt;
     private static URL i2cRequestForm;
     private static URL spiRequestForm;
-    
+    private static URL addInterruptForm;
+
     private static URL raspiController;
     private static URL beagleBoneBlackController;
     private static URL cubieBoardController;
 
     public GuiEntryPoint() {
         try {
-            //TODO: refactor this ugly code, possibly create new FileLoader utility class?...
-            File pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "IpPrompt" + ".fxml");
-            ipPrompt = pathToFxml.toURI().toURL();
-            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "Raspi" + ".fxml");
-            raspiController = pathToFxml.toURI().toURL();
-            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "I2cRequestForm" + ".fxml");
-            i2cRequestForm = pathToFxml.toURI().toURL();
-            pathToFxml = new File(PATH_TO_FXML_DIR + File.separator + "SpiRequestForm" + ".fxml");
-            spiRequestForm = pathToFxml.toURI().toURL();
+            initControllerPaths();
         } catch (MalformedURLException ex) {
-            GUI_LOGGER.error("Malformed URL:", ex);
+            GUI_LOGGER.error("Malformed URL. ", ex);
         }
+    }
+
+    private void initControllerPaths() throws MalformedURLException {
+        ipPrompt = getPathToController("IpPrompt");
+        raspiController = getPathToController("Raspi");
+        i2cRequestForm = getPathToController("I2cRequestForm");
+        spiRequestForm = getPathToController("SpiRequestForm");
+        addInterruptForm = getPathToController("AddListenerForm");
+    }
+
+    private URL getPathToController(String controllerName) throws MalformedURLException {
+        StringBuilder builder = new StringBuilder();
+        builder = builder
+                .append("src")
+                .append(File.separator)
+                .append("main")
+                .append(File.separator)
+                .append("resources")
+                .append(File.separator)
+                .append("fxml")
+                .append(File.separator)
+                .append(controllerName)
+                .append(FXML_EXT);
+
+        return new File(builder.toString()).toURI().toURL();
     }
 
     public static void provideFeedback(String msg) {
         TextInputControl text = (TextInputControl) stage.getScene().lookup("#feedbackArea");
-        
+
         text.setText(
-                '<' + LocalTime.now().format(DateTimeFormatter.ISO_TIME) 
-                    + "> " 
-                    + msg 
-                    + '\n'
-                    + (text.getText().length() < RESPONSE_STRING_CAP_LEN ? text.getText()
-                      : ""));
+                '<' + LocalTime.now().format(DateTimeFormatter.ISO_TIME)
+                + "> "
+                + msg
+                + '\n'
+                + (text.getText().length() < RESPONSE_STRING_CAP_LEN ? text.getText()
+                : ""));
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            stage = primaryStage;
+            switchScene(ipPrompt);
+            stage.setTitle("Debugger for ARM-based devices");
+            stage.show();
+        } catch (IOException ex) {
+            GUI_LOGGER.error(null, ex);
+            Platform.exit();
+        }
     }
 
     @Override
@@ -116,11 +146,10 @@ public final class GuiEntryPoint extends Application {
         switchScene(cubieBoardController);
     }
 
-    
-    public void switchToIpPrompt() throws IOException{
+    public void switchToIpPrompt() throws IOException {
         switchScene(ipPrompt);
     }
-    
+
     public void switchToCurrentDevice() throws IOException {
         if (ClientConnectionManager.getInstance() == null) {
             GUI_LOGGER.debug("manager not ready!");
@@ -151,36 +180,35 @@ public final class GuiEntryPoint extends Application {
         }
     }
 
-    private void createNewInterfaceForm(URL fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(fxml);
-        Parent newRoot = (Parent) fxmlLoader.load();
-        Stage newStage = new Stage();
-        newStage.initModality(Modality.APPLICATION_MODAL);
-        newStage.initStyle(StageStyle.DECORATED);
-        newStage.setTitle("Interface request");
-        newStage.setScene(new Scene(newRoot));
-        newStage.show();
+    private void createNewForm(URL fxml) throws IOException {
+        Platform.runLater(() -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(fxml);
+            Parent newRoot;
+            try {
+                newRoot = (Parent) fxmlLoader.load();
+            } catch (IOException ex) {
+                ControllerUtils.showErrorDialogMessage(ex.getMessage());
+                GUI_LOGGER.error(String.format("Invalid resource locator: %s", fxml), ex);
+                return;
+            }
+            Stage newStage = new Stage();
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.initStyle(StageStyle.DECORATED);
+            newStage.setScene(new Scene(newRoot));
+            newStage.show();
+
+        });
     }
 
     public void createNewI2cForm() throws IOException {
-        createNewInterfaceForm(i2cRequestForm);
+        createNewForm(i2cRequestForm);
     }
 
     public void createNewSpiForm() throws IOException {
-        createNewInterfaceForm(spiRequestForm);
+        createNewForm(spiRequestForm);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            stage = primaryStage;
-            switchScene(ipPrompt);
-            stage.setTitle("Debugger for ARM-based devices");
-            stage.show();
-        } catch (IOException ex) {
-            GUI_LOGGER.error(null, ex);
-            Platform.exit();
-        }
+    public void createNewAddListenerForm() throws IOException {
+        createNewForm(addInterruptForm);
     }
-
 }

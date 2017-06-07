@@ -6,7 +6,6 @@
 package layouts.controllers;
 
 import core.ClientConnectionManager;
-import core.GuiEntryPoint;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;

@@ -1,5 +1,6 @@
 package core;
 
+import layouts.controllers.GuiEntryPoint;
 import java.awt.EventQueue;
 import javafx.application.Application;
 
