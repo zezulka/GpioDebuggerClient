@@ -196,7 +196,6 @@ public final class GuiEntryPoint extends Application {
             newStage.initStyle(StageStyle.DECORATED);
             newStage.setScene(new Scene(newRoot));
             newStage.show();
-
         });
     }
 

@@ -7,10 +7,14 @@ import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import protocol.InterruptType;
+import protocol.InterruptValueObject;
 import protocol.RaspiClientPin;
 
 /**
@@ -24,6 +28,8 @@ public class AddListenerFormController implements Initializable {
     private ComboBox<InterruptType> interruptTypeComboBox;
     @FXML
     private ComboBox<RaspiClientPin> pinComboBox;
+    @FXML
+    private Button addListenerButton;
 
     /**
      * Initializes the controller class.
@@ -42,6 +48,14 @@ public class AddListenerFormController implements Initializable {
 
     private void addAllIntrTypes() {
        interruptTypeComboBox.setItems(FXCollections.observableArrayList(InterruptType.values()));
+    }
+
+    @FXML
+    private void addNewInterrupt(MouseEvent event) {
+        RaspiController.addNewInteruptListener(
+                new InterruptValueObject(pinComboBox.getValue(), 
+                                         interruptTypeComboBox.getValue()));
+        ((Stage)addListenerButton.getScene().getWindow()).close();
     }
     
 }
