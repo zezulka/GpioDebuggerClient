@@ -124,7 +124,6 @@ public class I2cRequestFormController implements Initializable {
         Stage stage = (Stage) i2cRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
-            System.out.println(msgToSend);
             ClientConnectionManager
                     .getInstance()
                     .setMessageToSend(msgToSend);

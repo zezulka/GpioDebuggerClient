@@ -121,7 +121,7 @@ public class ClientConnectionManager implements Runnable {
 
     public void setMessageToSend(String message) {
         this.messageToSend = message;
-        if(message != null) {
+        if (message != null) {
             try {
                 channel.register(selector, SelectionKey.OP_WRITE);
                 selector.wakeup();
@@ -129,7 +129,7 @@ public class ClientConnectionManager implements Runnable {
                 channel = null;
                 MAIN_LOGGER.error("There has been an attempt to "
                         + "register write operation on channel which has been closed.");
-                
+
             }
         }
     }
@@ -154,50 +154,15 @@ public class ClientConnectionManager implements Runnable {
                     GuiEntryPoint.getInstance().switchToIpPrompt();
                     resetResources();
                     Platform.runLater(() -> {
-                        GuiEntryPoint.provideFeedback("Cannot connect to manager. \nPlease make sure that agent instance is running on the specified address.");
+                        GuiEntryPoint.provideFeedback("Cannot connect to manager. "
+                                + "\nPlease make sure that agent instance is running on the specified address.");
                     });
                     return;
                 }
                 while (!Thread.interrupted()) {
                     selector.select();
                     Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
-
-                    while (keys.hasNext()) {
-                        SelectionKey key = keys.next();
-                        if (!key.isValid()) {
-                            keys.remove();
-                            continue;
-                        }
-                        if (key.isConnectable()) {
-                            keys.remove();
-                            if (!connect(key)) {
-                                break;
-                            }
-                        }
-                        if (this.messageToSend != null && key.isWritable()) {
-                            keys.remove();
-                            write(key);
-                        }
-                        if (key.isReadable() && this.boardType == null) {
-                            keys.remove();
-                            readInitMessage(key);
-                            try {
-                                GuiEntryPoint.getInstance().switchToCurrentDevice();
-                            } catch (IOException ex) {
-                                MAIN_LOGGER.error(null, ex);
-                            }
-                            continue;
-                        }
-                        if (key.isReadable()) {
-                            read(key);
-                            if (this.receivedMessage == null) {
-                                continue;
-                            }
-                            keys.remove();
-                            Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
-                        }
-                    }
-
+                    processSelectionKeys(keys);
                     if (!isAlive()) {
                         break;
                     }
@@ -206,6 +171,34 @@ public class ClientConnectionManager implements Runnable {
                 MAIN_LOGGER.error(null, ex);
             } finally {
                 close();
+            }
+        }
+    }
+
+    private void processSelectionKeys(Iterator<SelectionKey> keys) throws IOException {
+        while (keys.hasNext()) {
+            SelectionKey key = keys.next();
+            keys.remove();
+            if (!key.isValid()) {
+                continue;
+            }
+            if (key.isConnectable()) {
+                if (!connect(key)) {
+                    break;
+                }
+            }
+            if (this.messageToSend != null && key.isWritable()) {
+                write(key);
+            }
+            if (key.isReadable() && this.boardType == null) {
+                readInitMessage(key);
+                GuiEntryPoint.getInstance().switchToCurrentDevice();
+                continue;
+            }
+            if (key.isReadable()) {
+                read(key);
+                //what if receivedMessage is still null? is it an issue?
+                Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
             }
         }
     }
