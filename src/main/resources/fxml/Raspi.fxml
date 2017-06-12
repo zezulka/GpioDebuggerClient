@@ -18,7 +18,7 @@
 
 <AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.RaspiController">
     <children>
-      <TabPane prefHeight="688.0" prefWidth="1210.0">
+      <TabPane>
          <tabs>
             <Tab closable="false" text="Interfaces">
                <content>
@@ -118,18 +118,18 @@
             </Tab>
             <Tab closable="false" text="Interrupts">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="655.0" prefWidth="1345.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
                         <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="1017.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#addNewListenerMouseClicked" prefHeight="37.0" prefWidth="167.0" text="Add new listener" />
                         <TableView id="tableView" fx:id="tableView" layoutX="8.0" layoutY="68.0" prefHeight="448.0" prefWidth="1199.0">
                           <columns>
-                            <TableColumn fx:id="pinName" editable="false" prefWidth="107.0" text="Pin name" />
-                              <TableColumn fx:id="interruptType" editable="false" prefWidth="121.0" text="Interrupt type" />
-                            <TableColumn fx:id="timeAdded" editable="false" prefWidth="162.0" text="Time added" />
-                              <TableColumn fx:id="numberOfInterrupts" editable="false" prefWidth="151.0" text="No. interrrupts" />
-                              <TableColumn fx:id="latestInterruptTime" editable="false" minWidth="0.0" prefWidth="252.0" text="Latest interrupt time" />
-                              <TableColumn id="state" fx:id="state" prefWidth="171.0" text="Start / Stop" />
-                              <TableColumn id="bulkAction" fx:id="bulkAction" prefWidth="234.0" text="Bulk action" />
+                            <TableColumn fx:id="pinName" editable="false" prefWidth="107.0" text="Pin Name" />
+                              <TableColumn fx:id="interruptType" editable="false" prefWidth="121.0" text="Interrupt Type" />
+                            <TableColumn fx:id="timeAdded" editable="false" prefWidth="162.0" text="Time Added" />
+                              <TableColumn fx:id="numberOfInterrupts" editable="false" prefWidth="151.0" text="No. Interrrupts" />
+                              <TableColumn fx:id="latestInterruptTime" editable="false" minWidth="0.0" prefWidth="252.0" text="Latest Interrupt Time" />
+                              <TableColumn id="state" fx:id="state" prefWidth="171.0" text="Interrupt State" />
+                              <TableColumn id="bulkAction" fx:id="bulkAction" prefWidth="234.0" text="Bulk Action" />
                           </columns>
                         </TableView>
                         <ComboBox id="bulkActionsComboBox" fx:id="bulkActionsComboBox" layoutX="1017.0" layoutY="533.0" prefHeight="42.0" prefWidth="169.0" />

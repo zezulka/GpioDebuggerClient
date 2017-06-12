@@ -5,9 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane prefHeight="353.0" prefWidth="422.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
+<Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
     <children>
-        <TextArea editable="false" id="feedbackArea" fx:id="feedbackArea" focusTraversable="false" layoutX="14.0" layoutY="14.0" opacity="0.45" prefHeight="143.0" prefWidth="389.0" wrapText="true" />
+        <TextArea id="feedbackArea" fx:id="feedbackArea" editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" opacity="0.45" prefHeight="143.0" prefWidth="389.0" wrapText="true" />
         <TextField id="ipValue" fx:id="ipValue" layoutX="140.0" layoutY="244.0" prefHeight="31.0" prefWidth="244.0" />
         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="249.0" prefHeight="21.0" prefWidth="126.0" text="IP adress:" textAlignment="RIGHT">
             <font>

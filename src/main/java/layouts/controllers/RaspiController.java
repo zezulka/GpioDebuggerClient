@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,9 +41,9 @@ import protocol.ClientPin;
 import protocol.InterruptType;
 
 import protocol.InterruptValueObject;
-import protocol.InterruptValueObject.State;
 
 import protocol.ProtocolMessages;
+import protocol.ListenerState;
 
 /**
  *
@@ -75,7 +76,9 @@ public class RaspiController implements DeviceController, Initializable {
     @FXML
     private ComboBox<BulkAction> bulkActionsComboBox;
     @FXML
-    private TableColumn<InterruptValueObject, State> state;
+    private TableColumn<InterruptValueObject, ListenerState> state;
+    @FXML
+    private Button submitButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -131,47 +134,66 @@ public class RaspiController implements DeviceController, Initializable {
         tableView.refresh();
     }
 
-    private class RemoveInterruptsWorker extends Task<Void> {
-
-        @Override
-        protected Void call() throws Exception {
-            //send request to ARM device and wait for request
-            Thread.sleep(5000);
-            return null;
-        }
-
-        @Override
-        protected void done() {
-            INTERRUPTS.removeAll(INTERRUPTS.filtered((t) -> t.selectedProperty().get()));
-        }
-    }
-
     private class StartInterruptsWorker extends Task<Void> {
 
+        private final List<InterruptValueObject> intrs = 
+                INTERRUPTS.filtered((t) -> t.selectedProperty().get()
+                && t.stateProperty()
+                        .get()
+                        .equals(ListenerState.NOT_RUNNING));
+
         @Override
         protected Void call() throws Exception {
-            Thread.sleep(50);
+            String msgToSend = gatherMessageFromSubmitted();
+            if (msgToSend != null) {
+                System.out.println(msgToSend);
+                ClientConnectionManager
+                        .getInstance()
+                        .setMessageToSend(msgToSend);
+                LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
+            }
             return null;
         }
 
         @Override
         protected void done() {
-            for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get()
-                    && t.stateProperty()
-                            .get()
-                            .equals(InterruptValueObject.State.NOT_RUNNING))) {
+            for (InterruptValueObject obj : intrs) {
                 obj.incrementNumberOfInterrupts();
-                obj.setSelected(Boolean.TRUE);
-                obj.setLatestInterruptTime(LocalTime.now());
-                obj.setState(InterruptValueObject.State.RUNNING);
+                obj.setSelected(Boolean.FALSE);
+                obj.setState(ListenerState.RUNNING);
             }
+        }
+
+        private String gatherMessageFromSubmitted() {
+            StringBuilder result = new StringBuilder("GPIO:INTR_START");
+            for(InterruptValueObject obj : intrs) {
+                result = result
+                           .append(':')
+                           .append(obj.getClientPin().getName())
+                           .append(' ')
+                           .append(obj.getType());
+            }
+            return result.toString();
         }
     }
 
     private class StopInterruptsWorker extends Task<Void> {
 
+        private final List<InterruptValueObject> intrs = 
+                INTERRUPTS.filtered((t) -> t.selectedProperty().get()
+                && t.stateProperty()
+                        .get()
+                        .equals(ListenerState.RUNNING));
+        
         @Override
         protected Void call() throws Exception {
+            String msgToSend = gatherMessageFromSubmitted();
+            if (msgToSend != null) {
+                ClientConnectionManager
+                        .getInstance()
+                        .setMessageToSend(msgToSend);
+                LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
+            }
             return null;
         }
 
@@ -179,10 +201,20 @@ public class RaspiController implements DeviceController, Initializable {
         protected void done() {
             for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get())) {
                 obj.setSelected(Boolean.FALSE);
-                obj.setNumberOfInterrupts(0);
-                obj.setLatestInterruptTime(LocalTime.MIN);
-                obj.setState(InterruptValueObject.State.NOT_RUNNING);
+                obj.setState(ListenerState.NOT_RUNNING);
             }
+        }
+
+        private String gatherMessageFromSubmitted() {
+            StringBuilder result = new StringBuilder("GPIO:INTR_STOP");
+            for(InterruptValueObject obj : intrs) {
+                result = result
+                           .append(':')
+                           .append(obj.getClientPin().getName())
+                           .append(' ')
+                           .append(obj.getType());
+            }
+            return result.toString();
         }
     }
 

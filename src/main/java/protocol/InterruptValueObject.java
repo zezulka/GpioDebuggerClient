@@ -21,7 +21,7 @@ public class InterruptValueObject {
     private final InterruptType type;
     private final LocalTime timeAdded;
     private final IntegerProperty numberOfInterrupts;
-    private final ObjectProperty<State> state;
+    private final ObjectProperty<ListenerState> state;
     private final ObjectProperty<LocalTime> latestInterruptTime;
     
     public InterruptValueObject(ClientPin clientPin, InterruptType type) {
@@ -31,10 +31,10 @@ public class InterruptValueObject {
         this.numberOfInterrupts = new SimpleIntegerProperty(0);
         this.latestInterruptTime = new SimpleObjectProperty<>();
         this.selected = new SimpleBooleanProperty(false);
-        this.state = new SimpleObjectProperty<>(State.NOT_RUNNING);
+        this.state = new SimpleObjectProperty<>(ListenerState.NOT_RUNNING);
     }
 
-    public ObjectProperty<State> stateProperty() {
+    public ObjectProperty<ListenerState> stateProperty() {
         return this.state;
     }
     
@@ -78,12 +78,8 @@ public class InterruptValueObject {
         this.selected.setValue(selected);
     }
     
-    public void setState(State state) {
+    public void setState(ListenerState state) {
         this.state.setValue(state);
-    }
-    
-    public static enum State {
-        RUNNING, NOT_RUNNING;
     }
 
     @Override

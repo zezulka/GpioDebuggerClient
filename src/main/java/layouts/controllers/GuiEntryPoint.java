@@ -127,11 +127,12 @@ public final class GuiEntryPoint extends Application {
         GUI_LOGGER.debug("Load successful.");
         Scene scene = stage.getScene();
         if (scene == null) {
-            scene = new Scene(newParent, 1000, 800);
+            scene = new Scene(newParent);
+            stage.setMaximized(true);
             stage.setScene(scene);
         } else {
             stage.getScene().setRoot(newParent);
-        }
+        } 
     }
 
     private void switchToRaspi() throws IOException {
