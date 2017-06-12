@@ -1,6 +1,8 @@
 package layouts.controllers;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -12,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import protocol.ClientPin;
 
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
@@ -27,7 +31,7 @@ public class AddListenerFormController implements Initializable {
     @FXML
     private ComboBox<InterruptType> interruptTypeComboBox;
     @FXML
-    private ComboBox<RaspiClientPin> pinComboBox;
+    private ComboBox<ClientPin> pinComboBox;
     @FXML
     private Button addListenerButton;
 
@@ -43,19 +47,25 @@ public class AddListenerFormController implements Initializable {
     }    
 
     private void addAllPins() {
-        pinComboBox.setItems(FXCollections.observableArrayList(RaspiClientPin.gpioValues()));
+        List<ClientPin> result = new ArrayList<>();
+        for(ClientPin pin : RaspiClientPin.pins()) {
+            if(pin.isGpio()) {
+                result.add(pin);
+            }
+        }
+        pinComboBox.setItems(FXCollections.observableArrayList(result));
     }
-
     private void addAllIntrTypes() {
        interruptTypeComboBox.setItems(FXCollections.observableArrayList(InterruptType.values()));
     }
 
     @FXML
     private void addNewInterrupt(MouseEvent event) {
-        RaspiController.addNewInteruptListener(
+        if(RaspiController.addNewInteruptListener(
                 new InterruptValueObject(pinComboBox.getValue(), 
-                                         interruptTypeComboBox.getValue()));
-        ((Stage)addListenerButton.getScene().getWindow()).close();
+                                         interruptTypeComboBox.getValue()))) {
+            ((Stage)addListenerButton.getScene().getWindow()).close();
+        }
     }
     
 }

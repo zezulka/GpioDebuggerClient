@@ -1,6 +1,9 @@
 package protocol;
 
 import java.time.LocalTime;
+
+import java.util.Objects;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -28,7 +31,7 @@ public class InterruptValueObject {
         this.numberOfInterrupts = new SimpleIntegerProperty(0);
         this.latestInterruptTime = new SimpleObjectProperty<>();
         this.selected = new SimpleBooleanProperty(false);
-        this.state = new SimpleObjectProperty<>(State.NOT_STARTED);
+        this.state = new SimpleObjectProperty<>(State.NOT_RUNNING);
     }
 
     public ObjectProperty<State> stateProperty() {
@@ -58,9 +61,13 @@ public class InterruptValueObject {
     public ObjectProperty<LocalTime> latestInterruptTimeProperty() {
         return latestInterruptTime;
     }
+    
+    public void setNumberOfInterrupts(int num) {
+        this.numberOfInterrupts.set(num);
+    }
 
     public void incrementNumberOfInterrupts() {
-        this.numberOfInterrupts.set(numberOfInterrupts.get() + 1);
+        setNumberOfInterrupts(this.numberOfInterrupts.get() + 1);
     }
 
     public void setLatestInterruptTime(LocalTime latestInterruptTime) {
@@ -76,6 +83,35 @@ public class InterruptValueObject {
     }
     
     public static enum State {
-        RUNNING, NOT_STARTED, STOPPED;
+        RUNNING, NOT_RUNNING;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.clientPin);
+        hash = 23 * hash + Objects.hashCode(this.type);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final InterruptValueObject other = (InterruptValueObject) obj;
+        if (!Objects.equals(this.clientPin, other.clientPin)) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        return true;
     }
 }

@@ -95,10 +95,15 @@ public class RaspiController implements DeviceController, Initializable {
         });
     }
 
-    static void addNewInteruptListener(InterruptValueObject interrupt) {
-        INTERRUPTS.add(interrupt);
+    static boolean addNewInteruptListener(InterruptValueObject interrupt) {
+        if (!INTERRUPTS.contains(interrupt)) {
+            INTERRUPTS.add(interrupt);
+            return true;
+        }
+        ControllerUtils.showErrorDialogMessage("This interrupt has already been registered.");
+        return false;
     }
-    
+
     private void addAllBulkActions() {
         bulkActionsComboBox.setItems(FXCollections.observableArrayList(BulkAction.values()));
     }
@@ -111,15 +116,19 @@ public class RaspiController implements DeviceController, Initializable {
                 new Thread(new StartInterruptsWorker()).start();
                 break;
             }
-            case REMOVE: {
-                new Thread(new RemoveInterruptsWorker()).start();
-                break;
-            }
-            case STOP: {
+            case CANCEL: {
                 new Thread(new StopInterruptsWorker()).start();
                 break;
             }
+            case SELECT_NONE: {
+                selectNone();
+            }
         }
+    }
+
+    private void selectNone() {
+        INTERRUPTS.forEach((t) -> t.setSelected(Boolean.FALSE));
+        tableView.refresh();
     }
 
     private class RemoveInterruptsWorker extends Task<Void> {
@@ -147,8 +156,12 @@ public class RaspiController implements DeviceController, Initializable {
 
         @Override
         protected void done() {
-            for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get())) {
+            for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get()
+                    && t.stateProperty()
+                            .get()
+                            .equals(InterruptValueObject.State.NOT_RUNNING))) {
                 obj.incrementNumberOfInterrupts();
+                obj.setSelected(Boolean.TRUE);
                 obj.setLatestInterruptTime(LocalTime.now());
                 obj.setState(InterruptValueObject.State.RUNNING);
             }
@@ -165,14 +178,17 @@ public class RaspiController implements DeviceController, Initializable {
         @Override
         protected void done() {
             for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get())) {
-                obj.incrementNumberOfInterrupts();
-                obj.setState(InterruptValueObject.State.STOPPED);
+                obj.setSelected(Boolean.FALSE);
+                obj.setNumberOfInterrupts(0);
+                obj.setLatestInterruptTime(LocalTime.MIN);
+                obj.setState(InterruptValueObject.State.NOT_RUNNING);
             }
         }
     }
 
     private static enum BulkAction {
-        START("start"), STOP("stop"), REMOVE("remove");
+        START("start"), CANCEL("cancel"),
+        SELECT_NONE("select none");
 
         private final String desc;
 

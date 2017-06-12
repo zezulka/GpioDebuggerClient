@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -120,6 +121,17 @@ public class ClientConnectionManager implements Runnable {
 
     public void setMessageToSend(String message) {
         this.messageToSend = message;
+        if(message != null) {
+            try {
+                channel.register(selector, SelectionKey.OP_WRITE);
+                selector.wakeup();
+            } catch (ClosedChannelException ex) {
+                channel = null;
+                MAIN_LOGGER.error("There has been an attempt to "
+                        + "register write operation on channel which has been closed.");
+                
+            }
+        }
     }
 
     public void setReceivedMessage(String message) {
@@ -147,7 +159,7 @@ public class ClientConnectionManager implements Runnable {
                     return;
                 }
                 while (!Thread.interrupted()) {
-                    selector.select(TIMEOUT);
+                    selector.select();
                     Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
 
                     while (keys.hasNext()) {
@@ -225,7 +237,6 @@ public class ClientConnectionManager implements Runnable {
         byte[] buff = new byte[1024];
         readBuffer.get(buff, 0, length);
         this.setReceivedMessage(new String(buff).replaceAll("\0", ""));
-        channel.register(selector, SelectionKey.OP_WRITE);
     }
 
     private void readInitMessage(SelectionKey key) throws IOException {

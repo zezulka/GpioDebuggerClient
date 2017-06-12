@@ -1,8 +1,5 @@
 package protocol;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 /**
  *
  * @author Miloslav Zezulka
@@ -52,12 +49,12 @@ public enum RaspiClientPin implements ClientPin {
     
     private final String name;
     private final int port;
-    
+
     RaspiClientPin(String name, int port) {
         this.name = name;
         this.port = port;
     }
-
+    
     @Override
     public String getName() {
         return this.name;
@@ -66,23 +63,21 @@ public enum RaspiClientPin implements ClientPin {
     @Override
     public int getPort() {
         return this.port;
-    }
-
-    @Override
-    public boolean isGpio() {
-        return getName().startsWith("P1");
-    }
+    }  
 
     @Override
     public String toString() {
         return this.name; 
     }
+
     
-    public static RaspiClientPin[] gpioValues() {
-        return Arrays
-                .stream(RaspiClientPin.values())
-                .filter(t -> t.isGpio())
-                .toArray(RaspiClientPin[]::new);
+    public static ClientPin[] pins() {
+        return RaspiClientPin.values();
+    }
+
+    @Override
+    public boolean isGpio() {
+        return this.name.startsWith("P");
     }
     
 }

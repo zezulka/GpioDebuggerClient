@@ -1,8 +1,8 @@
 package protocol;
 
 public enum InterruptType {
-    FALLING_EGDE("falling edge"),
-    RISING_EDGE("rising edge"),
+    FALLING_EGDE("Falling"),
+    RISING_EDGE("Rising"),
     HIGH_LEVEL("high level"),
     LOW_LEVEL("low level");
     
@@ -14,6 +14,6 @@ public enum InterruptType {
     
     @Override
     public String toString() {
-        return type;
+        return this.type;
     }
 }
