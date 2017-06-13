@@ -140,12 +140,11 @@ public class I2cRequestFormController implements Initializable {
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
         if (Operation.isReadOperation(this.operationList.getSelectionModel().getSelectedItem())) {
-            String len = getTextFieldNumericContents(lengthField, 1);
-            if (len == null) {
+            if (!assertTextFieldContainsDecNumericContents(lengthField, 1)) {
                 ControllerUtils.showErrorDialogMessage("Len must be a positive integer");
                 return null;
             }
-            msgBuilder = msgBuilder.append(len);
+            msgBuilder = msgBuilder.append(lengthField.getText().trim());
             LOGGER.info(String.format("I2c request form has now "
                     + "submitted the following request:\n %s"
                     + "",
@@ -168,13 +167,11 @@ public class I2cRequestFormController implements Initializable {
             ControllerUtils.showErrorDialogMessage("Operation has not been selected");
             return null;
         }
-        String slave = getTextFieldNumericContents(slaveAddressField, 0);
-        if (slave == null) {
+        if (!assertTextFieldContainsHexNumericContents(slaveAddressField, 0)) {
             ControllerUtils.showErrorDialogMessage("Slave address must be a positive integer");
             return null;
         }
-        String register = getTextFieldNumericContents(registerAddressFromField, 0);
-        if (register == null) {
+        if (!assertTextFieldContainsHexNumericContents(registerAddressFromField, 0)) {
             ControllerUtils.showErrorDialogMessage("Register address must be a positive integer");
             return null;
         }
@@ -182,21 +179,32 @@ public class I2cRequestFormController implements Initializable {
                 .append(SEPARATOR)
                 .append(selectedOp.toString())
                 .append(SEPARATOR)
-                .append(slave)
+                .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR)
-                .append(register)
+                .append(registerAddressFromField.getText().trim())
                 .append(SEPARATOR);
     }
+    
+    private boolean assertTextFieldContainsHexNumericContents(TextField textInput, int lowBound) {
+        return assertTextFieldContainsNumericContents(textInput, lowBound, 16);
+    }
+    
+    private boolean assertTextFieldContainsDecNumericContents(TextField textInput, int lowBound) {
+        return assertTextFieldContainsNumericContents(textInput, lowBound, 10);
+    }
 
-    private String getTextFieldNumericContents(TextInputControl textInput, int lowBound) {
+    private boolean assertTextFieldContainsNumericContents(TextInputControl textInput, int lowBound, int radix) {
         try {
             if (textInput == null) {
-                return null;
+                return false;
             }
-            String result = textInput.getText().trim();
-            return Short.decode(result) >= lowBound ? HEXA_PREFIX + result : null;
+            String result = textInput.getText();
+            if(result == null) {
+                return false;
+            }
+            return Short.parseShort(result.trim(), radix) >= lowBound;
         } catch (NumberFormatException nfe) {
-            return null;
+            return false;
         }
     }
 

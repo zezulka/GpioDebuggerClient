@@ -3,8 +3,8 @@ package protocol;
 public enum InterruptType {
     FALLING_EGDE("Falling"),
     RISING_EDGE("Rising"),
-    HIGH_LEVEL("High level"),
-    LOW_LEVEL("Low level");
+    HIGH_LEVEL("High-level"),
+    LOW_LEVEL("Low-level");
     
     private final String type;
     

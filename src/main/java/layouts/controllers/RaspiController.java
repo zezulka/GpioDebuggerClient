@@ -254,6 +254,7 @@ public class RaspiController implements DeviceController, Initializable {
     protected void mouseClickedHandler(MouseEvent event) {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
+        LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
     }
 
     @FXML
@@ -261,6 +262,7 @@ public class RaspiController implements DeviceController, Initializable {
         if (event.getCode().equals(KeyCode.ENTER)) {
             String op = readRadioButton.isSelected() ? "read" : "write";
             sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
+            LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
         }
     }
 
