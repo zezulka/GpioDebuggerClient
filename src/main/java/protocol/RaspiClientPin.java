@@ -59,6 +59,15 @@ public enum RaspiClientPin implements ClientPin {
     public String getName() {
         return this.name;
     }
+    
+    public static ClientPin getPin(String pinName) {
+        for(RaspiClientPin pin : RaspiClientPin.values()) {
+            if(pin.name.equals(pinName)) {
+                return pin;
+            }
+        }
+        throw new IllegalArgumentException("pin with the given name has not been found");
+    }
 
     @Override
     public int getPort() {

@@ -133,6 +133,15 @@ public class RaspiController implements DeviceController, Initializable {
         INTERRUPTS.forEach((t) -> t.setSelected(Boolean.FALSE));
         tableView.refresh();
     }
+    
+    public static void updateInterruptListener(InterruptValueObject ivo) {
+        for(int i = 0; i < INTERRUPTS.size(); i++) {
+            if(INTERRUPTS.get(i).equals(ivo)) {
+                INTERRUPTS.set(i, ivo);
+                return;
+            }
+        }
+    }
 
     private class StartInterruptsWorker extends Task<Void> {
 
@@ -151,6 +160,7 @@ public class RaspiController implements DeviceController, Initializable {
                         .getInstance()
                         .setMessageToSend(msgToSend);
                 LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
+                
             }
             return null;
         }
@@ -189,6 +199,7 @@ public class RaspiController implements DeviceController, Initializable {
         protected Void call() throws Exception {
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
+                System.out.println(msgToSend);
                 ClientConnectionManager
                         .getInstance()
                         .setMessageToSend(msgToSend);

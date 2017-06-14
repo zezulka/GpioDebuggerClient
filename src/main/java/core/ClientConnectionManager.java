@@ -1,5 +1,6 @@
 package core;
 
+import util.MessageParser;
 import layouts.controllers.GuiEntryPoint;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -9,14 +10,22 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.time.LocalTime;
 import java.util.Iterator;
 import javafx.application.Platform;
+import layouts.controllers.RaspiController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import protocol.BoardType;
+import protocol.ClientPin;
+import protocol.InterruptListenerStatus;
+import protocol.InterruptType;
+import protocol.InterruptValueObject;
+import protocol.ListenerState;
 import protocol.ProtocolMessages;
+import protocol.RaspiClientPin;
 
 /**
  *
@@ -24,7 +33,6 @@ import protocol.ProtocolMessages;
  */
 public class ClientConnectionManager implements Runnable {
 
-    private String receivedMessage = null;
     private String messageToSend = null;
     private Selector selector;
     private static String ipAddress;
@@ -134,10 +142,6 @@ public class ClientConnectionManager implements Runnable {
         }
     }
 
-    public void setReceivedMessage(String message) {
-        this.receivedMessage = message;
-    }
-
     private void setBoardType(BoardType type) {
         this.boardType = type;
     }
@@ -198,12 +202,53 @@ public class ClientConnectionManager implements Runnable {
                     readInitMessage(key);
                     GuiEntryPoint.getInstance().switchToCurrentDevice();
                 } else {
-                    read(key);
-                    //what if receivedMessage is still null? is it an issue?
-                    Platform.runLater(() -> GuiEntryPoint.provideFeedback(receivedMessage));
+                    processAgentMessage(key);
                 }
             }
         }
+    }
+
+    private void processAgentMessage(SelectionKey key) throws IOException {
+        String agentMessage = read(key);
+        if (agentMessage != null) {
+            if (MessageParser.isInterruptMessage(getMessagePrefix(agentMessage))) {
+                InterruptValueObject ivo = getInterruptValueObjectFromMessage(agentMessage);
+                RaspiController.updateInterruptListener(ivo);
+            } else {
+                Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
+            }
+        }
+        MAIN_LOGGER.debug("null has been received from agent as a message");
+    }
+
+    private String getMessagePrefix(String message) {
+        return message.substring(0, message.indexOf(":"));
+    }
+
+    private InterruptValueObject getInterruptValueObjectFromMessage(String agentMessage) {
+        String[] splitMessage = agentMessage.split(":");
+        //bound to Raspi only!!!!
+        ClientPin pin = RaspiClientPin.getPin(splitMessage[1]);
+        InterruptType type = InterruptType.getType(splitMessage[2]);
+        InterruptValueObject result = new InterruptValueObject(pin, type);
+        InterruptListenerStatus status = InterruptListenerStatus.valueOf(splitMessage[0]);
+        switch (status) {
+            case INTR_GENERATED: {
+                result.setLatestInterruptTime(LocalTime.ofNanoOfDay(Integer.valueOf(splitMessage[3].replace('\n', '\0'))));
+                result.incrementNumberOfInterrupts();
+                break;
+            }
+            case INTR_STARTED: {
+                result.setState(ListenerState.RUNNING);
+                break;
+            }
+            case INTR_STOPPED: {
+                result.setState(ListenerState.NOT_RUNNING);
+                break;
+            }
+        }
+
+        return result;
     }
 
     private void close() {
@@ -217,7 +262,7 @@ public class ClientConnectionManager implements Runnable {
         }
     }
 
-    private void read(SelectionKey key) throws IOException {
+    private String read(SelectionKey key) throws IOException {
         ByteBuffer readBuffer = ByteBuffer.allocate(1000);
         readBuffer.clear();
         int length;
@@ -225,19 +270,18 @@ public class ClientConnectionManager implements Runnable {
         if (length == -1) {
             MAIN_LOGGER.error("Nothing was read from server");
             channel.close();
-            this.setReceivedMessage(null);
             key.cancel();
-            return;
+            return null;
         }
         readBuffer.flip();
         byte[] buff = new byte[1024];
         readBuffer.get(buff, 0, length);
-        this.setReceivedMessage(new String(buff).replaceAll("\0", ""));
+        return (new String(buff).replaceAll("\0", ""));
     }
 
     private void readInitMessage(SelectionKey key) throws IOException {
-        read(key);
-        this.setBoardType(BoardType.parse(this.receivedMessage));
+        String agentMessage = read(key);
+        this.setBoardType(BoardType.parse(agentMessage));
     }
 
     private void write(SelectionKey key) throws IOException {
