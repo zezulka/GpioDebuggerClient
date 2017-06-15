@@ -142,40 +142,45 @@ public class RaspiController implements DeviceController, Initializable {
             }
         }
     }
-
-    private class StartInterruptsWorker extends Task<Void> {
-
-        private final List<InterruptValueObject> intrs = 
+    
+    private abstract class AbstractInterruptsWorker extends Task<Void> {
+        private final ListenerState guardedState;
+        private final List<InterruptValueObject> intrs;
+        protected abstract String getMessagePrefix();
+        
+        protected AbstractInterruptsWorker(ListenerState guardedState) {
+            this.guardedState = guardedState;
+            this.intrs = 
                 INTERRUPTS.filtered((t) -> t.selectedProperty().get()
                 && t.stateProperty()
                         .get()
-                        .equals(ListenerState.NOT_RUNNING));
-
+                        .equals(this.guardedState));
+        }
+        
         @Override
         protected Void call() throws Exception {
+            super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
-                System.out.println(msgToSend);
                 ClientConnectionManager
                         .getInstance()
                         .setMessageToSend(msgToSend);
                 LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
-                
             }
             return null;
         }
 
         @Override
         protected void done() {
-            for (InterruptValueObject obj : intrs) {
-                obj.incrementNumberOfInterrupts();
-                obj.setSelected(Boolean.FALSE);
-                obj.setState(ListenerState.RUNNING);
-            }
+            super.done(); 
+            INTERRUPTS.forEach((intr) -> intr.setSelected(Boolean.FALSE));
         }
-
+        
         private String gatherMessageFromSubmitted() {
-            StringBuilder result = new StringBuilder("GPIO:INTR_START");
+            if(intrs.isEmpty()) {
+                return null;
+            }
+            StringBuilder result = new StringBuilder(getMessagePrefix());
             for(InterruptValueObject obj : intrs) {
                 result = result
                            .append(':')
@@ -187,45 +192,25 @@ public class RaspiController implements DeviceController, Initializable {
         }
     }
 
-    private class StopInterruptsWorker extends Task<Void> {
-
-        private final List<InterruptValueObject> intrs = 
-                INTERRUPTS.filtered((t) -> t.selectedProperty().get()
-                && t.stateProperty()
-                        .get()
-                        .equals(ListenerState.RUNNING));
-        
-        @Override
-        protected Void call() throws Exception {
-            String msgToSend = gatherMessageFromSubmitted();
-            if (msgToSend != null) {
-                System.out.println(msgToSend);
-                ClientConnectionManager
-                        .getInstance()
-                        .setMessageToSend(msgToSend);
-                LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
-            }
-            return null;
+    private class StartInterruptsWorker extends AbstractInterruptsWorker {     
+        public StartInterruptsWorker() {
+            super(ListenerState.NOT_RUNNING);
         }
 
         @Override
-        protected void done() {
-            for (InterruptValueObject obj : INTERRUPTS.filtered((t) -> t.selectedProperty().get())) {
-                obj.setSelected(Boolean.FALSE);
-                obj.setState(ListenerState.NOT_RUNNING);
-            }
+        protected String getMessagePrefix() {
+            return "GPIO:INTR_START";
+        }
+    }
+
+    private class StopInterruptsWorker extends AbstractInterruptsWorker { 
+        public StopInterruptsWorker() {
+            super(ListenerState.RUNNING);
         }
 
-        private String gatherMessageFromSubmitted() {
-            StringBuilder result = new StringBuilder("GPIO:INTR_STOP");
-            for(InterruptValueObject obj : intrs) {
-                result = result
-                           .append(':')
-                           .append(obj.getClientPin().getName())
-                           .append(' ')
-                           .append(obj.getType());
-            }
-            return result.toString();
+        @Override
+        protected String getMessagePrefix() {
+            return "GPIO:INTR_STOP";
         }
     }
 

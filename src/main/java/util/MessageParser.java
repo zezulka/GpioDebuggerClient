@@ -21,6 +21,11 @@ public class MessageParser {
         if(messagePrefix == null) {
             return false;
         }
-        return SPECIAL_PREFIXES.contains(InterruptListenerStatus.valueOf(messagePrefix));
+        try{
+            return SPECIAL_PREFIXES.contains(InterruptListenerStatus.valueOf(messagePrefix));    
+        } catch(IllegalArgumentException ex) {
+            return false;
+        }
+        
     }
 }

@@ -234,7 +234,7 @@ public class ClientConnectionManager implements Runnable {
         InterruptListenerStatus status = InterruptListenerStatus.valueOf(splitMessage[0]);
         switch (status) {
             case INTR_GENERATED: {
-                result.setLatestInterruptTime(LocalTime.ofNanoOfDay(Integer.valueOf(splitMessage[3].replace('\n', '\0'))));
+                result.setLatestInterruptTime(LocalTime.ofNanoOfDay(Long.valueOf(splitMessage[3].replace("\n", ""))));
                 result.incrementNumberOfInterrupts();
                 break;
             }
