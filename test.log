@@ -1,54 +1,402 @@
-17:22:01,565  INFO Main:242 - Connection to server OK
-17:22:02,050  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-17:22:02,149  INFO GuiEntryPoint:101 - load successful!
-17:24:05,428  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-17:24:05,592  INFO GuiEntryPoint:101 - load successful!
-17:24:13,128  INFO Main:240 - done connecting to server
-17:24:13,130  INFO Main:242 - Connection to server OK
-17:24:13,529  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-17:24:13,602  INFO GuiEntryPoint:101 - load successful!
-16:22:23,137  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-16:22:23,311  INFO GuiEntryPoint:101 - load successful!
-09:18:37,341  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-09:18:37,535  INFO GuiEntryPoint:101 - load successful!
-09:18:43,268  INFO Main:240 - done connecting to server
-09:18:43,269  INFO Main:242 - Connection to server OK
-09:18:43,672  INFO GuiEntryPoint:101 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-09:18:43,745  INFO GuiEntryPoint:101 - load successful!
-09:27:38,653  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-09:27:38,813  INFO GuiEntryPoint:104 - load successful!
-09:27:44,807  INFO Main:240 - done connecting to server
-09:27:44,809  INFO Main:242 - Connection to server OK
-09:27:44,832  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-09:27:44,923  INFO GuiEntryPoint:104 - load successful!
-09:29:42,105  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-09:29:42,273  INFO GuiEntryPoint:104 - load successful!
-09:29:49,089  INFO Main:240 - done connecting to server
-09:29:49,090  INFO Main:242 - Connection to server OK
-09:29:49,100  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-09:29:49,188  INFO GuiEntryPoint:104 - load successful!
-09:51:17,209  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-09:51:17,364  INFO GuiEntryPoint:104 - load successful!
-09:56:00,190  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-09:56:00,351  INFO GuiEntryPoint:104 - load successful!
-10:11:21,405  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:11:21,581  INFO GuiEntryPoint:104 - load successful!
-10:11:26,354  INFO Main:240 - done connecting to server
-10:11:26,356  INFO Main:242 - Connection to server OK
-10:11:26,711  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-10:11:26,802  INFO GuiEntryPoint:104 - load successful!
-10:18:22,554  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:18:22,739  INFO GuiEntryPoint:104 - load successful!
-10:18:27,947  INFO Main:240 - done connecting to server
-10:18:27,949  INFO Main:242 - Connection to server OK
-10:18:28,293  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-10:18:28,397  INFO GuiEntryPoint:104 - load successful!
-10:24:33,872  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:24:34,054  INFO GuiEntryPoint:104 - load successful!
-10:24:40,594  INFO Main:240 - done connecting to server
-10:24:40,597  INFO Main:242 - Connection to server OK
-10:24:40,929  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
-10:24:41,037  INFO GuiEntryPoint:104 - load successful!
-10:25:10,615 ERROR Main:213 - Nothing was read from server
-10:25:15,618  INFO GuiEntryPoint:104 - attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
-10:25:15,637  INFO GuiEntryPoint:104 - load successful!
+09:10:20,336 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:10:20,503 DEBUG GuiEntryPoint:127 - Load successful.
+09:10:24,345 ERROR Main:303 - Could not connect to server
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at core.ClientConnectionManager.connect(ClientConnectionManager.java:295)
+	at core.ClientConnectionManager.processSelectionKeys(ClientConnectionManager.java:194)
+	at core.ClientConnectionManager.iterateThoughRegisteredKeys(ClientConnectionManager.java:179)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:166)
+	at java.lang.Thread.run(Thread.java:745)
+09:10:24,348 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:10:24,356 DEBUG GuiEntryPoint:127 - Load successful.
+09:10:40,676 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:10:40,695 DEBUG GuiEntryPoint:127 - Load successful.
+09:37:09,890 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:37:10,039 DEBUG GuiEntryPoint:127 - Load successful.
+09:37:19,906  INFO Main:296 - done connecting to server
+09:37:19,907  INFO Main:298 - Connection to server OK
+09:37:19,927 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:37:20,058 DEBUG GuiEntryPoint:127 - Load successful.
+09:37:36,945  INFO RaspiController:254 - GPIO request has been sent : pin read, operation : P1_3
+09:37:37,030 DEBUG Main:221 - null has been received from agent as a message
+09:37:48,866  INFO RaspiController:169 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+09:37:48,982 DEBUG Main:221 - null has been received from agent as a message
+09:38:17,510  INFO RaspiController:254 - GPIO request has been sent : pin read, operation : P1_3
+09:38:17,523 DEBUG Main:221 - null has been received from agent as a message
+09:38:20,747  INFO RaspiController:254 - GPIO request has been sent : pin write, operation : P1_3
+09:38:20,782 DEBUG Main:221 - null has been received from agent as a message
+09:38:35,086  INFO RaspiController:254 - GPIO request has been sent : pin write, operation : P1_3
+09:38:35,101 DEBUG Main:221 - null has been received from agent as a message
+09:38:40,034  INFO RaspiController:254 - GPIO request has been sent : pin write, operation : P1_3
+09:38:40,047 DEBUG Main:221 - null has been received from agent as a message
+09:38:52,599  INFO RaspiController:169 - SPI request sent to client: GPIO:INTR_STOP:P1_3 Falling
+09:38:52,624 DEBUG Main:221 - null has been received from agent as a message
+09:50:44,043 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+09:50:44,213 DEBUG GuiEntryPoint:127 - Load successful.
+09:50:48,563  INFO Main:296 - done connecting to server
+09:50:48,565  INFO Main:298 - Connection to server OK
+09:50:48,587 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+09:50:48,722 DEBUG GuiEntryPoint:127 - Load successful.
+09:52:01,381  INFO RaspiController:169 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+09:52:01,551 DEBUG Main:221 - null has been received from agent as a message
+09:52:11,534  INFO RaspiController:254 - GPIO request has been sent : pin write, operation : P1_3
+09:52:12,085 DEBUG Main:221 - null has been received from agent as a message
+09:52:14,839  INFO RaspiController:254 - GPIO request has been sent : pin write, operation : P1_3
+09:52:15,012 DEBUG Main:221 - null has been received from agent as a message
+09:52:34,097  INFO RaspiController:169 - SPI request sent to client: GPIO:INTR_STOP:P1_3 Falling
+09:52:34,126 DEBUG Main:221 - null has been received from agent as a message
+10:22:52,720 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:22:52,882 DEBUG GuiEntryPoint:127 - Load successful.
+10:23:48,916  INFO Main:296 - done connecting to server
+10:23:48,917  INFO Main:298 - Connection to server OK
+10:23:48,937 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:23:49,077 DEBUG GuiEntryPoint:127 - Load successful.
+10:23:57,612  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+10:23:57,828 DEBUG Main:221 - null has been received from agent as a message
+10:24:15,432  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+10:24:15,480 DEBUG Main:221 - null has been received from agent as a message
+10:24:20,890  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:20,928 DEBUG Main:221 - null has been received from agent as a message
+10:24:21,474  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:21,492 DEBUG Main:221 - null has been received from agent as a message
+10:24:38,672  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:38,687 DEBUG Main:221 - null has been received from agent as a message
+10:24:39,200  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:39,217 DEBUG Main:221 - null has been received from agent as a message
+10:24:40,012  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:40,026 DEBUG Main:221 - null has been received from agent as a message
+10:24:40,658  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:40,670 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,052  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,067 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,220  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,235 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,389  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,405 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,532  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,545 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,692  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,706 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,835  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,854 DEBUG Main:221 - null has been received from agent as a message
+10:24:41,979  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:41,994 DEBUG Main:221 - null has been received from agent as a message
+10:24:42,155  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:24:42,171 DEBUG Main:221 - null has been received from agent as a message
+10:25:01,443 ERROR Main:271 - Nothing was read from server
+10:25:01,444 DEBUG Main:221 - null has been received from agent as a message
+10:29:18,122 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:29:18,283 DEBUG GuiEntryPoint:127 - Load successful.
+10:30:07,010  INFO Main:296 - done connecting to server
+10:30:07,012  INFO Main:298 - Connection to server OK
+10:30:07,039 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:30:07,221 DEBUG GuiEntryPoint:127 - Load successful.
+10:30:14,948  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+10:30:15,126 DEBUG Main:221 - null has been received from agent as a message
+10:30:23,029  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+10:30:23,100 DEBUG Main:221 - null has been received from agent as a message
+10:30:26,279  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:26,317 DEBUG Main:221 - null has been received from agent as a message
+10:30:27,253  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:27,272 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,047  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,064 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,207  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,231 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,376  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,399 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,527  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,547 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,673  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,693 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,825  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,848 DEBUG Main:221 - null has been received from agent as a message
+10:30:41,977  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:41,996 DEBUG Main:221 - null has been received from agent as a message
+10:30:42,145  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:42,163 DEBUG Main:221 - null has been received from agent as a message
+10:30:42,280  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:42,303 DEBUG Main:221 - null has been received from agent as a message
+10:30:42,433  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:42,459 DEBUG Main:221 - null has been received from agent as a message
+10:30:42,599  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:30:42,618 DEBUG Main:221 - null has been received from agent as a message
+10:31:01,830  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_STOP:P1_3 Falling
+10:31:01,854 DEBUG Main:221 - null has been received from agent as a message
+10:31:06,602 ERROR Main:271 - Nothing was read from server
+10:31:06,603 DEBUG Main:221 - null has been received from agent as a message
+10:33:38,165 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:33:38,334 DEBUG GuiEntryPoint:127 - Load successful.
+10:33:44,372  INFO Main:296 - done connecting to server
+10:33:44,373  INFO Main:298 - Connection to server OK
+10:33:44,390 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+10:33:44,517 DEBUG GuiEntryPoint:127 - Load successful.
+10:33:52,443  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+10:33:52,625 DEBUG Main:221 - null has been received from agent as a message
+10:34:01,872  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+10:34:02,307 DEBUG Main:221 - null has been received from agent as a message
+10:34:04,863  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+10:34:04,878 DEBUG Main:221 - null has been received from agent as a message
+10:34:05,497  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+10:34:05,515 DEBUG Main:221 - null has been received from agent as a message
+10:34:07,163  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:07,198 DEBUG Main:221 - null has been received from agent as a message
+10:34:07,616  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:07,632 DEBUG Main:221 - null has been received from agent as a message
+10:34:16,279  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:16,301 DEBUG Main:221 - null has been received from agent as a message
+10:34:16,473  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:16,486 DEBUG Main:221 - null has been received from agent as a message
+10:34:21,135  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:21,149 DEBUG Main:221 - null has been received from agent as a message
+10:34:21,295  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+10:34:21,308 DEBUG Main:221 - null has been received from agent as a message
+10:34:30,588  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_STOP:P1_3 Falling
+10:34:30,614 DEBUG Main:221 - null has been received from agent as a message
+10:59:34,338 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+10:59:34,511 DEBUG GuiEntryPoint:127 - Load successful.
+11:00:49,060  INFO Main:296 - done connecting to server
+11:00:49,060  INFO Main:298 - Connection to server OK
+11:00:49,084 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:00:49,228 DEBUG GuiEntryPoint:127 - Load successful.
+11:02:49,897  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:03:05,995 ERROR Main:271 - Nothing was read from server
+11:03:05,996 DEBUG Main:221 - null has been received from agent as a message
+11:05:41,046 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:05:41,212 DEBUG GuiEntryPoint:127 - Load successful.
+11:06:17,669  INFO Main:296 - done connecting to server
+11:06:17,670  INFO Main:298 - Connection to server OK
+11:06:17,687 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:06:17,806 DEBUG GuiEntryPoint:127 - Load successful.
+11:06:39,854  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:15:34,460 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:15:34,621 DEBUG GuiEntryPoint:127 - Load successful.
+11:15:41,470  INFO Main:296 - done connecting to server
+11:15:41,471  INFO Main:298 - Connection to server OK
+11:15:41,481 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:15:41,620 DEBUG GuiEntryPoint:127 - Load successful.
+11:15:48,432  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:15:48,485 DEBUG Main:221 - null has been received from agent as a message
+11:17:02,936  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:02,990 DEBUG Main:221 - null has been received from agent as a message
+11:17:03,559  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:03,577 DEBUG Main:221 - null has been received from agent as a message
+11:17:04,433  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:04,454 DEBUG Main:221 - null has been received from agent as a message
+11:17:17,587  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:17,599 DEBUG Main:221 - null has been received from agent as a message
+11:17:17,762  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:17,777 DEBUG Main:221 - null has been received from agent as a message
+11:17:17,903  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:17,919 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,053  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,069 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,178  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,196 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,332  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,349 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,469  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,514 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,615  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,662 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,755  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,839 DEBUG Main:221 - null has been received from agent as a message
+11:17:18,907  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:18,922 DEBUG Main:221 - null has been received from agent as a message
+11:17:19,038  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:19,071 DEBUG Main:221 - null has been received from agent as a message
+11:17:19,163  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:19,177 DEBUG Main:221 - null has been received from agent as a message
+11:17:19,305  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:17:19,322 DEBUG Main:221 - null has been received from agent as a message
+11:18:20,968  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_STOP:P1_3 Falling
+11:18:36,869 ERROR Main:271 - Nothing was read from server
+11:18:36,869 DEBUG Main:221 - null has been received from agent as a message
+11:23:02,143 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:23:02,301 DEBUG GuiEntryPoint:127 - Load successful.
+11:23:42,379  INFO Main:296 - done connecting to server
+11:23:42,381  INFO Main:298 - Connection to server OK
+11:23:42,402 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:23:42,531 DEBUG GuiEntryPoint:127 - Load successful.
+11:23:52,295  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:28:32,259 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:28:32,439 DEBUG GuiEntryPoint:127 - Load successful.
+11:29:00,412 ERROR Main:303 - Could not connect to server
+java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717)
+	at core.ClientConnectionManager.connect(ClientConnectionManager.java:295)
+	at core.ClientConnectionManager.processSelectionKeys(ClientConnectionManager.java:194)
+	at core.ClientConnectionManager.iterateThoughRegisteredKeys(ClientConnectionManager.java:179)
+	at core.ClientConnectionManager.run(ClientConnectionManager.java:166)
+	at java.lang.Thread.run(Thread.java:745)
+11:29:00,417 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:29:00,433 DEBUG GuiEntryPoint:127 - Load successful.
+11:29:08,155  INFO Main:296 - done connecting to server
+11:29:08,157  INFO Main:298 - Connection to server OK
+11:29:08,182 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:29:08,326 DEBUG GuiEntryPoint:127 - Load successful.
+11:31:35,432  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:31:35,622 DEBUG Main:221 - null has been received from agent as a message
+11:32:28,741  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:32:28,814 DEBUG Main:221 - null has been received from agent as a message
+11:32:29,302  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:32:29,322 DEBUG Main:221 - null has been received from agent as a message
+11:32:29,845  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:32:29,868 DEBUG Main:221 - null has been received from agent as a message
+11:32:36,646 ERROR Main:271 - Nothing was read from server
+11:32:36,646 DEBUG Main:221 - null has been received from agent as a message
+11:38:11,830 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:38:12,013 DEBUG GuiEntryPoint:127 - Load successful.
+11:38:57,743  INFO Main:296 - done connecting to server
+11:38:57,746  INFO Main:298 - Connection to server OK
+11:38:57,770 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:38:58,031 DEBUG GuiEntryPoint:127 - Load successful.
+11:39:07,396  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:39:07,603 DEBUG Main:221 - null has been received from agent as a message
+11:39:27,875  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:27,949 DEBUG Main:221 - null has been received from agent as a message
+11:39:28,023  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:28,040 DEBUG Main:221 - null has been received from agent as a message
+11:39:28,147  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:28,164 DEBUG Main:221 - null has been received from agent as a message
+11:39:28,287  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:28,307 DEBUG Main:221 - null has been received from agent as a message
+11:39:28,415  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:28,431 DEBUG Main:221 - null has been received from agent as a message
+11:39:28,577  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:28,591 DEBUG Main:221 - null has been received from agent as a message
+11:39:43,468  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:43,489 DEBUG Main:221 - null has been received from agent as a message
+11:39:43,982  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:39:44,003 DEBUG Main:221 - null has been received from agent as a message
+11:40:09,145  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:40:09,158 DEBUG Main:221 - null has been received from agent as a message
+11:40:09,748  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:40:09,768 DEBUG Main:221 - null has been received from agent as a message
+11:40:11,486  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:40:11,705 DEBUG Main:221 - null has been received from agent as a message
+11:40:12,055  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:40:12,293 DEBUG Main:221 - null has been received from agent as a message
+11:40:32,762 ERROR Main:271 - Nothing was read from server
+11:40:32,763 DEBUG Main:221 - null has been received from agent as a message
+11:43:16,553 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:43:16,731 DEBUG GuiEntryPoint:127 - Load successful.
+11:44:29,351  INFO Main:296 - done connecting to server
+11:44:29,353  INFO Main:298 - Connection to server OK
+11:44:29,376 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:44:29,518 DEBUG GuiEntryPoint:127 - Load successful.
+11:44:38,759  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:44:39,083 DEBUG Main:221 - null has been received from agent as a message
+11:44:53,587  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+11:46:22,665 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+11:46:22,851 DEBUG GuiEntryPoint:127 - Load successful.
+11:46:28,066  INFO Main:296 - done connecting to server
+11:46:28,068  INFO Main:298 - Connection to server OK
+11:46:28,078 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+11:46:28,213 DEBUG GuiEntryPoint:127 - Load successful.
+11:46:34,902  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+11:46:34,929 DEBUG Main:221 - null has been received from agent as a message
+11:47:09,751  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:47:09,777 DEBUG Main:221 - null has been received from agent as a message
+11:47:10,214  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:47:10,228 DEBUG Main:221 - null has been received from agent as a message
+11:47:19,951  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:47:20,067 DEBUG Main:221 - null has been received from agent as a message
+11:47:20,372  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+11:47:20,385 DEBUG Main:221 - null has been received from agent as a message
+11:47:38,452 ERROR Main:271 - Nothing was read from server
+11:47:38,452 DEBUG Main:221 - null has been received from agent as a message
+12:09:24,904 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:09:25,073 DEBUG GuiEntryPoint:127 - Load successful.
+12:10:41,126  INFO Main:296 - done connecting to server
+12:10:41,128  INFO Main:298 - Connection to server OK
+12:10:41,147 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:10:41,282 DEBUG GuiEntryPoint:127 - Load successful.
+12:10:43,405  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:10:44,231 ERROR Main:271 - Nothing was read from server
+12:10:44,232 DEBUG Main:221 - null has been received from agent as a message
+12:14:04,919 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:14:05,103 DEBUG GuiEntryPoint:127 - Load successful.
+12:14:11,797  INFO Main:296 - done connecting to server
+12:14:11,798  INFO Main:298 - Connection to server OK
+12:14:17,900 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:14:17,929 DEBUG GuiEntryPoint:127 - Load successful.
+12:16:53,207 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:16:53,374 DEBUG GuiEntryPoint:127 - Load successful.
+12:16:57,827  INFO Main:296 - done connecting to server
+12:16:57,828  INFO Main:298 - Connection to server OK
+12:17:18,050 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:17:18,060 DEBUG GuiEntryPoint:127 - Load successful.
+12:20:14,036 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:20:14,194 DEBUG GuiEntryPoint:127 - Load successful.
+12:21:13,072  INFO Main:296 - done connecting to server
+12:21:13,073  INFO Main:298 - Connection to server OK
+12:21:13,601 ERROR Main:271 - Nothing was read from server
+12:22:23,881 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:22:24,027 DEBUG GuiEntryPoint:127 - Load successful.
+12:24:00,033  INFO Main:296 - done connecting to server
+12:24:00,035  INFO Main:298 - Connection to server OK
+12:24:00,605 ERROR Main:271 - Nothing was read from server
+12:33:45,640 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/IpPrompt.fxml ...
+12:33:45,812 DEBUG GuiEntryPoint:127 - Load successful.
+12:34:21,677  INFO Main:296 - done connecting to server
+12:34:21,678  INFO Main:298 - Connection to server OK
+12:34:21,695 DEBUG GuiEntryPoint:125 - Attempting to load file:/home/miloslav/NetBeansProjects/GpioDebuggerUi/src/main/resources/fxml/Raspi.fxml ...
+12:34:21,816 DEBUG GuiEntryPoint:127 - Load successful.
+12:34:23,970  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:24,048 DEBUG Main:221 - null has been received from agent as a message
+12:34:24,740  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:24,762 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,187  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,200 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,349  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,363 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,493  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,506 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,624  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,636 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,757  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,769 DEBUG Main:221 - null has been received from agent as a message
+12:34:25,909  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:25,921 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,045  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,059 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,189  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,198 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,325  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,337 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,460  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,472 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,599  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,611 DEBUG Main:221 - null has been received from agent as a message
+12:34:26,760  INFO RaspiController:253 - GPIO request has been sent : pin read, operation : P1_3
+12:34:26,775 DEBUG Main:221 - null has been received from agent as a message
+12:34:27,743  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:34:27,774 DEBUG Main:221 - null has been received from agent as a message
+12:34:28,273  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:34:28,287 DEBUG Main:221 - null has been received from agent as a message
+12:34:29,297  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:34:29,310 DEBUG Main:221 - null has been received from agent as a message
+12:35:00,995  INFO RaspiController:168 - SPI request sent to client: GPIO:INTR_START:P1_3 Falling
+12:35:01,123 DEBUG Main:221 - null has been received from agent as a message
+12:35:38,026  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:38,044 DEBUG Main:221 - null has been received from agent as a message
+12:35:38,225  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:38,240 DEBUG Main:221 - null has been received from agent as a message
+12:35:49,329  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:49,342 DEBUG Main:221 - null has been received from agent as a message
+12:35:50,106  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:50,119 DEBUG Main:221 - null has been received from agent as a message
+12:35:50,844  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:50,859 DEBUG Main:221 - null has been received from agent as a message
+12:35:51,236  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:51,251 DEBUG Main:221 - null has been received from agent as a message
+12:35:51,396  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:51,409 DEBUG Main:221 - null has been received from agent as a message
+12:35:51,676  INFO RaspiController:253 - GPIO request has been sent : pin write, operation : P1_3
+12:35:51,690 DEBUG Main:221 - null has been received from agent as a message
+12:36:07,477 ERROR Main:271 - Nothing was read from server
+12:36:07,478 DEBUG Main:221 - null has been received from agent as a message
