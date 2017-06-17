@@ -179,8 +179,10 @@ public class I2cRequestFormController implements Initializable {
                 .append(SEPARATOR)
                 .append(selectedOp.toString())
                 .append(SEPARATOR)
+                .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR)
+                .append(HEXA_PREFIX)
                 .append(registerAddressFromField.getText().trim())
                 .append(SEPARATOR);
     }

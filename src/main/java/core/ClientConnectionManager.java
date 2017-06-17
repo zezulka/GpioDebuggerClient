@@ -217,8 +217,9 @@ public class ClientConnectionManager implements Runnable {
             } else {
                 Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
             }
+        } else {
+            MAIN_LOGGER.debug("null has been received from agent as a message");
         }
-        MAIN_LOGGER.debug("null has been received from agent as a message");
     }
 
     private String getMessagePrefix(String message) {

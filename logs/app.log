@@ -1,9 +1,0 @@
-[ 2017-49-15 12:49:37.837 ERROR] core.Main - Could not connect to server
-java.net.ConnectException: Connection refused
-	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method) ~[?:1.8.0_121]
-	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:717) ~[?:1.8.0_121]
-	at core.ClientConnectionManager.connect(ClientConnectionManager.java:295) [classes/:?]
-	at core.ClientConnectionManager.processSelectionKeys(ClientConnectionManager.java:194) [classes/:?]
-	at core.ClientConnectionManager.iterateThoughRegisteredKeys(ClientConnectionManager.java:179) [classes/:?]
-	at core.ClientConnectionManager.run(ClientConnectionManager.java:166) [classes/:?]
-	at java.lang.Thread.run(Thread.java:745) [?:1.8.0_121]
