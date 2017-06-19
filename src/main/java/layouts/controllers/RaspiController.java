@@ -2,8 +2,6 @@ package layouts.controllers;
 
 import core.ClientConnectionManager;
 
-import java.io.IOException;
-
 import java.net.URL;
 
 import javafx.fxml.FXML;
@@ -57,20 +55,12 @@ public class RaspiController implements DeviceController, Initializable {
 
     @FXML
     protected void createSpiForm(MouseEvent event) {
-        try {
-            GuiEntryPoint.getInstance().createNewSpiForm();
-        } catch (IOException ex) {
-            LOGGER.error(null, ex);
-        }
+        GuiEntryPoint.createNewSpiForm();
     }
 
     @FXML
     protected void createI2cForm(MouseEvent event) {
-        try {
-            GuiEntryPoint.getInstance().createNewI2cForm();
-        } catch (IOException ex) {
-            LOGGER.error(null, ex);
-        }
+        GuiEntryPoint.createNewI2cForm();
     }
 
     private String getButtonTitle(InputEvent event) {

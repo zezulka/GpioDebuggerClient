@@ -1,6 +1,6 @@
 package core;
 
-import util.MessageParser;
+import core.util.MessageParser;
 import layouts.controllers.GuiEntryPoint;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,7 +10,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.time.LocalTime;
 import java.util.Iterator;
 import javafx.application.Platform;
 import layouts.controllers.InterruptTableController;
@@ -19,13 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import protocol.BoardType;
-import protocol.ClientPin;
-import protocol.InterruptListenerStatus;
-import protocol.InterruptType;
 import protocol.InterruptValueObject;
-import protocol.ListenerState;
 import protocol.ProtocolMessages;
-import protocol.RaspiClientPin;
 
 /**
  *
@@ -155,7 +149,7 @@ public class ClientConnectionManager implements Runnable {
         while (true) {
             try {
                 if (!initManager()) {
-                    GuiEntryPoint.getInstance().switchToIpPrompt();
+                    GuiEntryPoint.switchToIpPrompt();
                     resetResources();
                     Platform.runLater(() -> {
                         GuiEntryPoint.provideFeedback("Cannot connect to manager. "
@@ -200,7 +194,7 @@ public class ClientConnectionManager implements Runnable {
             if (key.isReadable()) {
                 if (this.boardType == null) {
                     readInitMessage(key);
-                    GuiEntryPoint.getInstance().switchToCurrentDevice();
+                    GuiEntryPoint.switchToCurrentDevice();
                 } else {
                     processAgentMessage(key);
                 }
@@ -211,9 +205,9 @@ public class ClientConnectionManager implements Runnable {
     private void processAgentMessage(SelectionKey key) throws IOException {
         String agentMessage = read(key);
         if (agentMessage != null) {
-            if (MessageParser.isInterruptMessage(getMessagePrefix(agentMessage))) {
-                InterruptValueObject ivo = getInterruptValueObjectFromMessage(agentMessage);
-                InterruptTableController.updateInterruptListener(ivo);
+            InterruptValueObject object;
+            if ((object = MessageParser.getInterruptValueObjectFromMessage(agentMessage)) != null) {
+                InterruptTableController.updateInterruptListener(object);
             } else {
                 Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
             }
@@ -223,42 +217,6 @@ public class ClientConnectionManager implements Runnable {
         }
     }
 
-    private String getMessagePrefix(String message) {
-        int firstSeparatorOccurence = message.indexOf(":");
-        return message.substring(0, firstSeparatorOccurence < 0 ? message.length() : firstSeparatorOccurence);
-    }
-
-    private InterruptValueObject getInterruptValueObjectFromMessage(String agentMessage) {
-        MAIN_LOGGER.debug(String.format("Message accepted from agent is about to get processed: %s", agentMessage));
-        String[] splitMessage = agentMessage.split(":");
-        //bound to Raspi only!!!!
-        ClientPin pin;
-        InterruptType type;
-        try {
-            pin = RaspiClientPin.getPin(splitMessage[1]);
-            type = InterruptType.getType(splitMessage[2]);
-        } catch(IllegalArgumentException ex) {
-            return null;
-        }
-        InterruptValueObject result = new InterruptValueObject(pin, type);
-        InterruptListenerStatus status = InterruptListenerStatus.valueOf(splitMessage[0]);
-        switch (status) {
-            case INTR_GENERATED: {
-                result.setLatestInterruptTime(LocalTime.ofNanoOfDay(Long.valueOf(splitMessage[3].replace("\n", ""))));
-                break;
-            }
-            case INTR_STARTED: {
-                result.setState(ListenerState.RUNNING);
-                break;
-            }
-            case INTR_STOPPED: {
-                result.setState(ListenerState.NOT_RUNNING);
-                break;
-            }
-        }
-
-        return result;
-    }
 
     private void close() {
         if (selector == null) {

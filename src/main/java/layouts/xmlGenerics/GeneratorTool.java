@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;
+import protocol.BoardType;
 
 /**
  * Tool used for generating GUI (more specifically, this tool creates fxml files representing
@@ -19,9 +20,8 @@ public class GeneratorTool {
     public static void main(String[] args) {
         final Logger toolLogger = LoggerFactory.getLogger(GeneratorTool.class);
         try {
-            RaspiXmlGenerator.getInstance().createXml();
-            //BeagleBoneBlackXmlGenerator.getInstance().createXml();
-            //CubieBoardXmlGenerator.getInstance().createXml();
+            DeviceXmlGeneratorFactory.from(BoardType.RASPBERRY_PI).createXml();
+            //Stream.of(BoardType.values()).forEach((t) -> DeviceXmlGeneratorFactory.from(t).createXml());
         } catch (IOException ex) {
             toolLogger.error(null, ex);
         }

@@ -11,15 +11,8 @@ import protocol.BoardType;
  *
  * @author Miloslav Zezulka, 2017
  */
-public class RaspiXmlGenerator extends AbstractDeviceXmlGenerator {
-
-    private static final RaspiXmlGenerator INSTANCE = new RaspiXmlGenerator();
-    
-    private RaspiXmlGenerator() {
+public class RaspiXmlGenerator extends AbstractDeviceXmlGenerator {    
+    public RaspiXmlGenerator() {
         super(20, 2, BoardType.RASPBERRY_PI, "Raspi");
-    }
-    
-    public static RaspiXmlGenerator getInstance() {
-        return INSTANCE;
     }
 }

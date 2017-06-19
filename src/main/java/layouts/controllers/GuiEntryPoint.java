@@ -42,7 +42,6 @@ public final class GuiEntryPoint extends Application {
     private static final String FXML_EXT = ".fxml";
 
     private static final Logger GUI_LOGGER = LoggerFactory.getLogger(GuiEntryPoint.class);
-    private static final GuiEntryPoint INSTANCE = new GuiEntryPoint();
 
     private static URL ipPrompt;
     private static URL i2cRequestForm;
@@ -53,15 +52,7 @@ public final class GuiEntryPoint extends Application {
     private static URL beagleBoneBlackController;
     private static URL cubieBoardController;
 
-    public GuiEntryPoint() {
-        try {
-            initControllerPaths();
-        } catch (MalformedURLException ex) {
-            GUI_LOGGER.error("Malformed URL. ", ex);
-        }
-    }
-
-    private void initControllerPaths() throws MalformedURLException {
+    public static void initControllerPaths() throws MalformedURLException {
         ipPrompt = getPathToController("IpPrompt");
         raspiController = getPathToController("Raspi");
         i2cRequestForm = getPathToController("I2cRequestForm");
@@ -69,7 +60,7 @@ public final class GuiEntryPoint extends Application {
         addInterruptForm = getPathToController("AddListenerForm");
     }
 
-    private URL getPathToController(String controllerName) throws MalformedURLException {
+    private static URL getPathToController(String controllerName) throws MalformedURLException {
         StringBuilder builder = new StringBuilder();
         builder = builder
                 .append("src")
@@ -99,16 +90,17 @@ public final class GuiEntryPoint extends Application {
     }
 
     @Override
+    public void init() throws Exception {
+        super.init();
+        initControllerPaths();
+    }
+
+    @Override
     public void start(Stage primaryStage) {
-        try {
-            stage = primaryStage;
-            switchScene(ipPrompt);
-            stage.setTitle("Debugger for ARM-based devices");
-            stage.show();
-        } catch (IOException ex) {
-            GUI_LOGGER.error(null, ex);
-            Platform.exit();
-        }
+        stage = primaryStage;
+        switchScene(ipPrompt);
+        stage.setTitle("Debugger for ARM-based devices");
+        stage.show();
     }
 
     @Override
@@ -117,13 +109,15 @@ public final class GuiEntryPoint extends Application {
         System.exit(0);
     }
 
-    public static GuiEntryPoint getInstance() {
-        return INSTANCE;
-    }
-
-    private void switchScene(URL fxml) throws IOException {
+    private static void switchScene(URL fxml) {
         GUI_LOGGER.debug("Attempting to load " + fxml.toString() + " ...");
-        Parent newParent = (Parent) FXMLLoader.load(fxml);
+        Parent newParent = null;
+        try {
+            newParent = (Parent) FXMLLoader.load(fxml);
+        } catch (IOException ex) {
+            GUI_LOGGER.error("Load failed: ", ex);
+            Platform.exit();
+        }
         GUI_LOGGER.debug("Load successful.");
         Scene scene = stage.getScene();
         if (scene == null) {
@@ -132,26 +126,26 @@ public final class GuiEntryPoint extends Application {
             stage.setScene(scene);
         } else {
             stage.getScene().setRoot(newParent);
-        } 
+        }
     }
 
-    private void switchToRaspi() throws IOException {
+    private static void switchToRaspi() {
         switchScene(raspiController);
     }
 
-    private void switchToBBB() throws IOException {
+    private static void switchToBBB() {
         switchScene(beagleBoneBlackController);
     }
 
-    private void switchToCubieBoard() throws IOException {
+    private static void switchToCubieBoard() {
         switchScene(cubieBoardController);
     }
 
-    public void switchToIpPrompt() throws IOException {
+    public static void switchToIpPrompt() {
         switchScene(ipPrompt);
     }
 
-    public void switchToCurrentDevice() throws IOException {
+    public static void switchToCurrentDevice() {
         if (ClientConnectionManager.getInstance() == null) {
             GUI_LOGGER.debug("manager not ready!");
             return;
@@ -181,7 +175,7 @@ public final class GuiEntryPoint extends Application {
         }
     }
 
-    private void createNewForm(URL fxml) throws IOException {
+    private static void createNewForm(URL fxml) {
         Platform.runLater(() -> {
             FXMLLoader fxmlLoader = new FXMLLoader(fxml);
             Parent newRoot;
@@ -200,15 +194,15 @@ public final class GuiEntryPoint extends Application {
         });
     }
 
-    public void createNewI2cForm() throws IOException {
+    public static void createNewI2cForm() {
         createNewForm(i2cRequestForm);
     }
 
-    public void createNewSpiForm() throws IOException {
+    public static void createNewSpiForm() {
         createNewForm(spiRequestForm);
     }
 
-    public void createNewAddListenerForm() throws IOException {
+    public static void createNewAddListenerForm() {
         createNewForm(addInterruptForm);
     }
 }

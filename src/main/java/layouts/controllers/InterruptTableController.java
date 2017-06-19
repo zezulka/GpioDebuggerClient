@@ -1,7 +1,6 @@
 package layouts.controllers;
 
 import core.ClientConnectionManager;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
@@ -61,7 +60,7 @@ public class InterruptTableController implements Initializable {
     private ComboBox<Action> actionsComboBox;
     @FXML
     private TableView<InterruptValueObject> tableView;
-
+    
     /**
      * Initializes the controller class.
      */
@@ -74,11 +73,7 @@ public class InterruptTableController implements Initializable {
         tableView.setEditable(true);
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
             if (INTERRUPTS.size() <= MAX_THREAD_THRESHOLD) {
-                try {
-                    GuiEntryPoint.getInstance().createNewAddListenerForm();
-                } catch (IOException ex) {
-                    LOGGER.error(null, ex);
-                }
+                GuiEntryPoint.createNewAddListenerForm();
             }
         });
     }
@@ -89,11 +84,7 @@ public class InterruptTableController implements Initializable {
 
     @FXML
     private void addNewListenerMouseClicked(MouseEvent event) {
-        try {
-            GuiEntryPoint.getInstance().createNewAddListenerForm();
-        } catch (IOException ex) {
-            LOGGER.error(null, ex);
-        }
+        GuiEntryPoint.createNewAddListenerForm();
     }
 
     @FXML
