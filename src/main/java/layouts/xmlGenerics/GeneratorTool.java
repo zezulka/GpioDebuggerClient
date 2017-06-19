@@ -18,13 +18,12 @@ import org.slf4j.LoggerFactory;
 public class GeneratorTool {
     public static void main(String[] args) {
         final Logger toolLogger = LoggerFactory.getLogger(GeneratorTool.class);
-        throw new UnsupportedOperationException("not implemented yet");
-        /*try {
-            //RaspiXmlGenerator.getInstance().createXml();
+        try {
+            RaspiXmlGenerator.getInstance().createXml();
             //BeagleBoneBlackXmlGenerator.getInstance().createXml();
             //CubieBoardXmlGenerator.getInstance().createXml();
         } catch (IOException ex) {
-            toolLogger.error("I/O error:", ex);
-        }*/
+            toolLogger.error(null, ex);
+        }
     }
 }

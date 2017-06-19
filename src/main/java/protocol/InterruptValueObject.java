@@ -4,10 +4,8 @@ import java.time.LocalTime;
 
 import java.util.Objects;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -16,7 +14,6 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Miloslav Zezulka, 2017
  */
 public class InterruptValueObject {
-    private final BooleanProperty selected;
     private final ClientPin clientPin;
     private final InterruptType type;
     private final LocalTime timeAdded;
@@ -30,16 +27,11 @@ public class InterruptValueObject {
         this.timeAdded = LocalTime.now();
         this.numberOfInterrupts = new SimpleIntegerProperty(0);
         this.latestInterruptTime = new SimpleObjectProperty<>();
-        this.selected = new SimpleBooleanProperty(false);
         this.state = new SimpleObjectProperty<>(ListenerState.NOT_RUNNING);
     }
 
     public ObjectProperty<ListenerState> stateProperty() {
         return this.state;
-    }
-    
-    public BooleanProperty selectedProperty() {
-        return selected;
     }
 
     public ClientPin getClientPin() {
@@ -72,10 +64,6 @@ public class InterruptValueObject {
 
     public void setLatestInterruptTime(LocalTime latestInterruptTime) {
         this.latestInterruptTime.setValue(LocalTime.from(latestInterruptTime));
-    }
-
-    public void setSelected(Boolean selected) {
-        this.selected.setValue(selected);
     }
     
     public void setState(ListenerState state) {

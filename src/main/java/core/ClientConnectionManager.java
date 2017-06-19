@@ -13,7 +13,7 @@ import java.nio.channels.SocketChannel;
 import java.time.LocalTime;
 import java.util.Iterator;
 import javafx.application.Platform;
-import layouts.controllers.RaspiController;
+import layouts.controllers.InterruptTableController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +213,7 @@ public class ClientConnectionManager implements Runnable {
         if (agentMessage != null) {
             if (MessageParser.isInterruptMessage(getMessagePrefix(agentMessage))) {
                 InterruptValueObject ivo = getInterruptValueObjectFromMessage(agentMessage);
-                RaspiController.updateInterruptListener(ivo);
+                InterruptTableController.updateInterruptListener(ivo);
             } else {
                 Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
             }
@@ -223,14 +223,22 @@ public class ClientConnectionManager implements Runnable {
     }
 
     private String getMessagePrefix(String message) {
-        return message.substring(0, message.indexOf(":"));
+        int firstSeparatorOccurence = message.indexOf(":");
+        return message.substring(0, firstSeparatorOccurence < 0 ? message.length() : firstSeparatorOccurence);
     }
 
     private InterruptValueObject getInterruptValueObjectFromMessage(String agentMessage) {
+        MAIN_LOGGER.debug(String.format("Message accepted from agent is about to get processed: %s", agentMessage));
         String[] splitMessage = agentMessage.split(":");
         //bound to Raspi only!!!!
-        ClientPin pin = RaspiClientPin.getPin(splitMessage[1]);
-        InterruptType type = InterruptType.getType(splitMessage[2]);
+        ClientPin pin;
+        InterruptType type;
+        try {
+            pin = RaspiClientPin.getPin(splitMessage[1]);
+            type = InterruptType.getType(splitMessage[2]);
+        } catch(IllegalArgumentException ex) {
+            return null;
+        }
         InterruptValueObject result = new InterruptValueObject(pin, type);
         InterruptListenerStatus status = InterruptListenerStatus.valueOf(splitMessage[0]);
         switch (status) {

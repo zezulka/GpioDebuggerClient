@@ -7,6 +7,9 @@ package layouts.xmlGenerics;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -56,23 +59,27 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         }
     }
 
+    @Override
+    public void createXml() throws IOException {
+        try {
+            addImports();
+            createDocStructure();
+            createXmlFileFromTreeStructure();
+        } catch (TransformerException tfe) {
+            xmlLogger.error("transformer error:", tfe);
+        }
+    }
+
     private void addImports() {
         String importString = "import";
-        Node[] imports = {DOC.createProcessingInstruction(importString, "javafx.scene.control.Button"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.layout.AnchorPane"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.layout.BorderPane"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.layout.ColumnConstraints"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.layout.GridPane"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.layout.RowConstraints"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.control.Label"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.text.Font"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.control.RadioButton"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.control.ToggleGroup"),
-            DOC.createProcessingInstruction(importString, "javafx.scene.control.TextArea")
-        };
-        for (Node node : imports) {
-            DOC.appendChild(node);
-        }
+        String packagePrefix = "javafx.scene.";
+        List<String> importPaths = new ArrayList<>(Arrays.asList(
+                "control.Button", "control.ComboBox", "control.Label", "control.RadioButton", "control.ToggleGroup",
+                "control.TextArea", "control.Tab", "control.TableColumn", "control.TableView", "control.TableRow", "control.TabPane",
+                "layout.AnchorPane", "layout.BorderPane", "layout.ColumnConstraints", "layout.GridPane", "layout.RowConstraints",
+                "text.Font"
+        ));
+        importPaths.forEach(t -> DOC.appendChild(DOC.createProcessingInstruction(importString, packagePrefix + t)));
     }
 
     private Node createButton(int row, int col) {
@@ -98,8 +105,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private Node createInterfaceButton(String interfc, String row) {
         Element button = DOC.createElement("Button");
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#create" + interfc.substring(0, 1).toUpperCase() 
-                                                        + interfc.substring(1).toLowerCase() + "Form");
+        button.setAttribute("onMouseClicked", "#create" + interfc.substring(0, 1).toUpperCase()
+                + interfc.substring(1).toLowerCase() + "Form");
         button.setAttribute("text", interfc);
         button.setAttribute("GridPane.columnIndex", row);
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
@@ -107,88 +114,99 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         return button;
     }
 
+    private void createDocStructure() {
+        Element rootElement = DOC.createElement("AnchorPane");
+        rootElement.setAttribute("id", "AnchorPane");
+        rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
+        rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
+        rootElement.setAttribute("fx:controller", "layouts.controllers." + deviceName + "Controller");
+        DOC.appendChild(rootElement);
+        Element children = DOC.createElement("children");
+        rootElement.appendChild(children);
+        Element tabPane = DOC.createElement("TabPane");
+        children.appendChild(tabPane);
+        Element tabs = DOC.createElement("tabs");
+        tabs.appendChild(createFirstTab());
+        tabs.appendChild(createSecondTab());
+        tabPane.appendChild(tabs);
+    }
 
-    @Override
-    public void createXml() throws IOException {
-        try {
+    private void createXmlFileFromTreeStructure() throws TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOC.normalizeDocument();
+        DOMSource source = new DOMSource(DOC);
+        StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + deviceName + EXTENSION));
 
-            addImports();
-            //root element
-            Element rootElement = DOC.createElement("AnchorPane");
-            rootElement.setAttribute("id", "AnchorPane");
-            rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
-            rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
-            rootElement.setAttribute("fx:controller", "layouts.controllers." + deviceName + "Controller");
-            DOC.appendChild(rootElement);
+        //transformer formatting magic... taken from StackOverflow
+        transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(source, result);
+    }
 
-            Element children = DOC.createElement("children");
-            rootElement.appendChild(children);
-            //grid pane
-            Element gridPane = DOC.createElement("GridPane");
-            gridPane.setAttribute("layoutX", "0.0");
-            gridPane.setAttribute("layoutY", "0.0");
-            children.appendChild(gridPane);
+    private Node createFirstTab() {
+        Element tab = DOC.createElement("Tab");
+        tab.setAttribute("closable", "false");
+        tab.setAttribute("text", "Interfaces");
+        Element content = DOC.createElement("content");
+        tab.appendChild(content);
+        content.appendChild(createInterfacesGridPane());
+        return tab;
+    }
+    
+    private Node createSecondTab() {
+        Element tab = DOC.createElement("fx:include");
+        tab.setAttribute("source", "InterruptTable.fxml");
+        return tab;
+    }
 
-            //column constraints
-            Element columnConstraints = DOC.createElement("columnConstraints");
-
-            for (int i = 0; i < width + WIDTH_OFFSET_FOR_TEXT_AREA; i++) {
-                Element columnConstraint = DOC.createElement("ColumnConstraints");
-                columnConstraint.setAttribute("hgrow", "ALWAYS");
-                columnConstraint.setAttribute("minWidth", "10.0");
-                columnConstraint.setAttribute("prefWidth", "100.0");
-                columnConstraints.appendChild(columnConstraint);
-            }
-            gridPane.appendChild(columnConstraints);
-
-            //row constraints
-            Element rowConstraints = DOC.createElement("rowConstraints");
-
-            for (int i = 0; i < height + 1; i++) {
-                Element rowConstraint = DOC.createElement("RowConstraints");
-                rowConstraint.setAttribute("minHeight", "10.0");
-                rowConstraint.setAttribute("prefHeight", "30.0");
-                rowConstraint.setAttribute("vgrow", "ALWAYS");
-                rowConstraints.appendChild(rowConstraint);
-            }
-
-            gridPane.appendChild(rowConstraints);
-
-            //buttons for GPIO 
-            Element gridPaneChildren = DOC.createElement("children");
-            for (int col = 0; col < width; col++) {
-                for (int row = 0; row < height; row++) {
-                    gridPaneChildren.appendChild(this.createButton(row, col));
-                }
-            }
-            //buttons for interfaces
-            String[] interfaces = new String[]{"i2c", "spi"};
-            for (int col = 0; col < interfaces.length; col++) {
-                gridPaneChildren.appendChild(createInterfaceButton(interfaces[col],
-                        String.valueOf(col)));
-            }
-            gridPaneChildren.appendChild(createOutputArea());
-            gridPane.appendChild(gridPaneChildren);
-
-            gridPaneChildren.appendChild(createWriteRadioButton());
-            gridPaneChildren.appendChild(createReadRadioButton());
-
-            // write the content into xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOC.normalizeDocument();
-            DOMSource source = new DOMSource(DOC);
-            StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + deviceName + EXTENSION));
-
-            //transformer formatting magic... taken from StackOverflow
-            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.transform(source, result);
-
-        } catch (TransformerException tfe) {
-            xmlLogger.error("transformer error:", tfe);
+    private Node createInterfacesGridPane() {
+        Element gridPane = DOC.createElement("GridPane");
+        gridPane.setAttribute("layoutX", "0.0");
+        gridPane.setAttribute("layoutY", "0.0");
+        Element columnConstraints = DOC.createElement("columnConstraints");
+        for (int i = 0; i < width + WIDTH_OFFSET_FOR_TEXT_AREA; i++) {
+            Element columnConstraint = DOC.createElement("ColumnConstraints");
+            columnConstraint.setAttribute("hgrow", "ALWAYS");
+            columnConstraint.setAttribute("minWidth", "10.0");
+            columnConstraint.setAttribute("prefWidth", "100.0");
+            columnConstraints.appendChild(columnConstraint);
         }
+        gridPane.appendChild(columnConstraints);
+
+        Element rowConstraints = DOC.createElement("rowConstraints");
+
+        for (int i = 0; i < height + 1; i++) {
+            Element rowConstraint = DOC.createElement("RowConstraints");
+            rowConstraint.setAttribute("minHeight", "10.0");
+            rowConstraint.setAttribute("prefHeight", "30.0");
+            rowConstraint.setAttribute("vgrow", "ALWAYS");
+            rowConstraints.appendChild(rowConstraint);
+        }
+        gridPane.appendChild(rowConstraints);
+        gridPane.appendChild(createButtonsForFirstTab());
+        return gridPane;
+    }
+
+    private Node createButtonsForFirstTab() {
+        //buttons for GPIO 
+        Element gridPaneChildren = DOC.createElement("children");
+        for (int col = 0; col < width; col++) {
+            for (int row = 0; row < height; row++) {
+                gridPaneChildren.appendChild(this.createButton(row, col));
+            } 
+        }
+        //buttons for interfaces
+        String[] interfaces = new String[]{"i2c", "spi"};
+        for (int col = 0; col < interfaces.length; col++) {
+            gridPaneChildren.appendChild(createInterfaceButton(interfaces[col],
+                    String.valueOf(col)));
+        }
+        gridPaneChildren.appendChild(createOutputArea());
+        gridPaneChildren.appendChild(createWriteRadioButton());
+        gridPaneChildren.appendChild(createReadRadioButton());
+        return gridPaneChildren;
     }
 
     private Node createOutputArea() {

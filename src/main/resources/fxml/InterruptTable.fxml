@@ -1,0 +1,43 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableRow?>
+<?import javafx.scene.control.ComboBox?>
+<Tab closable="false" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" text="Interrupts" fx:controller="layouts.controllers.InterruptTableController">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0">
+            <children>
+                <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="1017.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#addNewListenerMouseClicked" prefHeight="37.0" prefWidth="167.0" text="Add new listener" />
+                <TableView id="tableView" fx:id="tableView" layoutX="8.0" layoutY="68.0" prefHeight="448.0" prefWidth="1199.0">
+                    <columns>
+                        <TableColumn fx:id="pinName" editable="false" prefWidth="107.0" text="Pin Name" />
+                        <TableColumn fx:id="interruptType" editable="false" prefWidth="121.0" text="Interrupt Type" />
+                        <TableColumn fx:id="timeAdded" editable="false" prefWidth="162.0" text="Time Added" />
+                        <TableColumn fx:id="numberOfInterrupts" editable="false" prefWidth="151.0" text="No. Interrrupts" />
+                        <TableColumn fx:id="latestInterruptTime" editable="false" minWidth="0.0" prefWidth="252.0" text="Latest Interrupt Time" />
+                        <TableColumn id="state" fx:id="state" prefWidth="171.0" text="Interrupt State" />
+                    </columns>
+                </TableView>
+                <ComboBox id="actionsComboBox" fx:id="actionsComboBox" layoutX="1017.0" layoutY="533.0" prefHeight="42.0" prefWidth="169.0" />
+                <Label layoutX="898.0" layoutY="539.0" prefHeight="30.0" prefWidth="119.0" text="Action">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <Button id="submitButton" fx:id="submitButton" layoutX="1029.0" layoutY="598.0" mnemonicParsing="false" onMouseClicked="#submitBulkActions" prefHeight="39.0" prefWidth="155.0" text="Submit" />
+            </children>
+        </AnchorPane>
+    </content>
+</Tab>

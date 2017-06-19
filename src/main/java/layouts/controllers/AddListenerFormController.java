@@ -58,10 +58,11 @@ public class AddListenerFormController implements Initializable {
     private void addAllIntrTypes() {
        interruptTypeComboBox.setItems(FXCollections.observableArrayList(InterruptType.values()));
     }
+    
 
     @FXML
     private void addNewInterrupt(MouseEvent event) {
-        if(RaspiController.addNewInteruptListener(
+        if(InterruptTableController.addNewInterruptListener(
                 new InterruptValueObject(pinComboBox.getValue(), 
                                          interruptTypeComboBox.getValue()))) {
             ((Stage)addListenerButton.getScene().getWindow()).close();
