@@ -122,7 +122,9 @@ public class InterruptTableController implements Initializable {
 
     public static void updateInterruptListener(InterruptValueObject ivo) {
         for (int i = 0; i < INTERRUPTS.size(); i++) {
-            if (INTERRUPTS.get(i).equals(ivo)) {
+            InterruptValueObject curr = INTERRUPTS.get(i);
+            if (curr.equals(ivo)) {
+                ivo.setNumberOfInterrupts(curr.numberOfInterruptsProperty().get() + 1);
                 INTERRUPTS.set(i, ivo);
                 return;
             }

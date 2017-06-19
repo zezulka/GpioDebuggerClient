@@ -219,6 +219,7 @@ public class ClientConnectionManager implements Runnable {
             }
         } else {
             MAIN_LOGGER.debug("null has been received from agent as a message");
+            resetResources();
         }
     }
 
@@ -244,7 +245,6 @@ public class ClientConnectionManager implements Runnable {
         switch (status) {
             case INTR_GENERATED: {
                 result.setLatestInterruptTime(LocalTime.ofNanoOfDay(Long.valueOf(splitMessage[3].replace("\n", ""))));
-                result.incrementNumberOfInterrupts();
                 break;
             }
             case INTR_STARTED: {
