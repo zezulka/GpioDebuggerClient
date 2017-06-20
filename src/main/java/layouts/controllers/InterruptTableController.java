@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.net.ClientConnectionManager;
+import core.net.ClientNetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
@@ -167,9 +167,7 @@ public class InterruptTableController implements Initializable {
             super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
-                ClientConnectionManager
-                        .getInstance()
-                        .setMessageToSend(msgToSend);
+                ClientNetworkManager.setMessageToSend(msgToSend);
                 LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
             }
             return null;

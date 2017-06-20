@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.net.ClientConnectionManager;
+import core.net.ClientNetworkManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,11 +146,11 @@ public final class GuiEntryPoint extends Application {
     }
 
     public static void switchToCurrentDevice() {
-        if (ClientConnectionManager.getInstance() == null) {
+        if (ClientNetworkManager.getInstance() == null) {
             GUI_LOGGER.debug("manager not ready!");
             return;
         }
-        BoardType board = ClientConnectionManager.getInstance().getBoardType();
+        BoardType board = ClientNetworkManager.getInstance().getBoardType();
 
         if (board == null) {
             GUI_LOGGER.debug("cannot view device controller, no device available");

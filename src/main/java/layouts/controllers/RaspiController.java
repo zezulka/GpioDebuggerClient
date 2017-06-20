@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.net.ClientConnectionManager;
+import core.net.ClientNetworkManager;
 
 import java.net.URL;
 
@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.control.RadioButton;
 
 import java.util.ResourceBundle;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 
 import javafx.scene.input.InputEvent;
@@ -76,9 +75,7 @@ public class RaspiController implements DeviceController, Initializable {
 
     private void sendRequest(InputEvent event, String msg) {
         if (event.getSource() instanceof Button) {
-            ClientConnectionManager
-                    .getInstance()
-                    .setMessageToSend(msg);
+            ClientNetworkManager.setMessageToSend(msg);
         } else {
             LOGGER.error(ProtocolMessages.C_ERR_GUI_NOT_BUTTON.toString());
             throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
@@ -87,5 +84,6 @@ public class RaspiController implements DeviceController, Initializable {
 
     @FXML
     private void disconnectHandler(MouseEvent event) {
+        ClientNetworkManager.disconnect();
     }
 }

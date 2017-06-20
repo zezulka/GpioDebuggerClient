@@ -26,33 +26,38 @@ import protocol.ProtocolMessages;
  *
  * @author Miloslav Zezulka, 2017
  */
-public class ClientConnectionManager implements Runnable {
+public class ClientNetworkManager implements Runnable {
 
-    private String messageToSend = null;
-    private Selector selector;
+    private static String messageToSend = null;
+    private static Selector selector;
     private static String ipAddress;
-    private BoardType boardType;
-    private SocketChannel channel;
+    private static BoardType boardType;
+    private static SocketChannel channel;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
     public static final int DEFAULT_SOCK_PORT = 8088;
     private static final int TIMEOUT = 5 * 1000;
 
-    private static final ClientConnectionManager CM = new ClientConnectionManager();
+    private static final ClientNetworkManager CM = new ClientNetworkManager();
 
-    public static ClientConnectionManager getInstance() {
+    public static ClientNetworkManager getInstance() {
         return CM;
     }
 
-    private ClientConnectionManager() {
+    private ClientNetworkManager() {
     }
 
     public void connectToDevice(String ipAddress) {
         setIpAddress(ipAddress);
         new Thread(this).start();
     }
+    
+    public static void disconnect() {
+        cleanUpResources();
+        GuiEntryPoint.switchToIpPrompt();
+    }
 
-    private void resetResources() {
+    private static void cleanUpResources() {
         try {
             if (channel != null) {
                 channel.close();
@@ -69,13 +74,13 @@ public class ClientConnectionManager implements Runnable {
         boardType = null;
     }
 
-    public boolean isAlive() {
+    private static boolean isAlive() {
         return channel != null && channel.isConnected();
     }
 
-    public boolean initManager() {
+    private boolean initManager() {
         if (selector != null || channel != null) {
-            resetResources();
+            cleanUpResources();
             throw new IllegalStateException("Manager has already been initialized!");
         }
         if (ipAddress == null) {
@@ -92,7 +97,7 @@ public class ClientConnectionManager implements Runnable {
                 Platform.runLater(() -> {
                     GuiEntryPoint.provideFeedback(String.format("Host %s could not be reached.", ipAddress));
                 });
-                resetResources();
+                cleanUpResources();
                 return false;
             } else {
                 LOGGER.debug(String.format("Host %s is reachable", ipAddress));
@@ -101,7 +106,7 @@ public class ClientConnectionManager implements Runnable {
             channel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException ex) {
             LOGGER.error(null, ex);
-            resetResources();
+            cleanUpResources();
             return false;
         }
         return true;
@@ -124,15 +129,15 @@ public class ClientConnectionManager implements Runnable {
         if (ipAddress == null) {
             throw new IllegalArgumentException("ip address cannot be null!");
         }
-        ClientConnectionManager.ipAddress = ipAddress;
+        ClientNetworkManager.ipAddress = ipAddress;
     }
 
     public String getIpAddress() {
         return ipAddress;
     }
 
-    public void setMessageToSend(String message) {
-        this.messageToSend = message;
+    public static void setMessageToSend(String message) {
+        messageToSend = message;
         if (message != null) {
             try {
                 channel.register(selector, SelectionKey.OP_WRITE);
@@ -179,7 +184,7 @@ public class ClientConnectionManager implements Runnable {
         } catch (IOException ex) {
             LOGGER.error(null, ex);
         } finally {
-            resetResources();
+            cleanUpResources();
             GuiEntryPoint.switchToIpPrompt();
         }
     }
@@ -223,7 +228,7 @@ public class ClientConnectionManager implements Runnable {
             }
         } else {
             LOGGER.debug("null has been received from agent as a message");
-            resetResources();
+            cleanUpResources();
         }
     }
 
@@ -235,7 +240,6 @@ public class ClientConnectionManager implements Runnable {
         if (length == -1) {
             LOGGER.error("Nothing was read from server");
             channel.close();
-            //key.cancel();
             return null;
         }
         readBuffer.flip();
@@ -255,9 +259,12 @@ public class ClientConnectionManager implements Runnable {
     }
 
     private void write(SelectionKey key) throws IOException {
-        channel.write(ByteBuffer.wrap(this.messageToSend.getBytes()));
+        if(messageToSend == null) {
+            throw new IllegalStateException("cannot send null message to agent");
+        }
+        channel.write(ByteBuffer.wrap(messageToSend.getBytes()));
         key.interestOps(SelectionKey.OP_READ);
-        this.setMessageToSend(null);
+        setMessageToSend(null);
     }
 
     private boolean connect(SelectionKey key) {

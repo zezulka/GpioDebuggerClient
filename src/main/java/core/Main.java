@@ -1,14 +1,15 @@
 package core;
 
-import layouts.controllers.GuiEntryPoint;
 import java.awt.EventQueue;
 import javafx.application.Application;
+import layouts.controllers.GuiEntryPoint;
 
 /**
  *
  * @author Miloslav Zezulka, 2017
  */
 public class Main {
+
     /**
      * @param args
      */

@@ -5,7 +5,7 @@
  */
 package layouts.controllers;
 
-import core.net.ClientConnectionManager;
+import core.net.ClientNetworkManager;
 import java.net.URL;
 
 import java.util.ResourceBundle;
@@ -49,7 +49,7 @@ public class IpPromptController implements Initializable {
             });
             return;
         }
-        ClientConnectionManager.getInstance().connectToDevice(ip);
+        ClientNetworkManager.getInstance().connectToDevice(ip);
     }
 
     @FXML
