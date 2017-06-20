@@ -16,6 +16,8 @@ public enum ProtocolMessages {
     C_RESPONSE_WAIT("Waiting for server to response..."),
     
     C_ERR_NOT_CONNECTED("Proper connection has not been established with server."),
+    C_ERR_CANNOT_CONNECT("Cannot connect to manager. "
+                                + "\nPlease make sure that agent instance is running on the specified address."),
     C_ERR_NO_BOARD("No device is currently binded to this session!"),
     C_ERR_NOT_BUTTON("The clicked entity is not of Button type, ignoring..."),
     C_ERR_ALREADY_CLOSED("Cannot close connection to server: already closed"),

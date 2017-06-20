@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.ClientConnectionManager;
+import core.net.ClientConnectionManager;
 
 import java.io.File;
 import java.io.IOException;

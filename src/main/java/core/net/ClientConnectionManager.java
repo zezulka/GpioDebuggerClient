@@ -1,5 +1,6 @@
-package core;
+package core.net;
 
+import core.Main;
 import core.util.MessageParser;
 import layouts.controllers.GuiEntryPoint;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class ClientConnectionManager implements Runnable {
     private BoardType boardType;
     private SocketChannel channel;
 
-    private static final Logger MAIN_LOGGER = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
     public static final int DEFAULT_SOCK_PORT = 8088;
     private static final int TIMEOUT = 5 * 1000;
 
@@ -60,7 +61,7 @@ public class ClientConnectionManager implements Runnable {
                 selector.close();
             }
         } catch (IOException ex) {
-            MAIN_LOGGER.error(null, ex);
+            LOGGER.error(null, ex);
         }
         selector = null;
         ipAddress = null;
@@ -75,39 +76,48 @@ public class ClientConnectionManager implements Runnable {
     public boolean initManager() {
         if (selector != null || channel != null) {
             resetResources();
-            return false;
+            throw new IllegalStateException("Manager has already been initialized!");
         }
         if (ipAddress == null) {
-            throw new IllegalStateException("Cannot initialize server,"
-                    + " ip address has not been set yet!");
+            return false;
         }
         setIpAddress(ipAddress);
         try {
             selector = Selector.open();
             channel = SocketChannel.open();
             channel.configureBlocking(true);
-            String[] octets = ipAddress.split("\\.", 4);
-            byte[] ipAddr = new byte[4];
-            for (int i = 0; i < 4; i++) {
-                ipAddr[i] = (byte) Integer.parseInt(octets[i]);
-            }
-            InetAddress inetAddress = InetAddress.getByAddress(ipAddr);
+
+            InetAddress inetAddress = InetAddress.getByAddress(getIpAddrArray(ipAddress));
             if (!inetAddress.isReachable(TIMEOUT)) {
                 Platform.runLater(() -> {
                     GuiEntryPoint.provideFeedback(String.format("Host %s could not be reached.", ipAddress));
                 });
                 resetResources();
                 return false;
+            } else {
+                LOGGER.debug(String.format("Host %s is reachable", ipAddress));
             }
             channel.configureBlocking(false);
             channel.register(selector, SelectionKey.OP_CONNECT);
-            channel.connect(new InetSocketAddress(ipAddress, DEFAULT_SOCK_PORT));
         } catch (IOException ex) {
-            MAIN_LOGGER.error("Init I/O error", ex);
+            LOGGER.error(null, ex);
             resetResources();
             return false;
         }
         return true;
+    }
+
+    private byte[] getIpAddrArray(String ipAddress) {
+        if (ipAddress == null) {
+            throw new IllegalArgumentException("ip address cannot be null");
+        }
+        final int arrSize = 4;
+        String[] octets = ipAddress.split("\\.", arrSize);
+        byte[] ipAddr = new byte[arrSize];
+        for (int i = 0; i < arrSize; i++) {
+            ipAddr[i] = (byte) Integer.parseInt(octets[i]);
+        }
+        return ipAddr;
     }
 
     public void setIpAddress(String ipAddress) {
@@ -129,9 +139,8 @@ public class ClientConnectionManager implements Runnable {
                 selector.wakeup();
             } catch (ClosedChannelException ex) {
                 channel = null;
-                MAIN_LOGGER.error("There has been an attempt to "
-                        + "register write operation on channel which has been closed.");
-
+                LOGGER.error("There has been an attempt to "
+                        + "register write operation on channel which has been closed.", ex);
             }
         }
     }
@@ -147,42 +156,43 @@ public class ClientConnectionManager implements Runnable {
     @Override
     public void run() {
         while (true) {
-            try {
-                if (!initManager()) {
-                    GuiEntryPoint.switchToIpPrompt();
-                    resetResources();
-                    Platform.runLater(() -> {
-                        GuiEntryPoint.provideFeedback("Cannot connect to manager. "
-                                + "\nPlease make sure that agent instance is running on the specified address.");
-                    });
-                    return;
-                }
-                iterateThoughRegisteredKeys();
-            } catch (IOException ex) {
-                MAIN_LOGGER.error(null, ex);
-            } finally {
-                close();
+            if (!initManager()) {
+                Platform.runLater(() -> {
+                    GuiEntryPoint.provideFeedback(ProtocolMessages.C_ERR_CANNOT_CONNECT.toString());
+                });
+                return;
             }
+            iterateThroughRegisteredKeys();
         }
     }
 
-    private void iterateThoughRegisteredKeys() throws IOException {
-        while (!Thread.interrupted()) {
-            selector.select();
-            Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
-            processSelectionKeys(keys);
-            if (!isAlive()) {
-                break;
+    private void iterateThroughRegisteredKeys() {
+        try {
+            while (true) {
+                selector.select();
+                Iterator<SelectionKey> keys = selector.selectedKeys().iterator();
+                processSelectionKeys(keys);
+                if (!isAlive()) {
+                    break;
+                }
             }
+        } catch (IOException ex) {
+            LOGGER.error(null, ex);
+        } finally {
+            resetResources();
+            GuiEntryPoint.switchToIpPrompt();
         }
     }
 
     private void processSelectionKeys(Iterator<SelectionKey> keys) throws IOException {
+        if (keys == null) {
+            return;
+        }
         while (keys.hasNext()) {
             SelectionKey key = keys.next();
             keys.remove();
             if (!key.isValid()) {
-                MAIN_LOGGER.error(String.format("A nonvalid key has been registered: %s", key.toString()));
+                LOGGER.error(String.format("A nonvalid key has been registered: %s", key.toString()));
                 continue;
             }
             if (key.isConnectable() && !connect(key)) {
@@ -193,17 +203,17 @@ public class ClientConnectionManager implements Runnable {
             }
             if (key.isReadable()) {
                 if (this.boardType == null) {
-                    readInitMessage(key);
+                    readInitMessage();
                     GuiEntryPoint.switchToCurrentDevice();
                 } else {
-                    processAgentMessage(key);
+                    processAgentMessage();
                 }
             }
         }
     }
 
-    private void processAgentMessage(SelectionKey key) throws IOException {
-        String agentMessage = read(key);
+    private void processAgentMessage() throws IOException {
+        String agentMessage = read();
         if (agentMessage != null) {
             InterruptValueObject object;
             if ((object = MessageParser.getInterruptValueObjectFromMessage(agentMessage)) != null) {
@@ -212,32 +222,20 @@ public class ClientConnectionManager implements Runnable {
                 Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
             }
         } else {
-            MAIN_LOGGER.debug("null has been received from agent as a message");
+            LOGGER.debug("null has been received from agent as a message");
             resetResources();
         }
     }
 
-
-    private void close() {
-        if (selector == null) {
-            return;
-        }
-        try {
-            selector.close();
-        } catch (IOException ex) {
-            MAIN_LOGGER.error(null, ex);
-        }
-    }
-
-    private String read(SelectionKey key) throws IOException {
+    private String read() throws IOException {
         ByteBuffer readBuffer = ByteBuffer.allocate(1000);
         readBuffer.clear();
         int length;
         length = channel.read(readBuffer);
         if (length == -1) {
-            MAIN_LOGGER.error("Nothing was read from server");
+            LOGGER.error("Nothing was read from server");
             channel.close();
-            key.cancel();
+            //key.cancel();
             return null;
         }
         readBuffer.flip();
@@ -246,9 +244,14 @@ public class ClientConnectionManager implements Runnable {
         return (new String(buff).replaceAll("\0", ""));
     }
 
-    private void readInitMessage(SelectionKey key) throws IOException {
-        String agentMessage = read(key);
-        this.setBoardType(BoardType.parse(agentMessage));
+    private boolean readInitMessage() throws IOException {
+        String agentMessage = read();
+        try {
+            this.setBoardType(BoardType.parse(agentMessage));
+            return true;
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     private void write(SelectionKey key) throws IOException {
@@ -259,17 +262,18 @@ public class ClientConnectionManager implements Runnable {
 
     private boolean connect(SelectionKey key) {
         try {
+            channel.connect(new InetSocketAddress(ipAddress, DEFAULT_SOCK_PORT));
             if (channel.isConnectionPending() && channel.finishConnect()) {
-                MAIN_LOGGER.info("done connecting to server");
+                LOGGER.info("done connecting to server");
+            } else {
+                return false;
             }
-            MAIN_LOGGER.info(ProtocolMessages.C_CONNECTION_OK.toString());
             channel.configureBlocking(false);
             key.interestOps(SelectionKey.OP_READ);
-
+            return true;
         } catch (IOException ex) {
-            MAIN_LOGGER.error("Could not connect to server", ex);
+            LOGGER.error("Could not connect to server, reason: ", ex);
             return false;
         }
-        return true;
     }
 }

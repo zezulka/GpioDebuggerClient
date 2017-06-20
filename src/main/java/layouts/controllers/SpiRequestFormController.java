@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.ClientConnectionManager;
+import core.net.ClientConnectionManager;
 
 import java.net.URL;
 

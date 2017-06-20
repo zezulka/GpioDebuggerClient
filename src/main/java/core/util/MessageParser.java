@@ -1,10 +1,14 @@
 package core.util;
 
+import java.io.IOException;
 import java.time.LocalTime;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.application.Platform;
+import layouts.controllers.GuiEntryPoint;
+import layouts.controllers.InterruptTableController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +29,18 @@ public class MessageParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageParser.class);
     private static final Set<InterruptListenerStatus> SPECIAL_PREFIXES
             = new HashSet<>(Arrays.asList(InterruptListenerStatus.values()));
+
+    public static void processAgentMessage(String agentMessage) throws IOException {
+        if (agentMessage == null) {
+            throw new IllegalArgumentException("Agent message cannot be null.");
+        }
+        InterruptValueObject object;
+        if ((object = MessageParser.getInterruptValueObjectFromMessage(agentMessage)) != null) {
+            InterruptTableController.updateInterruptListener(object);
+        } else {
+            Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
+        }
+    }
 
     private static boolean isInterruptMessage(String messagePrefix) {
         if (messagePrefix == null) {

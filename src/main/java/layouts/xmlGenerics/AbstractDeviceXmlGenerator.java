@@ -74,7 +74,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         String importString = "import";
         String packagePrefix = "javafx.scene.";
         List<String> importPaths = new ArrayList<>(Arrays.asList(
-                "control.Button", "control.ComboBox", "control.Label", "control.RadioButton", "control.ToggleGroup",
+                "control.Button", "control.ComboBox", "control.Label", "control.RadioButton", "control.Separator", "control.ToggleGroup",
                 "control.TextArea", "control.Tab", "control.TableColumn", "control.TableView", "control.TableRow", "control.TabPane",
                 "layout.AnchorPane", "layout.BorderPane", "layout.ColumnConstraints", "layout.GridPane", "layout.RowConstraints",
                 "text.Font"
@@ -82,7 +82,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         importPaths.forEach(t -> DOC.appendChild(DOC.createProcessingInstruction(importString, packagePrefix + t)));
     }
 
-    private Node createButton(int row, int col) {
+    private Node createGpioButton(int row, int col) {
         Element button = DOC.createElement("Button");
         int rowOffset = 2;
         int index = row * 2 + 1 + col;
@@ -101,13 +101,25 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
         return button;
     }
+    
+    private Node createDisconnectButton(int row, int col) {
+        Element button = DOC.createElement("Button");
+        button.setAttribute("mnemonicParsing", "false");
+        button.setAttribute("onMouseClicked", "#disconnectHandler");
+        button.setAttribute("text", "Disconnect");
+        button.setAttribute("GridPane.columnIndex", Integer.toString(col));
+        button.setAttribute("GridPane.rowIndex", Integer.toString(row));
+        button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
+        button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
+        return button;
+    }
 
     private Node createInterfaceButton(String interfc, String row) {
         Element button = DOC.createElement("Button");
         button.setAttribute("mnemonicParsing", "false");
         button.setAttribute("onMouseClicked", "#create" + interfc.substring(0, 1).toUpperCase()
                 + interfc.substring(1).toLowerCase() + "Form");
-        button.setAttribute("text", interfc);
+        button.setAttribute("text", interfc.toUpperCase() + "...");
         button.setAttribute("GridPane.columnIndex", row);
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
         button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
@@ -154,7 +166,21 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         content.appendChild(createInterfacesGridPane());
         return tab;
     }
-    
+
+    private Node createGpioLabel() {
+        Element fontChild = DOC.createElement("Font");
+        fontChild.setAttribute("name", "System Bold");
+        fontChild.setAttribute("size", "15.0");
+        Element font = DOC.createElement("font");
+        Element label = DOC.createElement("Label");
+        label.setAttribute("text", "GPIO control");
+        label.setAttribute("GridPane.columnIndex", "1");
+        label.setAttribute("GridPane.rowIndex", "3");
+        font.appendChild(fontChild);
+        label.appendChild(font);
+        return label;
+    }
+
     private Node createSecondTab() {
         Element tab = DOC.createElement("fx:include");
         tab.setAttribute("source", "InterruptTable.fxml");
@@ -185,17 +211,27 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
             rowConstraints.appendChild(rowConstraint);
         }
         gridPane.appendChild(rowConstraints);
-        gridPane.appendChild(createButtonsForFirstTab());
+        gridPane.appendChild(createContentsForFirstTab());
         return gridPane;
     }
 
-    private Node createButtonsForFirstTab() {
+    private Node createSeparator() {
+        Element separator = DOC.createElement("Separator");
+        separator.setAttribute("prefHeight", "0.0");
+        separator.setAttribute("prefWidth", "404.0");
+        separator.setAttribute("GridPane.columnSpan", "3");
+        separator.setAttribute("GridPane.rowIndex", "1");
+        separator.setAttribute("GridPane.valignment", "TOP");
+        return separator;
+    }
+
+    private Node createContentsForFirstTab() {
         //buttons for GPIO 
         Element gridPaneChildren = DOC.createElement("children");
         for (int col = 0; col < width; col++) {
             for (int row = 0; row < height; row++) {
-                gridPaneChildren.appendChild(this.createButton(row, col));
-            } 
+                gridPaneChildren.appendChild(createGpioButton(row, col));
+            }
         }
         //buttons for interfaces
         String[] interfaces = new String[]{"i2c", "spi"};
@@ -205,6 +241,9 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         }
         gridPaneChildren.appendChild(createOutputArea());
         gridPaneChildren.appendChild(createWriteRadioButton());
+        gridPaneChildren.appendChild(createGpioLabel());
+        gridPaneChildren.appendChild(createSeparator());
+        gridPaneChildren.appendChild(createDisconnectButton(0, 7));
         gridPaneChildren.appendChild(createReadRadioButton());
         return gridPaneChildren;
     }

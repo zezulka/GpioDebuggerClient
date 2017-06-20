@@ -1,6 +1,6 @@
 package layouts.controllers;
 
-import core.ClientConnectionManager;
+import core.net.ClientConnectionManager;
 
 import java.net.URL;
 
@@ -139,6 +139,9 @@ public class I2cRequestFormController implements Initializable {
 
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
+        if(msgBuilder == null) {
+            return null;
+        }
         if (Operation.isReadOperation(this.operationList.getSelectionModel().getSelectedItem())) {
             if (!assertTextFieldContainsDecNumericContents(lengthField, 1)) {
                 ControllerUtils.showErrorDialogMessage("Len must be a positive integer");
