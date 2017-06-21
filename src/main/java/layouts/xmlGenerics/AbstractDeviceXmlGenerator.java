@@ -31,7 +31,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
- *
+ * Convenient class for dealing with fxml files generation. Extending classes only need to supply
+ * specific parameters (such as number of rows / columns of pins), this abstract class takes care of everything else.
+ * Gist of generation : DOM tree representing resulting fxml is progressively built and then written to file specified 
+ * by extending class.
  * @author Miloslav Zezulka
  */
 public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
@@ -60,7 +63,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     @Override
-    public void createXml() throws IOException {
+    public void createFxml() throws IOException {
         try {
             addImports();
             createDocStructure();

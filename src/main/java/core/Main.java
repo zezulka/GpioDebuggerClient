@@ -11,6 +11,7 @@ import layouts.controllers.GuiEntryPoint;
 public class Main {
 
     /**
+     * Entry point for this application.
      * @param args
      */
     public static void main(String[] args) {

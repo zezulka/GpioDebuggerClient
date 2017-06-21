@@ -6,7 +6,7 @@
 package layouts.controllers;
 
 /**
- *
+ * Placeholder interface which only denotes type of an object.
  * @author Miloslav
  */
 public interface DeviceController {

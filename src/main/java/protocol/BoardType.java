@@ -24,6 +24,12 @@ public enum BoardType {
         return getName();
     }
     
+    /**
+     * Parses string representing name of the Board (as declared in bulldog library).
+     * This method is usually used for parsing the first received message from agent.
+     * @param name
+     * @return 
+     */
     public static BoardType parse(String name) {
         if(name == null) {
             throw new IllegalArgumentException("name cannot be null");

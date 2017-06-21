@@ -30,7 +30,16 @@ public class MessageParser {
     private static final Set<InterruptListenerStatus> SPECIAL_PREFIXES
             = new HashSet<>(Arrays.asList(InterruptListenerStatus.values()));
 
-    public static void processAgentMessage(String agentMessage) throws IOException {
+    
+    /**
+     * Utility method for parsing incoming messages from agent. The main focus 
+     * of this method is to determine whether the message deals with interrupt-oriented
+     * events. If not, the output is simply put in the TextArea of the user UI.
+     * @param agentMessage
+     * @throws IOException 
+     * @throws IllegalArgumentException {@code agentMessage} is null
+     */
+    public static void parseAgentMessage(String agentMessage) throws IOException {
         if (agentMessage == null) {
             throw new IllegalArgumentException("Agent message cannot be null.");
         }
@@ -53,12 +62,17 @@ public class MessageParser {
         }
     }
 
-    public static String getMessagePrefix(String message) {
+    private static String getMessagePrefix(String message) {
         int firstSeparatorOccurence = message.indexOf(":");
         return message.substring(0, firstSeparatorOccurence < 0 ? message.length() : firstSeparatorOccurence);
     }
 
-    public static InterruptValueObject getInterruptValueObjectFromMessage(String agentMessage) {
+    /**
+     * 
+     * @param agentMessage
+     * @return 
+     */
+    private static InterruptValueObject getInterruptValueObjectFromMessage(String agentMessage) {
         if (agentMessage == null) {
             throw new IllegalArgumentException("agent message cannot be null");
         }

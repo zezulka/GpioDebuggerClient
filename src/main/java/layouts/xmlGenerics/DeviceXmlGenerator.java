@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.xmlGenerics;
 
 import java.io.IOException;
 
 /**
- *
- * @author miloslav
+ * @author Miloslav Zezulka
  */
 public interface DeviceXmlGenerator {
-    void createXml() throws IOException;
+    /**
+     * Takes care of generating fxml file for a specific device.
+     * @throws IOException 
+     */
+    void createFxml() throws IOException;
 }

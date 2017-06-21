@@ -6,7 +6,8 @@
 package layouts.controllers;
 
 /**
- *
+ * Operations available for communicating with interfaces 
+ * available on the embedded device.
  * @author Miloslav
  */
 public enum Operation {

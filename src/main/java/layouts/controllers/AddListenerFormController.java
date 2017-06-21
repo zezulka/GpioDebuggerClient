@@ -34,10 +34,7 @@ public class AddListenerFormController implements Initializable {
     private ComboBox<ClientPin> pinComboBox;
     @FXML
     private Button addListenerButton;
-
-    /**
-     * Initializes the controller class.
-     */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllPins();

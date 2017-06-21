@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package protocol;
 
-/**
- *
- * @author miloslav
- */
 public enum ProtocolMessages {
     C_CONNECTION_OK("Connection to server OK"),
     C_CONNECTION_NOK("I/O error while trying to communicate with server"),

@@ -77,6 +77,10 @@ public final class GuiEntryPoint extends Application {
         return new File(builder.toString()).toURI().toURL();
     }
 
+    /**
+     * This method deals with actually putting agent message to TextArea in the application.
+     * @param msg 
+     */
     public static void provideFeedback(String msg) {
         TextInputControl text = (TextInputControl) stage.getScene().lookup("#feedbackArea");
 
@@ -145,6 +149,10 @@ public final class GuiEntryPoint extends Application {
         switchScene(ipPrompt);
     }
 
+    /**
+     * Deals with switching from a scene (typically IP address prompt) to the scene
+     * which enables user to control the device they connected to.
+     */
     public static void switchToCurrentDevice() {
         if (ClientNetworkManager.getInstance() == null) {
             GUI_LOGGER.debug("manager not ready!");

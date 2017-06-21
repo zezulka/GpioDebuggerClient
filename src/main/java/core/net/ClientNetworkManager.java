@@ -47,11 +47,24 @@ public class ClientNetworkManager implements Runnable {
     private ClientNetworkManager() {
     }
 
+    
+    /**
+     * Triggers manager to connect to the device on the given address. New Thread 
+     * instance is created, which iterates in infinite loop and scans for selection keys 
+     * (more information in run method).
+     * @param ipAddress 
+     */
     public void connectToDevice(String ipAddress) {
         setIpAddress(ipAddress);
         new Thread(this).start();
     }
     
+    /**
+     * Causes manager to close all resources binded to the existing connection and then
+     * switches to IP address prompt screen.
+     * If connection has not been established, invocation of this method is a no-op
+     * (regarding network resources).
+     */
     public static void disconnect() {
         cleanUpResources();
         GuiEntryPoint.switchToIpPrompt();
@@ -125,6 +138,12 @@ public class ClientNetworkManager implements Runnable {
         return ipAddr;
     }
 
+    /**
+     * Sets the IP address as given in the input argument (i.e. no validity checks
+     * are performed in this method)
+     * @param ipAddress 
+     * @throws IllegalArgumentException input is null
+     */
     public void setIpAddress(String ipAddress) {
         if (ipAddress == null) {
             throw new IllegalArgumentException("ip address cannot be null!");
@@ -136,6 +155,11 @@ public class ClientNetworkManager implements Runnable {
         return ipAddress;
     }
 
+    /**
+     * Given message is stored in the appropriate variable and 
+     * registers this message in SocketChannel to be sent via output stream to agent. 
+     * @param message 
+     */
     public static void setMessageToSend(String message) {
         messageToSend = message;
         if (message != null) {
@@ -151,13 +175,25 @@ public class ClientNetworkManager implements Runnable {
     }
 
     private void setBoardType(BoardType type) {
-        this.boardType = type;
+        boardType = type;
     }
 
     public BoardType getBoardType() {
-        return this.boardType;
+        return boardType;
     }
 
+    /**
+     * Main loop of the application logic. An attempt is made to initialise this 
+     * manager (singleton); if manager succeeded in connecting to the supplied IP address,
+     * it then tries to receive "handshake" message, which contains name of the device.
+     * If handshake message is valid (=parse completed successfully), it then 
+     * invokes appropriate method to switch to the given scene which enables user to 
+     * control the device the client connected to.
+     * 
+     * While the agent is alive, this thread iterates through selection keys and 
+     * deals with them (this includes reading messages from input stream or writing 
+     * client messages to output stream).
+     */
     @Override
     public void run() {
         while (true) {
@@ -220,12 +256,7 @@ public class ClientNetworkManager implements Runnable {
     private void processAgentMessage() throws IOException {
         String agentMessage = read();
         if (agentMessage != null) {
-            InterruptValueObject object;
-            if ((object = MessageParser.getInterruptValueObjectFromMessage(agentMessage)) != null) {
-                InterruptTableController.updateInterruptListener(object);
-            } else {
-                Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
-            }
+            MessageParser.parseAgentMessage(agentMessage);
         } else {
             LOGGER.debug("null has been received from agent as a message");
             cleanUpResources();
