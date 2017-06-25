@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.application.Platform;
-import layouts.controllers.GuiEntryPoint;
 import layouts.controllers.InterruptTableController;
 
 import org.slf4j.Logger;
@@ -47,7 +46,9 @@ public class MessageParser {
         if ((object = MessageParser.getInterruptValueObjectFromMessage(agentMessage)) != null) {
             InterruptTableController.updateInterruptListener(object);
         } else {
-            Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
+            //this is just a normal message, print it out
+            System.out.println(agentMessage);
+            //Platform.runLater(() -> GuiEntryPoint.provideFeedback(agentMessage));
         }
     }
 

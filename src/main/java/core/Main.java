@@ -1,8 +1,8 @@
 package core;
 
+import core.gui.App;
 import java.awt.EventQueue;
 import javafx.application.Application;
-import layouts.controllers.GuiEntryPoint;
 
 /**
  *
@@ -15,6 +15,6 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> Application.launch(GuiEntryPoint.class, args));
+        EventQueue.invokeLater(() -> Application.launch(App.class, args));
     }
 }

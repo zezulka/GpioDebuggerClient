@@ -1,5 +1,6 @@
 package layouts.controllers;
 
+import core.gui.App;
 import core.net.ClientNetworkManager;
 
 import java.net.URL;
@@ -124,7 +125,7 @@ public class I2cRequestFormController implements Initializable {
         Stage stage = (Stage) i2cRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
-            ClientNetworkManager.setMessageToSend(msgToSend);
+            ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
             LOGGER.info(String.format("I2c request sent to client: %s", msgToSend));
             stage.close();
         }

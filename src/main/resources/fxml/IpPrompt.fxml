@@ -5,19 +5,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
+<Pane prefHeight="173.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.IpPromptController">
     <children>
-        <TextArea id="feedbackArea" fx:id="feedbackArea" editable="false" focusTraversable="false" layoutX="14.0" layoutY="14.0" opacity="0.45" prefHeight="143.0" prefWidth="389.0" wrapText="true" />
-        <TextField id="ipValue" fx:id="ipValue" layoutX="140.0" layoutY="244.0" prefHeight="31.0" prefWidth="244.0" />
-        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="249.0" prefHeight="21.0" prefWidth="126.0" text="IP adress:" textAlignment="RIGHT">
+        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="14.0" layoutY="41.0" prefHeight="21.0" prefWidth="126.0" text="IP adress:" textAlignment="RIGHT">
             <font>
                 <Font name="System Bold" size="16.0" />
             </font>
         </Label>
-        <Button layoutX="278.0" layoutY="297.0" mnemonicParsing="false" onKeyPressed="#keyTyped" onMouseClicked="#submitButtonPressed" prefHeight="42.0" prefWidth="106.0" text="Submit">
+        <Button id="submitButton" fx:id="submitButton" layoutX="342.0" layoutY="100.0" mnemonicParsing="false" onKeyPressed="#keyTyped" onMouseClicked="#submitButtonPressed" prefHeight="42.0" prefWidth="106.0" text="Submit">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
+      <TextField id="byteOne" fx:id="byteOne" layoutX="153.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
+      <TextField id="byteTwo" fx:id="byteTwo" layoutX="228.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
+      <TextField id="byteThree" fx:id="byteThree" layoutX="305.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
+      <TextField id="byteFour" fx:id="byteFour" layoutX="384.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
+      <ComboBox focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="42.0" prefWidth="240.0" promptText="already used IP addresses" />
+      <Label layoutX="212.0" layoutY="39.0" text=".">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="289.0" layoutY="39.0" text=".">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="366.0" layoutY="39.0" text=".">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
     </children>
 </Pane>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableRow?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" cacheHint="SPEED" prefHeight="500.0" prefWidth="800.0" stylesheets="@../appStylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.MasterWindowController">
+    <children>
+        <TabPane id="devicesTab" fx:id="devicesTab" layoutX="6.0" layoutY="41.0" minHeight="450.0" minWidth="700.0" prefHeight="745.0" prefWidth="1000.0" style="-fx-rotate: 0;" />
+        <ToolBar layoutY="7.0" minWidth="700.0" prefHeight="37.0" prefWidth="1006.0">
+            <items>
+                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" text="Connect to device..." />
+            <Label id="status" fx:id="status" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" minWidth="500.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="19.0" prefWidth="833.0" text="No devices available at the moment. To connect, click the button &quot;Connect to device...&quot;." textAlignment="RIGHT">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            </items>
+        </ToolBar>
+    </children>
+</AnchorPane>

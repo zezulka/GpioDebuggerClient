@@ -1,5 +1,6 @@
 package layouts.controllers;
 
+import core.gui.App;
 import core.net.ClientNetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
@@ -73,18 +74,14 @@ public class InterruptTableController implements Initializable {
         tableView.setEditable(true);
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
             if (INTERRUPTS.size() <= MAX_THREAD_THRESHOLD) {
-                GuiEntryPoint.createNewAddListenerForm();
+                //MasterWindowController.getInstance()....
+                //GuiEntryPoint.createNewAddListenerForm();
             }
         });
     }
 
     private void addAllBulkActions() {
         actionsComboBox.setItems(FXCollections.observableArrayList(Action.values()));
-    }
-
-    @FXML
-    private void addNewListenerMouseClicked(MouseEvent event) {
-        GuiEntryPoint.createNewAddListenerForm();
     }
 
     @FXML
@@ -102,6 +99,10 @@ public class InterruptTableController implements Initializable {
         }
     }
 
+    static void clearAllInterruptListeners() {
+        INTERRUPTS.clear();
+    }
+    
     static boolean addNewInterruptListener(InterruptValueObject interrupt) {
         if (!INTERRUPTS.contains(interrupt)) {
             INTERRUPTS.add(interrupt);
@@ -167,7 +168,7 @@ public class InterruptTableController implements Initializable {
             super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
-                ClientNetworkManager.setMessageToSend(msgToSend);
+                ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
                 LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
             }
             return null;

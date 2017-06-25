@@ -1,0 +1,20 @@
+/* 
+    Created on : 23-Jun-2017, 08:39:52
+    Author     : miloslav
+*/
+* {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+*.tab-label {
+    -fx-rotate: 270;
+}
+
+#raspiTab .tab-label {
+    -fx-rotate: 0;
+}
+
+.tab {
+    -fx-padding: 3em 0.5em 3em 0.5em;
+}
