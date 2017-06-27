@@ -32,11 +32,6 @@
         <ToolBar layoutY="7.0" minWidth="700.0" prefHeight="37.0" prefWidth="1006.0">
             <items>
                 <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" text="Connect to device..." />
-            <Label id="status" fx:id="status" alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" minWidth="500.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="19.0" prefWidth="833.0" text="No devices available at the moment. To connect, click the button &quot;Connect to device...&quot;." textAlignment="RIGHT">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-            </Label>
             </items>
         </ToolBar>
     </children>

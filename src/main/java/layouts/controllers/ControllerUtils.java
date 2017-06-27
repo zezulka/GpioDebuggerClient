@@ -3,20 +3,27 @@ package layouts.controllers;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
 public class ControllerUtils {
 
-    public static void showErrorDialogMessage(String message) {
+    private static void showDialogMessage(AlertType alertType, String message) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR MESSAGE");
+            Alert alert = new Alert(alertType);
             alert.setHeaderText(null);
             alert.setResizable(true);
             alert.setContentText(message);
             alert.showAndWait();
         });
-
+    }
+    
+    public static void showInformationDialogMessage(String message) {
+        showDialogMessage(AlertType.INFORMATION, message);
+    }
+    
+    public static void showErrorDialogMessage(String message) {
+        showDialogMessage(AlertType.ERROR, message);
     }
 
     /**

@@ -7,30 +7,37 @@ import java.net.URL;
 
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.SimpleBooleanProperty;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 
 import javafx.scene.Node;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.paint.Color;
-
-import javafx.stage.Stage;
+import javafx.scene.paint.Paint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +54,6 @@ public class I2cRequestFormController implements Initializable {
     @FXML
     private TextField slaveAddressField;
     @FXML
-    private TextField registerAddressFromField;
-    @FXML
     private ComboBox<Operation> operationList;
     @FXML
     private GridPane textFieldGridPane;
@@ -62,6 +67,8 @@ public class I2cRequestFormController implements Initializable {
     private Label values;
     @FXML
     private Label length;
+    @FXML
+    private TextArea i2cTextArea;
 
     private static int numFields;
     private static final int MAX_NUM_FIELDS = 16;
@@ -70,6 +77,10 @@ public class I2cRequestFormController implements Initializable {
     private static final String HEXA_PREFIX = "0x";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
+    private static final String HEX_SEVEN_BIT_REGEX = "^(0?[3-9A-F]|[1-7][0-9A-F])$";
+    private static final Pattern HEX_SEVEN_BIT_REGEX_PATTERN = Pattern.compile(HEX_SEVEN_BIT_REGEX);
+    private static final String HEX_BYTE_REGEX = "^(0?[0-9A-F]|[1-9A-F][0-9A-F])$";
+    private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_SEVEN_BIT_REGEX);
 
     /**
      * initialises the controller class.
@@ -81,18 +92,52 @@ public class I2cRequestFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
         operationList.getSelectionModel().selectFirst();
+        i2cRequestButton.disableProperty().bind(
+                checkLengthFieldEmpty()
+                    .or(isSlaveAddressFieldHexadecimalUpmostSevenBitValue().not())
+        );
         setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
-        this.operationList.valueProperty().addListener(
-                new ChangeListener<Operation>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) {
-                if (newValue != null) {
-                    setComponentsDisableProperty(newValue);
+        this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
+            if (newValue != null) {
+                setComponentsDisableProperty(newValue);
+            }
+        });
+        checkByteValuesOnly(slaveAddressField);
+        enforceNumericValuesOnly(lengthField);
+    }
+    
+    private BooleanBinding isSlaveAddressFieldHexadecimalUpmostSevenBitValue() {
+         BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> HEX_SEVEN_BIT_REGEX_PATTERN.matcher(slaveAddressField.getText()).matches(), slaveAddressField.textProperty());
+        return Bindings.when(binding).then(true).otherwise(false);
+    }
+    
+    private BooleanBinding checkLengthFieldEmpty() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> operationList.getSelectionModel().getSelectedItem().isReadOperation(), operationList.getSelectionModel().selectedItemProperty());
+        return Bindings.isEmpty(lengthField.textProperty())
+                       .and(Bindings.when(binding).then(true).otherwise(false));
+    }
+    
+    private void checkByteValuesOnly(TextField textfield) {
+        textfield.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+            if (!newValue && !textfield.getText().isEmpty()) {
+                if (!textfield.getText().matches(HEX_SEVEN_BIT_REGEX)) {
+                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("ff5555"), CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("eeffee"), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
             }
-        }
-        );
+
+        });
+    }
+    
+    private void enforceNumericValuesOnly(TextField textfield) {
+        textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!(newValue.matches("\\d*"))) {
+                textfield.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     private void setComponentsDisableProperty(Operation op) {
@@ -122,12 +167,9 @@ public class I2cRequestFormController implements Initializable {
      */
     @FXML
     public void sendI2cRequest(MouseEvent evt) {
-        Stage stage = (Stage) i2cRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
             ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
-            LOGGER.info(String.format("I2c request sent to client: %s", msgToSend));
-            stage.close();
         }
     }
 
@@ -138,10 +180,10 @@ public class I2cRequestFormController implements Initializable {
 
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
-        if(msgBuilder == null) {
+        if (msgBuilder == null) {
             return null;
         }
-        if (Operation.isReadOperation(this.operationList.getSelectionModel().getSelectedItem())) {
+        if (operationList.getSelectionModel().getSelectedItem().isReadOperation()) {
             if (!assertTextFieldContainsDecNumericContents(lengthField, 1)) {
                 ControllerUtils.showErrorDialogMessage("Len must be a positive integer");
                 return null;
@@ -173,26 +215,19 @@ public class I2cRequestFormController implements Initializable {
             ControllerUtils.showErrorDialogMessage("Slave address must be a positive integer");
             return null;
         }
-        if (!assertTextFieldContainsHexNumericContents(registerAddressFromField, 0)) {
-            ControllerUtils.showErrorDialogMessage("Register address must be a positive integer");
-            return null;
-        }
         return msgBuilder
                 .append(SEPARATOR)
                 .append(selectedOp.toString())
                 .append(SEPARATOR)
                 .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
-                .append(SEPARATOR)
-                .append(HEXA_PREFIX)
-                .append(registerAddressFromField.getText().trim())
                 .append(SEPARATOR);
     }
-    
+
     private boolean assertTextFieldContainsHexNumericContents(TextField textInput, int lowBound) {
         return assertTextFieldContainsNumericContents(textInput, lowBound, 16);
     }
-    
+
     private boolean assertTextFieldContainsDecNumericContents(TextField textInput, int lowBound) {
         return assertTextFieldContainsNumericContents(textInput, lowBound, 10);
     }
@@ -203,7 +238,7 @@ public class I2cRequestFormController implements Initializable {
                 return false;
             }
             String result = textInput.getText();
-            if(result == null) {
+            if (result == null) {
                 return false;
             }
             return Short.parseShort(result.trim(), radix) >= lowBound;

@@ -57,7 +57,7 @@
                         <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="3" />
+                <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="3" editable="false" fx:id="spiTextArea" id="spiTextArea"/>
                 <Button mnemonicParsing="false" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
             </children>
         </GridPane>    

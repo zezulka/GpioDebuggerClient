@@ -38,7 +38,6 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import protocol.BoardType;
 
 /**
  * FXML Controller class

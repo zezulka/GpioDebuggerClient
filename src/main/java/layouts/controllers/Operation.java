@@ -24,12 +24,12 @@ public enum Operation {
         return this.op;
     }
     
-    public static boolean isReadOperation(Operation op) {
-        return op.equals(Operation.READ);
+    public boolean isReadOperation() {
+        return this.equals(Operation.READ);
     }
     
-    public static boolean isWriteOperation(Operation op) {
-        return op.equals(Operation.WRITE);
+    public boolean isWriteOperation() {
+        return this.equals(Operation.WRITE);
     }
     
     @Override

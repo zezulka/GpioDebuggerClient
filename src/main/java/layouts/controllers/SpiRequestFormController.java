@@ -21,13 +21,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javafx.scene.input.MouseEvent;
 
 import javafx.scene.layout.GridPane;
-
-import javafx.stage.Stage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +48,12 @@ public class SpiRequestFormController implements Initializable {
     private ComboBox<Integer> chipSelectList;
     @FXML
     private GridPane textFieldGridPane;
+    @FXML
+    private GridPane gridPane;
+    @FXML
+    private Button addNewFieldButton;
+    @FXML
+    private TextArea spiTextArea;
 
     private static int numFields = 0;
     private static final int MAX_NUM_FIELDS = 16;
@@ -60,7 +65,7 @@ public class SpiRequestFormController implements Initializable {
      * register.
      */
     private static final int MAX_CS_INDEX = 2;
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SpiRequestFormController.class);
 
     private static final Map<String, Operation> MODES = FXCollections.observableHashMap();
@@ -79,12 +84,9 @@ public class SpiRequestFormController implements Initializable {
 
     @FXML
     private void sendSpiRequest(MouseEvent event) {
-        Stage stage = (Stage) spiRequestButton.getScene().getWindow();
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
             ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
-            LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
-            stage.close();
         }
     }
 
@@ -112,13 +114,17 @@ public class SpiRequestFormController implements Initializable {
             return null;
         }
         for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
-            if(!appendTextFieldContent((TextField) it.next(), resultBuilder)) {
+            if (!appendTextFieldContent((TextField) it.next(), resultBuilder)) {
                 return null;
             }
             if (it.hasNext()) {
                 resultBuilder = resultBuilder.append(' ');
             }
         }
+        LOGGER.info(String.format("SPI request form has now "
+                    + "submitted the following request:\n %s"
+                    + "",
+                    resultBuilder.toString()));
         return resultBuilder.toString();
     }
 
@@ -140,7 +146,8 @@ public class SpiRequestFormController implements Initializable {
     }
 
     /**
-     * Generates common prefix for all SPI requests: "SPI:<MODE>:0x<CHIP_INDEX>:"
+     * Generates common prefix for all SPI requests:
+     * "SPI:<MODE>:0x<CHIP_INDEX>:"
      *
      * @return
      */

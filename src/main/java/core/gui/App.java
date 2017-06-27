@@ -6,23 +6,28 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import layouts.controllers.ControllerUtils;
 import layouts.controllers.MasterWindowController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import protocol.BoardType;
+import protocol.*;
 
 public class App extends Application {
 
@@ -39,7 +44,7 @@ public class App extends Application {
     private static URL beagleBoneBlack;
     private static URL cubieboard;
 
-    private static final Map<Tab, InetAddress> TAB_TO_ADDR_MAPPING = new HashMap<>();
+    private static final Set<TabAddressPair> TAB_ADDR_PAIRS = new HashSet<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -144,15 +149,19 @@ public class App extends Application {
         return new File(builder.toString()).toURI().toURL();
     }
 
+    public static TabPane getDevicesTab() {
+        return (TabPane) scene.lookup("#devicesTab");
+    }
+    
     public static void loadNewTab(InetAddress address, BoardType type) {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
-            pane.setText(address.toString() + "\t" + type.name());
+            pane.setText(address.getHostAddress() + '(' + type.toString() + ")\t");
+            TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
             Platform.runLater(() -> {
-                ((TabPane) scene.lookup("#devicesTab")).getTabs().add(pane);
+                (getDevicesTab()).getTabs().add(pane);
             });
-            TAB_TO_ADDR_MAPPING.put(pane, address);
         } catch (IOException ex) {
             LOGGER.error("Load failed.", ex);
             Platform.exit();
@@ -160,7 +169,49 @@ public class App extends Application {
         LOGGER.debug("Load successful.");
     }
 
-    public static InetAddress getIpAddressFromCurrentTab() {
-        return TAB_TO_ADDR_MAPPING.get(MasterWindowController.getCurrentTab());
+    public static void writeI2cResponseIntoTextArea(String response) {
+        writeResponseIntoTextArea("#i2cTextArea", response);
     }
+
+    public static void writeSpiResponseIntoTextArea(String response) {
+        writeResponseIntoTextArea("#spiTextArea", response);
+    }
+
+    private static void writeResponseIntoTextArea(String lookupId, String response) {
+        TextArea ta = ((TextArea) scene.lookup(lookupId));
+        ta.setText(LocalTime.now().toString() + response + '\n' + ta.getText());
+    }
+
+    public static void setPinButtonColourFromSignal(ClientPin pin, Signal signal) {
+        Button btn = (Button) scene.lookup("#" + pin.getName());
+        btn.setStyle("");
+        btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "FF0000" : "00FF00"));
+
+        FadeTransition fadeTransition
+                = new FadeTransition(Duration.millis(500), btn);
+        fadeTransition.setFromValue(0.5f);
+        fadeTransition.setToValue(1.2f);
+        fadeTransition.setCycleCount(1);
+        fadeTransition.setAutoReverse(true);
+        fadeTransition.play();
+    }
+
+    public static Tab getTabFromInetAddress(InetAddress address) {
+        for (TabAddressPair pair : TAB_ADDR_PAIRS) {
+            if(pair.getAddress().equals(address)) {
+                return pair.getTab();
+            }
+        }
+        throw new IllegalArgumentException("no such address is registered");
+    }
+
+    public static InetAddress getIpAddressFromCurrentTab() {
+        for (TabAddressPair pair : TAB_ADDR_PAIRS) {
+            if(pair.getTab().equals(MasterWindowController.getCurrentTab())) {
+                return pair.getAddress();
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
 }

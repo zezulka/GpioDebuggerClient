@@ -108,6 +108,9 @@ public class ClientConnectionThread implements Runnable {
         } else {
             LOGGER.debug("null has been received from agent as a message");
             cleanUpResources();
+            App.getDevicesTab()
+                    .getTabs()
+                    .remove(App.getTabFromInetAddress(connection.getInetAddress()));
         }
     }
 
@@ -117,7 +120,6 @@ public class ClientConnectionThread implements Runnable {
         int length;
         length = connection.getChannel().read(readBuffer);
         if (length == -1) {
-            LOGGER.error("Nothing was read from server");
             connection.getChannel().close();
             return null;
         }

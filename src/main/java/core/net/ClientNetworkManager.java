@@ -11,6 +11,7 @@ import java.nio.channels.SocketChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+import layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,8 @@ public class ClientNetworkManager {
 
     private void initConnection(InetAddress ipAddress) {
         if (alreadyConnectedToAddress(ipAddress)) {
-            throw new IllegalStateException("Manager has already been initialized!");
+            ControllerUtils.showErrorDialogMessage("Connection has already been established for this IP address.");
+            return;
         }
         Selector selector;
         SocketChannel channel;

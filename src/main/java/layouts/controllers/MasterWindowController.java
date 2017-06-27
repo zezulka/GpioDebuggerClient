@@ -37,6 +37,7 @@ public class MasterWindowController implements Initializable {
         devicesTab.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             currentTab = newValue;
         });
+
     }
 
     @FXML

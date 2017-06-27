@@ -93,6 +93,6 @@ public class InterruptValueObject {
         if (!Objects.equals(this.clientPin, other.clientPin)) {
             return false;
         }
-        return this.type == other.type;
+        return this.type.equals(other.type);
     }
 }
