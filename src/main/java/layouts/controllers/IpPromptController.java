@@ -20,12 +20,14 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -37,6 +39,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import userdata.UserDataUtils;
 
 /**
  * FXML Controller class
@@ -55,7 +58,9 @@ public class IpPromptController implements Initializable {
     private TextField byteThree;
     @FXML
     private TextField byteFour;
-
+    @FXML
+    private ComboBox<InetAddress> ipAddressesComboBox;
+    
     private static final String BYTE_REGEX = "^([0-9]|[1-9][0-9]|1[0-9][0-9]|25[0-5]|2[0-4][0-9])$";
     private static final Pattern BYTE_REGEX_PATTERN = Pattern.compile(BYTE_REGEX);
     private static final Logger LOGGER = LoggerFactory.getLogger(IpPromptController.class);
@@ -70,6 +75,16 @@ public class IpPromptController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ipAddressesComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getAddressesFromFile()));
+                ipAddressesComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            String[] strs = newValue.getHostAddress().split("\\.");
+            //unfortunately, newValue.getAddress() does not yield appropriate results (byte is always interpreted as signed)
+            //that's why split had to be used
+            byteOne.setText(strs[0]);
+            byteTwo.setText(strs[1]);
+            byteThree.setText(strs[2]);
+            byteFour.setText(strs[3]);
+        });
         submitButton.disableProperty().bind(
                 Bindings.isEmpty(byteOne.textProperty())
                         .or(Bindings.isEmpty(byteTwo.textProperty()))
@@ -99,7 +114,7 @@ public class IpPromptController implements Initializable {
 
     private void enforceNumericValuesOnly(TextField textfield) {
         textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if(newValue.equals("")) {
+            if (newValue.equals("")) {
                 textfield.setText("");
                 return;
             }

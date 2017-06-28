@@ -99,6 +99,18 @@ public class SpiRequestFormController implements Initializable {
         modeList.getSelectionModel().selectFirst();
     }
 
+    private void addAllModes() {
+        this.modeList.setItems(FXCollections.observableArrayList(Operation.values()));
+    }
+
+    private void addAllChipSelectIndexes() {
+        List<Integer> ints = new ArrayList<>();
+        for (int i = 0; i < MAX_CS_INDEX; i++) {
+            ints.add(i);
+        }
+        this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
+    }
+
     private BooleanBinding createDataTextFields() {
         BooleanBinding bind = Bindings.createBooleanBinding(() -> {
             return true;
@@ -178,7 +190,7 @@ public class SpiRequestFormController implements Initializable {
             return null;
         }
         for (Iterator<Node> it = textFieldGridPaneSpi.getChildren().iterator(); it.hasNext();) {
-            TextField tf = (TextField)it.next();
+            TextField tf = (TextField) it.next();
             resultBuilder.append(HEXA_PREFIX).append(tf.getText().trim());
             if (it.hasNext()) {
                 resultBuilder = resultBuilder.append(' ');
@@ -205,17 +217,5 @@ public class SpiRequestFormController implements Initializable {
                 .append(HEXA_PREFIX)
                 .append(chipSelectList.getSelectionModel().getSelectedItem())
                 .append(SEPARATOR);
-    }
-
-    private void addAllModes() {
-        this.modeList.setItems(FXCollections.observableArrayList(Operation.values()));
-    }
-
-    private void addAllChipSelectIndexes() {
-        List<Integer> ints = new ArrayList<>();
-        for (int i = 0; i < MAX_CS_INDEX; i++) {
-            ints.add(i);
-        }
-        this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
     }
 }

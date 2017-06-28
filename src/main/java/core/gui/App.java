@@ -28,6 +28,7 @@ import layouts.controllers.MasterWindowController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.*;
+import userdata.UserDataUtils;
 
 public class App extends Application {
 
@@ -62,7 +63,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setMinHeight(700);
         stage.setMinWidth(1000);
-        stage.setTitle("Debugger for ARM-based devices");
+        stage.setTitle("Debugger for BCM2835/6-based devices");
         stage.show();
     }
 
@@ -152,11 +153,12 @@ public class App extends Application {
     public static TabPane getDevicesTab() {
         return (TabPane) scene.lookup("#devicesTab");
     }
-    
+
     public static void loadNewTab(InetAddress address, BoardType type) {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
+            UserDataUtils.putNewAddressEntryIntoFile(address);
             pane.setText(address.getHostAddress() + '(' + type.toString() + ")\t");
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
             Platform.runLater(() -> {
@@ -198,7 +200,7 @@ public class App extends Application {
 
     public static Tab getTabFromInetAddress(InetAddress address) {
         for (TabAddressPair pair : TAB_ADDR_PAIRS) {
-            if(pair.getAddress().equals(address)) {
+            if (pair.getAddress().equals(address)) {
                 return pair.getTab();
             }
         }
@@ -207,7 +209,7 @@ public class App extends Application {
 
     public static InetAddress getIpAddressFromCurrentTab() {
         for (TabAddressPair pair : TAB_ADDR_PAIRS) {
-            if(pair.getTab().equals(MasterWindowController.getCurrentTab())) {
+            if (pair.getTab().equals(MasterWindowController.getCurrentTab())) {
                 return pair.getAddress();
             }
         }

@@ -21,7 +21,7 @@
       <TextField id="byteTwo" fx:id="byteTwo" layoutX="228.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
       <TextField id="byteThree" fx:id="byteThree" layoutX="305.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
       <TextField id="byteFour" fx:id="byteFour" layoutX="384.0" layoutY="39.0" prefHeight="25.0" prefWidth="53.0" />
-      <ComboBox focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="42.0" prefWidth="240.0" promptText="already used IP addresses" />
+      <ComboBox id="ipAddressesComboBox" fx:id="ipAddressesComboBox" focusTraversable="false" layoutX="14.0" layoutY="100.0" prefHeight="42.0" prefWidth="240.0" promptText="already used IP addresses" />
       <Label layoutX="212.0" layoutY="39.0" text=".">
          <font>
             <Font name="System Bold" size="20.0" />
