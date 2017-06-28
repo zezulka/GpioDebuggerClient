@@ -5,6 +5,8 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 
 public class ControllerUtils {
 
@@ -14,6 +16,12 @@ public class ControllerUtils {
             alert.setHeaderText(null);
             alert.setResizable(true);
             alert.setContentText(message);
+            alert.getDialogPane()
+                    .getChildren()
+                    .stream()
+                    .filter(node -> node instanceof Label)
+                    .forEach(node -> ((Label)node)
+                            .setMinHeight(Region.USE_PREF_SIZE));
             alert.showAndWait();
         });
     }

@@ -58,6 +58,14 @@ public class ClientNetworkManager {
     private boolean alreadyConnectedToAddress(InetAddress ipAddress) {
         return ADDRESSES.get(ipAddress) != null;
     }
+    
+    public static void addNewMapping(InetAddress address, ClientConnectionThread thread) {
+        ADDRESSES.put(address, thread);
+    }
+    
+    public static void removeMapping(InetAddress address) {
+        ADDRESSES.remove(address);
+    }
 
     private void initConnection(InetAddress ipAddress) {
         if (alreadyConnectedToAddress(ipAddress)) {
@@ -80,7 +88,6 @@ public class ClientNetworkManager {
         }
         AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, null, channel, ipAddress);
         ClientConnectionThread thread = new ClientConnectionThread(connection);
-        ADDRESSES.put(ipAddress, thread);
         new Thread(thread).start();
     }
     
@@ -90,7 +97,6 @@ public class ClientNetworkManager {
     
     public static void disconnect(InetAddress address) {
         ADDRESSES.get(address).disconnect();
-        ADDRESSES.remove(address);
     }
     
     public static void disconnectAll() {

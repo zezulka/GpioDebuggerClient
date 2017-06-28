@@ -10,7 +10,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import javafx.beans.value.ObservableValue;
 
@@ -27,7 +28,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -70,17 +70,15 @@ public class I2cRequestFormController implements Initializable {
     @FXML
     private TextArea i2cTextArea;
 
-    private static int numFields;
+    private final IntegerProperty numFields = new SimpleIntegerProperty(0);
     private static final int MAX_NUM_FIELDS = 16;
 
     private static final char SEPARATOR = ':';
     private static final String HEXA_PREFIX = "0x";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
-    private static final String HEX_SEVEN_BIT_REGEX = "^(0?[3-9A-F]|[1-7][0-9A-F])$";
-    private static final Pattern HEX_SEVEN_BIT_REGEX_PATTERN = Pattern.compile(HEX_SEVEN_BIT_REGEX);
-    private static final String HEX_BYTE_REGEX = "^(0?[0-9A-F]|[1-9A-F][0-9A-F])$";
-    private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_SEVEN_BIT_REGEX);
+    private static final String HEX_BYTE_REGEX = "^(0?[0-9A-Fa-f]|[1-9A-Fa-f][0-9A-Fa-f])$";
+    private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_BYTE_REGEX);
 
     /**
      * initialises the controller class.
@@ -91,51 +89,84 @@ public class I2cRequestFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
+        textFieldGridPane.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
         operationList.getSelectionModel().selectFirst();
         i2cRequestButton.disableProperty().bind(
                 checkLengthFieldEmpty()
-                    .or(isSlaveAddressFieldHexadecimalUpmostSevenBitValue().not())
+                        .or(isHexaByte(slaveAddressField).not())
+                        .or(checkGridPaneChildrenOutOfBounds())
+                        .or(createDataTextFields().not())
         );
+        addFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsHi()
+                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
+        removeFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsLo()
+                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
         setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
         this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
             if (newValue != null) {
                 setComponentsDisableProperty(newValue);
             }
         });
-        checkByteValuesOnly(slaveAddressField);
+        assertThatContainsByteValuesOnly(slaveAddressField);
         enforceNumericValuesOnly(lengthField);
     }
-    
-    private BooleanBinding isSlaveAddressFieldHexadecimalUpmostSevenBitValue() {
-         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> HEX_SEVEN_BIT_REGEX_PATTERN.matcher(slaveAddressField.getText()).matches(), slaveAddressField.textProperty());
+
+    private BooleanBinding createDataTextFields() {
+        BooleanBinding bind = Bindings.createBooleanBinding(() -> {return true;});
+        for (int i = 0; i < MAX_NUM_FIELDS; i++) {
+            TextField newField = new TextField();
+            newField.setDisable(true);
+            newField.setPrefSize(50, 35);
+            newField.setMaxSize(50, 35);
+            bind = Bindings.when(newField.disabledProperty()).then(true).otherwise(Bindings.isNotEmpty(newField.textProperty())).and(bind);
+            enforceHexValuesOnly(newField);
+            textFieldGridPane.add(newField, i % 4, i / 4);
+        }
+        return bind;
+    }
+
+    private BooleanBinding isHexaByte(TextField textfield) {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> HEX_BYTE_REGEX_PATTERN.matcher(textfield.getText()).matches(), textfield.textProperty());
         return Bindings.when(binding).then(true).otherwise(false);
     }
-    
+
     private BooleanBinding checkLengthFieldEmpty() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> operationList.getSelectionModel().getSelectedItem().isReadOperation(), operationList.getSelectionModel().selectedItemProperty());
         return Bindings.isEmpty(lengthField.textProperty())
-                       .and(Bindings.when(binding).then(true).otherwise(false));
+                .and(Bindings.when(binding).then(true).otherwise(false));
     }
-    
-    private void checkByteValuesOnly(TextField textfield) {
+
+    private void assertThatContainsByteValuesOnly(TextField textfield) {
         textfield.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-            if (!newValue && !textfield.getText().isEmpty()) {
-                if (!textfield.getText().matches(HEX_SEVEN_BIT_REGEX)) {
-                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("ff5555"), CornerRadii.EMPTY, Insets.EMPTY)));
-                } else {
+            if (!newValue) {
+                if (textfield.getText().matches(HEX_BYTE_REGEX) && !textfield.getText().isEmpty()) {
                     textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("eeffee"), CornerRadii.EMPTY, Insets.EMPTY)));
+                } else {
+                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("ff5555"), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
             }
 
         });
     }
-    
+
     private void enforceNumericValuesOnly(TextField textfield) {
         textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!(newValue.matches("\\d*"))) {
                 textfield.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+    
+    private void enforceHexValuesOnly(TextField textfield) {
+        textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if(newValue.equals("")) {
+                textfield.setText("");
+                return;
+            }
+            if (!(newValue.matches(HEX_BYTE_REGEX))) {
+                textfield.setText(oldValue);
             }
         });
     }
@@ -146,16 +177,12 @@ public class I2cRequestFormController implements Initializable {
                 values.setTextFill(Color.LIGHTGREY);
                 length.setTextFill(Color.BLACK);
                 lengthField.setDisable(false);
-                removeFieldButton.setDisable(true);
-                addFieldButton.setDisable(true);
                 break;
             }
             case WRITE: {
                 values.setTextFill(Color.BLACK);
                 length.setTextFill(Color.LIGHTGREY);
                 lengthField.setDisable(true);
-                removeFieldButton.setDisable(false);
-                addFieldButton.setDisable(false);
                 break;
             }
         }
@@ -184,10 +211,6 @@ public class I2cRequestFormController implements Initializable {
             return null;
         }
         if (operationList.getSelectionModel().getSelectedItem().isReadOperation()) {
-            if (!assertTextFieldContainsDecNumericContents(lengthField, 1)) {
-                ControllerUtils.showErrorDialogMessage("Len must be a positive integer");
-                return null;
-            }
             msgBuilder = msgBuilder.append(lengthField.getText().trim());
             LOGGER.info(String.format("I2c request form has now "
                     + "submitted the following request:\n %s"
@@ -207,14 +230,6 @@ public class I2cRequestFormController implements Initializable {
     private StringBuilder getMessagePrefix() {
         StringBuilder msgBuilder = new StringBuilder("i2c");
         Operation selectedOp = this.operationList.getSelectionModel().getSelectedItem();
-        if (selectedOp == null) {
-            ControllerUtils.showErrorDialogMessage("Operation has not been selected");
-            return null;
-        }
-        if (!assertTextFieldContainsHexNumericContents(slaveAddressField, 0)) {
-            ControllerUtils.showErrorDialogMessage("Slave address must be a positive integer");
-            return null;
-        }
         return msgBuilder
                 .append(SEPARATOR)
                 .append(selectedOp.toString())
@@ -222,29 +237,6 @@ public class I2cRequestFormController implements Initializable {
                 .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR);
-    }
-
-    private boolean assertTextFieldContainsHexNumericContents(TextField textInput, int lowBound) {
-        return assertTextFieldContainsNumericContents(textInput, lowBound, 16);
-    }
-
-    private boolean assertTextFieldContainsDecNumericContents(TextField textInput, int lowBound) {
-        return assertTextFieldContainsNumericContents(textInput, lowBound, 10);
-    }
-
-    private boolean assertTextFieldContainsNumericContents(TextInputControl textInput, int lowBound, int radix) {
-        try {
-            if (textInput == null) {
-                return false;
-            }
-            String result = textInput.getText();
-            if (result == null) {
-                return false;
-            }
-            return Short.parseShort(result.trim(), radix) >= lowBound;
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
     }
 
     private String gatherMessageArrayFromField() {
@@ -264,27 +256,38 @@ public class I2cRequestFormController implements Initializable {
 
     @FXML
     private void addNewTextField(MouseEvent event) {
-        if (numFields >= MAX_NUM_FIELDS) {
-            ControllerUtils.showErrorDialogMessage(String.format("Maximum number of rows is %d", MAX_NUM_FIELDS));
-            return;
-        }
+        ((TextField) textFieldGridPane.getChildren().get(numFields.get())).setBackground(new Background(new BackgroundFill(Paint.valueOf("FFFFFF"), CornerRadii.EMPTY, Insets.EMPTY)));
+        ((TextField) textFieldGridPane.getChildren().get(numFields.get())).setStyle("");
 
-        int size = textFieldGridPane.getChildren().size();
-        TextField tf = new TextField();
-        tf.setMaxHeight(20.0);
-        tf.setMaxWidth(100.0);
-
-        textFieldGridPane.add(tf, numFields % 2 == 1 ? 1 : 0, size - (numFields % 2 == 1 ? 1 : 0));
-        numFields++;
+        textFieldGridPane.getChildren().get(numFields.get()).setDisable(false);
+        numFields.set(numFields.get() + 1);
     }
 
     @FXML
     private void removeLastTextField(MouseEvent event) {
-        int index = textFieldGridPane.getChildren().size() - 1;
-        if (index < 0) {
-            return;
-        }
-        textFieldGridPane.getChildren().remove(index);
-        numFields--;
+        textFieldGridPane.getChildren().get(numFields.get() - 1).setDisable(true);
+        ((TextField)textFieldGridPane.getChildren().get(numFields.get() - 1)).setText("");
+        numFields.set(numFields.get() - 1);
+    }
+
+    private BooleanBinding checkGridPaneChildrenOutOfBounds() {
+
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> numFields.lessThanOrEqualTo(0)
+                        .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields)
+                .and(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE));
+        return Bindings.when(binding).then(true).otherwise(false);
+    }
+
+    private BooleanBinding chechGridPaneChildrenOutOfBoundsLo() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> numFields.lessThanOrEqualTo(0).get(), numFields);
+        return Bindings.when(binding).then(true).otherwise(false);
+    }
+
+    private BooleanBinding chechGridPaneChildrenOutOfBoundsHi() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> numFields.greaterThanOrEqualTo(MAX_NUM_FIELDS).get(), numFields);
+        return Bindings.when(binding).then(true).otherwise(false);
     }
 }

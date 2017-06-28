@@ -12,6 +12,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import javafx.application.Platform;
+import layouts.controllers.ControllerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.BoardType;
@@ -91,9 +93,10 @@ public class ClientConnectionThread implements Runnable {
                 write(key, connection);
             }
             if (key.isReadable()) {
-                if (connection.getBoardType() == null) {
-                    readInitMessage();
-                    App.loadNewTab(connection.getInetAddress(), connection.getBoardType());
+                if (connection.getBoardType() == null)  {
+                    if(readInitMessage()) {
+                        App.loadNewTab(connection.getInetAddress(), connection.getBoardType());
+                    }
                 } else {
                     processAgentMessage();
                 }
@@ -101,40 +104,59 @@ public class ClientConnectionThread implements Runnable {
         }
     }
 
-    private void processAgentMessage() throws IOException {
+    private void processAgentMessage() {
         String agentMessage = read();
         if (agentMessage != null) {
             MessageParser.parseAgentMessage(agentMessage);
         } else {
-            LOGGER.debug("null has been received from agent as a message");
-            cleanUpResources();
-            App.getDevicesTab()
+            LOGGER.debug("disconnecting from agent...");
+            disconnect();
+            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
+                    connection.getInetAddress(), connection.getBoardType()));
+            Platform.runLater(() -> {
+                App.getDevicesTab()
                     .getTabs()
                     .remove(App.getTabFromInetAddress(connection.getInetAddress()));
+            });
+            
         }
     }
 
-    private String read() throws IOException {
-        ByteBuffer readBuffer = ByteBuffer.allocate(1000);
-        readBuffer.clear();
-        int length;
-        length = connection.getChannel().read(readBuffer);
-        if (length == -1) {
-            connection.getChannel().close();
+    private String read() {
+        try {
+            ByteBuffer readBuffer = ByteBuffer.allocate(1000);
+            readBuffer.clear();
+            int length;
+            length = connection.getChannel().read(readBuffer);
+            if (length == -1) {
+                LOGGER.debug("reached end of the input stream");
+                connection.getChannel().close();
+                return null;
+            }
+            readBuffer.flip();
+            byte[] buff = new byte[1024];
+            readBuffer.get(buff, 0, length);
+            return (new String(buff).replaceAll("\0", ""));
+        } catch (IOException ex) {
+            ControllerUtils.showErrorDialogMessage("There has been an error reading message from agent."
+                    +    "Either agent is not running on the IP supplied or network connection failure has occured.\n");
+            LOGGER.error(ex.getLocalizedMessage());
+            disconnect();
             return null;
         }
-        readBuffer.flip();
-        byte[] buff = new byte[1024];
-        readBuffer.get(buff, 0, length);
-        return (new String(buff).replaceAll("\0", ""));
     }
 
-    private boolean readInitMessage() throws IOException {
+    private boolean readInitMessage() {
         String agentMessage = read();
+        if(agentMessage == null) {
+            return false;
+        }
         try {
             connection.setBoardType(BoardType.parse(agentMessage));
+            ClientNetworkManager.addNewMapping(connection.getInetAddress(), this);
             return true;
         } catch (IllegalArgumentException ex) {
+            LOGGER.error("could not parse agent init message");
             return false;
         }
     }
@@ -147,6 +169,7 @@ public class ClientConnectionThread implements Runnable {
      */
     public void disconnect() {
         cleanUpResources();
+        ClientNetworkManager.removeMapping(connection.getInetAddress());
     }
 
     private void write(SelectionKey key, AgentConnectionValueObject connection) throws IOException {

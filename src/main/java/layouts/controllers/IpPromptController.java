@@ -5,7 +5,6 @@
  */
 package layouts.controllers;
 
-import core.gui.App;
 import core.net.ClientNetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -100,8 +99,12 @@ public class IpPromptController implements Initializable {
 
     private void enforceNumericValuesOnly(TextField textfield) {
         textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!(newValue.matches("\\d*"))) {
-                textfield.setText(newValue.replaceAll("[^\\d]", ""));
+            if(newValue.equals("")) {
+                textfield.setText("");
+                return;
+            }
+            if (!(newValue.matches(BYTE_REGEX))) {
+                textfield.setText(oldValue);
             }
         });
     }

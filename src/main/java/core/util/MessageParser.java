@@ -30,7 +30,7 @@ public class MessageParser {
      * @throws IOException
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
-    public static void parseAgentMessage(String agentMessage) throws IOException {
+    public static void parseAgentMessage(String agentMessage) {
         if (agentMessage == null) {
             throw new IllegalArgumentException("Agent message cannot be null.");
         }
