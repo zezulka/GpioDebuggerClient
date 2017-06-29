@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.xmlGenerics;
 
 import java.io.File;
@@ -192,8 +187,30 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         }
         children.appendChild(createWriteRadioButton());
         children.appendChild(createReadRadioButton());
+        createLegend(children);
         children.appendChild(createImageView());
         return children;
+    }
+    
+    private void createLegend(Element root) {
+        root.appendChild(createLegendLabel("Legend:", "1", "1", "#000000"));
+        root.appendChild(createLegendLabel("HIGH", "2", "1", "#FF5555"));
+        root.appendChild(createLegendLabel("LOW", "3", "1", "#5555FF"));
+    }
+    
+    private Node createLegendLabel(String text, String rowIndex, String columnIndex, String textfill) {
+        Element labelEl = DOC.createElement("Label");
+        labelEl.setAttribute("text", text);
+        labelEl.setAttribute("textFill", textfill);
+        labelEl.setAttribute("GridPane.rowIndex", rowIndex);
+        labelEl.setAttribute("GridPane.columnIndex", columnIndex);
+        Element fontChildEl = DOC.createElement("Font");
+        fontChildEl.setAttribute("name", "SystemBold");
+        fontChildEl.setAttribute("size", "15.0");
+        Element fontEl = DOC.createElement("font");
+        fontEl.appendChild(fontChildEl);
+        labelEl.appendChild(fontEl);
+        return labelEl;
     }
 
     private Node createGpioButton(int row, int col) {
@@ -210,7 +227,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         String pinName = currentPin.isGpio()
                 ? currentPin.getName() : currentPin.getName();
         button.setAttribute("text", pinName);
-        button.setAttribute("id", pinName);
+        button.setAttribute("id", currentPin.isGpio() ? pinName : "nonselectable");
         button.setAttribute("GridPane.columnIndex", Integer.toString(col + columnOffset));
         button.setAttribute("GridPane.rowIndex", Integer.toString(row + rowOffset));
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
@@ -223,8 +240,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton1.setAttribute("ellipsisString", "W");
         rButton1.setAttribute("mnemonicParsing", "false");
         rButton1.setAttribute("text", "WRITE");
-        rButton1.setAttribute("GridPane.rowIndex", "4");
-        rButton1.setAttribute("GridPane.columnIndex", "1");
+        rButton1.setAttribute("GridPane.columnIndex", "3");
         rButton1.setAttribute("fx:id", "writeRadioButton");
         Element padding = DOC.createElement("toggleGroup");
         Element inset = DOC.createElement("ToggleGroup");
@@ -239,8 +255,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton2.setAttribute("ellipsisString", "R");
         rButton2.setAttribute("mnemonicParsing", "false");
         rButton2.setAttribute("text", "READ");
-        rButton2.setAttribute("GridPane.rowIndex", "3");
-        rButton2.setAttribute("GridPane.columnIndex", "1");
+        rButton2.setAttribute("GridPane.columnIndex", "2");
         rButton2.setAttribute("selected", "true");
         rButton2.setAttribute("fx:id", "readRadioButton");
         rButton2.setAttribute("toggleGroup", "$op");

@@ -158,11 +158,13 @@ public class App extends Application {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
+            
             UserDataUtils.putNewAddressEntryIntoFile(address);
             pane.setText(address.getHostAddress() + '(' + type.toString() + ")\t");
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
             Platform.runLater(() -> {
-                (getDevicesTab()).getTabs().add(pane);
+                getDevicesTab().getTabs().add(pane);
+                getDevicesTab().getSelectionModel().select(pane);
             });
         } catch (IOException ex) {
             LOGGER.error("Load failed.", ex);
@@ -187,12 +189,12 @@ public class App extends Application {
     public static void setPinButtonColourFromSignal(ClientPin pin, Signal signal) {
         Button btn = (Button) scene.lookup("#" + pin.getName());
         btn.setStyle("");
-        btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "FF0000" : "00FF00"));
+        btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "FF5555" : "5555FF"));
 
         FadeTransition fadeTransition
                 = new FadeTransition(Duration.millis(500), btn);
-        fadeTransition.setFromValue(0.5f);
-        fadeTransition.setToValue(1.2f);
+        fadeTransition.setFromValue(1.0f);
+        fadeTransition.setToValue(0.8f);
         fadeTransition.setCycleCount(1);
         fadeTransition.setAutoReverse(true);
         fadeTransition.play();

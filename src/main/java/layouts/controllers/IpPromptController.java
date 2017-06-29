@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package layouts.controllers;
 
 import core.net.ClientNetworkManager;
@@ -49,8 +44,6 @@ import userdata.UserDataUtils;
 public class IpPromptController implements Initializable {
 
     @FXML
-    private Button submitButton;
-    @FXML
     private TextField byteOne;
     @FXML
     private TextField byteTwo;
@@ -60,12 +53,16 @@ public class IpPromptController implements Initializable {
     private TextField byteFour;
     @FXML
     private ComboBox<InetAddress> ipAddressesComboBox;
-    
+
     private static final String BYTE_REGEX = "^([0-9]|[1-9][0-9]|1[0-9][0-9]|25[0-5]|2[0-4][0-9])$";
     private static final Pattern BYTE_REGEX_PATTERN = Pattern.compile(BYTE_REGEX);
     private static final Logger LOGGER = LoggerFactory.getLogger(IpPromptController.class);
     private final BooleanProperty isConnectivityCheckInProgress = new SimpleBooleanProperty(false);
     private static final ClientNetworkManager NETWORK_MANAGER = ClientNetworkManager.getInstance();
+    @FXML
+    private Button submitExistingButton;
+    @FXML
+    private Button submitNewButton;
 
     /**
      * initialises the controller class.
@@ -76,7 +73,7 @@ public class IpPromptController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ipAddressesComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getAddressesFromFile()));
-                ipAddressesComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        ipAddressesComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String[] strs = newValue.getHostAddress().split("\\.");
             //unfortunately, newValue.getAddress() does not yield appropriate results (byte is always interpreted as signed)
             //that's why split had to be used
@@ -85,7 +82,10 @@ public class IpPromptController implements Initializable {
             byteThree.setText(strs[2]);
             byteFour.setText(strs[3]);
         });
-        submitButton.disableProperty().bind(
+        submitExistingButton.disableProperty().bind(
+             ipAddressesComboBox.getSelectionModel().selectedItemProperty().isNull()
+        );  
+        submitNewButton.disableProperty().bind(
                 Bindings.isEmpty(byteOne.textProperty())
                         .or(Bindings.isEmpty(byteTwo.textProperty()))
                         .or(Bindings.isEmpty(byteThree.textProperty()))
@@ -137,6 +137,16 @@ public class IpPromptController implements Initializable {
         });
     }
 
+    @FXML
+    private void submitExistingButtonPressed(MouseEvent event) {
+        existingAddressHandler();
+    }
+
+    @FXML
+    private void submitNewButtonPressed(MouseEvent event) {
+        newAddressHandler();
+    }
+
     private class CheckConnectivityWorker extends Task<Boolean> {
 
         private final InetAddress inetAddress;
@@ -170,7 +180,7 @@ public class IpPromptController implements Initializable {
             try {
                 if (get()) {
                     NETWORK_MANAGER.connectToDevice(inetAddress);
-                    Stage stage = (Stage) submitButton.getScene().getWindow();
+                    Stage stage = (Stage) submitExistingButton.getScene().getWindow();
                     Platform.runLater(() -> stage.close());
                 }
             } catch (InterruptedException | ExecutionException ex) {
@@ -179,7 +189,7 @@ public class IpPromptController implements Initializable {
         }
     }
 
-    private void handler() {
+    private void newAddressHandler() {
         isConnectivityCheckInProgress.set(true);
         byte[] bytes = new byte[4];
         InetAddress address;
@@ -196,16 +206,16 @@ public class IpPromptController implements Initializable {
         }
     }
 
-    @FXML
-    private void keyTyped(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-            handler();
-        }
+    private void existingAddressHandler() {
+        isConnectivityCheckInProgress.set(true);
+        Task connectivityTask = new CheckConnectivityWorker(ipAddressesComboBox.getSelectionModel().getSelectedItem());
+        new Thread(connectivityTask).start();
     }
 
-    @FXML
-    private void submitButtonPressed(MouseEvent event) {
-        handler();
+    private void keyTyped(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            newAddressHandler();
+        }
     }
 
 }

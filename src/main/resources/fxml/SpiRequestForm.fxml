@@ -12,16 +12,15 @@
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="396.0" minWidth="10.0" prefWidth="279.0" />
+                <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
-                <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="25.0" vgrow="NEVER" />
+                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
@@ -31,13 +30,13 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Label ellipsisString="add" prefHeight="29.0" prefWidth="265.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.rowIndex="2">
+                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="29.0" prefWidth="265.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Button id="addFieldButton" fx:id="addFieldButton" mnemonicParsing="false" onMouseClicked="#addTextField" text="+" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                <Button id="removeFieldButton" fx:id="removeFieldButton" mnemonicParsing="false" onMouseClicked="#removeTextField" text="-" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                <Button id="addFieldButton" fx:id="addFieldButton" mnemonicParsing="false" onMouseClicked="#addTextField" text="Add new field" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Button id="removeFieldButton" fx:id="removeFieldButton" mnemonicParsing="false" onMouseClicked="#removeTextField" text="Remove last field" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
                 <Label text="Mode">
                     <font>
                         <Font name="System Bold" size="15.0" />
@@ -57,7 +56,11 @@
                         <RowConstraints prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                 </GridPane>
-                <TextArea id="spiTextArea" fx:id="spiTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647" />
+                <TextArea id="spiTextArea" fx:id="spiTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </GridPane.margin>
+                </TextArea>
                 
             </children>
         </GridPane>

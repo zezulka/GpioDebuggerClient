@@ -10,18 +10,17 @@
 
 <Tab text="I2C" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.I2cRequestFormController">
     <content>
-        <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0" >
+        <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="396.0" minWidth="10.0" prefWidth="220.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="156.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="192.0" />
-                <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+                <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="35.0" vgrow="NEVER" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
@@ -45,19 +44,19 @@
                     </font>
                 </Label>
                 <Group GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                <Label id="values" fx:id="values" text="Values (in hexadecimal)" GridPane.rowIndex="3">
+                <Label id="values" fx:id="values" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" focusTraversable="false" prefHeight="19.0" prefWidth="243.0" text="Values (in hexadecimal)" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Button id="addFieldButton" fx:id="addFieldButton" alignment="TOP_CENTER" mnemonicParsing="false" onMouseClicked="#addNewTextField" text="+" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                <Button id="addFieldButton" fx:id="addFieldButton" mnemonicParsing="false" onMouseClicked="#addNewTextField" text="Add new field" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                     <GridPane.margin>
-                        <Insets left="20.0" />
+                        <Insets />
                     </GridPane.margin>
                 </Button>
-                <Button id="removeFieldButton" fx:id="removeFieldButton" mnemonicParsing="false" onMouseClicked="#removeLastTextField" text="-" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                <Button id="removeFieldButton" fx:id="removeFieldButton" mnemonicParsing="false" onMouseClicked="#removeLastTextField" text="Remove last field" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
                     <GridPane.margin>
-                        <Insets right="20.0" />
+                        <Insets />
                     </GridPane.margin>
                 </Button>
                 <Label id="length" fx:id="length" text="Length" GridPane.rowIndex="2">
@@ -66,8 +65,12 @@
                     </font>
                 </Label>
                 <TextField id="lengthField" fx:id="lengthField" prefHeight="36.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" onMouseClicked="#sendI2cRequest" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                <TextArea id="i2cTextArea" fx:id="i2cTextArea" editable="false" prefHeight="226.0" prefWidth="194.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647" />
+                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" onMouseClicked="#sendI2cRequest" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <TextArea id="i2cTextArea" fx:id="i2cTextArea" editable="false" prefHeight="226.0" prefWidth="194.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
+                    <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" />
+                    </GridPane.margin>
+                </TextArea>
                 <GridPane id="textFieldGridPane" fx:id="textFieldGridPane" GridPane.rowIndex="6">
                     <columnConstraints>
                         <ColumnConstraints halignment="LEFT" minWidth="10.0" prefWidth="100.0" />

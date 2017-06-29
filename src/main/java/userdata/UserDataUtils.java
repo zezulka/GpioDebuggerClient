@@ -41,9 +41,15 @@ public class UserDataUtils {
     
     public static void putNewAddressEntryIntoFile(InetAddress address) {
         try {
-            FileUtils.writeStringToFile(IP_ADDRESSES_FILE, address.getHostAddress(), "UTF-8", true);
+            if(getAddressesFromFile().contains(address)) {
+                LOGGER.info("address already exists in the file, skipping...");
+                return;
+            }
+            FileUtils.writeStringToFile(IP_ADDRESSES_FILE, address.getHostAddress() + '\n', "UTF-8", true);
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage());
         }
     }
+    
+    
 }

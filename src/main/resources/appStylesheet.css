@@ -19,3 +19,9 @@
     -fx-padding: 3em 0.5em 3em 0.5em;
 }
 
+#nonselectable {
+    -fx-background-color: #000000;
+    -fx-text-fill : #ffffff;
+    -fx-opacity : 1.0;
+}
+
