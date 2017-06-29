@@ -10,7 +10,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
@@ -100,9 +102,8 @@ public class ClientNetworkManager {
     }
     
     public static void disconnectAll() {
-        ADDRESSES.forEach((addr, connection) -> {
-            connection.disconnect();
-        });
+        Set<ClientConnectionThread> threads = new HashSet<>(ADDRESSES.values());
+        threads.forEach((thread) -> thread.disconnect());
         ADDRESSES.clear();
     }
     
