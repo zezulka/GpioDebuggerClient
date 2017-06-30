@@ -45,7 +45,7 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <ComboBox id="modeList" fx:id="modeList" prefHeight="25.0" prefWidth="277.0" GridPane.columnIndex="1" />
+                <ComboBox id="operationList" fx:id="operationList" prefHeight="25.0" prefWidth="277.0" GridPane.columnIndex="1" />
                 <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="25.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#sendSpiRequest" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <GridPane id="textFieldGridPaneSpi" fx:id="textFieldGridPaneSpi" GridPane.rowIndex="5">

@@ -6,8 +6,6 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -24,10 +22,6 @@ public class MasterWindowController implements Initializable {
 
     @FXML
     private TabPane devicesTab;
-    @FXML
-    private Button connectToDeviceButton;
-    @FXML
-    private Label status;
 
     public MasterWindowController() {
     }
@@ -37,7 +31,6 @@ public class MasterWindowController implements Initializable {
         devicesTab.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             currentTab = newValue;
         });
-
     }
 
     @FXML

@@ -4,11 +4,8 @@ import core.gui.App;
 import core.net.ClientNetworkManager;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
@@ -22,9 +19,6 @@ import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-
-import javafx.scene.Node;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -35,17 +29,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import userdata.I2cRequestValueObject;
 import userdata.UserDataUtils;
 
@@ -54,7 +44,7 @@ import userdata.UserDataUtils;
  *
  * @author Miloslav Zezulka
  */
-public class I2cRequestFormController implements Initializable {
+public class I2cRequestFormController extends AbstractInterfaceFormController implements Initializable {
 
     @FXML
     private Button i2cRequestButton;
@@ -80,13 +70,11 @@ public class I2cRequestFormController implements Initializable {
     private ComboBox<I2cRequestValueObject> usedRequestsComboBox;
 
     private final IntegerProperty numFields = new SimpleIntegerProperty(0);
-    private static final int MAX_NUM_FIELDS = 16;
+
 
     private static final char SEPARATOR = ':';
-    private static final String HEXA_PREFIX = "0x";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
-    private static final String HEX_BYTE_REGEX = "^(0?[0-9A-Fa-f]|[1-9A-Fa-f][0-9A-Fa-f])$";
     private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_BYTE_REGEX);
 
     /**
@@ -97,7 +85,31 @@ public class I2cRequestFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addAllModes();
+        super.addAllModes(operationList);
+        initUserRequestsComboBox();
+        textFieldGridPane.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
+        operationList.getSelectionModel().selectFirst();
+        i2cRequestButton.disableProperty().bind(
+                checkLengthFieldEmpty()
+                        .or(isHexaByte(slaveAddressField).not())
+                        .or(checkGridPaneChildrenOutOfBounds())
+                        .or(createDataTextFields(textFieldGridPane).not())
+        );
+        addFieldButton.disableProperty().bind(super.assertDataFieldsSizeAtLeastMaxCap(numFields)
+                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
+        removeFieldButton.disableProperty().bind(super.assertDataFieldsSizeNonpositive(numFields)
+                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
+        setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
+        this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
+            if (newValue != null) {
+                setComponentsDisableProperty(newValue);
+            }
+        });
+        super.enforceHexValuesOnly(slaveAddressField);
+        super.enforceNumericValuesOnly(lengthField);
+    }
+    
+    private void initUserRequestsComboBox() {
         usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getI2cRequests()));
         usedRequestsComboBox.setCellFactory((ListView<I2cRequestValueObject> param) -> {
             final ListCell<I2cRequestValueObject> cell = new ListCell<I2cRequestValueObject>() {
@@ -125,40 +137,6 @@ public class I2cRequestFormController implements Initializable {
             }
             numFields.set(newValue.getBytes().size());
         });
-        textFieldGridPane.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
-        operationList.getSelectionModel().selectFirst();
-        i2cRequestButton.disableProperty().bind(
-                checkLengthFieldEmpty()
-                        .or(isHexaByte(slaveAddressField).not())
-                        .or(checkGridPaneChildrenOutOfBounds())
-                        .or(createDataTextFields().not())
-        );
-        addFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsHi()
-                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
-        removeFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsLo()
-                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
-        setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
-        this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
-            if (newValue != null) {
-                setComponentsDisableProperty(newValue);
-            }
-        });
-        assertThatContainsByteValuesOnly(slaveAddressField);
-        enforceNumericValuesOnly(lengthField);
-    }
-
-    private BooleanBinding createDataTextFields() {
-        BooleanBinding bind = Bindings.createBooleanBinding(() -> {return true;});
-        for (int i = 0; i < MAX_NUM_FIELDS; i++) {
-            TextField newField = new TextField();
-            newField.setDisable(true);
-            newField.setPrefSize(50, 35);
-            newField.setMaxSize(50, 35);
-            bind = Bindings.when(newField.disabledProperty()).then(true).otherwise(Bindings.isNotEmpty(newField.textProperty())).and(bind);
-            enforceHexValuesOnly(newField);
-            textFieldGridPane.add(newField, i % 4, i / 4);
-        }
-        return bind;
     }
 
     private BooleanBinding isHexaByte(TextField textfield) {
@@ -172,39 +150,6 @@ public class I2cRequestFormController implements Initializable {
                 -> operationList.getSelectionModel().getSelectedItem().isReadOperation(), operationList.getSelectionModel().selectedItemProperty());
         return Bindings.isEmpty(lengthField.textProperty())
                 .and(Bindings.when(binding).then(true).otherwise(false));
-    }
-
-    private void assertThatContainsByteValuesOnly(TextField textfield) {
-        textfield.focusedProperty().addListener((arg0, oldValue, newValue) -> {
-            if (!newValue) {
-                if (textfield.getText().matches(HEX_BYTE_REGEX) && !textfield.getText().isEmpty()) {
-                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("eeffee"), CornerRadii.EMPTY, Insets.EMPTY)));
-                } else {
-                    textfield.setBackground(new Background(new BackgroundFill(Paint.valueOf("ff5555"), CornerRadii.EMPTY, Insets.EMPTY)));
-                }
-            }
-
-        });
-    }
-
-    private void enforceNumericValuesOnly(TextField textfield) {
-        textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (!(newValue.matches("\\d*"))) {
-                textfield.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-    }
-    
-    private void enforceHexValuesOnly(TextField textfield) {
-        textfield.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if(newValue.equals("")) {
-                textfield.setText("");
-                return;
-            }
-            if (!(newValue.matches(HEX_BYTE_REGEX))) {
-                textfield.setText(oldValue);
-            }
-        });
     }
 
     private void setComponentsDisableProperty(Operation op) {
@@ -242,29 +187,15 @@ public class I2cRequestFormController implements Initializable {
     private I2cRequestValueObject getNewI2cRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
         return new I2cRequestValueObject(op, slaveAddressField.getText(), 
-                                         op.isWriteOperation() ? textFieldGridPane.getChildren().filtered((textfield) -> !textfield.isDisabled()).size() : Integer.parseUnsignedInt(lengthField.getText()), 
-                                         op.isReadOperation() ? Collections.EMPTY_LIST : getBytes());
+                                         op.isWriteOperation() ? textFieldGridPane
+                                                 .getChildren()
+                                                 .filtered((textfield) -> !textfield.isDisabled())
+                                                 .size() : Integer.parseUnsignedInt(lengthField.getText()), 
+                                         op.isReadOperation() ? Collections.EMPTY_LIST : super.getBytes(textFieldGridPane));
     }
     
-    private List<String> getBytes() {
-        List<Node> enabledNodes = textFieldGridPane.getChildren().filtered((textfield) -> !textfield.isDisabled());
-        List<String> resultDataArray = new ArrayList<>();
-        for(Node node : enabledNodes) {
-            resultDataArray.add(((TextField)node).getText());
-        }
-        return resultDataArray;
-    }
-
-    private void addAllModes() {
-        this.operationList
-                .setItems(FXCollections.observableArrayList(Operation.values()));
-    }
-
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
-        if (msgBuilder == null) {
-            return null;
-        }
         if (operationList.getSelectionModel().getSelectedItem().isReadOperation()) {
             msgBuilder = msgBuilder.append(lengthField.getText().trim());
             LOGGER.info(String.format("I2c request form has now "
@@ -273,7 +204,7 @@ public class I2cRequestFormController implements Initializable {
                     msgBuilder.toString()));
             return msgBuilder.toString();
         }
-        String valueToWrite = gatherMessageArrayFromField();
+        String valueToWrite = super.gatherMessageFromForm(textFieldGridPane);
         if (valueToWrite == null || valueToWrite.isEmpty()) {
             ControllerUtils.showErrorDialogMessage("Value to write must be filled correctly");
             return null;
@@ -282,7 +213,8 @@ public class I2cRequestFormController implements Initializable {
         return msgBuilder.toString();
     }
 
-    private StringBuilder getMessagePrefix() {
+    @Override
+    protected StringBuilder getMessagePrefix() {
         StringBuilder msgBuilder = new StringBuilder("i2c");
         Operation selectedOp = this.operationList.getSelectionModel().getSelectedItem();
         return msgBuilder
@@ -293,36 +225,15 @@ public class I2cRequestFormController implements Initializable {
                 .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR);
     }
-
-    private String gatherMessageArrayFromField() {
-        StringBuilder resultBuilder = new StringBuilder();
-        for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
-            String t = ((TextField) it.next()).getText().trim();
-            if (t == null || t.isEmpty()) {
-                return resultBuilder.toString();
-            }
-            resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
-            if (it.hasNext()) {
-                resultBuilder = resultBuilder.append(' ');
-            }
-        }
-        return resultBuilder.toString();
-    }
-
+    
     @FXML
     private void addNewTextField(MouseEvent event) {
-        ((TextField) textFieldGridPane.getChildren().get(numFields.get())).setBackground(new Background(new BackgroundFill(Paint.valueOf("FFFFFF"), CornerRadii.EMPTY, Insets.EMPTY)));
-        ((TextField) textFieldGridPane.getChildren().get(numFields.get())).setStyle("");
-
-        textFieldGridPane.getChildren().get(numFields.get()).setDisable(false);
-        numFields.set(numFields.get() + 1);
+        super.addNewTextField(textFieldGridPane, numFields);
     }
 
     @FXML
     private void removeLastTextField(MouseEvent event) {
-        textFieldGridPane.getChildren().get(numFields.get() - 1).setDisable(true);
-        ((TextField)textFieldGridPane.getChildren().get(numFields.get() - 1)).setText("");
-        numFields.set(numFields.get() - 1);
+        super.addNewTextField(textFieldGridPane, numFields);
     }
 
     private BooleanBinding checkGridPaneChildrenOutOfBounds() {
@@ -331,18 +242,6 @@ public class I2cRequestFormController implements Initializable {
                 -> numFields.lessThanOrEqualTo(0)
                         .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields)
                 .and(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE));
-        return Bindings.when(binding).then(true).otherwise(false);
-    }
-
-    private BooleanBinding chechGridPaneChildrenOutOfBoundsLo() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> numFields.lessThanOrEqualTo(0).get(), numFields);
-        return Bindings.when(binding).then(true).otherwise(false);
-    }
-
-    private BooleanBinding chechGridPaneChildrenOutOfBoundsHi() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> numFields.greaterThanOrEqualTo(MAX_NUM_FIELDS).get(), numFields);
         return Bindings.when(binding).then(true).otherwise(false);
     }
 }

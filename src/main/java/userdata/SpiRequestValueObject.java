@@ -28,6 +28,6 @@ public final class SpiRequestValueObject {
     
     @Override
     public String toString() {
-        return "operation=" + operation + ", chipSelect=" + chipSelect + ", bytes=" + bytes + '}';
+        return "operation=" + operation + ", chipSelect=" + chipSelect + ", bytes=" + bytes;
     }
 }

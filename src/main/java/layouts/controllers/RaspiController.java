@@ -14,8 +14,6 @@ import javafx.scene.control.RadioButton;
 
 import java.util.ResourceBundle;
 import javafx.scene.control.Tab;
-import javafx.scene.control.ToggleGroup;
-
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,43 +21,37 @@ import javafx.scene.input.KeyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import protocol.ProtocolMessages;
-
 /**
  *
  * @author Miloslav Zezulka
  */
 public class RaspiController implements DeviceController, Initializable {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-    
+
     @FXML
     private RadioButton readRadioButton;
     @FXML
-    private RadioButton writeRadioButton;
-    @FXML
-    private ToggleGroup op;
-    @FXML
     private Tab raspiTab;
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         raspiTab.setOnCloseRequest((event) -> {
             if (ControllerUtils.showConfirmationDialogMessage("Are you sure that you want to disconnect from this device?")) {
                 ClientNetworkManager.disconnect(App.getIpAddressFromCurrentTab());
                 raspiTab.getTabPane().getTabs().remove(raspiTab);
-            } 
+            }
             event.consume();
         });
     }
-    
+
     @FXML
     protected void mouseClickedHandler(MouseEvent event) {
         String op = readRadioButton.isSelected() ? "read" : "write";
         sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
         LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
     }
-    
+
     @FXML
     protected void keyPressedHandler(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
@@ -68,20 +60,15 @@ public class RaspiController implements DeviceController, Initializable {
             LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
         }
     }
-    
+
     private String getButtonTitle(InputEvent event) {
         if (event == null) {
             return null;
         }
         return ((Button) event.getSource()).getText();
     }
-    
+
     private void sendRequest(InputEvent event, String msg) {
-        if (event.getSource() instanceof Button) {
-            ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msg);
-        } else {
-            LOGGER.error(ProtocolMessages.C_ERR_GUI_NOT_BUTTON.toString());
-            throw new IllegalArgumentException("error in MouseEvent: entity clicked is not of Button instance ");
-        }
+        ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msg);
     }
 }

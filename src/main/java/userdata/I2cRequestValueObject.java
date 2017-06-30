@@ -34,7 +34,7 @@ public final class I2cRequestValueObject {
     
     @Override
     public String toString() {
-        return "operation=" + operation + ", slaveAddress=0x" + slaveAddress + ", length=" + length + (!bytes.isEmpty() ? ", bytes=" + bytes + '}' : "");
+        return "operation=" + operation + ", slaveAddress=0x" + slaveAddress + ", length=" + length + (!bytes.isEmpty() ? ", bytes=" + bytes : "");
     }
     
     

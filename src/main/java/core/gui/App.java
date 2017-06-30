@@ -134,6 +134,7 @@ public class App extends Application {
             addListenerForm = getPathToFxml("AddListenerForm");
         } catch (MalformedURLException ex) {
             LOGGER.error(null, ex);
+            Platform.exit();
         }
     }
 
@@ -187,7 +188,7 @@ public class App extends Application {
 
     private static void writeResponseIntoTextArea(String lookupId, String response) {
         TextArea ta = ((TextArea) scene.lookup(lookupId));
-        ta.setText(LocalTime.now().toString() + response + '\n' + ta.getText());
+        ta.setText(LocalTime.now().toString() + '\n' + response + '\n' + ta.getText());
     }
 
     public static void setPinButtonColourFromSignal(ClientPin pin, Signal signal) {
@@ -195,12 +196,10 @@ public class App extends Application {
         btn.setStyle("");
         btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "FF5555" : "5555FF"));
 
-        FadeTransition fadeTransition
-                = new FadeTransition(Duration.millis(500), btn);
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), btn);
         fadeTransition.setFromValue(1.0f);
         fadeTransition.setToValue(0.8f);
         fadeTransition.setCycleCount(1);
-        fadeTransition.setAutoReverse(true);
         fadeTransition.play();
     }
 
@@ -221,5 +220,4 @@ public class App extends Application {
         }
         throw new IllegalArgumentException();
     }
-
 }
