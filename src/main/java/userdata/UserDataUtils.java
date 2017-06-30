@@ -41,9 +41,12 @@ public class UserDataUtils {
             setupAliasesIfNecessary();
             if(I2C_REQUESTS.isDirty()) {
                 X_STREAM.toXML(I2C_REQUESTS, new FileWriter(I2C_REQUESTS_FILE));
-                LOGGER.info("New I2c request templates saved.");
+                LOGGER.info("New I2C request templates saved.");
             }
-            //X_STREAM.toXML(SPI_REQUESTS, new FileWriter(SPI_REQUESTS_FILE));
+            if(SPI_REQUESTS.isDirty()) {
+                X_STREAM.toXML(SPI_REQUESTS, new FileWriter(SPI_REQUESTS_FILE));
+                LOGGER.info("New SPI request templates saved.");
+            }
         } catch (IOException ex) {
             LOGGER.error("Could not save user data ", ex);
         }
@@ -56,6 +59,7 @@ public class UserDataUtils {
         X_STREAM.alias("i2cRequests", I2cRequests.class);
         X_STREAM.alias("spiRequests", SpiRequests.class);
         X_STREAM.omitField(I2cRequests.class, "isDirty");
+        X_STREAM.omitField(SpiRequests.class, "isDirty");
         X_STREAM.addImplicitCollection(I2cRequests.class, "requests", I2cRequestValueObject.class);
         X_STREAM.addImplicitCollection(SpiRequests.class, "requests", SpiRequestValueObject.class);
     }
@@ -126,18 +130,11 @@ public class UserDataUtils {
     public static List<SpiRequestValueObject> getSpiRequests() {
         return SPI_REQUESTS.getRequests();
     }
-
-    public static void putNewSpiRequestEntryIntoFile(SpiRequestValueObject request) {
-        try {
-            List<SpiRequestValueObject> obj = initSpiRequestsFromFile();
-            if (!SPI_REQUESTS_FILE.exists()) {
-                FileUtils.touch(SPI_REQUESTS_FILE);
-            }
-            obj.add(request);
-            X_STREAM.toXML(new SpiRequests(obj), new FileWriter(SPI_REQUESTS_FILE, false));
-        } catch (IOException ex) {
-            LOGGER.error(ex.getMessage());
+    
+    public static void addNewSpiRequest(SpiRequestValueObject request) {
+        if(!SPI_REQUESTS.contains(request)) {
+            SPI_REQUESTS.setDirty(true);
+            SPI_REQUESTS.addNewRequest(request);
         }
     }
-
 }

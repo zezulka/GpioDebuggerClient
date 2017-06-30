@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -27,6 +26,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -40,6 +41,8 @@ import javafx.scene.paint.Paint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import userdata.SpiRequestValueObject;
+import userdata.UserDataUtils;
 
 /**
  * FXML Controller class
@@ -63,6 +66,8 @@ public class SpiRequestFormController implements Initializable {
     private Button addFieldButton;
     @FXML
     private Button removeFieldButton;
+    @FXML
+    private ComboBox<SpiRequestValueObject> usedRequestsComboBox;
 
     private final IntegerProperty numFields = new SimpleIntegerProperty(0);
     private static final int MAX_NUM_FIELDS = 16;
@@ -84,15 +89,39 @@ public class SpiRequestFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
-        textFieldGridPaneSpi.disableProperty().bind(modeList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
+        usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getSpiRequests()));
+        usedRequestsComboBox.setCellFactory((ListView<SpiRequestValueObject> param) -> {
+            final ListCell<SpiRequestValueObject> cell = new ListCell<SpiRequestValueObject>() {
+                {
+                    super.setPrefWidth(150);
+                }
+
+                @Override
+                public void updateItem(SpiRequestValueObject item,
+                        boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.toString());
+                    }
+                }
+            };
+            return cell;
+        });
+        usedRequestsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            chipSelectList.getSelectionModel().select(newValue.getChipSelect());
+            modeList.getSelectionModel().select(newValue.getOperation());
+            for (int i = 0; i < newValue.getBytes().size(); i++) {
+                ((TextField) textFieldGridPaneSpi.getChildren().get(i)).setText(newValue.getBytes().get(i));
+                ((TextField) textFieldGridPaneSpi.getChildren().get(i)).setDisable(false);
+            }
+            numFields.set(newValue.getBytes().size());
+        });
         spiRequestButton.disableProperty().bind(
                 checkGridPaneChildrenOutOfBounds()
                         .or(createDataTextFields().not())
         );
-        addFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsHi()
-                .or(modeList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
-        removeFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsLo()
-                .or(modeList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
+        addFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsHi());
+        removeFieldButton.disableProperty().bind(chechGridPaneChildrenOutOfBoundsLo());
         addAllModes();
         addAllChipSelectIndexes();
         chipSelectList.getSelectionModel().selectFirst();
@@ -112,9 +141,7 @@ public class SpiRequestFormController implements Initializable {
     }
 
     private BooleanBinding createDataTextFields() {
-        BooleanBinding bind = Bindings.createBooleanBinding(() -> {
-            return true;
-        });
+        BooleanBinding bind = Bindings.createBooleanBinding(() -> {return true;});
         for (int i = 0; i < MAX_NUM_FIELDS; i++) {
             TextField newField = new TextField();
             newField.setDisable(true);
@@ -154,8 +181,7 @@ public class SpiRequestFormController implements Initializable {
     private BooleanBinding checkGridPaneChildrenOutOfBounds() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> numFields.lessThanOrEqualTo(0)
-                        .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields)
-                .and(modeList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE));
+                        .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields);
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
@@ -164,7 +190,24 @@ public class SpiRequestFormController implements Initializable {
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
             ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
+            SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
+            usedRequestsComboBox.getItems().add(request);
+            UserDataUtils.addNewSpiRequest(request);
         }
+    }
+    
+    private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {
+        Operation op = modeList.getSelectionModel().getSelectedItem();
+        return new SpiRequestValueObject(chipSelectList.getValue(), op, getBytes());
+    }
+    
+    private List<String> getBytes() {
+        List<Node> enabledNodes = textFieldGridPaneSpi.getChildren().filtered((textfield) -> !textfield.isDisabled());
+        List<String> resultDataArray = new ArrayList<>();
+        for(Node node : enabledNodes) {
+            resultDataArray.add(((TextField)node).getText());
+        }
+        return resultDataArray;
     }
 
     @FXML
@@ -189,7 +232,7 @@ public class SpiRequestFormController implements Initializable {
             ControllerUtils.showErrorDialogMessage("At least one byte must be sent!");
             return null;
         }
-        for (Iterator<Node> it = textFieldGridPaneSpi.getChildren().iterator(); it.hasNext();) {
+        for (Iterator<Node> it = textFieldGridPaneSpi.getChildren().filtered((node) -> !node.isDisabled()).iterator(); it.hasNext();) {
             TextField tf = (TextField) it.next();
             resultBuilder.append(HEXA_PREFIX).append(tf.getText().trim());
             if (it.hasNext()) {
