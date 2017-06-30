@@ -4,8 +4,11 @@ import core.gui.App;
 import core.net.ClientNetworkManager;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
@@ -26,6 +29,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -41,6 +46,8 @@ import javafx.scene.paint.Paint;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import userdata.I2cRequestValueObject;
+import userdata.UserDataUtils;
 
 /**
  * FXML Controller class
@@ -69,6 +76,8 @@ public class I2cRequestFormController implements Initializable {
     private Label length;
     @FXML
     private TextArea i2cTextArea;
+    @FXML
+    private ComboBox<I2cRequestValueObject> usedRequestsComboBox;
 
     private final IntegerProperty numFields = new SimpleIntegerProperty(0);
     private static final int MAX_NUM_FIELDS = 16;
@@ -89,6 +98,33 @@ public class I2cRequestFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addAllModes();
+        usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getI2cRequests()));
+        usedRequestsComboBox.setCellFactory((ListView<I2cRequestValueObject> param) -> {
+            final ListCell<I2cRequestValueObject> cell = new ListCell<I2cRequestValueObject>() {
+                {
+                    super.setPrefWidth(150);
+                }
+                
+                @Override public void updateItem(I2cRequestValueObject item,
+                        boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.toString());
+                    }
+                }
+            };
+            return cell;
+        });
+        usedRequestsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            lengthField.setText(String.valueOf(newValue.getLength()));
+            operationList.getSelectionModel().select(newValue.getOperation());
+            slaveAddressField.setText(newValue.getSlaveAddress());
+            for(int i = 0; i < newValue.getBytes().size(); i++) {
+                ((TextField)textFieldGridPane.getChildren().get(i)).setText(newValue.getBytes().get(i));
+                ((TextField)textFieldGridPane.getChildren().get(i)).setDisable(false);
+            }
+            numFields.set(newValue.getBytes().size());
+        });
         textFieldGridPane.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
         operationList.getSelectionModel().selectFirst();
         i2cRequestButton.disableProperty().bind(
@@ -197,7 +233,26 @@ public class I2cRequestFormController implements Initializable {
         String msgToSend = gatherMessageFromForm();
         if (msgToSend != null) {
             ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
+            I2cRequestValueObject request = getNewI2cRequestEntryFromCurrentData();
+            usedRequestsComboBox.getItems().add(request);
+            UserDataUtils.addNewI2cRequest(request);
         }
+    }
+    
+    private I2cRequestValueObject getNewI2cRequestEntryFromCurrentData() {
+        Operation op = operationList.getSelectionModel().getSelectedItem();
+        return new I2cRequestValueObject(op, slaveAddressField.getText(), 
+                                         op.isWriteOperation() ? textFieldGridPane.getChildren().filtered((textfield) -> !textfield.isDisabled()).size() : Integer.parseUnsignedInt(lengthField.getText()), 
+                                         op.isReadOperation() ? Collections.EMPTY_LIST : getBytes());
+    }
+    
+    private List<String> getBytes() {
+        List<Node> enabledNodes = textFieldGridPane.getChildren().filtered((textfield) -> !textfield.isDisabled());
+        List<String> resultDataArray = new ArrayList<>();
+        for(Node node : enabledNodes) {
+            resultDataArray.add(((TextField)node).getText());
+        }
+        return resultDataArray;
     }
 
     private void addAllModes() {
@@ -244,7 +299,7 @@ public class I2cRequestFormController implements Initializable {
         for (Iterator<Node> it = textFieldGridPane.getChildren().iterator(); it.hasNext();) {
             String t = ((TextField) it.next()).getText().trim();
             if (t == null || t.isEmpty()) {
-                return null;
+                return resultBuilder.toString();
             }
             resultBuilder = resultBuilder.append(HEXA_PREFIX).append(t);
             if (it.hasNext()) {

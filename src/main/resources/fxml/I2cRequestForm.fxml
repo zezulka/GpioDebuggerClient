@@ -24,9 +24,12 @@
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <ComboBox id="operationList" fx:id="operationList" prefHeight="31.0" prefWidth="284.0" promptText="select mode...." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox"  GridPane.columnSpan="2" prefHeight="31.0" prefWidth="500.0" promptText="browse history of requests...." GridPane.rowIndex="8" GridPane.halignment="CENTER" />
                 <TextField id="slaveAddressField" fx:id="slaveAddressField" prefHeight="34.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label alignment="BASELINE_RIGHT" prefHeight="48.0" prefWidth="38.0" text="0x" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                     <font>

@@ -55,10 +55,14 @@ public class App extends Application {
             if (ClientNetworkManager.isAnyConnectionOpened()
                     && ControllerUtils.showConfirmationDialogMessage("Are you sure you want to close the whole application? All connections to devices will be closed.")) {
                 ClientNetworkManager.disconnectAll();
-
+            } else if(ClientNetworkManager.isAnyConnectionOpened()) {
+                event.consume();
+                return;
             }
+            UserDataUtils.saveAllRequests();
             stage.close();
             Platform.exit();
+
         });
         stage.setScene(scene);
         stage.setMinHeight(700);
@@ -158,7 +162,7 @@ public class App extends Application {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
-            
+
             UserDataUtils.putNewAddressEntryIntoFile(address);
             pane.setText(address.getHostAddress() + '(' + type.toString() + ")\t");
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));

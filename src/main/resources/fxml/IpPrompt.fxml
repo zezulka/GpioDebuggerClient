@@ -23,11 +23,11 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" prefHeight="251.0" prefWidth="443.0" text="...or enter new IP address">
+          <TitledPane animated="false" expanded="false" prefHeight="251.0" prefWidth="443.0" text="...or enter new IP address">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="204.0" prefWidth="441.0">
                      <children>
-                        <Button id="submitButton" fx:id="submitNewButton" onMouseClicked="#submitNewButtonPressed" layoutX="311.0" layoutY="151.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="100.0" text="Submit">
+                        <Button id="submitButton" fx:id="submitNewButton" layoutX="311.0" layoutY="151.0" mnemonicParsing="false" onMouseClicked="#submitNewButtonPressed" prefHeight="42.0" prefWidth="100.0" text="Submit">
                            <font>
                               <Font size="16.0" />
                            </font>
