@@ -101,16 +101,4 @@ public abstract class AbstractInterfaceFormController implements Initializable {
     }
     
     protected abstract StringBuilder getMessagePrefix();
-    
-    protected String gatherMessageFromForm(GridPane gridPane) {
-        StringBuilder resultBuilder = getMessagePrefix();
-        for (Iterator<Node> it = gridPane.getChildren().filtered((node) -> !node.isDisabled()).iterator(); it.hasNext();) {
-            TextField tf = (TextField) it.next();
-            resultBuilder.append(HEXA_PREFIX).append(tf.getText().trim());
-            if (it.hasNext()) {
-                resultBuilder = resultBuilder.append(' ');
-            }
-        }
-        return resultBuilder.toString();
-    }
 }

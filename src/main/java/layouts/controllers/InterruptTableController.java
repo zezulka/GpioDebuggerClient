@@ -61,7 +61,9 @@ public class InterruptTableController implements Initializable {
     private ComboBox<Action> actionsComboBox;
     @FXML
     private TableView<InterruptValueObject> tableView;
-    
+    @FXML
+    private Button submitButton;
+
     /**
      * Initializes the controller class.
      */
@@ -75,7 +77,7 @@ public class InterruptTableController implements Initializable {
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
             if (INTERRUPTS.size() <= MAX_THREAD_THRESHOLD) {
                 //MasterWindowController.getInstance()....
-                //GuiEntryPoint.createNewAddListenerForm();
+                App.createNewAddListenerPromptForm();
             }
         });
     }
@@ -84,25 +86,10 @@ public class InterruptTableController implements Initializable {
         actionsComboBox.setItems(FXCollections.observableArrayList(Action.values()));
     }
 
-    @FXML
-    private void submitBulkActions(MouseEvent event) {
-        Action action = actionsComboBox.getValue();
-        switch (action) {
-            case START: {
-                new Thread(new StartInterruptsWorker()).start();
-                break;
-            }
-            case CANCEL: {
-                new Thread(new StopInterruptsWorker()).start();
-                break;
-            }
-        }
-    }
-
     static void clearAllInterruptListeners() {
         INTERRUPTS.clear();
     }
-    
+
     static boolean addNewInterruptListener(InterruptValueObject interrupt) {
         if (!INTERRUPTS.contains(interrupt)) {
             INTERRUPTS.add(interrupt);

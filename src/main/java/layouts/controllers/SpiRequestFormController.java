@@ -40,6 +40,7 @@ import userdata.UserDataUtils;
  * @author miloslav
  */
 public class SpiRequestFormController extends AbstractInterfaceFormController implements Initializable {
+
     @FXML
     private Button spiRequestButton;
     @FXML
@@ -85,7 +86,7 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
         chipSelectList.getSelectionModel().selectFirst();
         operationList.getSelectionModel().selectFirst();
     }
-    
+
     private void initUsedRequestsComboBox() {
         usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getSpiRequests()));
         usedRequestsComboBox.setCellFactory((ListView<SpiRequestValueObject> param) -> {
@@ -133,20 +134,21 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
 
     @FXML
     private void sendSpiRequest(MouseEvent event) {
-        String msgToSend = super.gatherMessageFromForm(textFieldGridPaneSpi);
-        if (msgToSend != null) {
-            ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
-            SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
-            usedRequestsComboBox.getItems().add(request);
-            UserDataUtils.addNewSpiRequest(request);
+        StringBuilder msgToSend = getMessagePrefix();
+        for (String str : super.getBytes(textFieldGridPaneSpi)) {
+            msgToSend = msgToSend.append(HEXA_PREFIX).append(str).append(' ');
         }
+        ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend.toString());
+        SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
+        usedRequestsComboBox.getItems().add(request);
+        UserDataUtils.addNewSpiRequest(request);
     }
-    
+
     private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
         return new SpiRequestValueObject(chipSelectList.getValue(), op, super.getBytes(textFieldGridPaneSpi));
     }
-    
+
     @FXML
     private void addTextField(MouseEvent event) {
         super.addNewTextField(textFieldGridPaneSpi, numFields);

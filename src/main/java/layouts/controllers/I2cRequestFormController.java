@@ -5,6 +5,7 @@ import core.net.ClientNetworkManager;
 
 import java.net.URL;
 import java.util.Collections;
+import java.util.Iterator;
 
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -19,6 +20,7 @@ import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -32,6 +34,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.paint.Color;
+import static layouts.controllers.AbstractInterfaceFormController.HEXA_PREFIX;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -204,12 +207,9 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                     msgBuilder.toString()));
             return msgBuilder.toString();
         }
-        String valueToWrite = super.gatherMessageFromForm(textFieldGridPane);
-        if (valueToWrite == null || valueToWrite.isEmpty()) {
-            ControllerUtils.showErrorDialogMessage("Value to write must be filled correctly");
-            return null;
+        for (String str : super.getBytes(textFieldGridPane)) {
+            msgBuilder = msgBuilder.append(HEXA_PREFIX).append(str).append(' ');
         }
-        msgBuilder = msgBuilder.append(valueToWrite);
         return msgBuilder.toString();
     }
 

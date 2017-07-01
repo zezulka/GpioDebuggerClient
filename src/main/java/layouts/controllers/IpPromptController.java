@@ -23,6 +23,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -34,6 +36,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import userdata.SpiRequestValueObject;
 import userdata.UserDataUtils;
 
 /**
@@ -72,6 +75,24 @@ public class IpPromptController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        ipAddressesComboBox.setCellFactory((ListView<InetAddress> param) -> {
+            final ListCell<InetAddress> cell = new ListCell<InetAddress>() {
+                {
+                    super.setPrefWidth(150);
+                }
+
+                @Override
+                public void updateItem(InetAddress item,
+                        boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.getHostAddress());
+                    }
+                }
+            };
+            return cell;
+        }
+        );
         ipAddressesComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getAddressesFromFile()));
         ipAddressesComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             String[] strs = newValue.getHostAddress().split("\\.");
@@ -83,8 +104,8 @@ public class IpPromptController implements Initializable {
             byteFour.setText(strs[3]);
         });
         submitExistingButton.disableProperty().bind(
-             ipAddressesComboBox.getSelectionModel().selectedItemProperty().isNull()
-        );  
+                ipAddressesComboBox.getSelectionModel().selectedItemProperty().isNull()
+        );
         submitNewButton.disableProperty().bind(
                 Bindings.isEmpty(byteOne.textProperty())
                         .or(Bindings.isEmpty(byteTwo.textProperty()))
