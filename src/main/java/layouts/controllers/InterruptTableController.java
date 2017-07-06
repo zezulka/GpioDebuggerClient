@@ -5,31 +5,24 @@ import core.net.ClientNetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 
 import javafx.concurrent.Task;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.util.Callback;
-import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
@@ -105,7 +98,7 @@ public class InterruptTableController implements Initializable {
         
         public ButtonCell() {
             
-            cellButton.setPrefSize(25, 25);
+            cellButton.setPadding(Insets.EMPTY);
             cellButton.setOnAction((event) -> {
                 InterruptValueObject selected = (InterruptValueObject) getTableRow().getItem();
                 switch (selected.stateProperty().get()) {
@@ -128,6 +121,7 @@ public class InterruptTableController implements Initializable {
             if (!empty) {
                 setGraphic(cellButton);
             }
+            getTableView().refresh();
         }
     }
     
