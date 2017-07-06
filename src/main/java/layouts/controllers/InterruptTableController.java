@@ -5,29 +5,38 @@ import core.net.ClientNetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-
-import javafx.collections.FXCollections;
+import javafx.animation.FadeTransition;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+
 import javafx.concurrent.Task;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-
-import javafx.scene.input.MouseEvent;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import protocol.ClientPin;
+import protocol.InterruptManager;
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
 import protocol.ListenerState;
@@ -38,11 +47,9 @@ import protocol.ListenerState;
  * @author miloslav
  */
 public class InterruptTableController implements Initializable {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-    private static final ObservableList<InterruptValueObject> INTERRUPTS = FXCollections.observableArrayList();
-    private static final int MAX_THREAD_THRESHOLD = 10;
-
+    
     @FXML
     private Button addNewInterruptListenerButton;
     @FXML
@@ -58,8 +65,6 @@ public class InterruptTableController implements Initializable {
     @FXML
     private TableColumn<InterruptValueObject, ListenerState> state;
     @FXML
-    private ComboBox<Action> actionsComboBox;
-    @FXML
     private TableView<InterruptValueObject> tableView;
     @FXML
     private Button submitButton;
@@ -69,47 +74,21 @@ public class InterruptTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addAllBulkActions();
         initCellValueFactory();
-        actionsComboBox.getSelectionModel().selectFirst();
-        tableView.setItems(INTERRUPTS);
+        tableView.setItems(InterruptManager.getListeners());
         tableView.setEditable(true);
+        addNewInterruptListenerButton.disableProperty().bind(assertNumListeners());
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
-            if (INTERRUPTS.size() <= MAX_THREAD_THRESHOLD) {
-                //MasterWindowController.getInstance()....
-                App.createNewAddListenerPromptForm();
-            }
+            App.createNewAddListenerPromptForm();
         });
     }
-
-    private void addAllBulkActions() {
-        actionsComboBox.setItems(FXCollections.observableArrayList(Action.values()));
+    
+    protected BooleanBinding assertNumListeners() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> InterruptManager.getNumListeners().greaterThanOrEqualTo(InterruptManager.MAX_INTR_LISTENER_THRESHOLD).get(), InterruptManager.getNumListeners());
+        return Bindings.when(binding).then(true).otherwise(false);
     }
-
-    static void clearAllInterruptListeners() {
-        INTERRUPTS.clear();
-    }
-
-    static boolean addNewInterruptListener(InterruptValueObject interrupt) {
-        if (!INTERRUPTS.contains(interrupt)) {
-            INTERRUPTS.add(interrupt);
-            return true;
-        }
-        ControllerUtils.showErrorDialogMessage("This interrupt has already been registered.");
-        return false;
-    }
-
-    public static void updateInterruptListener(InterruptValueObject ivo) {
-        for (int i = 0; i < INTERRUPTS.size(); i++) {
-            InterruptValueObject curr = INTERRUPTS.get(i);
-            if (curr.equals(ivo)) {
-                ivo.setNumberOfInterrupts(curr.numberOfInterruptsProperty().get() + 1);
-                INTERRUPTS.set(i, ivo);
-                return;
-            }
-        }
-    }
-
+    
     private void initCellValueFactory() {
         pinName.setCellValueFactory(new PropertyValueFactory<>("clientPin"));
         interruptType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -117,39 +96,51 @@ public class InterruptTableController implements Initializable {
         numberOfInterrupts.setCellValueFactory(new PropertyValueFactory<>("numberOfInterrupts"));
         numberOfInterrupts.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         latestInterruptTime.setCellValueFactory(new PropertyValueFactory<>("latestInterruptTime"));
-        state.setCellValueFactory(new PropertyValueFactory<>("state"));
+        state.setCellFactory((TableColumn<InterruptValueObject, ListenerState> p) -> new ButtonCell());
     }
-
-    private static enum Action {
-        START("start"), CANCEL("cancel");
-
-        private final String desc;
-
-        private Action(String desc) {
-            this.desc = desc;
+    
+    private class ButtonCell extends TableCell<InterruptValueObject, ListenerState> {
+        
+        final Button cellButton = new Button(null, new ImageView(new Image("play-button.jpg", 30, 30, true, true)));
+        
+        public ButtonCell() {
+            
+            cellButton.setPrefSize(25, 25);
+            cellButton.setOnAction((event) -> {
+                InterruptValueObject selected = (InterruptValueObject) getTableRow().getItem();
+                switch (selected.stateProperty().get()) {
+                    case NOT_RUNNING: {
+                        new Thread(new StartInterruptsWorker(selected, cellButton)).start();
+                        break;
+                    }
+                    case RUNNING: {
+                        new Thread(new StopInterruptsWorker(selected, cellButton)).start();
+                        break;
+                    }
+                }
+            });
         }
 
+        //Display button if the row is not empty
         @Override
-        public String toString() {
-            return this.desc;
-        }
-    }
-
-    private abstract class AbstractInterruptsWorker extends Task<Void> {
-
-        private final InterruptValueObject selectedIntr;
-
-        protected abstract String getMessagePrefix();
-
-        protected AbstractInterruptsWorker(ListenerState guardedState) {
-            InterruptValueObject ivo = tableView.getSelectionModel().getSelectedItem();
-            if (ivo != null && ivo.stateProperty().get().equals(guardedState)) {
-                this.selectedIntr = tableView.getSelectionModel().getSelectedItem();
-            } else {
-                selectedIntr = null;
+        protected void updateItem(ListenerState t, boolean empty) {
+            super.updateItem(t, empty);
+            if (!empty) {
+                setGraphic(cellButton);
             }
         }
-
+    }
+    
+    private abstract class AbstractInterruptsWorker extends Task<Void> {
+        
+        private final InterruptValueObject selectedIntr;
+        
+        protected abstract String getMessagePrefix();
+        
+        protected AbstractInterruptsWorker(InterruptValueObject selected, ListenerState guardedState) {
+            this.selectedIntr = selected;
+        }
+        
         @Override
         protected Void call() throws Exception {
             super.done();
@@ -160,7 +151,7 @@ public class InterruptTableController implements Initializable {
             }
             return null;
         }
-
+        
         private String gatherMessageFromSubmitted() {
             if (selectedIntr == null) {
                 return null;
@@ -174,29 +165,48 @@ public class InterruptTableController implements Initializable {
             return result.toString();
         }
     }
-
+    
     private class StartInterruptsWorker extends AbstractInterruptsWorker {
-
-        public StartInterruptsWorker() {
-            super(ListenerState.NOT_RUNNING);
+        
+        private final Button triggerer;
+        
+        public StartInterruptsWorker(InterruptValueObject selected, Button triggerer) {
+            super(selected, ListenerState.NOT_RUNNING);
+            this.triggerer = triggerer;
         }
-
+        
         @Override
         protected String getMessagePrefix() {
             return "GPIO:INTR_START";
         }
-    }
-
-    private class StopInterruptsWorker extends AbstractInterruptsWorker {
-
-        public StopInterruptsWorker() {
-            super(ListenerState.RUNNING);
+        
+        @Override
+        protected void done() {
+            super.done();
+            Platform.runLater(() -> triggerer.setGraphic(new ImageView(new Image("stop-button.jpg", 30, 30, true, true))));
         }
-
+    }
+    
+    private class StopInterruptsWorker extends AbstractInterruptsWorker {
+        
+        private final Button triggerer;
+        
+        public StopInterruptsWorker(InterruptValueObject selected, Button triggerer) {
+            super(selected, ListenerState.RUNNING);
+            this.triggerer = triggerer;
+        }
+        
         @Override
         protected String getMessagePrefix() {
             return "GPIO:INTR_STOP";
         }
+        
+        @Override
+        protected void done() {
+            super.done();
+            Platform.runLater(() -> triggerer.setGraphic(new ImageView(new Image("play-button.jpg", 30, 30, true, true))));
+            
+        }
     }
-
+    
 }

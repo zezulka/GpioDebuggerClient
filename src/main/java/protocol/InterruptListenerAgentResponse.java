@@ -1,24 +1,22 @@
 package protocol;
 
+
 import core.util.ResponseType;
 import java.time.LocalTime;
-import layouts.controllers.InterruptTableController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InterruptListenerAgentResponse implements AgentResponse {
 
-    private final ResponseType responseType;
-    private final LocalTime timeGenerated;
-    private final ClientPin pin;
-    private final InterruptType intrType;
+    private final InterruptValueObject response;
+    private final ResponseType type;
+    private final LocalTime generatedAt;
+    private static final Logger LOGGER = LoggerFactory.getLogger(InterruptListenerAgentResponse.class);
     
-    public InterruptListenerAgentResponse(ResponseType responseType, LocalTime timeGenerated, ClientPin pin, InterruptType intrType) {
-        if(!responseType.isInterruptMessage()) {
-           throw new IllegalArgumentException("Response is not of interrupt type."); 
-        }
-        this.responseType = responseType;
-        this.timeGenerated = timeGenerated;
-        this.pin = pin;
-        this.intrType = intrType;
+    public InterruptListenerAgentResponse(InterruptValueObject response, ResponseType type, LocalTime generatedAt) {
+        this.response = response;
+        this.type = type;
+        this.generatedAt = generatedAt;
     }
     
     @Override
@@ -27,23 +25,24 @@ public class InterruptListenerAgentResponse implements AgentResponse {
     }
     
     private void modifyInterruptValueObject() {
-        InterruptValueObject found = new InterruptValueObject(pin, intrType);
-        switch (responseType) {
+        switch (type) {
             case INTR_GENERATED: {
-                found.setLatestInterruptTime(this.timeGenerated);
+                response.setLatestInterruptTime(generatedAt);
                 break;
             }
             case INTR_STARTED: {
-                found.setState(ListenerState.RUNNING);
+                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getName(), ListenerState.RUNNING));
+                response.setState(ListenerState.RUNNING);
                 break;
             }
             case INTR_STOPPED: {
-                found.setState(ListenerState.NOT_RUNNING);
+                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getName(), ListenerState.NOT_RUNNING));
+                response.setState(ListenerState.NOT_RUNNING);
                 break;
             }
             default: throw new IllegalArgumentException();
         }
-        InterruptTableController.updateInterruptListener(found);
+        InterruptManager.updateInterruptListener(response);
     }
     
 }

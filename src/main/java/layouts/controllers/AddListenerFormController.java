@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import protocol.ClientPin;
+import protocol.InterruptManager;
 
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
@@ -59,7 +60,7 @@ public class AddListenerFormController implements Initializable {
 
     @FXML
     private void addNewInterrupt(MouseEvent event) {
-        if(InterruptTableController.addNewInterruptListener(
+        if(InterruptManager.addInterruptListener(
                 new InterruptValueObject(pinComboBox.getValue(), 
                                          interruptTypeComboBox.getValue()))) {
             ((Stage)addListenerButton.getScene().getWindow()).close();

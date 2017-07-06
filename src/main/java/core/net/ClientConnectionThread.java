@@ -111,14 +111,13 @@ public class ClientConnectionThread implements Runnable {
         } else {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
-            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
-                    connection.getInetAddress(), connection.getBoardType()));
             Platform.runLater(() -> {
                 App.getDevicesTab()
                     .getTabs()
                     .remove(App.getTabFromInetAddress(connection.getInetAddress()));
             });
-            
+            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
+                    connection.getInetAddress(), connection.getBoardType()));
         }
     }
 
@@ -210,10 +209,10 @@ public class ClientConnectionThread implements Runnable {
         SocketChannel channel = connection.getChannel();
         Selector selector = connection.getSelector();
         try {
-            if (channel.isOpen()) {
+            if (channel != null && channel.isOpen()) {
                 channel.close();
             }
-            if (selector.isOpen()) {
+            if (selector != null && selector.isOpen()) {
                 selector.close();
             }
         } catch (IOException ex) {

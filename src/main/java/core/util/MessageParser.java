@@ -1,6 +1,4 @@
 package core.util;
-
-import java.io.IOException;
 import layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
@@ -16,8 +14,8 @@ public class MessageParser {
 
     /**
      * Utility method for parsing incoming messages from agent. The main focus
-     * of this method is to determine which kind of response has been sent to
-     * client using AgentResponseFactory. Possible response types: 
+     * of this method is to parse agent response using AgentResponseFactory and then
+     * call react() method should the message be valid. Possible response types: 
      * 
      * GPIO:<PIN_NUMBER>:[HIGH|LOW]
      * SPI:<BYTE_IN_HEX>* 
@@ -27,7 +25,6 @@ public class MessageParser {
      * <ILLEGAL_REQUEST>
      *
      * @param agentMessage
-     * @throws IOException
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
     public static void parseAgentMessage(String agentMessage) {
@@ -37,7 +34,7 @@ public class MessageParser {
         try {
             AgentResponseFactory.of(agentMessage).react();
         } catch (IllegalResponseException ex) {
-            LOGGER.error(String.format("Agent response '%s' could not be recognized by the message parser.", agentMessage));
+            LOGGER.error(String.format("Agent response '%s' could not be recognized by the message parser, error generated: %s", agentMessage, ex.getMessage()));
             ControllerUtils.showInformationDialogMessage(String.format("Unrecognized message has been received: %s", agentMessage));
         }
     }

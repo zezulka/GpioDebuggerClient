@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import protocol.InterruptManager;
 
 /**
  *
@@ -39,6 +40,7 @@ public class RaspiController implements DeviceController, Initializable {
         raspiTab.setOnCloseRequest((event) -> {
             if (ControllerUtils.showConfirmationDialogMessage("Are you sure that you want to disconnect from this device?")) {
                 ClientNetworkManager.disconnect(App.getIpAddressFromCurrentTab());
+                InterruptManager.clearAllInterruptListeners();
                 raspiTab.getTabPane().getTabs().remove(raspiTab);
             }
             event.consume();

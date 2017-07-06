@@ -1,9 +1,5 @@
 package core.util;
 
-/**
- *
- * @author miloslav
- */
 public enum ResponseType {
     GPIO,
     SPI,
