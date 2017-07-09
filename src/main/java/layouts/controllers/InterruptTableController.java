@@ -68,14 +68,14 @@ public class InterruptTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initCellValueFactory();
-        tableView.setItems(InterruptManager.getListeners());
+        tableView.setItems(InterruptManager.getListeners(App.getLastAddress()));
         tableView.setEditable(true);
         addNewInterruptListenerButton.disableProperty().bind(assertNumListeners());
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
             App.createNewAddListenerPromptForm();
         });
     }
-    
+   
     protected BooleanBinding assertNumListeners() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> InterruptManager.getNumListeners().greaterThanOrEqualTo(InterruptManager.MAX_INTR_LISTENER_THRESHOLD).get(), InterruptManager.getNumListeners());

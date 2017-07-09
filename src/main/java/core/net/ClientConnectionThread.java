@@ -17,6 +17,7 @@ import layouts.controllers.ControllerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.BoardType;
+import protocol.InterruptManager;
 
 public class ClientConnectionThread implements Runnable {
 
@@ -107,7 +108,7 @@ public class ClientConnectionThread implements Runnable {
     private void processAgentMessage() {
         String agentMessage = read();
         if (agentMessage != null) {
-            MessageParser.parseAgentMessage(agentMessage);
+            MessageParser.parseAgentMessage(connection.getInetAddress(), agentMessage);
         } else {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
@@ -168,6 +169,7 @@ public class ClientConnectionThread implements Runnable {
      */
     public void disconnect() {
         cleanUpResources();
+        InterruptManager.clearAllListeners(connection.getInetAddress());
         ClientNetworkManager.removeMapping(connection.getInetAddress());
     }
 

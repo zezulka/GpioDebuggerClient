@@ -1,5 +1,6 @@
 package core.util;
 
+import java.net.InetAddress;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import protocol.AgentResponse;
@@ -9,6 +10,7 @@ import protocol.I2cAgentResponse;
 import protocol.InterruptListenerAgentResponse;
 import protocol.InterruptManager;
 import protocol.InterruptType;
+import protocol.InterruptValueObject;
 import protocol.RaspiClientPin;
 import protocol.Signal;
 import protocol.SpiAgentResponse;
@@ -19,7 +21,7 @@ import protocol.SpiAgentResponse;
  */
 public class AgentResponseFactory {
 
-    public static AgentResponse of(String agentMessage) throws IllegalResponseException {
+    public static AgentResponse of(InetAddress address, String agentMessage) throws IllegalResponseException {
         if(agentMessage == null) {
             throw new IllegalResponseException();
         }
@@ -64,7 +66,12 @@ public class AgentResponseFactory {
                     ClientPin interruptPin = RaspiClientPin.getPin(splitResponseBody[1]);
                     InterruptType intrType = InterruptType.getType(splitResponseBody[2]);
                     LocalTime timeGenerated = LocalTime.parse(splitResponseBody[3], DateTimeFormatter.ISO_LOCAL_TIME);
-                    return new InterruptListenerAgentResponse(InterruptManager.getInterruptListenerFromValues(interruptPin, intrType), type, timeGenerated);
+                    InterruptValueObject interrupt = InterruptManager.getInterruptListener(address, new InterruptValueObject(interruptPin, intrType));
+                    if(interrupt == null) {
+                        throw new IllegalResponseException(
+                                String.format("There is no such combination of address '%s' and interrupt listener [pin=%s, type=%s]", address, interruptPin, intrType));
+                    }
+                    return new InterruptListenerAgentResponse(interrupt, type, timeGenerated, address);
                 } catch (IllegalArgumentException ex) {
                     throw new IllegalResponseException(String.format("Interrupt listener response %s is not valid.", agentMessage));
                 }

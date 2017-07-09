@@ -46,6 +46,7 @@ public class App extends Application {
     private static URL cubieboard;
 
     private static final Set<TabAddressPair> TAB_ADDR_PAIRS = new HashSet<>();
+    private static InetAddress lastAddedAddress;
 
     @Override
     public void start(Stage primaryStage) {
@@ -65,10 +66,14 @@ public class App extends Application {
 
         });
         stage.setScene(scene);
-        stage.setMinHeight(700);
+        stage.setMinHeight(800);
         stage.setMinWidth(1000);
         stage.setTitle("Debugger for BCM2835/6-based devices");
         stage.show();
+    }
+    
+    public static InetAddress getLastAddress() {
+        return lastAddedAddress;
     }
 
     public static URL getUrlFromBoardType(BoardType type) {
@@ -160,6 +165,8 @@ public class App extends Application {
     }
 
     public static void loadNewTab(InetAddress address, BoardType type) {
+        InetAddress previous = lastAddedAddress;
+        lastAddedAddress = address;
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
@@ -172,6 +179,7 @@ public class App extends Application {
                 getDevicesTab().getSelectionModel().select(pane);
             });
         } catch (IOException ex) {
+            lastAddedAddress = previous;
             LOGGER.error("Load failed.", ex);
             Platform.exit();
         }

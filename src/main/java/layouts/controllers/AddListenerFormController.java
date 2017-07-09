@@ -1,5 +1,6 @@
 package layouts.controllers;
 
+import core.gui.App;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class AddListenerFormController implements Initializable {
     @FXML
     private void addNewInterrupt(MouseEvent event) {
         if(InterruptManager.addInterruptListener(
+                App.getIpAddressFromCurrentTab(), 
                 new InterruptValueObject(pinComboBox.getValue(), 
                                          interruptTypeComboBox.getValue()))) {
             ((Stage)addListenerButton.getScene().getWindow()).close();

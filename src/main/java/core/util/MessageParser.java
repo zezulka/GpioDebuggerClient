@@ -1,4 +1,5 @@
 package core.util;
+import java.net.InetAddress;
 import layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
@@ -27,12 +28,12 @@ public class MessageParser {
      * @param agentMessage
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
-    public static void parseAgentMessage(String agentMessage) {
+    public static void parseAgentMessage(InetAddress address, String agentMessage) {
         if (agentMessage == null) {
             throw new IllegalArgumentException("Agent message cannot be null.");
         }
         try {
-            AgentResponseFactory.of(agentMessage).react();
+            AgentResponseFactory.of(address, agentMessage).react();
         } catch (IllegalResponseException ex) {
             LOGGER.error(String.format("Agent response '%s' could not be recognized by the message parser, error generated: %s", agentMessage, ex.getMessage()));
             ControllerUtils.showInformationDialogMessage(String.format("Unrecognized message has been received: %s", agentMessage));
