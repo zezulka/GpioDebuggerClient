@@ -68,7 +68,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setMinHeight(800);
         stage.setMinWidth(1000);
-        stage.setTitle("Debugger for BCM2835/6-based devices");
+        stage.setTitle("Debugger for RaspberryPi");
         stage.show();
     }
     

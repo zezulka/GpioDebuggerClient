@@ -14,13 +14,14 @@ import javafx.beans.property.SimpleObjectProperty;
  * @author Miloslav Zezulka, 2017
  */
 public class InterruptValueObject {
+
     private final ClientPin clientPin;
     private final InterruptType type;
     private final LocalTime timeAdded;
     private final IntegerProperty numberOfInterrupts;
     private final ObjectProperty<ListenerState> state;
     private final ObjectProperty<LocalTime> latestInterruptTime;
-    
+
     public InterruptValueObject(ClientPin clientPin, InterruptType type) {
         this.clientPin = clientPin;
         this.type = type;
@@ -53,7 +54,7 @@ public class InterruptValueObject {
     public ObjectProperty<LocalTime> latestInterruptTimeProperty() {
         return latestInterruptTime;
     }
-    
+
     public void setNumberOfInterrupts(int num) {
         this.numberOfInterrupts.set(num);
     }
@@ -65,7 +66,7 @@ public class InterruptValueObject {
     public void setLatestInterruptTime(LocalTime latestInterruptTime) {
         this.latestInterruptTime.setValue(LocalTime.from(latestInterruptTime));
     }
-    
+
     public void setState(ListenerState state) {
         this.state.setValue(state);
     }
