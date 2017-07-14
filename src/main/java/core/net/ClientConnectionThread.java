@@ -11,6 +11,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import javafx.application.Platform;
 import layouts.controllers.ControllerUtils;
@@ -87,7 +88,7 @@ public class ClientConnectionThread implements Runnable {
                 LOGGER.error(String.format("A nonvalid key has been registered: %s", key.toString()));
                 continue;
             }
-            if (key.isConnectable() && !connect(key, connection.getInetAddress(), connection.getChannel())) {
+            if (key.isConnectable() && !connect(key, connection.getDevice().getAddress(), connection.getChannel())) {
                 break;
             }
             if (key.isWritable() && connection.getMessageToSend() != null) {
@@ -96,7 +97,7 @@ public class ClientConnectionThread implements Runnable {
             if (key.isReadable()) {
                 if (connection.getBoardType() == null)  {
                     if(readInitMessage()) {
-                        App.loadNewTab(connection.getInetAddress(), connection.getBoardType());
+                        App.loadNewTab(connection.getDevice().getAddress(), connection.getBoardType());
                     }
                 } else {
                     processAgentMessage();
@@ -108,17 +109,17 @@ public class ClientConnectionThread implements Runnable {
     private void processAgentMessage() {
         String agentMessage = read();
         if (agentMessage != null) {
-            MessageParser.parseAgentMessage(connection.getInetAddress(), agentMessage);
+            MessageParser.parseAgentMessage(connection.getDevice().getAddress(), agentMessage);
         } else {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             Platform.runLater(() -> {
                 App.getDevicesTab()
                     .getTabs()
-                    .remove(App.getTabFromInetAddress(connection.getInetAddress()));
+                    .remove(App.getTabFromInetAddress(connection.getDevice().getAddress()));
             });
             ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
-                    connection.getInetAddress(), connection.getBoardType()));
+                    connection.getDevice().getAddress(), connection.getBoardType()));
         }
     }
 
@@ -153,7 +154,8 @@ public class ClientConnectionThread implements Runnable {
         }
         try {
             connection.setBoardType(BoardType.parse(agentMessage));
-            ClientNetworkManager.addNewMapping(connection.getInetAddress(), this);
+            ClientNetworkManager.addNewMapping(connection.getDevice().getAddress(), this);
+            connection.getDevice().setTimeConnected(LocalDateTime.now());
             return true;
         } catch (IllegalArgumentException ex) {
             LOGGER.error("could not parse agent init message");
@@ -169,8 +171,8 @@ public class ClientConnectionThread implements Runnable {
      */
     public void disconnect() {
         cleanUpResources();
-        InterruptManager.clearAllListeners(connection.getInetAddress());
-        ClientNetworkManager.removeMapping(connection.getInetAddress());
+        InterruptManager.clearAllListeners(connection.getDevice().getAddress());
+        ClientNetworkManager.removeMapping(connection.getDevice().getAddress());
     }
 
     private void write(SelectionKey key, AgentConnectionValueObject connection) throws IOException {
@@ -195,6 +197,7 @@ public class ClientConnectionThread implements Runnable {
             return true;
         } catch (IOException ex) {
             LOGGER.error("Could not connect to server, reason: ", ex);
+            ControllerUtils.showErrorDialogMessage("Could not connect to server.");
             return false;
         }
     }

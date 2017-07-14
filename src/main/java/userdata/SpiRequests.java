@@ -6,11 +6,11 @@ import javafx.collections.FXCollections;
 public final class SpiRequests {
 
     private final List<SpiRequestValueObject> requests;
-    private boolean isDirty;
+    private boolean dirty;
 
     public SpiRequests(List<SpiRequestValueObject> requests) {
         this.requests = FXCollections.observableArrayList(requests);
-        this.isDirty = false;
+        this.dirty = false;
     }
 
     public List<SpiRequestValueObject> getRequests() {
@@ -18,15 +18,12 @@ public final class SpiRequests {
     }
 
     public void addNewRequest(SpiRequestValueObject request) {
+        this.dirty = true;
         requests.add(request);
     }
 
     public boolean isDirty() {
-        return isDirty;
-    }
-
-    public void setDirty(boolean val) {
-        this.isDirty = val;
+        return dirty;
     }
 
     public boolean contains(SpiRequestValueObject request) {

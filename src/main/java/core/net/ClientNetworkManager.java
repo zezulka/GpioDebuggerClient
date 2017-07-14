@@ -17,6 +17,7 @@ import layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import userdata.DeviceValueObject;
 
 /**
  *
@@ -35,18 +36,6 @@ public class ClientNetworkManager {
 
     public static ClientNetworkManager getInstance() {
         return INSTANCE;
-    }
-
-    /**
-     * Triggers manager to connect to the device on the given address. New
-     * Thread instance is created, which iterates in infinite loop and scans for
-     * selection keys (more information in run method). It is supposed that the
-     * ipAddress supplied is valid and agent is alive on the specified address.
-     *
-     * @param ipAddress
-     */
-    public void connectToDevice(InetAddress ipAddress) {
-        initConnection(ipAddress);
     }
 
     /**
@@ -69,16 +58,21 @@ public class ClientNetworkManager {
         ADDRESSES.remove(address);
     }
 
-    private void initConnection(InetAddress ipAddress) {
-        if (alreadyConnectedToAddress(ipAddress)) {
+    /**
+     * Triggers manager to connect to the device on the given address. New
+     * Thread instance is created, which iterates in infinite loop and scans for
+     * selection keys (more information in run method). It is supposed that the
+     * ipAddress supplied is valid and agent is alive on the specified address.
+     *
+     * @param ipAddress
+     */
+    public boolean connectToDevice(DeviceValueObject device) {
+        if (alreadyConnectedToAddress(device.getAddress())) {
             ControllerUtils.showErrorDialogMessage("Connection has already been established for this IP address.");
-            return;
+            return false;
         }
         Selector selector;
         SocketChannel channel;
-        if (ipAddress == null) {
-            return;
-        }
         try {
             selector = Selector.open();
             channel = SocketChannel.open();
@@ -86,11 +80,12 @@ public class ClientNetworkManager {
             channel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException ex) {
             LOGGER.error(null, ex);
-            return;
+            return false;
         }
-        AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, null, channel, ipAddress);
+        AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, null, channel, device);
         ClientConnectionThread thread = new ClientConnectionThread(connection);
         new Thread(thread).start();
+        return true;
     }
     
     public static void setMessageToSend(InetAddress address, String messageToSend) {

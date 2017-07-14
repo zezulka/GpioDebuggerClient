@@ -8,10 +8,8 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ObjectProperty;
 
 import javafx.concurrent.Task;
-import javafx.event.EventType;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
