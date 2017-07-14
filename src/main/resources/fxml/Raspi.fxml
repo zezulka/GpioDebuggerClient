@@ -88,12 +88,12 @@
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>
                                 </Label>
-                                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="HIGH" textFill="#FF5555">
+                                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="HIGH" textFill="#55FF55">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>
                                 </Label>
-                                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="LOW" textFill="#5555FF">
+                                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="LOW" textFill="#FF5555">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>

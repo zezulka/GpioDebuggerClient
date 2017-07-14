@@ -130,7 +130,6 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private Node createGpioContents() {
         Element contents = DOC.createElement("content");
         Element gridPane = DOC.createElement("GridPane");
-        //cacheHint="SPEED" layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="700.0"
         gridPane.setAttribute("cacheHint", "SPEED");
         gridPane.setAttribute("layoutX", "0.0");
         gridPane.setAttribute("layoutY", "0.0");
@@ -194,8 +193,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     
     private void createLegend(Element root) {
         root.appendChild(createLegendLabel("Legend:", "1", "1", "#000000"));
-        root.appendChild(createLegendLabel("HIGH", "2", "1", "#FF5555"));
-        root.appendChild(createLegendLabel("LOW", "3", "1", "#5555FF"));
+        root.appendChild(createLegendLabel("HIGH", "2", "1", "#55FF55"));
+        root.appendChild(createLegendLabel("LOW", "3", "1", "#FF5555"));
     }
     
     private Node createLegendLabel(String text, String rowIndex, String columnIndex, String textfill) {
