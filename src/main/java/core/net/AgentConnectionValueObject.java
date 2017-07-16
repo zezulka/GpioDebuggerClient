@@ -12,27 +12,18 @@ import userdata.DeviceValueObject;
 public class AgentConnectionValueObject {
     private String messageToSend;
     private final Selector selector;
-    private BoardType boardType;
     private final DeviceValueObject device;
     private final SocketChannel channel;
 
-    public AgentConnectionValueObject(String messageToSend, Selector selector, BoardType boardType, SocketChannel channel, DeviceValueObject device) {
+    public AgentConnectionValueObject(String messageToSend, Selector selector, SocketChannel channel, DeviceValueObject device) {
         this.messageToSend = messageToSend;
         this.selector = selector;
-        this.boardType = boardType;
         this.channel = channel;
         this.device = device;
     }
 
     public void setMessageToSend(String messageToSend) {
         this.messageToSend = messageToSend;
-    }
-    
-    public void setBoardType(BoardType boardType) {
-        if(this.boardType != null) {
-            throw new IllegalStateException("board type already set!");
-        }
-        this.boardType = boardType;
     }
     
     public String getMessageToSend() {
@@ -45,10 +36,6 @@ public class AgentConnectionValueObject {
 
     public Selector getSelector() {
         return selector;
-    }
-
-    public BoardType getBoardType() {
-        return boardType;
     }
 
     public SocketChannel getChannel() {

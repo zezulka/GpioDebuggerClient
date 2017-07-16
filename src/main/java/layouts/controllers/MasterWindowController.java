@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 import javafx.application.Platform;
@@ -127,7 +126,7 @@ public class MasterWindowController implements Initializable {
     
     private DeviceValueObject getNewDeviceFromUser() {
         try {
-            return new DeviceValueObject(InetAddress.getByName(ipAddress.getText()));
+            return new DeviceValueObject(InetAddress.getByName(ipAddress.getText()), null);
         } catch (UnknownHostException ex) {
             LOGGER.error("Invalid IP address");
             ControllerUtils.showErrorDialogMessage("The hostname you provided has not been found.");

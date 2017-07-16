@@ -95,9 +95,9 @@ public class ClientConnectionThread implements Runnable {
                 write(key, connection);
             }
             if (key.isReadable()) {
-                if (connection.getBoardType() == null)  {
+                if (connection.getDevice().getBoardType() == null)  {
                     if(readInitMessage()) {
-                        App.loadNewTab(connection.getDevice().getAddress(), connection.getBoardType());
+                        App.loadNewTab(connection.getDevice().getAddress(), connection.getDevice().getBoardType());
                     }
                 } else {
                     processAgentMessage();
@@ -119,7 +119,7 @@ public class ClientConnectionThread implements Runnable {
                     .remove(App.getTabFromInetAddress(connection.getDevice().getAddress()));
             });
             ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
-                    connection.getDevice().getAddress(), connection.getBoardType()));
+                    connection.getDevice().getAddress(), connection.getDevice().getBoardType()));
         }
     }
 
@@ -153,7 +153,7 @@ public class ClientConnectionThread implements Runnable {
             return false;
         }
         try {
-            connection.setBoardType(BoardType.parse(agentMessage));
+            connection.getDevice().setBoardType(BoardType.parse(agentMessage));
             ClientNetworkManager.addNewMapping(connection.getDevice().getAddress(), this);
             connection.getDevice().setTimeConnected(LocalDateTime.now());
             return true;

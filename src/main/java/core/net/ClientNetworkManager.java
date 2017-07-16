@@ -64,7 +64,8 @@ public class ClientNetworkManager {
      * selection keys (more information in run method). It is supposed that the
      * ipAddress supplied is valid and agent is alive on the specified address.
      *
-     * @param ipAddress
+     * @param device
+     * @return
      */
     public boolean connectToDevice(DeviceValueObject device) {
         if (alreadyConnectedToAddress(device.getAddress())) {
@@ -82,7 +83,7 @@ public class ClientNetworkManager {
             LOGGER.error(null, ex);
             return false;
         }
-        AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, null, channel, device);
+        AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, channel, device);
         ClientConnectionThread thread = new ClientConnectionThread(connection);
         new Thread(thread).start();
         return true;

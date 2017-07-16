@@ -3,23 +3,30 @@ package userdata;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import protocol.BoardType;
 
 public final class DeviceValueObject {
     private final InetAddress address;
+    private BoardType boardType;
     private LocalDateTime timeConnected;
     private boolean dirty = false;
 
-    public DeviceValueObject(InetAddress address) {
-        this(address, null);
+    public DeviceValueObject(InetAddress address, BoardType device) {
+        this(address, device, null);
     }
 
-    public DeviceValueObject(InetAddress address, LocalDateTime timeConnected) {
+    public DeviceValueObject(InetAddress address, BoardType device, LocalDateTime timeConnected) {
         this.address = address;
         this.timeConnected = timeConnected;
+        this.boardType = device;
     }
     
     public boolean isDirty() {
         return dirty;
+    }
+    
+    public BoardType getBoardType() {
+        return boardType;
     }
     
     public String getHostName() {
@@ -38,11 +45,19 @@ public final class DeviceValueObject {
         this.dirty = true;
         this.timeConnected = ldt;
     }
+    
+    public void setBoardType(BoardType boardType) {
+        if(this.boardType != null) {
+            throw new IllegalStateException("board type already set!");
+        }
+        this.boardType = boardType;
+    }
 
     @Override
     public String toString() {
         return  "\nIP: " + address.getHostAddress() 
                 + (this.getHostName().equals(address.getHostAddress()) ? "" : ("\nHostname: " + this.getHostName()))
+                + (this.getBoardType() == null ? "" : "\nBoard type: " + this.getBoardType().toString())
                 + "\nLast connection: " + (timeConnected == null ? "never" : timeConnected.format(DateTimeFormatter.ofPattern("dd-MM, HH:mm")));
     }
 
