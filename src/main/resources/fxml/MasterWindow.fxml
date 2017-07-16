@@ -29,11 +29,12 @@
 
 <AnchorPane id="AnchorPane" cacheHint="SPEED" prefHeight="788.0" prefWidth="598.0" stylesheets="@../appStylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.MasterWindowController">
     <children>
-      <SplitPane fx:id="splitPane" dividerPositions="0.25" focusTraversable="false" layoutX="4.0" layoutY="80.0" prefHeight="708.0" prefWidth="1024.0">
+      <SplitPane fx:id="splitPane" dividerPositions="0.7" focusTraversable="false" layoutX="4.0" layoutY="80.0" prefHeight="708.0" prefWidth="1024.0">
          <items>
+              <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" minHeight="450.0" minWidth="600.0" prefHeight="706.0" prefWidth="626.0" style="-fx-background-color: lightgoldenrodyellow;" />
             <SplitPane dividerPositions="0.8073654390934845" orientation="VERTICAL" SplitPane.resizableWithParent="false">
                <items>
-                  <TreeView id="devicesTree" fx:id="devicesTree" minWidth="0.0" prefHeight="745.0" style="-fx-background-color: white;">
+                  <TreeView id="devicesTree" fx:id="devicesTree" minWidth="0.0" prefHeight="566.0" prefWidth="380.0" style="-fx-background-color: white;">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
@@ -62,13 +63,12 @@
                   </GridPane>
                </items>
             </SplitPane>
-              <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" minHeight="450.0" minWidth="600.0" prefHeight="745.0" prefWidth="727.0" style="-fx-background-color: lightgoldenrodyellow;" />
          </items>
       </SplitPane>
-        <ToolBar layoutY="7.0" minWidth="700.0" prefHeight="75.0" prefWidth="1024.0">
+        <ToolBar layoutY="7.0" minWidth="700.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="75.0" prefWidth="1024.0">
             <items>
-            <ToggleButton fx:id="deviceTree" mnemonicParsing="false" />
-                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" blendMode="SRC_ATOP" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" />
+            <ToggleButton fx:id="deviceTree" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" textAlignment="RIGHT" />
+                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" alignment="CENTER_RIGHT" blendMode="SRC_ATOP" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" textAlignment="RIGHT" />
             </items>
         </ToolBar>
     </children>

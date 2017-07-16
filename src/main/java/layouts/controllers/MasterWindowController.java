@@ -150,9 +150,9 @@ public class MasterWindowController implements Initializable {
     private void initializeDeviceTree() {
         DoubleProperty splitPaneDividerPosition = splitPane.getDividers().get(0).positionProperty();
         splitPaneDividerPosition.addListener((obs, oldPos, newPos)
-                -> deviceTree.setSelected(newPos.doubleValue() > 0.05));
+                -> deviceTree.setSelected(newPos.doubleValue() < 0.95));
         deviceTree.setOnAction(event -> {
-            splitPane.setDividerPositions(deviceTree.isSelected() ? 0.25 : 0.0);
+            splitPane.setDividerPositions(deviceTree.isSelected() ? 0.70 : 1.0);
         });
         TreeItem<Object> root = new TreeItem<>("devices", new ImageView(DEVICES_IMG));
         TreeItem<Object> activeBranch = new TreeItem<>("active", new ImageView(ACTIVE_IMG));

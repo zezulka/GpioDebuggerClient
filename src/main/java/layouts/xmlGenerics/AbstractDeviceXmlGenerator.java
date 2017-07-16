@@ -157,10 +157,10 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
     private Node createGpioGridPaneColumnConstraints() {
         Element columnConstraints = DOC.createElement("columnConstraints");
-        columnConstraints.appendChild(getColumnConstraint("85.0", null, null));
-        columnConstraints.appendChild(getColumnConstraint("90.0", null, null));
-        columnConstraints.appendChild(getColumnConstraint("396.0", "RIGHT", null));
-        columnConstraints.appendChild(getColumnConstraint("153.0", "RIGHT", null));
+        columnConstraints.appendChild(getColumnConstraint("0.0", null, null));
+        columnConstraints.appendChild(getColumnConstraint("90.0", "RIGHT", null));
+        columnConstraints.appendChild(getColumnConstraint("270.0", "RIGHT", null));
+        columnConstraints.appendChild(getColumnConstraint("85.0", "RIGHT", null));
         columnConstraints.appendChild(getColumnConstraint("168.0", "LEFT", "ALWAYS"));
         return columnConstraints;
     }
@@ -277,7 +277,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         imageView.appendChild(image);
         Element gridPaneMargin = DOC.createElement("GridPane.margin");
         Element insets = DOC.createElement("Insets");
-        insets.setAttribute("top", "26.0");
+        insets.setAttribute("top", "15.0");
         gridPaneMargin.appendChild(insets);
         imageView.appendChild(gridPaneMargin);
         return imageView;

@@ -7,10 +7,10 @@
                     <content>
                         <GridPane cacheHint="SPEED" layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="700.0">
                             <columnConstraints>
-                                <ColumnConstraints prefWidth="85.0"/>
-                                <ColumnConstraints prefWidth="90.0"/>
-                                <ColumnConstraints halignment="RIGHT" prefWidth="396.0"/>
-                                <ColumnConstraints halignment="RIGHT" prefWidth="153.0"/>
+                                <ColumnConstraints prefWidth="0.0"/>
+                                <ColumnConstraints halignment="RIGHT" prefWidth="90.0"/>
+                                <ColumnConstraints halignment="RIGHT" prefWidth="270.0"/>
+                                <ColumnConstraints halignment="RIGHT" prefWidth="85.0"/>
                                 <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" prefWidth="168.0"/>
                             </columnConstraints>
                             <rowConstraints>
@@ -103,7 +103,7 @@
                                         <Image url="@../Raspi.png"/>
                                     </image>
                                     <GridPane.margin>
-                                        <Insets top="26.0"/>
+                                        <Insets top="15.0"/>
                                     </GridPane.margin>
                                 </ImageView>
                             </children>
