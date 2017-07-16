@@ -205,7 +205,7 @@ public class App extends Application {
     }
 
     public static void setPinButtonColourFromSignal(ClientPin pin, Signal signal) {
-        Button btn = (Button) scene.lookup("#" + pin.getName());
+        Button btn = (Button) scene.lookup("#" + pin.getPinId());
         btn.setStyle("");
         btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "55FF55" : "FF5555"));
 

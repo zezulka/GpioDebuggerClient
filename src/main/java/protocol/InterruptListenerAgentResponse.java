@@ -38,12 +38,12 @@ public class InterruptListenerAgentResponse implements AgentResponse {
                 break;
             }
             case INTR_STARTED: {
-                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getName(), ListenerState.RUNNING));
+                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getGpioName(), ListenerState.RUNNING));
                 response.setState(ListenerState.RUNNING);
                 break;
             }
             case INTR_STOPPED: {
-                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getName(), ListenerState.NOT_RUNNING));
+                LOGGER.debug(String.format("Pin %s listener's state changed to %s", response.getClientPin().getGpioName(), ListenerState.NOT_RUNNING));
                 response.setState(ListenerState.NOT_RUNNING);
                 break;
             }

@@ -47,13 +47,13 @@ public class AgentResponseFactoryTest {
 
     @Test
     public void illegalInterface() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTERFACE_UNKNOWN:" + clientPin.getName() + ":HIGH")).isInstanceOf(IllegalResponseException.class);
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTERFACE_UNKNOWN:" + clientPin.getPinId() + ":HIGH")).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test
     public void responseWithExtraSpaces() {
         try {
-            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO : " + clientPin.getName() + ": HIGH ")).isInstanceOf(AgentResponse.class);
+            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO : " + clientPin.getPinId() + ": HIGH ")).isInstanceOf(AgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -62,7 +62,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void happyScenarioGpioHighVoltage() {
         try {
-            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getName() + ":HIGH")).isInstanceOf(GpioAgentResponse.class);
+            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getPinId() + ":HIGH")).isInstanceOf(GpioAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -71,7 +71,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void happyScenarioGpioLowVoltage() {
         try {
-            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getName() + ":LOW")).isInstanceOf(GpioAgentResponse.class);
+            assertThat(AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getPinId() + ":LOW")).isInstanceOf(GpioAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -79,7 +79,7 @@ public class AgentResponseFactoryTest {
 
     @Test
     public void gpioInvalidVoltage() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getName() + "MID")).isInstanceOf(IllegalResponseException.class);
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "GPIO:" + clientPin.getPinId() + "MID")).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test
@@ -114,7 +114,7 @@ public class AgentResponseFactoryTest {
     public void interruptGeneratedHappyScenario() {
         try {
             InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
-            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_GENERATED:" + clientPin.getName()
+            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_GENERATED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow)).isInstanceOf(InterruptListenerAgentResponse.class);
         } catch (IllegalResponseException ex) {
@@ -126,7 +126,7 @@ public class AgentResponseFactoryTest {
     public void interruptStartedHappyScenario() {
         try {
             InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
-            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_STARTED:" + clientPin.getName()
+            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_STARTED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow)).isInstanceOf(InterruptListenerAgentResponse.class);
         } catch (IllegalResponseException ex) {
@@ -139,7 +139,7 @@ public class AgentResponseFactoryTest {
         try {
             InterruptValueObject object = new InterruptValueObject(clientPin, intrType);
             InterruptManager.addInterruptListener(mockedAddress, object);
-            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getName()
+            assertThat(AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow)).isInstanceOf(InterruptListenerAgentResponse.class);
         } catch (IllegalResponseException ex) {
@@ -149,28 +149,28 @@ public class AgentResponseFactoryTest {
     
     @Test
     public void interruptGeneratedMissing() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_GENERATED:" + clientPin.getName()
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_GENERATED:" + clientPin.getPinId()
                 + ':' + intrType.toString() + ':'
                 + mockedNow)).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test
     public void interruptStartedMissing() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STARTED:" + clientPin.getName()
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STARTED:" + clientPin.getPinId()
                 + ':' + intrType.toString() + ':'
                 + mockedNow)).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test
     public void interruptStoppedMissing() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getName()
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getPinId()
                 + ':' + intrType.toString() + ':'
                 + mockedNow)).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test
     public void interruptInvalidType() {
-        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getName()
+        assertThatThrownBy(() -> AgentResponseFactory.of(mockedAddress, "INTR_STOPPED:" + clientPin.getPinId()
                 + ":NONE:"
                 + mockedNow)).isInstanceOf(IllegalResponseException.class);
     }

@@ -5,7 +5,6 @@ import core.net.ClientNetworkManager;
 
 import java.net.URL;
 import java.util.Collections;
-import java.util.Iterator;
 
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -55,8 +54,6 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     @FXML
     private ComboBox<Operation> operationList;
     @FXML
-    private GridPane textFieldGridPane;
-    @FXML
     private Button addFieldButton;
     @FXML
     private Button removeFieldButton;
@@ -70,14 +67,14 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     private TextArea i2cTextArea;
     @FXML
     private ComboBox<I2cRequestValueObject> usedRequestsComboBox;
-
-    private final IntegerProperty numFields = new SimpleIntegerProperty(0);
-
-
+    @FXML
+    private TextField byteArrayTextfield;
+    
     private static final char SEPARATOR = ':';
 
     private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
     private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_BYTE_REGEX);
+    
 
     /**
      * initialises the controller class.
@@ -89,18 +86,15 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     public void initialize(URL url, ResourceBundle rb) {
         super.addAllModes(operationList);
         initUserRequestsComboBox();
-        textFieldGridPane.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
+        byteArrayTextfield.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
         operationList.getSelectionModel().selectFirst();
         i2cRequestButton.disableProperty().bind(
                 checkLengthFieldEmpty()
                         .or(isHexaByte(slaveAddressField).not())
-                        .or(checkGridPaneChildrenOutOfBounds())
-                        .or(createDataTextFields(textFieldGridPane).not())
+                        .or(Bindings.when(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE))
+                                .then(super.createHexValuesOnlyBinding(byteArrayTextfield).not())
+                                .otherwise(false))
         );
-        addFieldButton.disableProperty().bind(super.assertDataFieldsSizeAtLeastMaxCap(numFields)
-                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
-        removeFieldButton.disableProperty().bind(super.assertDataFieldsSizeNonpositive(numFields)
-                .or(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.READ)));
         setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
         this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
             if (newValue != null) {
@@ -133,11 +127,6 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
             lengthField.setText(String.valueOf(newValue.getLength()));
             operationList.getSelectionModel().select(newValue.getOperation());
             slaveAddressField.setText(newValue.getSlaveAddress());
-            for(int i = 0; i < newValue.getBytes().size(); i++) {
-                ((TextField)textFieldGridPane.getChildren().get(i)).setText(newValue.getBytes().get(i));
-                ((TextField)textFieldGridPane.getChildren().get(i)).setDisable(false);
-            }
-            numFields.set(newValue.getBytes().size());
         });
     }
 
@@ -189,11 +178,8 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     private I2cRequestValueObject getNewI2cRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
         return new I2cRequestValueObject(op, slaveAddressField.getText(), 
-                                         op.isWriteOperation() ? textFieldGridPane
-                                                 .getChildren()
-                                                 .filtered((textfield) -> !textfield.isDisabled())
-                                                 .size() : Integer.parseUnsignedInt(lengthField.getText()), 
-                                         op.isReadOperation() ? Collections.EMPTY_LIST : super.getBytes(textFieldGridPane));
+                                         op.isWriteOperation() ? byteArrayTextfield.getText().length()/2 : Integer.parseUnsignedInt(lengthField.getText()), 
+                                         op.isReadOperation() ? "" : byteArrayTextfield.getText());
     }
     
     private String gatherMessageFromForm() {
@@ -206,9 +192,7 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                     msgBuilder.toString()));
             return msgBuilder.toString();
         }
-        for (String str : super.getBytes(textFieldGridPane)) {
-            msgBuilder = msgBuilder.append(HEXA_PREFIX).append(str).append(' ');
-        }
+        msgBuilder = msgBuilder.append(byteArrayTextfield.getText());
         return msgBuilder.toString();
     }
 
@@ -223,24 +207,5 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                 .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR);
-    }
-    
-    @FXML
-    private void addNewTextField(MouseEvent event) {
-        super.addNewTextField(textFieldGridPane, numFields);
-    }
-
-    @FXML
-    private void removeLastTextField(MouseEvent event) {
-        super.addNewTextField(textFieldGridPane, numFields);
-    }
-
-    private BooleanBinding checkGridPaneChildrenOutOfBounds() {
-
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> numFields.lessThanOrEqualTo(0)
-                        .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields)
-                .and(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE));
-        return Bindings.when(binding).then(true).otherwise(false);
     }
 }

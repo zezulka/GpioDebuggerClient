@@ -7,9 +7,9 @@ public final class I2cRequestValueObject {
     private final Operation operation;
     private final String slaveAddress;
     private final int length;
-    private final List<String> bytes;
+    private final String bytes;
 
-    public I2cRequestValueObject(Operation operation, String slaveAddress, int length, List<String> bytes) {
+    public I2cRequestValueObject(Operation operation, String slaveAddress, int length, String bytes) {
         this.operation = operation;
         this.slaveAddress = slaveAddress;
         this.length = length;
@@ -28,7 +28,7 @@ public final class I2cRequestValueObject {
         return length;
     }
 
-    public List<String> getBytes() {
+    public String getBytes() {
         return bytes;
     }
     

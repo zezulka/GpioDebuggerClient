@@ -1,14 +1,13 @@
 package userdata;
 
-import java.util.List;
 import layouts.controllers.Operation;
 
 public final class SpiRequestValueObject {
     private final int chipSelect;
     private final Operation operation;
-    private final List<String> bytes;
+    private final String bytes;
 
-    public SpiRequestValueObject(int chipSelect, Operation operation, List<String> bytes) {
+    public SpiRequestValueObject(int chipSelect, Operation operation, String bytes) {
         this.chipSelect = chipSelect;
         this.operation = operation;
         this.bytes = bytes;
@@ -22,7 +21,7 @@ public final class SpiRequestValueObject {
         return operation;
     }
 
-    public List<String> getBytes() {
+    public String getBytes() {
         return bytes;
     }
     

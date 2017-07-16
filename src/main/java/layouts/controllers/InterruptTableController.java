@@ -172,7 +172,7 @@ public class InterruptTableController implements Initializable {
             StringBuilder result = new StringBuilder(getMessagePrefix());
             result = result
                     .append(':')
-                    .append(selectedIntr.getClientPin().getName())
+                    .append(selectedIntr.getClientPin().getPinId())
                     .append(' ')
                     .append(selectedIntr.getType());
             return result.toString();

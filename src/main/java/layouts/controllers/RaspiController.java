@@ -67,7 +67,7 @@ public class RaspiController implements DeviceController, Initializable {
         if (event == null) {
             return null;
         }
-        return ((Button) event.getSource()).getText();
+        return ((Button) event.getSource()).getId();
     }
 
     private void sendRequest(InputEvent event, String msg) {

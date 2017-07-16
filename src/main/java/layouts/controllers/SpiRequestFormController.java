@@ -8,10 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import javafx.collections.FXCollections;
 
@@ -26,8 +22,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javafx.scene.input.MouseEvent;
-
-import javafx.scene.layout.GridPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,17 +42,12 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     @FXML
     private ComboBox<Integer> chipSelectList;
     @FXML
-    private GridPane textFieldGridPaneSpi;
-    @FXML
     private TextArea spiTextArea;
     @FXML
-    private Button addFieldButton;
-    @FXML
-    private Button removeFieldButton;
-    @FXML
     private ComboBox<SpiRequestValueObject> usedRequestsComboBox;
+    @FXML
+    private TextField byteArrayTextfield;
 
-    private final IntegerProperty numFields = new SimpleIntegerProperty(0);
     private static final char SEPARATOR = ':';
     /**
      * Highest possible index which is reasonable to set in BCM2835's CS
@@ -76,11 +65,9 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     public void initialize(URL url, ResourceBundle rb) {
         initUsedRequestsComboBox();
         spiRequestButton.disableProperty().bind(
-                checkGridPaneChildrenOutOfBounds()
-                        .or(createDataTextFields(textFieldGridPaneSpi).not())
+            super.createHexValuesOnlyBinding(byteArrayTextfield).not()
         );
-        addFieldButton.disableProperty().bind(assertDataFieldsSizeAtLeastMaxCap(numFields));
-        removeFieldButton.disableProperty().bind(assertDataFieldsSizeNonpositive(numFields));
+        super.enforceHexValuesOnly(byteArrayTextfield);
         super.addAllModes(operationList);
         addAllChipSelectIndexes();
         chipSelectList.getSelectionModel().selectFirst();
@@ -109,11 +96,6 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
         usedRequestsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             chipSelectList.getSelectionModel().select(newValue.getChipSelect());
             operationList.getSelectionModel().select(newValue.getOperation());
-            for (int i = 0; i < newValue.getBytes().size(); i++) {
-                ((TextField) textFieldGridPaneSpi.getChildren().get(i)).setText(newValue.getBytes().get(i));
-                ((TextField) textFieldGridPaneSpi.getChildren().get(i)).setDisable(false);
-            }
-            numFields.set(newValue.getBytes().size());
         });
     }
 
@@ -125,19 +107,10 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
         this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
     }
 
-    private BooleanBinding checkGridPaneChildrenOutOfBounds() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> numFields.lessThanOrEqualTo(0)
-                        .or(numFields.greaterThan(MAX_NUM_FIELDS)).get(), numFields);
-        return Bindings.when(binding).then(true).otherwise(false);
-    }
-
     @FXML
     private void sendSpiRequest(MouseEvent event) {
         StringBuilder msgToSend = getMessagePrefix();
-        for (String str : super.getBytes(textFieldGridPaneSpi)) {
-            msgToSend = msgToSend.append(HEXA_PREFIX).append(str).append(' ');
-        }
+        msgToSend = msgToSend.append(byteArrayTextfield.getText());
         ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
         usedRequestsComboBox.getItems().add(request);
@@ -146,17 +119,7 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
 
     private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
-        return new SpiRequestValueObject(chipSelectList.getValue(), op, super.getBytes(textFieldGridPaneSpi));
-    }
-
-    @FXML
-    private void addTextField(MouseEvent event) {
-        super.addNewTextField(textFieldGridPaneSpi, numFields);
-    }
-
-    @FXML
-    private void removeTextField(MouseEvent event) {
-        super.removeLastTextField(textFieldGridPaneSpi, numFields);
+        return new SpiRequestValueObject(chipSelectList.getValue(), op, byteArrayTextfield.getText());
     }
 
     /**

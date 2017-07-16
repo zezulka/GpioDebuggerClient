@@ -223,10 +223,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         button.setAttribute("onMouseClicked", "#mouseClickedHandler");
         button.setAttribute("onKeyPressed", "#keyPressedHandler");
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
-        String pinName = currentPin.isGpio()
-                ? currentPin.getName() : currentPin.getName();
-        button.setAttribute("text", pinName);
-        button.setAttribute("id", currentPin.isGpio() ? pinName : "nonselectable");
+        button.setAttribute("text", currentPin.isGpio() ? currentPin.getGpioName() : currentPin.getPinId());
+        button.setAttribute("id", currentPin.isGpio() ? currentPin.getPinId() : "nonselectable");
         button.setAttribute("GridPane.columnIndex", Integer.toString(col + columnOffset));
         button.setAttribute("GridPane.rowIndex", Integer.toString(row + rowOffset));
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
