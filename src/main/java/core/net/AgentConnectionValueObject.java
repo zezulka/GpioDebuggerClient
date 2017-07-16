@@ -2,7 +2,6 @@ package core.net;
 
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import protocol.BoardType;
 import userdata.DeviceValueObject;
 
 /**

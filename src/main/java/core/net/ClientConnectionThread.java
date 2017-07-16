@@ -4,20 +4,14 @@ import core.gui.App;
 import static core.net.ClientNetworkManager.DEFAULT_SOCK_PORT;
 import core.util.MessageParser;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
-import java.time.LocalDateTime;
+import java.nio.channels.*;
 import java.util.Iterator;
 import javafx.application.Platform;
 import layouts.controllers.ControllerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import protocol.BoardType;
 import protocol.InterruptManager;
 
 public class ClientConnectionThread implements Runnable {
@@ -51,7 +45,7 @@ public class ClientConnectionThread implements Runnable {
         try {
             while (true) {
                 connection.getSelector().select();
-                if(!connection.getSelector().isOpen()) {
+                if (!connection.getSelector().isOpen()) {
                     break;
                 }
                 Iterator<SelectionKey> keys = connection.getSelector().selectedKeys().iterator();
@@ -88,20 +82,14 @@ public class ClientConnectionThread implements Runnable {
                 LOGGER.error(String.format("A nonvalid key has been registered: %s", key.toString()));
                 continue;
             }
-            if (key.isConnectable() && !connect(key, connection.getDevice().getAddress(), connection.getChannel())) {
+            if (key.isConnectable() && !connect(key)) {
                 break;
             }
             if (key.isWritable() && connection.getMessageToSend() != null) {
-                write(key, connection);
+                write(key);
             }
             if (key.isReadable()) {
-                if (connection.getDevice().getBoardType() == null)  {
-                    if(readInitMessage()) {
-                        App.loadNewTab(connection.getDevice().getAddress(), connection.getDevice().getBoardType());
-                    }
-                } else {
-                    processAgentMessage();
-                }
+                processAgentMessage();
             }
         }
     }
@@ -109,16 +97,16 @@ public class ClientConnectionThread implements Runnable {
     private void processAgentMessage() {
         String agentMessage = read();
         if (agentMessage != null) {
-            MessageParser.parseAgentMessage(connection.getDevice().getAddress(), agentMessage);
+            MessageParser.parseAgentMessage(connection, agentMessage);
         } else {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             Platform.runLater(() -> {
                 App.getDevicesTab()
-                    .getTabs()
-                    .remove(App.getTabFromInetAddress(connection.getDevice().getAddress()));
+                        .getTabs()
+                        .remove(App.getTabFromInetAddress(connection.getDevice().getAddress()));
             });
-            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s", 
+            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s",
                     connection.getDevice().getAddress(), connection.getDevice().getBoardType()));
         }
     }
@@ -140,26 +128,10 @@ public class ClientConnectionThread implements Runnable {
             return (new String(buff).replaceAll("\0", ""));
         } catch (IOException ex) {
             ControllerUtils.showErrorDialogMessage("There has been an error reading message from agent."
-                    +    "Either agent is not running on the IP supplied or network connection failure has occured.\n");
+                    + "Either agent is not running on the IP supplied or network connection failure has occured.\n");
             LOGGER.error(ex.getLocalizedMessage());
             disconnect();
             return null;
-        }
-    }
-
-    private boolean readInitMessage() {
-        String agentMessage = read();
-        if(agentMessage == null) {
-            return false;
-        }
-        try {
-            connection.getDevice().setBoardType(BoardType.parse(agentMessage));
-            ClientNetworkManager.addNewMapping(connection.getDevice().getAddress(), this);
-            connection.getDevice().setTimeConnected(LocalDateTime.now());
-            return true;
-        } catch (IllegalArgumentException ex) {
-            LOGGER.error("could not parse agent init message");
-            return false;
         }
     }
 
@@ -175,7 +147,7 @@ public class ClientConnectionThread implements Runnable {
         ClientNetworkManager.removeMapping(connection.getDevice().getAddress());
     }
 
-    private void write(SelectionKey key, AgentConnectionValueObject connection) throws IOException {
+    private void write(SelectionKey key) throws IOException {
         if (connection.getMessageToSend() == null) {
             throw new IllegalStateException("cannot send null message to agent");
         }
@@ -184,9 +156,10 @@ public class ClientConnectionThread implements Runnable {
         connection.setMessageToSend(null);
     }
 
-    private boolean connect(SelectionKey key, InetAddress ipAddress, SocketChannel channel) {
+    private boolean connect(SelectionKey key) {
         try {
-            channel.connect(new InetSocketAddress(ipAddress, DEFAULT_SOCK_PORT));
+            SocketChannel channel = connection.getChannel();
+            channel.connect(new InetSocketAddress(connection.getDevice().getAddress(), DEFAULT_SOCK_PORT));
             if (channel.isConnectionPending() && channel.finishConnect()) {
                 LOGGER.info("done connecting to server");
             } else {

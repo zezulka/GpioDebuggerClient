@@ -1,14 +1,13 @@
 package userdata;
-
-import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
 
 public class Devices {
     private final List<DeviceValueObject> devices;
     private boolean dirty;
 
     public Devices(List<DeviceValueObject> requests) {
-        this.devices = new ArrayList<>(requests);
+        this.devices = FXCollections.observableArrayList(requests);
         this.dirty = false;
     }
 

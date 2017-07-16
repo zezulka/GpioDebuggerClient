@@ -1,6 +1,9 @@
-package protocol;
+package protocol.response;
 
+import protocol.response.AgentResponse;
 import core.gui.App;
+import protocol.ClientPin;
+import protocol.Signal;
 
 public class GpioAgentResponse implements AgentResponse {
 

@@ -1,19 +1,21 @@
 package core.util;
 
-import java.net.InetAddress;
+import core.net.AgentConnectionValueObject;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import protocol.AgentResponse;
+import protocol.BoardType;
+import protocol.response.AgentResponse;
 import protocol.ClientPin;
-import protocol.GpioAgentResponse;
-import protocol.I2cAgentResponse;
-import protocol.InterruptListenerAgentResponse;
+import protocol.response.GpioAgentResponse;
+import protocol.response.I2cAgentResponse;
+import protocol.response.InterruptListenerAgentResponse;
 import protocol.InterruptManager;
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
 import protocol.RaspiClientPin;
 import protocol.Signal;
-import protocol.SpiAgentResponse;
+import protocol.response.InitAgentResponse;
+import protocol.response.SpiAgentResponse;
 
 /**
  *
@@ -21,15 +23,15 @@ import protocol.SpiAgentResponse;
  */
 public class AgentResponseFactory {
 
-    public static AgentResponse of(InetAddress address, String agentMessage) throws IllegalResponseException {
-        if(agentMessage == null) {
+    public static AgentResponse of(AgentConnectionValueObject connection, String agentMessage) throws IllegalResponseException {
+        if (agentMessage == null) {
             throw new IllegalResponseException();
         }
-        String[] splitResponseBody = agentMessage.split(":",4);
-        if(splitResponseBody.length <= 1) {
+        String[] splitResponseBody = agentMessage.split(":", 4);
+        if (splitResponseBody.length <= 1) {
             throw new IllegalResponseException();
         }
-        for(int i = 0; i < splitResponseBody.length; i++) {
+        for (int i = 0; i < splitResponseBody.length; i++) {
             splitResponseBody[i] = splitResponseBody[i].trim();
         }
         ResponseType type = null;
@@ -39,6 +41,14 @@ public class AgentResponseFactory {
             throw new IllegalResponseException();
         }
         switch (type) {
+            case INIT:
+                try {
+                    BoardType boardType;
+                    boardType = BoardType.parse(splitResponseBody[1]);
+                    return new InitAgentResponse(connection, boardType);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalResponseException(e);
+                }
             case GPIO:
                 ClientPin pin;
                 Signal signal;
@@ -66,12 +76,12 @@ public class AgentResponseFactory {
                     ClientPin interruptPin = RaspiClientPin.getPin(splitResponseBody[1]);
                     InterruptType intrType = InterruptType.getType(splitResponseBody[2]);
                     LocalTime timeGenerated = LocalTime.parse(splitResponseBody[3], DateTimeFormatter.ISO_LOCAL_TIME);
-                    InterruptValueObject interrupt = InterruptManager.getInterruptListener(address, new InterruptValueObject(interruptPin, intrType));
-                    if(interrupt == null) {
+                    InterruptValueObject interrupt = InterruptManager.getInterruptListener(connection.getDevice().getAddress(), new InterruptValueObject(interruptPin, intrType));
+                    if (interrupt == null) {
                         throw new IllegalResponseException(
-                                String.format("There is no such combination of address '%s' and interrupt listener [pin=%s, type=%s]", address, interruptPin, intrType));
+                                String.format("There is no such combination of address '%s' and interrupt listener [pin=%s, type=%s]", connection, interruptPin, intrType));
                     }
-                    return new InterruptListenerAgentResponse(interrupt, type, timeGenerated, address);
+                    return new InterruptListenerAgentResponse(interrupt, type, timeGenerated, connection.getDevice().getAddress());
                 } catch (IllegalArgumentException ex) {
                     throw new IllegalResponseException(String.format("Interrupt listener response %s is not valid.", agentMessage));
                 }

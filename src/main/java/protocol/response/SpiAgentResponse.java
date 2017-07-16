@@ -1,5 +1,6 @@
-package protocol;
+package protocol.response;
 
+import protocol.response.AgentResponse;
 import core.gui.App;
 
 public class SpiAgentResponse implements AgentResponse {

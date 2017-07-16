@@ -1,4 +1,5 @@
 package core.util;
+import core.net.AgentConnectionValueObject;
 import java.net.InetAddress;
 import layouts.controllers.ControllerUtils;
 
@@ -18,22 +19,24 @@ public class MessageParser {
      * of this method is to parse agent response using AgentResponseFactory and then
      * call react() method should the message be valid. Possible response types: 
      * 
-     * GPIO:<PIN_NUMBER>:[HIGH|LOW]
-     * SPI:<BYTE_IN_HEX>* 
-     * SPI:<WRITE_REQUEST_OK>
-     * I2C:<BYTE_IN_HEX>*
-     * [INTR_STOPPED | INTR_STARTED | INTR_GENERATED]:<PIN_NAME>:<INTERRUPT_TYPE>:<TIME>
-     * <ILLEGAL_REQUEST>
+     * INIT:[BOARD_TYPE]
+     * GPIO:[PIN_NUMBER]:[HIGH|LOW]
+     * SPI:[BYTE_IN_HEX]* 
+     * SPI:[WRITE_REQUEST_OK]
+     * I2C:[BYTE_IN_HEX]*
+     * [INTR_STOPPED | INTR_STARTED | INTR_GENERATED]:[PIN_NAME]:[INTERRUPT_TYPE]:[TIME]
+     * [ILLEGAL_REQUEST]
      *
+     * @param connection
      * @param agentMessage
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
-    public static void parseAgentMessage(InetAddress address, String agentMessage) {
+    public static void parseAgentMessage(AgentConnectionValueObject connection, String agentMessage) {
         if (agentMessage == null) {
             throw new IllegalArgumentException("Agent message cannot be null.");
         }
         try {
-            AgentResponseFactory.of(address, agentMessage).react();
+            AgentResponseFactory.of(connection, agentMessage).react();
         } catch (IllegalResponseException ex) {
             LOGGER.error(String.format("Agent response '%s' could not be recognized by the message parser, error generated: %s", agentMessage, ex.getMessage()));
             ControllerUtils.showInformationDialogMessage(String.format("Unrecognized message has been received: %s", agentMessage));

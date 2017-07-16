@@ -50,7 +50,7 @@ public class ClientNetworkManager {
         return ADDRESSES.get(ipAddress) != null;
     }
     
-    public static void addNewMapping(InetAddress address, ClientConnectionThread thread) {
+    private void addNewMapping(InetAddress address, ClientConnectionThread thread) {
         ADDRESSES.put(address, thread);
     }
     
@@ -85,6 +85,7 @@ public class ClientNetworkManager {
         }
         AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, channel, device);
         ClientConnectionThread thread = new ClientConnectionThread(connection);
+        addNewMapping(device.getAddress(), thread);
         new Thread(thread).start();
         return true;
     }
