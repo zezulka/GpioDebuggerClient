@@ -1,0 +1,24 @@
+<devices>
+  <device>
+    <address class="java.net.Inet4Address" resolves-to="address" serialization="custom">
+      <address>
+        <default>
+          <hostName>raspi</hostName>
+          <address>-1062709180</address>
+          <family>2</family>
+        </default>
+      </address>
+    </address>
+    <boardType>RASPBERRY_PI</boardType>
+    <timeConnected resolves-to="java.time.Ser">
+      <byte>5</byte>
+      <int>2017</int>
+      <byte>7</byte>
+      <byte>20</byte>
+      <byte>14</byte>
+      <byte>16</byte>
+      <byte>33</byte>
+      <int>285000000</int>
+    </timeConnected>
+  </device>
+</devices>

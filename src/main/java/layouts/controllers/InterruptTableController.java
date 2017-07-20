@@ -4,10 +4,13 @@ import core.gui.App;
 import core.net.ClientNetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
 
 import javafx.concurrent.Task;
 
@@ -16,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,6 +27,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
@@ -33,6 +39,7 @@ import protocol.InterruptManager;
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
 import protocol.ListenerState;
+import protocol.RaspiClientPin;
 
 /**
  * FXML Controller class
@@ -45,6 +52,12 @@ public class InterruptTableController implements Initializable {
     private static final Image PLAY_BTN = new Image("play-button.jpg", 30, 30, true, true);
     private static final Image STOP_BTN = new Image("stop-button.jpg", 30, 30, true, true);
 
+    @FXML
+    private ComboBox<InterruptType> interruptTypeComboBox;
+    @FXML
+    private ComboBox<ClientPin> pinComboBox;
+    @FXML
+    private Button addListenerButton;
     @FXML
     private Button addNewInterruptListenerButton;
     @FXML
@@ -69,16 +82,45 @@ public class InterruptTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        addAllPins();
+        addAllIntrTypes();
+        interruptTypeComboBox.getSelectionModel().selectFirst();
+        pinComboBox.getSelectionModel().selectFirst();
         initCellValueFactory();
         tableView.setItems(InterruptManager.getListeners(App.getLastAddress()));
         tableView.selectionModelProperty().set(null);
         tableView.setEditable(true);
         addNewInterruptListenerButton.disableProperty().bind(assertNumListeners());
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
-            App.createNewAddListenerPromptForm();
+            InterruptManager.addInterruptListener(App.getIpAddressFromCurrentTab(), getTempIvo());
+
         });
     }
 
+    /**
+     * Creates temporary InterruptValueObject from selected ComboBoxes.
+     *
+     * @return
+     */
+    private InterruptValueObject getTempIvo() {
+        return new InterruptValueObject(pinComboBox.getSelectionModel().getSelectedItem(),
+                interruptTypeComboBox.getSelectionModel().getSelectedItem());
+    }
+
+    private void addAllPins() {
+        List<ClientPin> result = new ArrayList<>();
+        for (ClientPin pin : RaspiClientPin.pins()) {
+            if (pin.isGpio()) {
+                result.add(pin);
+            }
+        }
+        pinComboBox.setItems(FXCollections.observableArrayList(result));
+    }
+
+    private void addAllIntrTypes() {
+        interruptTypeComboBox.setItems(FXCollections.observableArrayList(InterruptType.values()));
+    }
+    
     protected BooleanBinding assertNumListeners() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> InterruptManager.getNumListeners().greaterThanOrEqualTo(InterruptManager.MAX_INTR_LISTENER_THRESHOLD).get(), InterruptManager.getNumListeners());
@@ -125,7 +167,7 @@ public class InterruptTableController implements Initializable {
         protected void updateItem(ListenerState t, boolean empty) {
             super.updateItem(t, empty);
             getTableView().refresh();
-            if(t == null) {
+            if (t == null) {
                 return;
             }
             switch (t) {

@@ -39,7 +39,6 @@ public class App extends Application {
     public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     private static URL ipPrompt;
-    private static URL addListenerForm;
     private static URL masterWindow;
     private static URL raspi;
     private static URL beagleBoneBlack;
@@ -100,10 +99,6 @@ public class App extends Application {
         createNewForm(ipPrompt);
     }
 
-    public static void createNewAddListenerPromptForm() {
-        createNewForm(addListenerForm);
-    }
-
     private static void createNewForm(URL fxml) {
         Platform.runLater(() -> {
             FXMLLoader fxmlLoader = new FXMLLoader(fxml);
@@ -143,7 +138,6 @@ public class App extends Application {
             ipPrompt = getPathToFxml("IpPrompt");
             raspi = getPathToFxml("Raspi");
             masterWindow = getPathToFxml("MasterWindow");
-            addListenerForm = getPathToFxml("AddListenerForm");
         } catch (MalformedURLException ex) {
             LOGGER.error(null, ex);
             Platform.exit();

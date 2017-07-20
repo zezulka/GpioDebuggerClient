@@ -8,6 +8,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import layouts.controllers.ControllerUtils;
 
 public class InterruptManager {
 
@@ -65,16 +66,16 @@ public class InterruptManager {
         throw new IllegalArgumentException("illegal object");
     }
 
-    public static boolean addInterruptListener(InetAddress destination, InterruptValueObject ivo) {
+    public static void addInterruptListener(InetAddress destination, InterruptValueObject ivo) {
         if (INTERRUPTS.get(destination) == null) {
             INTERRUPTS.put(destination, FXCollections.observableArrayList());
         }
         if (!INTERRUPTS.get(destination).contains(ivo) && INTERRUPTS.size() <= MAX_INTR_LISTENER_THRESHOLD) {
             NUM_LISTENERS.set(NUM_LISTENERS.get() + 1);
-
-            return INTERRUPTS.get(destination).add(ivo);
+            INTERRUPTS.get(destination).add(ivo);
+        } else {
+           ControllerUtils.showErrorDialogMessage("This listener already exists.");
         }
-        return false;
     }
 
     public static boolean removeInterruptListener(InetAddress destination, InterruptValueObject ivo) {

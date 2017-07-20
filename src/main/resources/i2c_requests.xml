@@ -1,0 +1,20 @@
+<i2cRequests>
+  <i2cRequest>
+    <operation>READ</operation>
+    <slaveAddress>48</slaveAddress>
+    <length>3</length>
+    <bytes></bytes>
+  </i2cRequest>
+  <i2cRequest>
+    <operation>WRITE</operation>
+    <slaveAddress>48</slaveAddress>
+    <length>2</length>
+    <bytes>00AA</bytes>
+  </i2cRequest>
+  <i2cRequest>
+    <operation>READ</operation>
+    <slaveAddress>48</slaveAddress>
+    <length>3</length>
+    <bytes></bytes>
+  </i2cRequest>
+</i2cRequests>

@@ -19,7 +19,9 @@
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0">
             <children>
-                <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="25.0" layoutY="14.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Add new listener" />
+                <ComboBox id="interruptTypeComboBox" fx:id="interruptTypeComboBox" prefHeight="25.0" prefWidth="200.0" layoutX="70.0" layoutY="14.0"/>
+                <ComboBox id="pinComboBox" fx:id="pinComboBox" prefHeight="25.0" prefWidth="200.0" layoutX="300.0" layoutY="14.0"/>
+                <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="525.0" layoutY="14.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Add new listener" />
                 <TableView id="tableView" fx:id="tableView" layoutX="8.0" layoutY="68.0" prefHeight="448.0" prefWidth="850.0">
                     <columns>
                         <TableColumn fx:id="pinName" editable="false" prefWidth="80.0" text="Pin Name" />
@@ -30,12 +32,6 @@
                         <TableColumn id="state" fx:id="state" prefWidth="150.0" text="Interrupt State" />
                     </columns>
                 </TableView>
-                <ComboBox id="actionsComboBox" fx:id="actionsComboBox" layoutX="1017.0" layoutY="533.0" prefHeight="42.0" prefWidth="169.0" />
-                <Label layoutX="898.0" layoutY="539.0" prefHeight="30.0" prefWidth="119.0" text="Action">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
-                </Label>
             </children>
         </AnchorPane>
     </content>

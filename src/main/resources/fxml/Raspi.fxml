@@ -77,12 +77,12 @@
                                 <Button GridPane.columnIndex="3" GridPane.rowIndex="21" disable="false" id="P1_38" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO20"/>
                                 <Button GridPane.columnIndex="2" GridPane.rowIndex="22" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
                                 <Button GridPane.columnIndex="3" GridPane.rowIndex="22" disable="false" id="P1_40" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO21"/>
-                                <RadioButton GridPane.columnIndex="3" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
+                                <RadioButton GridPane.columnIndex="3" GridPane.rowIndex="1" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
                                     <toggleGroup>
                                         <ToggleGroup fx:id="op"/>
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton GridPane.columnIndex="2" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$op"/>
+                                <RadioButton GridPane.columnIndex="2" GridPane.rowIndex="1" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$op"/>
                                 <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Legend:" textFill="#000000">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
