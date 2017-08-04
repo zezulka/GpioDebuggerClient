@@ -18,6 +18,8 @@ public class InitAgentResponse implements AgentResponse {
     @Override
     public void react() {
         connection.getDevice().setTimeConnected(LocalDateTime.now());
+        connection.getDevice().setBoardType(boardType);
+        
         App.loadNewTab(connection.getDevice().getAddress(), connection.getDevice().getBoardType());
     }
     

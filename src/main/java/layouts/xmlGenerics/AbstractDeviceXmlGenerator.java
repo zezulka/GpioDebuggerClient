@@ -130,11 +130,10 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     private Node createGpioContents() {
         Element contents = DOC.createElement("content");
         Element gridPane = DOC.createElement("GridPane");
+        gridPane.setAttribute("fx:id", "gpioGridPane");
         gridPane.setAttribute("cacheHint", "SPEED");
         gridPane.setAttribute("layoutX", "0.0");
         gridPane.setAttribute("layoutY", "0.0");
-        gridPane.setAttribute("prefHeight", "500.0");
-        gridPane.setAttribute("prefWidth", "700.0");
         gridPane.appendChild(createGpioGridPaneColumnConstraints());
         gridPane.appendChild(createGpioGridPaneRowConstraints());
         gridPane.appendChild(createGpioGridPaneChildren());
@@ -147,9 +146,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
         for (int i = 0; i < height + 1; i++) {
             Element rowConstraint = DOC.createElement("RowConstraints");
-            rowConstraint.setAttribute("minHeight", "26.0");
-            rowConstraint.setAttribute("prefHeight", "26.0");
-            rowConstraint.setAttribute("vgrow", "ALWAYS");
+            rowConstraint.setAttribute("minHeight", "30.0");
+            rowConstraint.setAttribute("prefHeight", "30.0");
             rowConstraints.appendChild(rowConstraint);
         }
         return rowConstraints;
@@ -157,22 +155,18 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
     private Node createGpioGridPaneColumnConstraints() {
         Element columnConstraints = DOC.createElement("columnConstraints");
-        columnConstraints.appendChild(getColumnConstraint("0.0", null, null));
-        columnConstraints.appendChild(getColumnConstraint("90.0", "RIGHT", null));
-        columnConstraints.appendChild(getColumnConstraint("270.0", "RIGHT", null));
-        columnConstraints.appendChild(getColumnConstraint("85.0", "RIGHT", null));
-        columnConstraints.appendChild(getColumnConstraint("168.0", "LEFT", "ALWAYS"));
+        columnConstraints.appendChild(getColumnConstraint(280.0, "CENTER"));
+        columnConstraints.appendChild(getColumnConstraint(100.0, "LEFT"));
+        columnConstraints.appendChild(getColumnConstraint(120.0, "LEFT"));
+        columnConstraints.appendChild(getColumnConstraint(120.0, "LEFT"));
         return columnConstraints;
     }
 
-    private Node getColumnConstraint(String prefWidth, String halignment, String hgrow) {
+    private Node getColumnConstraint(double prefWidth, String halignment) {
         Element result = DOC.createElement("ColumnConstraints");
-        result.setAttribute("prefWidth", prefWidth);
+        result.setAttribute("prefWidth", Double.toString(prefWidth));
         if (halignment != null) {
             result.setAttribute("halignment", halignment);
-        }
-        if (hgrow != null) {
-            result.setAttribute("hgrow", hgrow);
         }
         return result;
     }
@@ -192,17 +186,17 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
     
     private void createLegend(Element root) {
-        root.appendChild(createLegendLabel("Legend:", "1", "1", "#000000"));
-        root.appendChild(createLegendLabel("HIGH", "2", "1", "#55FF55"));
-        root.appendChild(createLegendLabel("LOW", "3", "1", "#FF5555"));
+        root.appendChild(createLegendLabel("Legend:", "1", "#000000"));
+        root.appendChild(createLegendLabel("HIGH", "2", "#55FF55"));
+        root.appendChild(createLegendLabel("LOW", "3", "#FF5555"));
     }
     
-    private Node createLegendLabel(String text, String rowIndex, String columnIndex, String textfill) {
+    private Node createLegendLabel(String text, String rowIndex, String textfill) {
         Element labelEl = DOC.createElement("Label");
         labelEl.setAttribute("text", text);
         labelEl.setAttribute("textFill", textfill);
         labelEl.setAttribute("GridPane.rowIndex", rowIndex);
-        labelEl.setAttribute("GridPane.columnIndex", columnIndex);
+        labelEl.setAttribute("GridPane.columnIndex", "3");
         Element fontChildEl = DOC.createElement("Font");
         fontChildEl.setAttribute("name", "SystemBold");
         fontChildEl.setAttribute("size", "15.0");
@@ -214,8 +208,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
     private Node createGpioButton(int row, int col) {
         Element button = DOC.createElement("Button");
-        int rowOffset = 3;
-        int columnOffset = 2;
+        int rowOffset = 1;
+        int columnOffset = 1;
         int index = row * 2 + 1 + col;
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
@@ -237,7 +231,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton1.setAttribute("ellipsisString", "W");
         rButton1.setAttribute("mnemonicParsing", "false");
         rButton1.setAttribute("text", "WRITE");
-        rButton1.setAttribute("GridPane.columnIndex", "3");
+        rButton1.setAttribute("GridPane.rowIndex", "0");
         rButton1.setAttribute("fx:id", "writeRadioButton");
         Element padding = DOC.createElement("toggleGroup");
         Element inset = DOC.createElement("ToggleGroup");
@@ -252,7 +246,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rButton2.setAttribute("ellipsisString", "R");
         rButton2.setAttribute("mnemonicParsing", "false");
         rButton2.setAttribute("text", "READ");
-        rButton2.setAttribute("GridPane.columnIndex", "2");
+        rButton2.setAttribute("GridPane.rowIndex", "1");
         rButton2.setAttribute("selected", "true");
         rButton2.setAttribute("fx:id", "readRadioButton");
         rButton2.setAttribute("toggleGroup", "$op");
@@ -260,10 +254,12 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createImageView() {
+        Element stackPane = DOC.createElement("StackPane");
+        stackPane.setAttribute("fx:id", "gpioStackPane");
         Element imageView = DOC.createElement("ImageView");
         imageView.setAttribute("disable", "true");
-        imageView.setAttribute("fitHeight", "613.0");
-        imageView.setAttribute("fitWidth", "737.0");
+        imageView.setAttribute("fitHeight", "665x.0");
+        imageView.setAttribute("fitWidth", "730.0");
         imageView.setAttribute("GridPane.columnSpan", "999");
         imageView.setAttribute("GridPane.halignment", "LEFT");
         imageView.setAttribute("GridPane.hgrow", "ALWAYS");
@@ -273,13 +269,11 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         Element imagePath = DOC.createElement("Image");
         imagePath.setAttribute("url", "@../" + deviceName + ".png");
         Element image = DOC.createElement("image");
+        Element children = DOC.createElement("children");
         image.appendChild(imagePath);
         imageView.appendChild(image);
-        Element gridPaneMargin = DOC.createElement("GridPane.margin");
-        Element insets = DOC.createElement("Insets");
-        insets.setAttribute("top", "15.0");
-        gridPaneMargin.appendChild(insets);
-        imageView.appendChild(gridPaneMargin);
+        children.appendChild(imageView);
+        stackPane.appendChild(children);
         return imageView;
     }
 

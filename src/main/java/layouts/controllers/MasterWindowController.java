@@ -96,10 +96,10 @@ public class MasterWindowController implements Initializable {
         addNewDeviceButton.setOnAction((event) -> {
             DeviceValueObject newDevice = getNewDeviceFromUser();
             ObservableList<TreeItem<Object>> childrenAllBranch = devicesTree.getRoot().getChildren().get(ALL_BRANCH_INDEX).getChildren();
-            if(newDevice != null) {
+            if (newDevice != null) {
                 ipAddress.textProperty().set("");
-                for(TreeItem<Object> item : childrenAllBranch) {
-                    if(item.getValue() instanceof DeviceValueObject && ((DeviceValueObject) item.getValue()).equals(newDevice)) {
+                for (TreeItem<Object> item : childrenAllBranch) {
+                    if (item.getValue() instanceof DeviceValueObject && ((DeviceValueObject) item.getValue()).equals(newDevice)) {
                         devicesTree.getSelectionModel().select(item);
                         return;
                     }
@@ -113,17 +113,17 @@ public class MasterWindowController implements Initializable {
             currentTab = newValue;
         });
     }
-    
+
     private StringBinding indicatorBinding() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> textfieldContainsIpAddress(), ipAddress.textProperty());
         return Bindings.when(binding).then("IP address").otherwise("hostname");
     }
-    
+
     private boolean textfieldContainsIpAddress() {
         return InetAddressValidator.getInstance().isValid(ipAddress.getText().trim());
     }
-    
+
     private DeviceValueObject getNewDeviceFromUser() {
         try {
             return new DeviceValueObject(InetAddress.getByName(ipAddress.getText()), null);
@@ -148,11 +148,20 @@ public class MasterWindowController implements Initializable {
     }
 
     private void initializeDeviceTree() {
+        final double separatorThreshold = 0.7;
         DoubleProperty splitPaneDividerPosition = splitPane.getDividers().get(0).positionProperty();
+        splitPane.getDividers().get(0).positionProperty().set(separatorThreshold);
+        deviceTree.setSelected(true);
         splitPaneDividerPosition.addListener((obs, oldPos, newPos)
-                -> deviceTree.setSelected(newPos.doubleValue() < 0.95));
+                -> {
+                       if(deviceTree.isSelected() && newPos.doubleValue() > separatorThreshold) {
+                           splitPane.getDividers().get(0).setPosition(separatorThreshold);
+                       }
+                       deviceTree.setSelected(newPos.doubleValue() < 0.97);
+                   }
+        );
         deviceTree.setOnAction(event -> {
-            splitPane.setDividerPositions(deviceTree.isSelected() ? 0.70 : 1.0);
+            splitPane.setDividerPositions(deviceTree.isSelected() ? separatorThreshold : 1.0);
         });
         TreeItem<Object> root = new TreeItem<>("devices", new ImageView(DEVICES_IMG));
         TreeItem<Object> activeBranch = new TreeItem<>("active", new ImageView(ACTIVE_IMG));
@@ -169,7 +178,7 @@ public class MasterWindowController implements Initializable {
         try {
             DeviceValueObject selectedDevice = (DeviceValueObject) devicesTree.getSelectionModel().getSelectedItem().getValue();
             new Thread(new ConnectionWorker(selectedDevice)).start();
-        } catch(ClassCastException ex) {
+        } catch (ClassCastException ex) {
             //this should never happen because of the connectToDevice button binding!
             throw new RuntimeException(ex);
         }

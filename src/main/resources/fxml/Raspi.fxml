@@ -5,106 +5,102 @@
             <tabs>
                 <Tab closable="false" text="GPIO">
                     <content>
-                        <GridPane cacheHint="SPEED" layoutX="0.0" layoutY="0.0" prefHeight="500.0" prefWidth="700.0">
+                        <GridPane cacheHint="SPEED" fx:id="gpioGridPane" layoutX="0.0" layoutY="0.0">
                             <columnConstraints>
-                                <ColumnConstraints prefWidth="0.0"/>
-                                <ColumnConstraints halignment="RIGHT" prefWidth="90.0"/>
-                                <ColumnConstraints halignment="RIGHT" prefWidth="270.0"/>
-                                <ColumnConstraints halignment="RIGHT" prefWidth="85.0"/>
-                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" prefWidth="168.0"/>
+                                <ColumnConstraints halignment="CENTER" prefWidth="280.0"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="120.0"/>
+                                <ColumnConstraints halignment="LEFT" prefWidth="120.0"/>
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
-                                <RowConstraints minHeight="26.0" prefHeight="26.0" vgrow="ALWAYS"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
                             </rowConstraints>
                             <children>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="3" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="3.3V"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="3" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="5V"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="4" disable="false" id="P1_3" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO2"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="4" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="5V"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="5" disable="false" id="P1_5" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO3"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="5" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="6" disable="false" id="P1_7" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO4"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="6" disable="false" id="P1_8" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO14"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="3.3V"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="1" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="5V"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="2" disable="false" id="P1_3" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO2"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="2" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="5V"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="3" disable="false" id="P1_5" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO3"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="3" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="4" disable="false" id="P1_7" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO4"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="4" disable="false" id="P1_8" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO14"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="5" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="5" disable="false" id="P1_10" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO15"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="6" disable="false" id="P1_11" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO17"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="6" disable="false" id="P1_12" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO18"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="7" disable="false" id="P1_13" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO27"/>
                                 <Button GridPane.columnIndex="2" GridPane.rowIndex="7" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="7" disable="false" id="P1_10" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO15"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="8" disable="false" id="P1_11" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO17"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="8" disable="false" id="P1_12" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO18"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="9" disable="false" id="P1_13" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO27"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="9" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="10" disable="false" id="P1_15" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO22"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="10" disable="false" id="P1_16" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO23"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="11" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="3.3V"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="11" disable="false" id="P1_18" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO24"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="12" disable="false" id="P1_19" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO10"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="12" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="13" disable="false" id="P1_21" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO9"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="13" disable="false" id="P1_22" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO25"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="14" disable="false" id="P1_23" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO11"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="14" disable="false" id="P1_24" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO8"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="8" disable="false" id="P1_15" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO22"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="8" disable="false" id="P1_16" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO23"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="9" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="3.3V"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="9" disable="false" id="P1_18" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO24"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="10" disable="false" id="P1_19" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO10"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="10" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="11" disable="false" id="P1_21" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO9"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="11" disable="false" id="P1_22" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO25"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="12" disable="false" id="P1_23" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO11"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="12" disable="false" id="P1_24" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO8"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="13" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="13" disable="false" id="P1_26" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO7"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="14" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="ID_SD"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="14" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="ID_SC"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="15" disable="false" id="P1_29" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO5"/>
                                 <Button GridPane.columnIndex="2" GridPane.rowIndex="15" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="15" disable="false" id="P1_26" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO7"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="16" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="ID_SD"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="16" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="ID_SC"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="17" disable="false" id="P1_29" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO5"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="17" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="18" disable="false" id="P1_31" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO6"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="18" disable="false" id="P1_32" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO12"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="19" disable="false" id="P1_33" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO13"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="19" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="20" disable="false" id="P1_35" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO19"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="20" disable="false" id="P1_36" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO16"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="21" disable="false" id="P1_37" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO26"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="21" disable="false" id="P1_38" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO20"/>
-                                <Button GridPane.columnIndex="2" GridPane.rowIndex="22" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
-                                <Button GridPane.columnIndex="3" GridPane.rowIndex="22" disable="false" id="P1_40" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO21"/>
-                                <RadioButton GridPane.columnIndex="3" GridPane.rowIndex="1" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="16" disable="false" id="P1_31" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO6"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="16" disable="false" id="P1_32" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO12"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="17" disable="false" id="P1_33" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO13"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="17" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="18" disable="false" id="P1_35" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO19"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="18" disable="false" id="P1_36" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO16"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="19" disable="false" id="P1_37" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO26"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="19" disable="false" id="P1_38" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO20"/>
+                                <Button GridPane.columnIndex="1" GridPane.rowIndex="20" disable="true" id="nonselectable" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GND"/>
+                                <Button GridPane.columnIndex="2" GridPane.rowIndex="20" disable="false" id="P1_40" mnemonicParsing="false" onKeyPressed="#keyPressedHandler" onMouseClicked="#mouseClickedHandler" prefHeight="25" prefWidth="75" text="GPIO21"/>
+                                <RadioButton GridPane.rowIndex="0" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
                                     <toggleGroup>
                                         <ToggleGroup fx:id="op"/>
                                     </toggleGroup>
                                 </RadioButton>
-                                <RadioButton GridPane.columnIndex="2" GridPane.rowIndex="1" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$op"/>
-                                <Label GridPane.columnIndex="1" GridPane.rowIndex="1" text="Legend:" textFill="#000000">
+                                <RadioButton GridPane.rowIndex="1" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$op"/>
+                                <Label GridPane.columnIndex="3" GridPane.rowIndex="1" text="Legend:" textFill="#000000">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>
                                 </Label>
-                                <Label GridPane.columnIndex="1" GridPane.rowIndex="2" text="HIGH" textFill="#55FF55">
+                                <Label GridPane.columnIndex="3" GridPane.rowIndex="2" text="HIGH" textFill="#55FF55">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>
                                 </Label>
-                                <Label GridPane.columnIndex="1" GridPane.rowIndex="3" text="LOW" textFill="#FF5555">
+                                <Label GridPane.columnIndex="3" GridPane.rowIndex="3" text="LOW" textFill="#FF5555">
                                     <font>
                                         <Font name="SystemBold" size="15.0"/>
                                     </font>
                                 </Label>
-                                <ImageView GridPane.columnSpan="999" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="999" GridPane.valignment="BASELINE" GridPane.vgrow="ALWAYS" disable="true" fitHeight="613.0" fitWidth="737.0">
+                                <ImageView GridPane.columnSpan="999" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="999" GridPane.valignment="BASELINE" GridPane.vgrow="ALWAYS" disable="true" fitHeight="665.0" fitWidth="730.0">
                                     <image>
                                         <Image url="@../Raspi.png"/>
                                     </image>
-                                    <GridPane.margin>
-                                        <Insets top="15.0"/>
-                                    </GridPane.margin>
                                 </ImageView>
                             </children>
                         </GridPane>

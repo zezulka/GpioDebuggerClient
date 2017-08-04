@@ -47,9 +47,6 @@ public final class DeviceValueObject {
     }
     
     public void setBoardType(BoardType boardType) {
-        if(this.boardType != null) {
-            throw new IllegalStateException("board type already set!");
-        }
         this.boardType = boardType;
     }
 

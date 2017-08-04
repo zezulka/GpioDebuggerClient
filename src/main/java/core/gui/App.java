@@ -66,7 +66,6 @@ public class App extends Application {
         });
         stage.setScene(scene);
         stage.setMinHeight(800);
-        stage.setResizable(false);
         stage.setMinWidth(1000);
         stage.setTitle("Debugger for RaspberryPi");
         stage.show();
@@ -171,7 +170,7 @@ public class App extends Application {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             Tab pane = FXMLLoader.load(App.getUrlFromBoardType(type));
-            pane.setText(address.getHostAddress() + '(' + type.toString() + ")\t");
+            pane.setText(address.getHostAddress());
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
             Platform.runLater(() -> {
                 getDevicesTab().getTabs().add(pane);
