@@ -1,5 +1,6 @@
 package layouts.controllers;
 
+import core.gui.App;
 import core.net.ClientNetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -7,6 +8,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SplitPane;
 
 import javafx.scene.control.Tab;
@@ -38,6 +41,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import protocol.InterruptManager;
 import userdata.DeviceValueObject;
 import userdata.UserDataUtils;
 
@@ -56,6 +60,7 @@ public class MasterWindowController implements Initializable {
     private static final Image ADD_NEW_IMG = new Image("add_new.png", 30, 30, true, true);
     private static final Image TREE_IMG = new Image("tree.png", 30, 30, true, true);
     private static final Image CONNECT_IMG = new Image("connect.png", 30, 30, true, true);
+    private static final Image DISCONNECT_IMG = new Image("disconnect.png", 30, 30, true, true);
 
     @FXML
     private TabPane devicesTab;
@@ -75,6 +80,8 @@ public class MasterWindowController implements Initializable {
     private Label nowEnteringLabel;
     @FXML
     private Label indicationLabel;
+    @FXML
+    private Button disconnectButton;
 
     public MasterWindowController() {
     }
@@ -86,9 +93,11 @@ public class MasterWindowController implements Initializable {
     }
 
     private void initializeToolbar() {
-        initializeToolbarButton(connectToDeviceButton, CONNECT_IMG, "Connects to device. Device must be selected in device tree.");
+        initializeToolbarButton(disconnectButton, DISCONNECT_IMG, "Disconnects from device. Device must be both selected in the device tree and active.");
+        initializeToolbarButton(connectToDeviceButton, CONNECT_IMG, "Connects to device. Device must be selected in the device tree.");
         initializeToolbarButton(addNewDeviceButton, ADD_NEW_IMG, "Adds new device.");
         initializeToolbarButton(deviceTree, TREE_IMG, "Device tree browser.");
+
         nowEnteringLabel.visibleProperty().bind(ipAddress.textProperty().isNotEmpty());
         indicationLabel.visibleProperty().bind(ipAddress.textProperty().isNotEmpty());
         indicationLabel.textProperty().bind(indicatorBinding());
@@ -108,7 +117,8 @@ public class MasterWindowController implements Initializable {
                 UserDataUtils.putNewDeviceEntryIntoCollection(newDevice);
             }
         });
-        connectToDeviceButton.disableProperty().bind(isAnyDeviceSelected());
+        connectToDeviceButton.disableProperty().bind(isDeviceFromCorrectBranchSelected((t) -> t.getParent().nextSibling() == null).not());
+        disconnectButton.disableProperty().bind(isDeviceFromCorrectBranchSelected(     (t) -> t.getParent().nextSibling() != null).not());
         devicesTab.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
             currentTab = newValue;
         });
@@ -133,12 +143,24 @@ public class MasterWindowController implements Initializable {
         }
         return null;
     }
-
-    private BooleanBinding isAnyDeviceSelected() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> (!devicesTree.getSelectionModel().isEmpty() && devicesTree.getSelectionModel().getSelectedItem().getValue() instanceof DeviceValueObject),
-                devicesTree.getSelectionModel().selectedItemProperty());
-        return Bindings.when(binding).then(false).otherwise(true);
+    
+    /**
+     * This binding tells whether selected device in the device tree is from correct branch.
+     * Specifically used as a helper function to determine whether to enable 
+     * disconnect (connect respectively) button.
+     * @param verifyFn
+     * @return 
+     */
+    private BooleanBinding isDeviceFromCorrectBranchSelected(Function<TreeItem, Boolean> verifyFn) {
+        BooleanBinding binding = Bindings.createBooleanBinding(() -> {
+            MultipleSelectionModel<TreeItem<Object>> selectionModel = devicesTree.getSelectionModel();
+            TreeItem<Object> selectedItem = selectionModel.getSelectedItem();
+            
+            return !selectionModel.isEmpty() && 
+                    selectedItem.getValue() instanceof DeviceValueObject &&
+                    verifyFn.apply(selectedItem);
+        }, devicesTree.getSelectionModel().selectedItemProperty()); 
+        return Bindings.when(binding).then(true).otherwise(false);
     }
 
     private void initializeToolbarButton(ButtonBase button, Image buttonImage, String tooltipText) {
@@ -154,11 +176,11 @@ public class MasterWindowController implements Initializable {
         deviceTree.setSelected(true);
         splitPaneDividerPosition.addListener((obs, oldPos, newPos)
                 -> {
-                       if(deviceTree.isSelected() && newPos.doubleValue() > separatorThreshold) {
-                           splitPane.getDividers().get(0).setPosition(separatorThreshold);
-                       }
-                       deviceTree.setSelected(newPos.doubleValue() < 0.97);
-                   }
+            if (deviceTree.isSelected() && newPos.doubleValue() > separatorThreshold) {
+                splitPane.getDividers().get(0).setPosition(separatorThreshold);
+            }
+            deviceTree.setSelected(newPos.doubleValue() < 0.97);
+        }
         );
         deviceTree.setOnAction(event -> {
             splitPane.setDividerPositions(deviceTree.isSelected() ? separatorThreshold : 1.0);
@@ -173,14 +195,37 @@ public class MasterWindowController implements Initializable {
         devicesTree.setRoot(root);
     }
 
+    private void moveDeviceNodeToOtherBranch(TreeItem item) {
+        TreeItem parentNode = item.getParent();
+        parentNode.getChildren().remove(item);
+        TreeItem nextNode;
+        if((nextNode = parentNode.nextSibling()) == null) {
+            parentNode.previousSibling().getChildren().add(item);
+        } else {
+            nextNode.getChildren().add(item);
+        }
+    }
+
     @FXML
     private void connectToDeviceHandler(MouseEvent event) {
         try {
-            DeviceValueObject selectedDevice = (DeviceValueObject) devicesTree.getSelectionModel().getSelectedItem().getValue();
-            new Thread(new ConnectionWorker(selectedDevice)).start();
+            TreeItem selectedItem = devicesTree.getSelectionModel().getSelectedItem();
+            new Thread(new ConnectionWorker(selectedItem)).start();
         } catch (ClassCastException ex) {
             //this should never happen because of the connectToDevice button binding!
             throw new RuntimeException(ex);
+        }
+    }
+
+    @FXML
+    private void disconnectHandler(MouseEvent event) {
+        if (ControllerUtils.showConfirmationDialogMessage("Are you sure that you want to disconnect from this device?")) {
+            TreeItem selectedItem = devicesTree.getSelectionModel().getSelectedItem();
+            DeviceValueObject selectedDevice = (DeviceValueObject) selectedItem.getValue();
+            ClientNetworkManager.disconnect(selectedDevice.getAddress());
+            InterruptManager.clearAllListeners(selectedDevice.getAddress());
+            moveDeviceNodeToOtherBranch(selectedItem);
+            devicesTab.getTabs().remove(App.getTabFromInetAddress(selectedDevice.getAddress()));
         }
     }
 
@@ -190,10 +235,12 @@ public class MasterWindowController implements Initializable {
 
     private class ConnectionWorker extends Task<Boolean> {
 
+        private final TreeItem selectedItem;
         private final DeviceValueObject device;
 
-        public ConnectionWorker(DeviceValueObject device) {
-            this.device = device;
+        public ConnectionWorker(TreeItem selectedItem) {
+            this.selectedItem = selectedItem;
+            this.device = (DeviceValueObject) selectedItem.getValue();
         }
 
         @Override
@@ -219,7 +266,7 @@ public class MasterWindowController implements Initializable {
         protected void done() {
             try {
                 if (get() && NETWORK_MANAGER.connectToDevice(device)) {
-                    //devicesTree.getRoot().getChildren().get(0).getChildren().add(new TreeItem<>(device));
+                    moveDeviceNodeToOtherBranch(selectedItem);
                     devicesTree.refresh();
                 }
             } catch (InterruptedException | ExecutionException ex) {

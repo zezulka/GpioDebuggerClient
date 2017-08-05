@@ -81,6 +81,7 @@
             <items>
             <ToggleButton fx:id="deviceTree" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" textAlignment="RIGHT" />
                 <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" alignment="CENTER_RIGHT" blendMode="SRC_ATOP" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" textAlignment="RIGHT" />
+            <Button id="disconnectButton" fx:id="disconnectButton" mnemonicParsing="false" onMouseClicked="#disconnectHandler" />
             </items>
          <cursor>
             <Cursor fx:constant="OPEN_HAND" />

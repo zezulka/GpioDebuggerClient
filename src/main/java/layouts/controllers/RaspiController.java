@@ -26,10 +26,10 @@ import protocol.InterruptManager;
  *
  * @author Miloslav Zezulka
  */
-public class RaspiController implements DeviceController, Initializable {
+public class RaspiController implements Initializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-
+    
     @FXML
     private RadioButton readRadioButton;
     @FXML
@@ -37,14 +37,7 @@ public class RaspiController implements DeviceController, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        raspiTab.setOnCloseRequest((event) -> {
-            if (ControllerUtils.showConfirmationDialogMessage("Are you sure that you want to disconnect from this device?")) {
-                ClientNetworkManager.disconnect(App.getIpAddressFromCurrentTab());
-                InterruptManager.clearAllInterruptListeners();
-                raspiTab.getTabPane().getTabs().remove(raspiTab);
-            }
-            event.consume();
-        });
+        raspiTab.setClosable(false);
     }
 
     @FXML
