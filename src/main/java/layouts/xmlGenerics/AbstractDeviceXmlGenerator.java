@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import protocol.ClientPin;
 import layouts.PinLayoutFactory;
+import misc.StringConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.BoardType;
@@ -36,30 +37,37 @@ import org.w3c.dom.Node;
  */
 public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 
+    private final Logger xmlLogger
+            = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
+
     private final int height;
     private final int width;
     private final BoardType type;
     private final String deviceName;
-    private final Logger xmlLogger = LoggerFactory.getLogger(AbstractDeviceXmlGenerator.class);
-    public static final String EXTENSION = ".fxml";
+
+    public static final String FXML_EXT = ".fxml";
     private static final String PREF_WIDTH_BUTTON = "75";
     private static final String PREF_HEIGHT_BUTTON = "25";
-    private static Document DOC;
+    private static Document doc;
 
-    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type, String deviceName) {
+    protected AbstractDeviceXmlGenerator(int height, int width, BoardType type,
+            String deviceName) {
         this.height = height;
         this.width = width;
         this.type = type;
         this.deviceName = deviceName;
         try {
-            DOC = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            doc = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .newDocument();
         } catch (ParserConfigurationException ex) {
             System.exit(1);
         }
     }
 
     @Override
-    public void createFxml() throws IOException {
+    public final void createFxml() throws IOException {
         try {
             addImports();
             createInMemoryTreeStructure();
@@ -70,7 +78,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private void addImports() {
-        String importString = "import";
+        String importStr = "import";
         List<String> importPaths = new ArrayList<>(Arrays.asList(
                 "javafx.geometry.*",
                 "javafx.scene.web.*",
@@ -80,30 +88,38 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
                 "javafx.scene.layout.*",
                 "javafx.scene.text.*"
         ));
-        importPaths.forEach(t -> DOC.appendChild(DOC.createProcessingInstruction(importString, t)));
+        importPaths.forEach((t) -> {
+            doc.appendChild(doc.createProcessingInstruction(importStr, t));
+        });
     }
 
     private Node createRootTabElement() {
-        Element rootElement = DOC.createElement("Tab");
-        //caused bugs, variable name should have first letter lowercase (opposed to supplied deviceName variable)
+        Element rootElement = doc.createElement("Tab");
+        //caused bugs, variable name should have first letter lowercase
+        //(opposed to supplied deviceName variable)
         rootElement.setAttribute("id", deviceName.toLowerCase() + "Tab");
         rootElement.setAttribute("fx:id", deviceName.toLowerCase() + "Tab");
         rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
         rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
-        rootElement.setAttribute("fx:controller", "layouts.controllers." + deviceName + "Controller");
+
+        rootElement.setAttribute("fx:controller", getPathToController());
         return rootElement;
+    }
+
+    private String getPathToController() {
+        return "layouts.controllers." + deviceName + "Controller";
     }
 
     private void createInMemoryTreeStructure() {
         Node result = createRootTabElement();
         Node rootWrapper = createRootElementWrapper();
         result.appendChild(rootWrapper);
-        DOC.appendChild(result);
+        doc.appendChild(result);
     }
 
     private Node createRootElementWrapper() {
-        Element content = DOC.createElement("content");
-        Element tabPane = DOC.createElement("TabPane");
+        Element content = doc.createElement("content");
+        Element tabPane = doc.createElement("TabPane");
         tabPane.setAttribute("side", "RIGHT");
         tabPane.appendChild(createAllSubtabs());
         content.appendChild(tabPane);
@@ -111,7 +127,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createAllSubtabs() {
-        Element tabs = DOC.createElement("tabs");
+        Element tabs = doc.createElement("tabs");
         tabs.appendChild(createGpioTab());
         tabs.appendChild(importSpiTab());
         tabs.appendChild(importI2cTab());
@@ -120,7 +136,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createGpioTab() {
-        Element tab = DOC.createElement("Tab");
+        Element tab = doc.createElement("Tab");
         tab.setAttribute("closable", "false");
         tab.setAttribute("text", "GPIO");
         tab.appendChild(createGpioContents());
@@ -128,8 +144,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createGpioContents() {
-        Element contents = DOC.createElement("content");
-        Element gridPane = DOC.createElement("GridPane");
+        Element contents = doc.createElement("content");
+        Element gridPane = doc.createElement("GridPane");
         gridPane.setAttribute("fx:id", "gpioGridPane");
         gridPane.setAttribute("cacheHint", "SPEED");
         gridPane.setAttribute("layoutX", "0.0");
@@ -142,10 +158,10 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createGpioGridPaneRowConstraints() {
-        Element rowConstraints = DOC.createElement("rowConstraints");
+        Element rowConstraints = doc.createElement("rowConstraints");
 
         for (int i = 0; i < height + 1; i++) {
-            Element rowConstraint = DOC.createElement("RowConstraints");
+            Element rowConstraint = doc.createElement("RowConstraints");
             rowConstraint.setAttribute("minHeight", "30.0");
             rowConstraint.setAttribute("prefHeight", "30.0");
             rowConstraints.appendChild(rowConstraint);
@@ -154,16 +170,20 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createGpioGridPaneColumnConstraints() {
-        Element columnConstraints = DOC.createElement("columnConstraints");
-        columnConstraints.appendChild(getColumnConstraint(280.0, "CENTER"));
-        columnConstraints.appendChild(getColumnConstraint(100.0, "LEFT"));
-        columnConstraints.appendChild(getColumnConstraint(120.0, "LEFT"));
-        columnConstraints.appendChild(getColumnConstraint(120.0, "LEFT"));
+        final double firstCol = 280.0;
+        final double secondCol = 100.0;
+        final double thirdCol = 120.0;
+        final double fourthCol = thirdCol;
+        Element columnConstraints = doc.createElement("columnConstraints");
+        columnConstraints.appendChild(getColumnConstraint(firstCol, "CENTER"));
+        columnConstraints.appendChild(getColumnConstraint(secondCol, "LEFT"));
+        columnConstraints.appendChild(getColumnConstraint(thirdCol, "LEFT"));
+        columnConstraints.appendChild(getColumnConstraint(fourthCol, "LEFT"));
         return columnConstraints;
     }
 
     private Node getColumnConstraint(double prefWidth, String halignment) {
-        Element result = DOC.createElement("ColumnConstraints");
+        Element result = doc.createElement("ColumnConstraints");
         result.setAttribute("prefWidth", Double.toString(prefWidth));
         if (halignment != null) {
             result.setAttribute("halignment", halignment);
@@ -172,7 +192,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createGpioGridPaneChildren() {
-        Element children = DOC.createElement("children");
+        Element children = doc.createElement("children");
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 children.appendChild(createGpioButton(row, col));
@@ -184,30 +204,32 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         children.appendChild(createImageView());
         return children;
     }
-    
+
     private void createLegend(Element root) {
         root.appendChild(createLegendLabel("Legend:", "1", "#000000"));
         root.appendChild(createLegendLabel("HIGH", "2", "#55FF55"));
         root.appendChild(createLegendLabel("LOW", "3", "#FF5555"));
     }
-    
-    private Node createLegendLabel(String text, String rowIndex, String textfill) {
-        Element labelEl = DOC.createElement("Label");
+
+    private Node createLegendLabel(String text, String rowIndex,
+            String textfill) {
+
+        Element labelEl = doc.createElement("Label");
         labelEl.setAttribute("text", text);
         labelEl.setAttribute("textFill", textfill);
         labelEl.setAttribute("GridPane.rowIndex", rowIndex);
         labelEl.setAttribute("GridPane.columnIndex", "3");
-        Element fontChildEl = DOC.createElement("Font");
+        Element fontChildEl = doc.createElement("Font");
         fontChildEl.setAttribute("name", "SystemBold");
         fontChildEl.setAttribute("size", "15.0");
-        Element fontEl = DOC.createElement("font");
+        Element fontEl = doc.createElement("font");
         fontEl.appendChild(fontChildEl);
         labelEl.appendChild(fontEl);
         return labelEl;
     }
 
     private Node createGpioButton(int row, int col) {
-        Element button = DOC.createElement("Button");
+        Element button = doc.createElement("Button");
         int rowOffset = 1;
         int columnOffset = 1;
         int index = row * 2 + 1 + col;
@@ -217,24 +239,27 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         button.setAttribute("onMouseClicked", "#mouseClickedHandler");
         button.setAttribute("onKeyPressed", "#keyPressedHandler");
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
-        button.setAttribute("text", currentPin.isGpio() ? currentPin.getGpioName() : currentPin.getPinId());
-        button.setAttribute("id", currentPin.isGpio() ? currentPin.getPinId() : "nonselectable");
-        button.setAttribute("GridPane.columnIndex", Integer.toString(col + columnOffset));
-        button.setAttribute("GridPane.rowIndex", Integer.toString(row + rowOffset));
+        button.setAttribute("text", currentPin.toString());
+        button.setAttribute("id",
+                currentPin.isGpio() ? currentPin.getPinId() : "nonselectable");
+        button.setAttribute("GridPane.columnIndex",
+                Integer.toString(col + columnOffset));
+        button.setAttribute("GridPane.rowIndex",
+                Integer.toString(row + rowOffset));
         button.setAttribute("prefWidth", PREF_WIDTH_BUTTON);
         button.setAttribute("prefHeight", PREF_HEIGHT_BUTTON);
         return button;
     }
 
     private Node createWriteRadioButton() {
-        Element rButton1 = DOC.createElement("RadioButton");
+        Element rButton1 = doc.createElement("RadioButton");
         rButton1.setAttribute("ellipsisString", "W");
         rButton1.setAttribute("mnemonicParsing", "false");
         rButton1.setAttribute("text", "WRITE");
         rButton1.setAttribute("GridPane.rowIndex", "0");
         rButton1.setAttribute("fx:id", "writeRadioButton");
-        Element padding = DOC.createElement("toggleGroup");
-        Element inset = DOC.createElement("ToggleGroup");
+        Element padding = doc.createElement("toggleGroup");
+        Element inset = doc.createElement("ToggleGroup");
         inset.setAttribute("fx:id", "op");
         padding.appendChild(inset);
         rButton1.appendChild(padding);
@@ -242,7 +267,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createReadRadioButton() {
-        Element rButton2 = DOC.createElement("RadioButton");
+        Element rButton2 = doc.createElement("RadioButton");
         rButton2.setAttribute("ellipsisString", "R");
         rButton2.setAttribute("mnemonicParsing", "false");
         rButton2.setAttribute("text", "READ");
@@ -254,9 +279,9 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node createImageView() {
-        Element stackPane = DOC.createElement("StackPane");
+        Element stackPane = doc.createElement("StackPane");
         stackPane.setAttribute("fx:id", "gpioStackPane");
-        Element imageView = DOC.createElement("ImageView");
+        Element imageView = doc.createElement("ImageView");
         imageView.setAttribute("disable", "true");
         imageView.setAttribute("fitHeight", "665x.0");
         imageView.setAttribute("fitWidth", "730.0");
@@ -266,10 +291,10 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         imageView.setAttribute("GridPane.vgrow", "ALWAYS");
         imageView.setAttribute("GridPane.rowSpan", "999");
         imageView.setAttribute("GridPane.valignment", "BASELINE");
-        Element imagePath = DOC.createElement("Image");
+        Element imagePath = doc.createElement("Image");
         imagePath.setAttribute("url", "@../" + deviceName + ".png");
-        Element image = DOC.createElement("image");
-        Element children = DOC.createElement("children");
+        Element image = doc.createElement("image");
+        Element children = doc.createElement("children");
         image.appendChild(imagePath);
         imageView.appendChild(image);
         children.appendChild(imageView);
@@ -290,21 +315,25 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
     }
 
     private Node importTab(String sourceWithoutExtension) {
-        Element importEl = DOC.createElement("fx:include");
-        importEl.setAttribute("source", sourceWithoutExtension + EXTENSION);
+        Element importEl = doc.createElement("fx:include");
+        importEl.setAttribute("source", sourceWithoutExtension + FXML_EXT);
         return importEl;
     }
 
     private void createXmlFileFromTreeStructure() throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOC.normalizeDocument();
-        DOMSource source = new DOMSource(DOC);
-        StreamResult result = new StreamResult(new File("./src/main/resources/fxml/" + deviceName + EXTENSION));
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer();
+        doc.normalizeDocument();
+        DOMSource source = new DOMSource(doc);
+        String pathToDevice =
+                StringConstants.PATH_TO_FXML_DIR + deviceName + FXML_EXT;
+        StreamResult result = new StreamResult(new File(pathToDevice));
 
         //transformer formatting magic... taken from StackOverflow
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer
+                .setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
+                        "4");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(source, result);
     }

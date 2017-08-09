@@ -3,14 +3,18 @@ package layouts.controllers;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 
-public class ControllerUtils {
+public final class ControllerUtils {
 
-    private static void showDialogMessage(AlertType alertType, String message) {
+    private ControllerUtils() {
+    }
+
+    private static void showDialog(Alert.AlertType alertType,
+            String message) {
+
         Platform.runLater(() -> {
             Alert alert = new Alert(alertType);
             alert.setHeaderText(null);
@@ -20,26 +24,26 @@ public class ControllerUtils {
                     .getChildren()
                     .stream()
                     .filter(node -> node instanceof Label)
-                    .forEach(node -> ((Label)node)
-                            .setMinHeight(Region.USE_PREF_SIZE));
+                    .forEach(node -> ((Label) node)
+                    .setMinHeight(Region.USE_PREF_SIZE));
             alert.showAndWait();
         });
     }
-    
-    public static void showInformationDialogMessage(String message) {
-        showDialogMessage(AlertType.INFORMATION, message);
+
+    public static void showInfoDialog(String message) {
+        showDialog(Alert.AlertType.INFORMATION, message);
     }
-    
-    public static void showErrorDialogMessage(String message) {
-        showDialogMessage(AlertType.ERROR, message);
+
+    public static void showErrorDialog(String message) {
+        showDialog(Alert.AlertType.ERROR, message);
     }
 
     /**
      * @return True if user confirmed that they confirm the given action, false
-     * otherwise. This method must be wrapped in Platform.runLater (because of 
+     * otherwise. This method must be wrapped in Platform.runLater (because of
      * the return value).
      */
-    public static boolean showConfirmationDialogMessage(String message) {
+    public static boolean showConfirmDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Please confirm");
         alert.setHeaderText(null);

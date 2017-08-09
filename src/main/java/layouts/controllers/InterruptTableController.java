@@ -1,7 +1,7 @@
 package layouts.controllers;
 
 import core.gui.App;
-import core.net.ClientNetworkManager;
+import core.net.NetworkManager;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -25,10 +25,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
@@ -41,16 +38,10 @@ import protocol.InterruptValueObject;
 import protocol.ListenerState;
 import protocol.RaspiClientPin;
 
-/**
- * FXML Controller class
- *
- * @author miloslav
- */
-public class InterruptTableController implements Initializable {
+public final class InterruptTableController implements Initializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-    private static final Image PLAY_BTN = new Image("play-button.jpg", 30, 30, true, true);
-    private static final Image STOP_BTN = new Image("stop-button.jpg", 30, 30, true, true);
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(RaspiController.class);
 
     @FXML
     private ComboBox<InterruptType> interruptTypeComboBox;
@@ -67,9 +58,9 @@ public class InterruptTableController implements Initializable {
     @FXML
     private TableColumn<InterruptValueObject, LocalTime> timeAdded;
     @FXML
-    private TableColumn<InterruptValueObject, Integer> numberOfInterrupts;
+    private TableColumn<InterruptValueObject, Integer> numOfIntrs;
     @FXML
-    private TableColumn<InterruptValueObject, LocalTime> latestInterruptTime;
+    private TableColumn<InterruptValueObject, LocalTime> lastIntrTime;
     @FXML
     private TableColumn<InterruptValueObject, ListenerState> state;
     @FXML
@@ -90,10 +81,13 @@ public class InterruptTableController implements Initializable {
         tableView.setItems(InterruptManager.getListeners(App.getLastAddress()));
         tableView.selectionModelProperty().set(null);
         tableView.setEditable(true);
-        addNewInterruptListenerButton.disableProperty().bind(assertNumListeners());
+        addNewInterruptListenerButton
+                .disableProperty().bind(assertNumListeners());
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
-            InterruptManager.addInterruptListener(App.getIpAddressFromCurrentTab(), getTempIvo());
-
+            InterruptManager.addInterruptListener(
+                    App.getIpFromCurrentTab(),
+                    getTempIvo()
+            );
         });
     }
 
@@ -103,8 +97,10 @@ public class InterruptTableController implements Initializable {
      * @return
      */
     private InterruptValueObject getTempIvo() {
-        return new InterruptValueObject(pinComboBox.getSelectionModel().getSelectedItem(),
-                interruptTypeComboBox.getSelectionModel().getSelectedItem());
+        return new InterruptValueObject(
+                pinComboBox.getSelectionModel().getSelectedItem(),
+                interruptTypeComboBox.getSelectionModel().getSelectedItem()
+        );
     }
 
     private void addAllPins() {
@@ -118,12 +114,16 @@ public class InterruptTableController implements Initializable {
     }
 
     private void addAllIntrTypes() {
-        interruptTypeComboBox.setItems(FXCollections.observableArrayList(InterruptType.values()));
+        interruptTypeComboBox.setItems(InterruptType.observableValues());
     }
-    
+
     protected BooleanBinding assertNumListeners() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> InterruptManager.getNumListeners().greaterThanOrEqualTo(InterruptManager.MAX_INTR_LISTENER_THRESHOLD).get(), InterruptManager.getNumListeners());
+                -> InterruptManager
+                        .getNumListeners()
+                        .greaterThanOrEqualTo(InterruptManager.LISTENERS_MAX)
+                        .get(),
+                InterruptManager.getNumListeners());
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
@@ -131,23 +131,31 @@ public class InterruptTableController implements Initializable {
         pinName.setCellValueFactory(new PropertyValueFactory<>("clientPin"));
         interruptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         timeAdded.setCellValueFactory(new PropertyValueFactory<>("timeAdded"));
-        numberOfInterrupts.setCellValueFactory(new PropertyValueFactory<>("numberOfInterrupts"));
-        numberOfInterrupts.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        latestInterruptTime.setCellValueFactory(new PropertyValueFactory<>("latestInterruptTime"));
+        numOfIntrs
+                .setCellValueFactory(new PropertyValueFactory<>("numOfIntrs"));
+        numOfIntrs
+                .setCellFactory(TextFieldTableCell
+                        .forTableColumn(new IntegerStringConverter()));
+        lastIntrTime
+                .setCellValueFactory(
+                        new PropertyValueFactory<>("lastIntrTime"));
         state.setCellValueFactory(new PropertyValueFactory<>("state"));
         state.setCellFactory(p -> new ButtonCell());
     }
 
-    private class ButtonCell extends TableCell<InterruptValueObject, ListenerState> {
+    private class ButtonCell extends
+            TableCell<InterruptValueObject, ListenerState> {
 
-        final Button cellButton = new Button(null, new ImageView(PLAY_BTN));
+        private final Button cellBtn
+                = new Button(null, new ImageView(Images.PLAY_BTN));
 
-        public ButtonCell() {
-            cellButton.setPadding(Insets.EMPTY);
-            cellButton.getChildrenUnmodifiable().size();
-            cellButton.setOnAction((event) -> {
-                InterruptValueObject selected = (InterruptValueObject) getTableRow().getItem();
-                cellButton.disableProperty().set(true);
+        ButtonCell() {
+            cellBtn.setPadding(Insets.EMPTY);
+            cellBtn.getChildrenUnmodifiable().size();
+            cellBtn.setOnAction((event) -> {
+                InterruptValueObject selected
+                        = (InterruptValueObject) getTableRow().getItem();
+                cellBtn.disableProperty().set(true);
                 switch (selected.stateProperty().get()) {
                     case NOT_RUNNING: {
                         new Thread(new StartInterruptsWorker(selected)).start();
@@ -157,8 +165,10 @@ public class InterruptTableController implements Initializable {
                         new Thread(new StopInterruptsWorker(selected)).start();
                         break;
                     }
+                    default:
+                        throw new RuntimeException("Unknown state.");
                 }
-                cellButton.disableProperty().set(false);
+                cellBtn.disableProperty().set(false);
             });
         }
 
@@ -172,16 +182,22 @@ public class InterruptTableController implements Initializable {
             }
             switch (t) {
                 case NOT_RUNNING: {
-                    Platform.runLater(() -> cellButton.setGraphic(new ImageView(PLAY_BTN)));
+                    Platform.runLater(() -> {
+                        cellBtn.setGraphic(new ImageView(Images.PLAY_BTN));
+                    });
                     break;
                 }
                 case RUNNING: {
-                    Platform.runLater(() -> cellButton.setGraphic(new ImageView(STOP_BTN)));
+                    Platform.runLater(() -> {
+                        cellBtn.setGraphic(new ImageView(Images.STOP_BTN));
+                    });
                     break;
                 }
+                default:
+                    throw new RuntimeException("Uknown state.");
             }
             if (!empty) {
-                setGraphic(cellButton);
+                setGraphic(cellBtn);
             }
         }
     }
@@ -192,7 +208,8 @@ public class InterruptTableController implements Initializable {
 
         protected abstract String getMessagePrefix();
 
-        protected AbstractInterruptsWorker(InterruptValueObject selected, ListenerState guardedState) {
+        protected AbstractInterruptsWorker(InterruptValueObject selected,
+                ListenerState guardedState) {
             this.selectedIntr = selected;
         }
 
@@ -201,8 +218,10 @@ public class InterruptTableController implements Initializable {
             super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
-                ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
-                LOGGER.info(String.format("SPI request sent to client: %s", msgToSend));
+                NetworkManager
+                        .setMessageToSend(App.getIpFromCurrentTab(),
+                                msgToSend);
+                LOGGER.info(String.format("SPI request sent: %s", msgToSend));
             }
             return null;
         }
@@ -221,7 +240,7 @@ public class InterruptTableController implements Initializable {
         }
     }
 
-    public class StartInterruptsWorker extends AbstractInterruptsWorker {
+    public final class StartInterruptsWorker extends AbstractInterruptsWorker {
 
         public StartInterruptsWorker(InterruptValueObject selected) {
             super(selected, ListenerState.NOT_RUNNING);
@@ -238,7 +257,7 @@ public class InterruptTableController implements Initializable {
         }
     }
 
-    public class StopInterruptsWorker extends AbstractInterruptsWorker {
+    public final class StopInterruptsWorker extends AbstractInterruptsWorker {
 
         public StopInterruptsWorker(InterruptValueObject selected) {
             super(selected, ListenerState.RUNNING);
@@ -254,5 +273,4 @@ public class InterruptTableController implements Initializable {
             super.done();
         }
     }
-
 }

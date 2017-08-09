@@ -1,21 +1,16 @@
 package layouts.controllers;
 
 import core.gui.App;
-import core.net.ClientNetworkManager;
+import core.net.NetworkManager;
 
 import java.net.URL;
-import java.util.Collections;
 
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import javafx.beans.value.ObservableValue;
-
-import javafx.collections.FXCollections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +24,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 
 import javafx.scene.paint.Color;
 import static layouts.controllers.AbstractInterfaceFormController.HEXA_PREFIX;
@@ -45,7 +39,8 @@ import userdata.UserDataUtils;
  *
  * @author Miloslav Zezulka
  */
-public class I2cRequestFormController extends AbstractInterfaceFormController implements Initializable {
+public final class I2cRequestFormController
+        extends AbstractInterfaceFormController implements Initializable {
 
     @FXML
     private Button i2cRequestButton;
@@ -69,12 +64,14 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     private ComboBox<I2cRequestValueObject> usedRequestsComboBox;
     @FXML
     private TextField byteArrayTextfield;
-    
+
     private static final char SEPARATOR = ':';
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(I2cRequestFormController.class);
-    private static final Pattern HEX_BYTE_REGEX_PATTERN = Pattern.compile(HEX_BYTE_REGEX);
-    
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(I2cRequestFormController.class);
+
+    private static final Pattern HEX_BYTE_REGEX_PATTERN
+            = Pattern.compile(HEX_BYTE_REGEX);
 
     /**
      * initialises the controller class.
@@ -86,59 +83,83 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
     public void initialize(URL url, ResourceBundle rb) {
         super.addAllModes(operationList);
         initUserRequestsComboBox();
-        byteArrayTextfield.disableProperty().bind(operationList.getSelectionModel().selectedItemProperty().isNotEqualTo(Operation.WRITE));
+        byteArrayTextfield.disableProperty()
+                .bind(operationList
+                        .getSelectionModel()
+                        .selectedItemProperty()
+                        .isNotEqualTo(Operation.WRITE));
+
         operationList.getSelectionModel().selectFirst();
         i2cRequestButton.disableProperty().bind(
                 checkLengthFieldEmpty()
                         .or(isHexaByte(slaveAddressField).not())
-                        .or(Bindings.when(operationList.getSelectionModel().selectedItemProperty().isEqualTo(Operation.WRITE))
-                                .then(super.createHexValuesOnlyBinding(byteArrayTextfield).not())
+                        .or(Bindings.when(operationList
+                                .getSelectionModel()
+                                .selectedItemProperty()
+                                .isEqualTo(Operation.WRITE))
+                                .then(super.hexValuesOnly(byteArrayTextfield)
+                                        .not())
                                 .otherwise(false))
         );
-        setComponentsDisableProperty(operationList.getSelectionModel().getSelectedItem());
-        this.operationList.valueProperty().addListener((ObservableValue<? extends Operation> observable, Operation oldValue, Operation newValue) -> {
-            if (newValue != null) {
-                setComponentsDisableProperty(newValue);
-            }
-        });
+        setComponentsDisableProperty(getSelectedOperation());
+        operationList
+                .valueProperty()
+                .addListener((ObservableValue<? extends Operation> obs,
+                        Operation old, Operation newValue) -> {
+                    if (newValue != null) {
+                        setComponentsDisableProperty(newValue);
+                    }
+                });
         super.enforceHexValuesOnly(slaveAddressField);
         super.enforceNumericValuesOnly(lengthField);
     }
-    
+
     private void initUserRequestsComboBox() {
-        usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getI2cRequests()));
-        usedRequestsComboBox.setCellFactory((ListView<I2cRequestValueObject> param) -> {
-            final ListCell<I2cRequestValueObject> cell = new ListCell<I2cRequestValueObject>() {
-                {
-                    super.setPrefWidth(150);
-                }
-                
-                @Override public void updateItem(I2cRequestValueObject item,
-                        boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item != null) {
-                        setText(item.toString());
-                    }
-                }
-            };
-            return cell;
-        });
-        usedRequestsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            lengthField.setText(String.valueOf(newValue.getLength()));
-            operationList.getSelectionModel().select(newValue.getOperation());
-            slaveAddressField.setText(newValue.getSlaveAddress());
-        });
+        usedRequestsComboBox.setItems(UserDataUtils.getI2cRequests());
+        usedRequestsComboBox
+                .setCellFactory((ListView<I2cRequestValueObject> param) -> {
+                    final ListCell<I2cRequestValueObject> cell
+                            = new ListCell<I2cRequestValueObject>() {
+                        {
+                            final int prefWidth = 150;
+                            super.setPrefWidth(prefWidth);
+                        }
+
+                        @Override
+                        public void updateItem(I2cRequestValueObject item,
+                                boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item != null) {
+                                setText(item.toString());
+                            }
+                        }
+                    };
+                    return cell;
+                });
+        usedRequestsComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    lengthField.setText(String.valueOf(newValue.getLength()));
+                    operationList
+                            .getSelectionModel()
+                            .select(newValue.getOperation());
+                    slaveAddressField.setText(newValue.getSlaveAddress());
+                });
     }
 
     private BooleanBinding isHexaByte(TextField textfield) {
         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> HEX_BYTE_REGEX_PATTERN.matcher(textfield.getText()).matches(), textfield.textProperty());
+                -> HEX_BYTE_REGEX_PATTERN
+                        .matcher(textfield.getText()).matches(),
+                textfield.textProperty());
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
     private BooleanBinding checkLengthFieldEmpty() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> operationList.getSelectionModel().getSelectedItem().isReadOperation(), operationList.getSelectionModel().selectedItemProperty());
+                -> getSelectedOperation().isReadOperation(),
+                operationList.getSelectionModel().selectedItemProperty());
+
         return Bindings.isEmpty(lengthField.textProperty())
                 .and(Bindings.when(binding).then(true).otherwise(false));
     }
@@ -157,6 +178,8 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                 lengthField.setDisable(true);
                 break;
             }
+            default:
+                throw new RuntimeException("Illegal Operation");
         }
     }
 
@@ -166,25 +189,27 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
      */
     @FXML
     public void sendI2cRequest(MouseEvent evt) {
-        String msgToSend = gatherMessageFromForm();
-        if (msgToSend != null) {
-            ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend);
-            I2cRequestValueObject request = getNewI2cRequestEntryFromCurrentData();
+        String msg = gatherMessageFromForm();
+        if (msg != null) {
+            NetworkManager
+                    .setMessageToSend(App.getIpFromCurrentTab(), msg);
+            I2cRequestValueObject request = getNewI2cRequestEntryFromForm();
             usedRequestsComboBox.getItems().add(request);
             UserDataUtils.addNewI2cRequest(request);
         }
     }
-    
-    private I2cRequestValueObject getNewI2cRequestEntryFromCurrentData() {
-        Operation op = operationList.getSelectionModel().getSelectedItem();
-        return new I2cRequestValueObject(op, slaveAddressField.getText(), 
-                                         op.isWriteOperation() ? byteArrayTextfield.getText().length()/2 : Integer.parseUnsignedInt(lengthField.getText()), 
-                                         op.isReadOperation() ? "" : byteArrayTextfield.getText());
+
+    private I2cRequestValueObject getNewI2cRequestEntryFromForm() {
+        Operation op = getSelectedOperation();
+        return new I2cRequestValueObject(op, slaveAddressField.getText(),
+                getLengthRequestAttr(op),
+                getByteArrayStr(op));
     }
-    
+
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
-        if (operationList.getSelectionModel().getSelectedItem().isReadOperation()) {
+        Operation op = getSelectedOperation();
+        if (op.isReadOperation()) {
             msgBuilder = msgBuilder.append(lengthField.getText().trim());
             LOGGER.info(String.format("I2c request form has now "
                     + "submitted the following request:\n %s"
@@ -192,14 +217,32 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                     msgBuilder.toString()));
             return msgBuilder.toString();
         }
-        msgBuilder = msgBuilder.append(byteArrayTextfield.getText());
+        msgBuilder = msgBuilder.append(getByteArrayStr(op));
         return msgBuilder.toString();
+    }
+
+    /**
+     * Semantics of length in this case is the length attribute of request, not
+     * the length of request itself.
+     *
+     * @return length of either bytes being sent or length specified by user
+     */
+    private int getLengthRequestAttr(Operation op) {
+        if (op.isWriteOperation()) {
+            return getByteArrayStr(op).length() / 2;
+        }
+        return Integer.parseUnsignedInt(lengthField.getText());
+    }
+
+    private String getByteArrayStr(Operation op) {
+        return op.isReadOperation() ? "" : byteArrayTextfield.getText();
     }
 
     @Override
     protected StringBuilder getMessagePrefix() {
         StringBuilder msgBuilder = new StringBuilder("i2c");
-        Operation selectedOp = this.operationList.getSelectionModel().getSelectedItem();
+        Operation selectedOp = getSelectedOperation();
+
         return msgBuilder
                 .append(SEPARATOR)
                 .append(selectedOp.toString())
@@ -207,5 +250,11 @@ public class I2cRequestFormController extends AbstractInterfaceFormController im
                 .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
                 .append(SEPARATOR);
+    }
+
+    private Operation getSelectedOperation() {
+        return operationList
+                .getSelectionModel()
+                .getSelectedItem();
     }
 }

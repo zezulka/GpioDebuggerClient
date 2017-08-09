@@ -17,9 +17,8 @@ public enum RaspiClientPin implements ClientPin {
     ID_SD("ID_SD", 27),
     ID_SC("ID_SC", 28),
     GND_6("GND", 30),
-    GND_7("GND", 34), 
+    GND_7("GND", 34),
     GND_8("GND", 39),
-    
     P1_3("P1_3", 3, 2),
     P1_5("P1_5", 5, 3),
     P1_7("P1_7", 7, 4),
@@ -46,7 +45,7 @@ public enum RaspiClientPin implements ClientPin {
     P1_37("P1_37", 37, 26),
     P1_38("P1_38", 38, 20),
     P1_40("P1_40", 40, 21);
-    
+
     private final String id;
     private final int port;
     private final int gpioAddress;
@@ -58,41 +57,41 @@ public enum RaspiClientPin implements ClientPin {
         this.gpio = false;
         this.gpioAddress = Integer.MIN_VALUE;
     }
-     
+
     RaspiClientPin(String id, int port, int gpioAddress) {
         this.id = id;
         this.port = port;
         this.gpioAddress = gpioAddress;
         this.gpio = true;
     }
-    
+
     @Override
     public String getPinId() {
         return this.id;
     }
-    
+
     @Override
     public String getGpioName() {
         return "GPIO" + gpioAddress;
     }
-    
+
     public static ClientPin getPin(String pinName) {
-        for(RaspiClientPin pin : RaspiClientPin.values()) {
-            if(pin.id.equals(pinName)) {
+        for (RaspiClientPin pin : RaspiClientPin.values()) {
+            if (pin.id.equals(pinName)) {
                 return pin;
             }
         }
-        throw new IllegalArgumentException("pin with the given name has not been found");
+        throw new IllegalArgumentException("pin not found");
     }
 
     @Override
     public int getPort() {
         return this.port;
-    }  
+    }
 
     @Override
     public String toString() {
-        return this.isGpio() ? this.getGpioName() : this.id; 
+        return this.isGpio() ? this.getGpioName() : this.id;
     }
 
     public static ClientPin[] pins() {

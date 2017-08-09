@@ -1,12 +1,14 @@
 package core.net;
 
 import core.gui.App;
-import static core.net.ClientNetworkManager.DEFAULT_SOCK_PORT;
 import core.util.MessageParser;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import javafx.application.Platform;
 import layouts.controllers.ControllerUtils;
@@ -14,13 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
 
-public class ClientConnectionThread implements Runnable {
+public final class ConnectionThread implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientConnectionThread.class);
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(ConnectionThread.class);
 
-    private final AgentConnectionValueObject connection;
+    private final ConnectionValueObject connection;
 
-    public ClientConnectionThread(AgentConnectionValueObject connection) {
+    public ConnectionThread(ConnectionValueObject connection) {
         this.connection = connection;
     }
 
@@ -48,7 +51,10 @@ public class ClientConnectionThread implements Runnable {
                 if (!connection.getSelector().isOpen()) {
                     break;
                 }
-                Iterator<SelectionKey> keys = connection.getSelector().selectedKeys().iterator();
+                Iterator<SelectionKey> keys = connection
+                        .getSelector()
+                        .selectedKeys()
+                        .iterator();
                 processSelectionKeys(keys);
                 if (!isAlive()) {
                     break;
@@ -68,10 +74,13 @@ public class ClientConnectionThread implements Runnable {
      * @return true if alive, false otherwise
      */
     private boolean isAlive() {
-        return connection.getSelector().isOpen() && connection.getChannel().isOpen() && connection.getChannel().isConnected();
+        return connection.getSelector().isOpen()
+                && connection.getChannel().isOpen()
+                && connection.getChannel().isConnected();
     }
 
-    private void processSelectionKeys(Iterator<SelectionKey> keys) throws IOException {
+    private void processSelectionKeys(Iterator<SelectionKey> keys)
+            throws IOException {
         if (keys == null) {
             return;
         }
@@ -79,7 +88,7 @@ public class ClientConnectionThread implements Runnable {
             SelectionKey key = keys.next();
             keys.remove();
             if (!key.isValid()) {
-                LOGGER.error(String.format("A nonvalid key has been registered: %s", key.toString()));
+                LOGGER.error(String.format("Invalid key registered: %s", key));
                 continue;
             }
             if (key.isConnectable() && !connect(key)) {
@@ -104,31 +113,40 @@ public class ClientConnectionThread implements Runnable {
             Platform.runLater(() -> {
                 App.getDevicesTab()
                         .getTabs()
-                        .remove(App.getTabFromInetAddress(connection.getDevice().getAddress()));
+                        .remove(App.getTabFromInetAddress(connection
+                                .getDevice()
+                                .getAddress()));
             });
-            ControllerUtils.showInformationDialogMessage(String.format("Disconnected from address %s, device %s",
-                    connection.getDevice().getAddress(), connection.getDevice().getBoardType()));
+            ControllerUtils.showInfoDialog(
+                    String.format("Disconnected from address %s, device %s",
+                            connection.getDevice().getAddress(),
+                            connection.getDevice().getBoardType())
+            );
         }
     }
 
     private String read() {
         try {
-            ByteBuffer readBuffer = ByteBuffer.allocate(1000);
+            ByteBuffer readBuffer =
+                    ByteBuffer.allocate(NetworkManager.BUFFER_SIZE);
             readBuffer.clear();
             int length;
             length = connection.getChannel().read(readBuffer);
-            if (length == -1) {
+            if (length == NetworkManager.END_OF_STREAM) {
                 LOGGER.debug("reached end of the input stream");
                 connection.getChannel().close();
                 return null;
             }
             readBuffer.flip();
-            byte[] buff = new byte[1024];
+            byte[] buff = new byte[NetworkManager.BUFFER_SIZE];
             readBuffer.get(buff, 0, length);
             return (new String(buff).replaceAll("\0", ""));
         } catch (IOException ex) {
-            ControllerUtils.showErrorDialogMessage("There has been an error reading message from agent."
-                    + "Either agent is not running on the IP supplied or network connection failure has occured.\n");
+            ControllerUtils.showErrorDialog(
+                    "There has been an error reading message from agent."
+                    + "Either agent is not running on the IP supplied or "
+                    + "network connection failure has occured.\n"
+            );
             LOGGER.error(ex.getLocalizedMessage());
             disconnect();
             return null;
@@ -144,14 +162,18 @@ public class ClientConnectionThread implements Runnable {
     public void disconnect() {
         cleanUpResources();
         InterruptManager.clearAllListeners(connection.getDevice().getAddress());
-        ClientNetworkManager.removeMapping(connection.getDevice().getAddress());
+        NetworkManager.removeMapping(connection.getDevice().getAddress());
     }
 
     private void write(SelectionKey key) throws IOException {
         if (connection.getMessageToSend() == null) {
-            throw new IllegalStateException("cannot send null message to agent");
+            throw new IllegalStateException("cannot send null message");
         }
-        connection.getChannel().write(ByteBuffer.wrap(connection.getMessageToSend().getBytes()));
+        connection
+                .getChannel()
+                .write(ByteBuffer.wrap(connection
+                        .getMessageToSend()
+                        .getBytes()));
         key.interestOps(SelectionKey.OP_READ);
         connection.setMessageToSend(null);
     }
@@ -159,7 +181,10 @@ public class ClientConnectionThread implements Runnable {
     private boolean connect(SelectionKey key) {
         try {
             SocketChannel channel = connection.getChannel();
-            channel.connect(new InetSocketAddress(connection.getDevice().getAddress(), DEFAULT_SOCK_PORT));
+            channel.connect(
+                    new InetSocketAddress(connection.getDevice().getAddress(),
+                            NetworkManager.DEFAULT_SOCK_PORT)
+            );
             if (channel.isConnectionPending() && channel.finishConnect()) {
                 LOGGER.info("done connecting to server");
             } else {
@@ -170,7 +195,8 @@ public class ClientConnectionThread implements Runnable {
             return true;
         } catch (IOException ex) {
             LOGGER.error("Could not connect to server, reason: ", ex);
-            ControllerUtils.showErrorDialogMessage("Could not connect to server.");
+            ControllerUtils
+                    .showErrorDialog("Could not connect to server.");
             return false;
         }
     }
@@ -208,11 +234,13 @@ public class ClientConnectionThread implements Runnable {
         connection.setMessageToSend(message);
         if (message != null) {
             try {
-                connection.getChannel().register(connection.getSelector(), SelectionKey.OP_WRITE);
+                connection.getChannel().register(connection.getSelector(),
+                        SelectionKey.OP_WRITE);
                 connection.getSelector().wakeup();
             } catch (ClosedChannelException ex) {
                 LOGGER.error("There has been an attempt to "
-                        + "register write operation on channel which has been closed.", ex);
+                        + "register write operation on channel "
+                        + "which has been closed.", ex);
                 throw new IllegalStateException();
             }
         }

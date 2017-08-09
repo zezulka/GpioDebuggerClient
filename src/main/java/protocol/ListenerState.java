@@ -2,14 +2,14 @@ package protocol;
 
 /**
  *
- * @author Miloslav Zezulka
+ * @author Miloslav Zezulka, 2017
  */
 public enum ListenerState {
     RUNNING("running"),
-    NOT_RUNNING("not running");    
+    NOT_RUNNING("not running");
 
     private final String desc;
-    
+
     ListenerState(String desc) {
         this.desc = desc;
     }

@@ -2,13 +2,18 @@ package layouts.xmlGenerics;
 
 import protocol.BoardType;
 
-public class DeviceXmlGeneratorFactory {
+public final class DeviceXmlGeneratorFactory {
+
+    private DeviceXmlGeneratorFactory() {
+    }
+
     public static DeviceXmlGenerator from(BoardType boardType) {
-        switch(boardType) {
+        switch (boardType) {
             case BEAGLEBONEBLACK : return new BeagleBoneBlackXmlGenerator();
             case CUBIEBOARD : return new CubieBoardXmlGenerator();
             case RASPBERRY_PI : return new RaspiXmlGenerator();
+            default:
+                throw new IllegalArgumentException("Not supported yet.");
         }
-        throw new IllegalArgumentException("Board type not supported yet.");
-    } 
+    }
 }

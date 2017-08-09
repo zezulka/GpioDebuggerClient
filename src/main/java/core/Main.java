@@ -8,10 +8,14 @@ import javafx.application.Application;
  *
  * @author Miloslav Zezulka, 2017
  */
-public class Main {
+public final class Main {
+
+    private Main() {
+    }
 
     /**
      * Entry point for this application.
+     *
      * @param args
      */
     public static void main(String[] args) {

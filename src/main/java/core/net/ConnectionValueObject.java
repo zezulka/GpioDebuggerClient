@@ -8,13 +8,14 @@ import userdata.DeviceValueObject;
  *
  * @author Miloslav Zezulka
  */
-public class AgentConnectionValueObject {
+public final class ConnectionValueObject {
     private String messageToSend;
     private final Selector selector;
     private final DeviceValueObject device;
     private final SocketChannel channel;
 
-    public AgentConnectionValueObject(String messageToSend, Selector selector, SocketChannel channel, DeviceValueObject device) {
+    public ConnectionValueObject(String messageToSend, Selector selector,
+            SocketChannel channel, DeviceValueObject device) {
         this.messageToSend = messageToSend;
         this.selector = selector;
         this.channel = channel;
@@ -24,11 +25,11 @@ public class AgentConnectionValueObject {
     public void setMessageToSend(String messageToSend) {
         this.messageToSend = messageToSend;
     }
-    
+
     public String getMessageToSend() {
         return messageToSend;
     }
-    
+
     public DeviceValueObject getDevice() {
         return this.device;
     }

@@ -1,6 +1,5 @@
 package userdata;
 
-import java.util.List;
 import layouts.controllers.Operation;
 
 public final class I2cRequestValueObject {
@@ -9,7 +8,8 @@ public final class I2cRequestValueObject {
     private final int length;
     private final String bytes;
 
-    public I2cRequestValueObject(Operation operation, String slaveAddress, int length, String bytes) {
+    public I2cRequestValueObject(Operation operation, String slaveAddress,
+            int length, String bytes) {
         this.operation = operation;
         this.slaveAddress = slaveAddress;
         this.length = length;
@@ -31,11 +31,16 @@ public final class I2cRequestValueObject {
     public String getBytes() {
         return bytes;
     }
-    
+
     @Override
     public String toString() {
-        return "operation=" + operation + ", slaveAddress=0x" + slaveAddress + ", length=" + length + (!bytes.isEmpty() ? ", bytes=" + bytes : "");
+        String byteArray = "";
+        if (operation.isWriteOperation()) {
+            byteArray = ", bytes=" + bytes;
+        }
+        return "operation=" + operation
+                + ", slaveAddress=0x" + slaveAddress
+                + ", length=" + length
+                + byteArray;
     }
-    
-    
 }

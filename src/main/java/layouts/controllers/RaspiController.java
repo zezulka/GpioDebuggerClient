@@ -1,7 +1,7 @@
 package layouts.controllers;
 
 import core.gui.App;
-import core.net.ClientNetworkManager;
+import core.net.NetworkManager;
 
 import java.net.URL;
 
@@ -20,16 +20,16 @@ import javafx.scene.input.KeyEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import protocol.InterruptManager;
 
 /**
  *
  * @author Miloslav Zezulka
  */
-public class RaspiController implements Initializable {
+public final class RaspiController implements Initializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RaspiController.class);
-    
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(RaspiController.class);
+
     @FXML
     private RadioButton readRadioButton;
     @FXML
@@ -42,18 +42,22 @@ public class RaspiController implements Initializable {
 
     @FXML
     protected void mouseClickedHandler(MouseEvent event) {
-        String op = readRadioButton.isSelected() ? "read" : "write";
-        sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
-        LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
+        handleGpioButton(event);
     }
 
     @FXML
     protected void keyPressedHandler(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
-            String op = readRadioButton.isSelected() ? "read" : "write";
-            sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
-            LOGGER.info(String.format("GPIO request has been sent : pin %s, operation : %s", op, getButtonTitle(event)));
+            handleGpioButton(event);
         }
+    }
+
+    private void handleGpioButton(InputEvent event) {
+        String op = readRadioButton.isSelected() ? "read" : "write";
+        sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
+        LOGGER.info(String.format("GPIO request sent: pin %s, operation: %s",
+                op,
+                getButtonTitle(event)));
     }
 
     private String getButtonTitle(InputEvent event) {
@@ -64,6 +68,6 @@ public class RaspiController implements Initializable {
     }
 
     private void sendRequest(InputEvent event, String msg) {
-        ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msg);
+        NetworkManager.setMessageToSend(App.getIpFromCurrentTab(), msg);
     }
 }

@@ -47,6 +47,4 @@ public final  class TabAddressPair {
         final TabAddressPair other = (TabAddressPair) obj;
         return this.tab.equals(other.tab) && this.address.equals(other.address);
     }
-    
-    
 }

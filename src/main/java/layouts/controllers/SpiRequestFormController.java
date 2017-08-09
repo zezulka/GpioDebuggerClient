@@ -1,7 +1,7 @@
 package layouts.controllers;
 
 import core.gui.App;
-import core.net.ClientNetworkManager;
+import core.net.NetworkManager;
 
 import java.net.URL;
 
@@ -33,7 +33,8 @@ import userdata.UserDataUtils;
  *
  * @author miloslav
  */
-public class SpiRequestFormController extends AbstractInterfaceFormController implements Initializable {
+public final class SpiRequestFormController
+        extends AbstractInterfaceFormController implements Initializable {
 
     @FXML
     private Button spiRequestButton;
@@ -56,7 +57,8 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
      */
     private static final int MAX_CS_INDEX = 2;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpiRequestFormController.class);
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(SpiRequestFormController.class);
 
     /**
      * Initializes the controller class.
@@ -65,7 +67,7 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     public void initialize(URL url, ResourceBundle rb) {
         initUsedRequestsComboBox();
         spiRequestButton.disableProperty().bind(
-            super.createHexValuesOnlyBinding(byteArrayTextfield).not()
+                super.hexValuesOnly(byteArrayTextfield).not()
         );
         super.enforceHexValuesOnly(byteArrayTextfield);
         super.addAllModes(operationList);
@@ -75,28 +77,38 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     }
 
     private void initUsedRequestsComboBox() {
-        usedRequestsComboBox.setItems(FXCollections.observableArrayList(UserDataUtils.getSpiRequests()));
-        usedRequestsComboBox.setCellFactory((ListView<SpiRequestValueObject> param) -> {
-            final ListCell<SpiRequestValueObject> cell = new ListCell<SpiRequestValueObject>() {
-                {
-                    super.setPrefWidth(150);
-                }
+        usedRequestsComboBox.setItems(UserDataUtils.getSpiRequests());
+        usedRequestsComboBox
+                .setCellFactory((ListView<SpiRequestValueObject> param) -> {
+                    final ListCell<SpiRequestValueObject> cell
+                            = new ListCell<SpiRequestValueObject>() {
+                        {
+                            final int prefWidth = 150;
+                            super.setPrefWidth(prefWidth);
+                        }
 
-                @Override
-                public void updateItem(SpiRequestValueObject item,
-                        boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item != null) {
-                        setText(item.toString());
-                    }
-                }
-            };
-            return cell;
-        });
-        usedRequestsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            chipSelectList.getSelectionModel().select(newValue.getChipSelect());
-            operationList.getSelectionModel().select(newValue.getOperation());
-        });
+                        @Override
+                        public void updateItem(SpiRequestValueObject item,
+                                boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item != null) {
+                                setText(item.toString());
+                            }
+                        }
+                    };
+                    return cell;
+                });
+        usedRequestsComboBox
+                .getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    chipSelectList
+                            .getSelectionModel()
+                            .select(newValue.getChipSelect());
+                    operationList
+                            .getSelectionModel()
+                            .select(newValue.getOperation());
+                });
     }
 
     private void addAllChipSelectIndexes() {
@@ -111,7 +123,9 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     private void sendSpiRequest(MouseEvent event) {
         StringBuilder msgToSend = getMessagePrefix();
         msgToSend = msgToSend.append(byteArrayTextfield.getText());
-        ClientNetworkManager.setMessageToSend(App.getIpAddressFromCurrentTab(), msgToSend.toString());
+        NetworkManager
+                .setMessageToSend(App.getIpFromCurrentTab(),
+                        msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
         usedRequestsComboBox.getItems().add(request);
         UserDataUtils.addNewSpiRequest(request);
@@ -119,7 +133,9 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
 
     private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
-        return new SpiRequestValueObject(chipSelectList.getValue(), op, byteArrayTextfield.getText());
+        return new SpiRequestValueObject(chipSelectList.getValue(),
+                op,
+                byteArrayTextfield.getText());
     }
 
     /**
@@ -132,7 +148,8 @@ public class SpiRequestFormController extends AbstractInterfaceFormController im
     protected StringBuilder getMessagePrefix() {
         return (new StringBuilder())
                 .append("SPI:")
-                .append(operationList.getSelectionModel().getSelectedItem().toString())
+                .append(operationList
+                        .getSelectionModel().getSelectedItem().toString())
                 .append(SEPARATOR)
                 .append(HEXA_PREFIX)
                 .append(chipSelectList.getSelectionModel().getSelectedItem())

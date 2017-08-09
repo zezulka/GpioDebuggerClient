@@ -13,21 +13,21 @@ import javafx.beans.property.SimpleObjectProperty;
  *
  * @author Miloslav Zezulka, 2017
  */
-public class InterruptValueObject {
+public final class InterruptValueObject {
 
     private final ClientPin clientPin;
     private final InterruptType type;
     private final LocalTime timeAdded;
-    private final IntegerProperty numberOfInterrupts;
+    private final IntegerProperty numOfIntrs;
     private final ObjectProperty<ListenerState> state;
-    private final ObjectProperty<LocalTime> latestInterruptTime;
+    private final ObjectProperty<LocalTime> lastIntrTime;
 
     public InterruptValueObject(ClientPin clientPin, InterruptType type) {
         this.clientPin = clientPin;
         this.type = type;
         this.timeAdded = LocalTime.now();
-        this.numberOfInterrupts = new SimpleIntegerProperty(0);
-        this.latestInterruptTime = new SimpleObjectProperty<>();
+        this.numOfIntrs = new SimpleIntegerProperty(0);
+        this.lastIntrTime = new SimpleObjectProperty<>();
         this.state = new SimpleObjectProperty<>(ListenerState.NOT_RUNNING);
     }
 
@@ -48,23 +48,23 @@ public class InterruptValueObject {
     }
 
     public IntegerProperty numberOfInterruptsProperty() {
-        return numberOfInterrupts;
+        return numOfIntrs;
     }
 
     public ObjectProperty<LocalTime> latestInterruptTimeProperty() {
-        return latestInterruptTime;
+        return lastIntrTime;
     }
 
     public void setNumberOfInterrupts(int num) {
-        this.numberOfInterrupts.set(num);
+        this.numOfIntrs.set(num);
     }
 
     public void incrementNumberOfInterrupts() {
-        setNumberOfInterrupts(this.numberOfInterrupts.get() + 1);
+        setNumberOfInterrupts(this.numOfIntrs.get() + 1);
     }
 
     public void setLatestInterruptTime(LocalTime latestInterruptTime) {
-        this.latestInterruptTime.setValue(LocalTime.from(latestInterruptTime));
+        this.lastIntrTime.setValue(LocalTime.from(latestInterruptTime));
     }
 
     public void setState(ListenerState state) {

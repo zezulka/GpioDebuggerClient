@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import layouts.controllers.ControllerUtils;
+import misc.StringConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,18 +24,22 @@ import userdata.DeviceValueObject;
  *
  * @author Miloslav Zezulka, 2017
  */
-public class ClientNetworkManager {
+public final class NetworkManager {
 
-    private static final Map<InetAddress, ClientConnectionThread> ADDRESSES = new HashMap<>();
+    private static final Map<InetAddress, ConnectionThread> ADDRESSES
+            = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
     public static final int DEFAULT_SOCK_PORT = 8088;
+    public static final int BUFFER_SIZE = 1024;
+    public static final int END_OF_STREAM = -1;
     public static final int TIMEOUT = 5 * 1000;
-    private static final ClientNetworkManager INSTANCE = new ClientNetworkManager();
+    private static final NetworkManager INSTANCE
+            = new NetworkManager();
 
-    private ClientNetworkManager() {
+    private NetworkManager() {
     }
 
-    public static ClientNetworkManager getInstance() {
+    public static NetworkManager getInstance() {
         return INSTANCE;
     }
 
@@ -49,11 +54,11 @@ public class ClientNetworkManager {
     private boolean alreadyConnectedToAddress(InetAddress ipAddress) {
         return ADDRESSES.get(ipAddress) != null;
     }
-    
-    private void addNewMapping(InetAddress address, ClientConnectionThread thread) {
+
+    private void addNew(InetAddress address, ConnectionThread thread) {
         ADDRESSES.put(address, thread);
     }
-    
+
     public static void removeMapping(InetAddress address) {
         ADDRESSES.remove(address);
     }
@@ -69,7 +74,9 @@ public class ClientNetworkManager {
      */
     public boolean connectToDevice(DeviceValueObject device) {
         if (alreadyConnectedToAddress(device.getAddress())) {
-            ControllerUtils.showErrorDialogMessage("Connection has already been established for this IP address.");
+            ControllerUtils
+                    .showErrorDialog(StringConstants.ERR_ALREADY_CONNECTED
+                            .toString());
             return false;
         }
         Selector selector;
@@ -83,28 +90,30 @@ public class ClientNetworkManager {
             LOGGER.error(null, ex);
             return false;
         }
-        AgentConnectionValueObject connection = new AgentConnectionValueObject(null, selector, channel, device);
-        ClientConnectionThread thread = new ClientConnectionThread(connection);
-        addNewMapping(device.getAddress(), thread);
+        ConnectionValueObject connection
+                = new ConnectionValueObject(null, selector, channel, device);
+        ConnectionThread thread = new ConnectionThread(connection);
+        addNew(device.getAddress(), thread);
         new Thread(thread).start();
         return true;
     }
-    
-    public static void setMessageToSend(InetAddress address, String messageToSend) {
+
+    public static void setMessageToSend(InetAddress address,
+            String messageToSend) {
         ADDRESSES.get(address).setMessageToSend(messageToSend);
     }
-    
+
     public static void disconnect(InetAddress address) {
         ADDRESSES.get(address).disconnect();
     }
-    
+
     public static void disconnectAll() {
-        Set<ClientConnectionThread> threads = new HashSet<>(ADDRESSES.values());
+        Set<ConnectionThread> threads = new HashSet<>(ADDRESSES.values());
         threads.forEach((thread) -> thread.disconnect());
         ADDRESSES.clear();
     }
-    
+
     public static boolean isAnyConnectionOpened() {
         return !ADDRESSES.isEmpty();
     }
-} 
+}

@@ -2,7 +2,6 @@ package userdata;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import protocol.BoardType;
 
 public final class DeviceValueObject {
@@ -11,27 +10,37 @@ public final class DeviceValueObject {
     private LocalDateTime timeConnected;
     private boolean dirty = false;
 
+    /**
+     * Constructor without BoardType input variable. If such constructor is
+     * used, {@link BoardType.UNKNOWN} is used.
+     * @param address
+     */
+    public DeviceValueObject(InetAddress address) {
+        this(address, BoardType.UNKNOWN);
+    }
+
     public DeviceValueObject(InetAddress address, BoardType device) {
         this(address, device, null);
     }
 
-    public DeviceValueObject(InetAddress address, BoardType device, LocalDateTime timeConnected) {
+    public DeviceValueObject(InetAddress address, BoardType device,
+            LocalDateTime timeConnected) {
         this.address = address;
         this.timeConnected = timeConnected;
         this.boardType = device;
     }
-    
+
     public boolean isDirty() {
         return dirty;
     }
-    
+
     public BoardType getBoardType() {
         return boardType;
     }
-    
+
     public String getHostName() {
         return this.address.getHostName();
-    } 
+    }
 
     public InetAddress getAddress() {
         return address;
@@ -40,28 +49,40 @@ public final class DeviceValueObject {
     public LocalDateTime getTimeConnected() {
         return timeConnected;
     }
-    
+
+    public String getTimeConnectedStr() {
+        if (timeConnected == null) {
+            return "never";
+        }
+        return timeConnected.format(UserDataUtils.DATE_TIME_FORMATTER);
+    }
+
     public void setTimeConnected(LocalDateTime ldt) {
         this.dirty = true;
         this.timeConnected = ldt;
     }
-    
+
     public void setBoardType(BoardType boardType) {
         this.boardType = boardType;
     }
 
     @Override
     public String toString() {
-        return  "\nIP: " + address.getHostAddress() 
-                + (this.getHostName().equals(address.getHostAddress()) ? "" : ("\nHostname: " + this.getHostName()))
-                + (this.getBoardType() == null ? "" : "\nBoard type: " + this.getBoardType().toString())
-                + "\nLast connection: " + (timeConnected == null ? "never" : timeConnected.format(DateTimeFormatter.ofPattern("dd-MM, HH:mm")));
+        String ipAddress = address.getHostAddress();
+        String hostname = getHostName();
+        String board = "Board type: " + getBoardType();
+        String lastConnection = "Last connection: " + getTimeConnectedStr();
+
+        return  ipAddress + '\n'
+                + hostname + '\n'
+                + board + '\n'
+                + lastConnection;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + this.address.hashCode();
+        hash = 11 * hash + address.hashCode();
         return hash;
     }
 
@@ -77,8 +98,8 @@ public final class DeviceValueObject {
             return false;
         }
         final DeviceValueObject other = (DeviceValueObject) obj;
-        return this.address.equals(other.address);
+        return address.equals(other.address);
     }
-    
-    
+
+
 }

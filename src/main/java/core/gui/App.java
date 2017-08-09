@@ -1,14 +1,19 @@
 package core.gui;
 
-import core.net.ClientNetworkManager;
+import core.net.NetworkManager;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.time.LocalTime;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -22,19 +27,30 @@ import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import javafx.util.Duration;
+
 import layouts.controllers.ControllerUtils;
 import layouts.controllers.MasterWindowController;
+
+import misc.StringConstants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import protocol.*;
 import userdata.UserDataUtils;
 
-public class App extends Application {
+import protocol.BoardType;
+import protocol.ClientPin;
+import protocol.Signal;
+
+public final class App extends Application {
 
     private static Scene scene;
     private static Stage stage;
     private static final String FXML_EXT = ".fxml";
+
+    private static final int WINDOW_HEIGHT = 800;
+    private static final int WINDOW_WIDTH = 1000;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
@@ -52,21 +68,22 @@ public class App extends Application {
         stage = primaryStage;
         loadScene();
         stage.setOnCloseRequest((event) -> {
-            if (ClientNetworkManager.isAnyConnectionOpened()
-                    && ControllerUtils.showConfirmationDialogMessage("Are you sure you want to close the whole application? All connections to devices will be closed.")) {
-                ClientNetworkManager.disconnectAll();
-            } else if(ClientNetworkManager.isAnyConnectionOpened()) {
-                event.consume();
-                return;
+            if (NetworkManager.isAnyConnectionOpened()) {
+                if (ControllerUtils.showConfirmDialog(StringConstants
+                        .CLOSE_WHEN_DEVICES_ACTIVE.toString())) {
+                    NetworkManager.disconnectAll();
+                } else {
+                    event.consume();
+                    return;
+                }
             }
             UserDataUtils.saveAllRequests();
             stage.close();
             Platform.exit();
-
         });
         stage.setScene(scene);
-        stage.setMinHeight(800);
-        stage.setMinWidth(1000);
+        stage.setMinHeight(WINDOW_HEIGHT);
+        stage.setMinWidth(WINDOW_WIDTH);
         stage.setTitle("Debugger for RaspberryPi");
         stage.show();
     }
@@ -76,7 +93,7 @@ public class App extends Application {
         UserDataUtils.saveAllDevices();
         super.stop();
     }
-   
+
     public static InetAddress getLastAddress() {
         return lastAddedAddress;
     }
@@ -90,7 +107,7 @@ public class App extends Application {
             case CUBIEBOARD:
                 return cubieboard;
             default:
-                throw new IllegalArgumentException("[URL loader] unsupported board type");
+                throw new IllegalArgumentException("unsupported board type");
         }
     }
 
@@ -105,8 +122,8 @@ public class App extends Application {
             try {
                 newRoot = (Parent) fxmlLoader.load();
             } catch (IOException ex) {
-                ControllerUtils.showErrorDialogMessage(ex.getMessage());
-                LOGGER.error(String.format("Invalid resource locator: %s", fxml), ex);
+                ControllerUtils.showErrorDialog(ex.getMessage());
+                LOGGER.error(String.format("Invalid URL: %s", fxml), ex);
                 return;
             }
             Stage newStage = new Stage();
@@ -143,7 +160,9 @@ public class App extends Application {
         }
     }
 
-    private static URL getPathToFxml(String fxmlName) throws MalformedURLException {
+    private static URL getPathToFxml(String fxmlName)
+            throws MalformedURLException {
+
         StringBuilder builder = new StringBuilder();
         builder = builder
                 .append("src")
@@ -185,26 +204,39 @@ public class App extends Application {
     }
 
     public static void writeI2cResponseIntoTextArea(String response) {
-        writeResponseIntoTextArea("#i2cTextArea", response);
+        updateTextArea("#i2cTextArea", response);
     }
 
     public static void writeSpiResponseIntoTextArea(String response) {
-        writeResponseIntoTextArea("#spiTextArea", response);
+        updateTextArea("#spiTextArea", response);
     }
 
-    private static void writeResponseIntoTextArea(String lookupId, String response) {
+    private static void updateTextArea(String lookupId, String response) {
         TextArea ta = ((TextArea) scene.lookup(lookupId));
-        ta.setText(LocalTime.now().toString() + '\n' + response + '\n' + ta.getText());
+        ta.setText(LocalTime.now().toString()
+                + '\n' + response
+                + '\n' + ta.getText());
     }
 
-    public static void setPinButtonColourFromSignal(ClientPin pin, Signal signal) {
+    public static void setPinButtonColourFromSignal(ClientPin pin,
+            Signal signal) {
         Button btn = (Button) scene.lookup("#" + pin.getPinId());
         btn.setStyle("");
-        btn.setStyle("-fx-background-color: #" + (signal.getBooleanValue() ? "55FF55" : "FF5555"));
+        String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
+        btn.setStyle("-fx-background-color: #" + color);
 
-        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), btn);
-        fadeTransition.setFromValue(1.0f);
-        fadeTransition.setToValue(0.8f);
+        playFadeTransition(btn);
+    }
+
+    private static void playFadeTransition(Button btn) {
+        final double startVal = 1.0f;
+        final double endVal = 0.8f;
+        final int playDurationMilis = 500;
+
+        FadeTransition fadeTransition
+                = new FadeTransition(Duration.millis(playDurationMilis), btn);
+        fadeTransition.setFromValue(startVal);
+        fadeTransition.setToValue(endVal);
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
     }
@@ -218,7 +250,7 @@ public class App extends Application {
         throw new IllegalArgumentException("no such address is registered");
     }
 
-    public static InetAddress getIpAddressFromCurrentTab() {
+    public static InetAddress getIpFromCurrentTab() {
         for (TabAddressPair pair : TAB_ADDR_PAIRS) {
             if (pair.getTab().equals(MasterWindowController.getCurrentTab())) {
                 return pair.getAddress();

@@ -2,3 +2,7 @@
 /logs/
 
 /nbproject/
+src/main/resources/devices.xml
+src/main/resources/i2c_requests.xml
+src/main/resources/spi_requests.xml
+
