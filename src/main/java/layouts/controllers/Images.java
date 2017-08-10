@@ -22,7 +22,6 @@ public final class Images {
     static final Image DEVICES = getImageFromPath("devices.png");
     static final Image CONNECT = getImageFromPath("connect.png");
     static final Image DEVICE_TREE = getImageFromPath("tree.png");
-    static final Image ADD_NEW = getImageFromPath("add_new.png");
     static final Image HISTORY = getImageFromPath("history.png");
     static final Image DISCONNECT = getImageFromPath("disconnect.png");
 

@@ -95,8 +95,6 @@ public final class MasterWindowController implements Initializable {
         initializeToolbarButton(connectToDeviceButton, Images.CONNECT,
                 "Connects to device. "
                 + "\nDevice must be selected in the device tree.");
-        initializeToolbarButton(addNewDeviceButton, Images.ADD_NEW,
-                "Adds new device.");
         initializeToolbarButton(deviceTree, Images.DEVICE_TREE,
                 "Device tree browser.");
 

@@ -61,7 +61,7 @@
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets></Label>
-                        <Button fx:id="addNewDeviceButton" ellipsisString="" minWidth="0.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                        <Button fx:id="addNewDeviceButton" ellipsisString="" minWidth="0.0" mnemonicParsing="false" text="Add new" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                         <Label fx:id="nowEnteringLabel" opacity="0.75" text="Now entering:" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                            <font>
                               <Font name="System Italic" size="13.0" />
