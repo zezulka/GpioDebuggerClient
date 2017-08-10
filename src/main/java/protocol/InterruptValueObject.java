@@ -47,23 +47,23 @@ public final class InterruptValueObject {
         return timeAdded;
     }
 
-    public IntegerProperty numberOfInterruptsProperty() {
+    public IntegerProperty numOfIntrsProperty() {
         return numOfIntrs;
     }
 
-    public ObjectProperty<LocalTime> latestInterruptTimeProperty() {
+    public ObjectProperty<LocalTime> lastIntrTimeProperty() {
         return lastIntrTime;
     }
 
-    public void setNumberOfInterrupts(int num) {
+    public void setNumOfIntrs(int num) {
         this.numOfIntrs.set(num);
     }
 
     public void incrementNumberOfInterrupts() {
-        setNumberOfInterrupts(this.numOfIntrs.get() + 1);
+        setNumOfIntrs(this.numOfIntrs.get() + 1);
     }
 
-    public void setLatestInterruptTime(LocalTime latestInterruptTime) {
+    public void setLastIntrTime(LocalTime latestInterruptTime) {
         this.lastIntrTime.setValue(LocalTime.from(latestInterruptTime));
     }
 

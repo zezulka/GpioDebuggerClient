@@ -22,9 +22,9 @@ public final class InterruptGeneratedAgentResponse
     protected void modifyInterruptValueObjectImpl() {
         if (getResponse().stateProperty().get().equals(ListenerState.RUNNING)) {
             final int newNumIntrs
-                    = getResponse().numberOfInterruptsProperty().get() + 1;
-            getResponse().setNumberOfInterrupts(newNumIntrs);
-            getResponse().setLatestInterruptTime(getGeneratedAt());
+                    = getResponse().numOfIntrsProperty().get() + 1;
+            getResponse().numOfIntrsProperty().set(newNumIntrs);
+            getResponse().setLastIntrTime(getGeneratedAt());
         } else {
             LOGGER.debug("Message about interrupt has been received, "
                     + "but this listener is not active.");
