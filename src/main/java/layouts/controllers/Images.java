@@ -23,6 +23,7 @@ public final class Images {
     static final Image CONNECT = getImageFromPath("connect.png");
     static final Image DEVICE_TREE = getImageFromPath("tree.png");
     static final Image HISTORY = getImageFromPath("history.png");
+    static final Image REMOVE = getImageFromPath("remove.jpg");
     static final Image DISCONNECT = getImageFromPath("disconnect.png");
 
     private static Image getImageFromPath(String path) {

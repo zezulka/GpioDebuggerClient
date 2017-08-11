@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 
 import javafx.concurrent.Task;
@@ -48,8 +46,6 @@ public final class InterruptTableController implements Initializable {
     @FXML
     private ComboBox<ClientPin> pinComboBox;
     @FXML
-    private Button addListenerButton;
-    @FXML
     private Button addNewInterruptListenerButton;
     @FXML
     private TableColumn<InterruptValueObject, ClientPin> pinName;
@@ -66,7 +62,7 @@ public final class InterruptTableController implements Initializable {
     @FXML
     private TableView<InterruptValueObject> tableView;
     @FXML
-    private Button submitButton;
+    private TableColumn<InterruptValueObject, Void> removeRowBtn;
 
     /**
      * Initializes the controller class.
@@ -81,8 +77,6 @@ public final class InterruptTableController implements Initializable {
         tableView.setItems(InterruptManager.getListeners(App.getLastAddress()));
         tableView.selectionModelProperty().set(null);
         tableView.setEditable(true);
-        addNewInterruptListenerButton
-                .disableProperty().bind(assertNumListeners());
         addNewInterruptListenerButton.setOnMouseClicked((event) -> {
             InterruptManager.addInterruptListener(
                     App.getIpFromCurrentTab(),
@@ -117,16 +111,6 @@ public final class InterruptTableController implements Initializable {
         interruptTypeComboBox.setItems(InterruptType.observableValues());
     }
 
-    protected BooleanBinding assertNumListeners() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> InterruptManager
-                        .getNumListeners()
-                        .greaterThanOrEqualTo(InterruptManager.LISTENERS_MAX)
-                        .get(),
-                InterruptManager.getNumListeners());
-        return Bindings.when(binding).then(true).otherwise(false);
-    }
-
     private void initCellValueFactory() {
         pinName.setCellValueFactory(new PropertyValueFactory<>("clientPin"));
         interruptType.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -140,18 +124,47 @@ public final class InterruptTableController implements Initializable {
                 .setCellValueFactory(
                         new PropertyValueFactory<>("lastIntrTime"));
         state.setCellValueFactory(new PropertyValueFactory<>("state"));
-        state.setCellFactory(p -> new ButtonCell());
+        state.setCellFactory(p -> new StatePropertyButtonCell());
+        removeRowBtn.setCellFactory(p -> new RemoveRowButtonCell());
     }
 
-    private class ButtonCell extends
+    private class RemoveRowButtonCell extends
+            TableCell<InterruptValueObject, Void> {
+
+        private final Button cellBtn
+                = new Button(null, new ImageView(Images.REMOVE));
+
+        RemoveRowButtonCell() {
+            cellBtn.setPadding(Insets.EMPTY);
+            cellBtn.setOnAction((event) -> {
+                InterruptValueObject ivo = (InterruptValueObject) getTableRow()
+                        .getItem();
+                tableView
+                        .itemsProperty()
+                        .get()
+                        .remove(ivo);
+            });
+        }
+
+        //Display button if the row is not empty
+        @Override
+        protected void updateItem(Void nothing, boolean empty) {
+            super.updateItem(nothing, empty);
+            getTableView().refresh();
+            if (!empty) {
+                setGraphic(cellBtn);
+            }
+        }
+    }
+
+    private class StatePropertyButtonCell extends
             TableCell<InterruptValueObject, ListenerState> {
 
         private final Button cellBtn
                 = new Button(null, new ImageView(Images.PLAY_BTN));
 
-        ButtonCell() {
+        StatePropertyButtonCell() {
             cellBtn.setPadding(Insets.EMPTY);
-            cellBtn.getChildrenUnmodifiable().size();
             cellBtn.setOnAction((event) -> {
                 InterruptValueObject selected
                         = (InterruptValueObject) getTableRow().getItem();

@@ -14,7 +14,6 @@ public final class InterruptManager {
 
     private static final Map<InetAddress, ObservableList<InterruptValueObject>>
             INTERRUPTS = new HashMap<>();
-    public static final int LISTENERS_MAX = 4;
     private static final IntegerProperty NUM_LISTENERS
             = new SimpleIntegerProperty(0);
 
@@ -81,8 +80,7 @@ public final class InterruptManager {
         if (INTERRUPTS.get(destination) == null) {
             INTERRUPTS.put(destination, FXCollections.observableArrayList());
         }
-        if (!INTERRUPTS.get(destination).contains(ivo)
-                && INTERRUPTS.size() <= LISTENERS_MAX) {
+        if (!INTERRUPTS.get(destination).contains(ivo)) {
             NUM_LISTENERS.set(NUM_LISTENERS.get() + 1);
             INTERRUPTS.get(destination).add(ivo);
         } else {
