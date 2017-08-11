@@ -10,7 +10,7 @@ public final class DeviceValueObject {
     private final InetAddress address;
     private BoardType boardType;
     private LocalDateTime timeConnected;
-    private final BooleanProperty disconnected;
+    private BooleanProperty disconnected;
     private boolean dirty = false;
 
     /**
@@ -31,7 +31,6 @@ public final class DeviceValueObject {
         this.address = address;
         this.timeConnected = timeConnected;
         this.boardType = device;
-        this.disconnected = new SimpleBooleanProperty(true);
     }
 
     public boolean isDirty() {
@@ -43,6 +42,9 @@ public final class DeviceValueObject {
     }
 
     public BooleanProperty disconnectedProperty() {
+        if (disconnected == null) {
+            disconnected = new SimpleBooleanProperty(true);
+        }
         return disconnected;
     }
 

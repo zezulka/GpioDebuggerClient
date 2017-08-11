@@ -208,10 +208,21 @@ public final class MasterWindowController implements Initializable {
                 .forEach((device)
                         -> hist
                         .getChildren()
-                        .add(new TreeItem<>(device)));
+                        .add(getTreeItemWithListener(device)));
         root.getChildren().addAll(active, hist);
         root.setExpanded(true);
         devicesTree.setRoot(root);
+    }
+
+    private TreeItem<DeviceValueObject>
+            getTreeItemWithListener(DeviceValueObject obj) {
+        TreeItem<DeviceValueObject> treeItem = new TreeItem<>(obj);
+        obj.disconnectedProperty().addListener((observable, before, now) -> {
+            if (before.booleanValue() != now.booleanValue()) {
+                moveDeviceNodeToOtherBranch(treeItem);
+            }
+        });
+        return treeItem;
     }
 
     private static void moveDeviceNodeToOtherBranch(TreeItem item) {
@@ -251,7 +262,7 @@ public final class MasterWindowController implements Initializable {
                     = (DeviceValueObject) selectedItem.getValue();
             NetworkManager.disconnect(device.getAddress());
             InterruptManager.clearAllListeners(device.getAddress());
-            moveDeviceNodeToOtherBranch(selectedItem);
+            device.disconnectedProperty().set(true);
             devicesTab
                     .getTabs()
                     .remove(App.getTabFromInetAddress(device.getAddress()));
@@ -264,11 +275,9 @@ public final class MasterWindowController implements Initializable {
 
     private class ConnectionWorker extends Task<Boolean> {
 
-        private final TreeItem selectedItem;
         private final DeviceValueObject device;
 
         ConnectionWorker(TreeItem selectedItem) {
-            this.selectedItem = selectedItem;
             this.device = (DeviceValueObject) selectedItem.getValue();
         }
 
@@ -305,7 +314,6 @@ public final class MasterWindowController implements Initializable {
         protected void done() {
             try {
                 if (get() && NETWORK_MANAGER.connectToDevice(device)) {
-                    moveDeviceNodeToOtherBranch(selectedItem);
                     devicesTree.refresh();
                 }
             } catch (InterruptedException | ExecutionException ex) {

@@ -90,6 +90,7 @@ public final class UserDataUtils {
         X_STREAM.omitField(SpiRequests.class, "dirty");
         X_STREAM.omitField(Devices.class, "dirty");
         X_STREAM.omitField(DeviceValueObject.class, "dirty");
+        X_STREAM.omitField(DeviceValueObject.class, "disconnected");
 
         X_STREAM.addImplicitCollection(I2cRequests.class, "requests",
                 I2cRequestValueObject.class);

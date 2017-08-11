@@ -127,14 +127,13 @@ public final class ConnectionThread implements Runnable {
 
     private String read() {
         try {
-            ByteBuffer readBuffer =
-                    ByteBuffer.allocate(NetworkManager.BUFFER_SIZE);
+            ByteBuffer readBuffer
+                    = ByteBuffer.allocate(NetworkManager.BUFFER_SIZE);
             readBuffer.clear();
             int length;
             length = connection.getChannel().read(readBuffer);
             if (length == NetworkManager.END_OF_STREAM) {
                 LOGGER.debug("reached end of the input stream");
-                connection.getChannel().close();
                 return null;
             }
             readBuffer.flip();
@@ -161,6 +160,12 @@ public final class ConnectionThread implements Runnable {
      */
     public void disconnect() {
         cleanUpResources();
+        try {
+            connection.getChannel().close();
+        } catch (IOException ex) {
+            //ignore for the time being
+        }
+        connection.getDevice().disconnectedProperty().set(true);
         InterruptManager.clearAllListeners(connection.getDevice().getAddress());
         NetworkManager.removeMapping(connection.getDevice().getAddress());
     }
@@ -192,6 +197,7 @@ public final class ConnectionThread implements Runnable {
             }
             channel.configureBlocking(false);
             key.interestOps(SelectionKey.OP_READ);
+            connection.getDevice().disconnectedProperty().set(false);
             return true;
         } catch (IOException ex) {
             LOGGER.error("Could not connect to server, reason: ", ex);
