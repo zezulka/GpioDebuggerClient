@@ -2,12 +2,15 @@ package userdata;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import protocol.BoardType;
 
 public final class DeviceValueObject {
     private final InetAddress address;
     private BoardType boardType;
     private LocalDateTime timeConnected;
+    private final BooleanProperty disconnected;
     private boolean dirty = false;
 
     /**
@@ -28,6 +31,7 @@ public final class DeviceValueObject {
         this.address = address;
         this.timeConnected = timeConnected;
         this.boardType = device;
+        this.disconnected = new SimpleBooleanProperty(true);
     }
 
     public boolean isDirty() {
@@ -36,6 +40,10 @@ public final class DeviceValueObject {
 
     public BoardType getBoardType() {
         return boardType;
+    }
+
+    public BooleanProperty disconnectedProperty() {
+        return disconnected;
     }
 
     public String getHostName() {

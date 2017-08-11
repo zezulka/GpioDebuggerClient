@@ -1,5 +1,6 @@
 package layouts.controllers;
 
+import core.util.StringConstants;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -39,16 +40,14 @@ public final class ControllerUtils {
     }
 
     /**
-     * @return True if user confirmed that they confirm the given action, false
-     * otherwise. This method must be wrapped in Platform.runLater (because of
-     * the return value).
+     * @return True if user confirmed the given action, false otherwise.
      */
-    public static boolean showConfirmDialog(String message) {
+    public static boolean showConfirmDialog(StringConstants message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Please confirm");
         alert.setHeaderText(null);
         alert.setResizable(true);
-        alert.setContentText(message);
+        alert.setContentText(message.toString());
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() != null && result.get().equals(ButtonType.OK);
     }

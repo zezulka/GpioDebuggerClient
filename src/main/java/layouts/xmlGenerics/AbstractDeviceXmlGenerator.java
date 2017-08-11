@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import protocol.ClientPin;
 import layouts.PinLayoutFactory;
-import misc.StringConstants;
+import core.util.StringConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.BoardType;

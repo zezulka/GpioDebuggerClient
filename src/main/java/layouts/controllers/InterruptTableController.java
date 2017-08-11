@@ -2,6 +2,7 @@ package layouts.controllers;
 
 import core.gui.App;
 import core.net.NetworkManager;
+import core.util.StringConstants;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public final class InterruptTableController implements Initializable {
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(RaspiController.class);
+    public static final Object SYNC = new Object();
 
     @FXML
     private ComboBox<InterruptType> interruptTypeComboBox;
@@ -135,15 +137,24 @@ public final class InterruptTableController implements Initializable {
                 = new Button(null, new ImageView(Images.REMOVE));
 
         RemoveRowButtonCell() {
+
             cellBtn.setPadding(Insets.EMPTY);
             cellBtn.setOnAction((event) -> {
-                InterruptValueObject ivo = (InterruptValueObject) getTableRow()
-                        .getItem();
-                tableView
-                        .itemsProperty()
-                        .get()
-                        .remove(ivo);
+                buttonClickedListener();
             });
+        }
+
+        private void buttonClickedListener() {
+            InterruptValueObject ivo = (InterruptValueObject) getTableRow()
+                    .getItem();
+            if (ivo.stateProperty().get().equals(ListenerState.NOT_RUNNING)) {
+                tableView.itemsProperty().get().remove(ivo);
+                return;
+            }
+            if (ControllerUtils
+                    .showConfirmDialog(StringConstants.LISTENER_ACTIVE)) {
+                new Thread(new StopAndRemoveInterruptsWorker(ivo)).start();
+            }
         }
 
         //Display button if the row is not empty
@@ -239,6 +250,10 @@ public final class InterruptTableController implements Initializable {
             return null;
         }
 
+        protected InterruptValueObject getSelectedIntr() {
+            return selectedIntr;
+        }
+
         private String gatherMessageFromSubmitted() {
             if (selectedIntr == null) {
                 return null;
@@ -263,27 +278,39 @@ public final class InterruptTableController implements Initializable {
         protected String getMessagePrefix() {
             return "GPIO:INTR_START";
         }
-
-        @Override
-        protected void done() {
-            super.done();
-        }
     }
 
-    public final class StopInterruptsWorker extends AbstractInterruptsWorker {
+    public class StopInterruptsWorker extends AbstractInterruptsWorker {
 
         public StopInterruptsWorker(InterruptValueObject selected) {
             super(selected, ListenerState.RUNNING);
         }
 
         @Override
-        protected String getMessagePrefix() {
+        protected final String getMessagePrefix() {
             return "GPIO:INTR_STOP";
+        }
+    }
+
+    public final class StopAndRemoveInterruptsWorker
+            extends StopInterruptsWorker {
+
+        public StopAndRemoveInterruptsWorker(InterruptValueObject selected) {
+            super(selected);
         }
 
         @Override
         protected void done() {
             super.done();
+            synchronized (SYNC) {
+                try {
+                    // wait until InterruptListenerStoppedAgentResponse sends
+                    // signal; please see this class for more information
+                    SYNC.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+            tableView.itemsProperty().get().remove(getSelectedIntr());
         }
     }
 }

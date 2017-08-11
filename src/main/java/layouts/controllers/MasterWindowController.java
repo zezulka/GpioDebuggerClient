@@ -38,7 +38,7 @@ import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import javafx.collections.ObservableList;
-import misc.StringConstants;
+import core.util.StringConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,11 +214,7 @@ public final class MasterWindowController implements Initializable {
         devicesTree.setRoot(root);
     }
 
-    private SplitPane.Divider getSplitPaneDivider() {
-        return rootSplitPane.getDividers().get(0);
-    }
-
-    private void moveDeviceNodeToOtherBranch(TreeItem item) {
+    private static void moveDeviceNodeToOtherBranch(TreeItem item) {
         TreeItem parentNode = item.getParent();
         parentNode.getChildren().remove(item);
         TreeItem nextNode = parentNode.nextSibling();
@@ -248,8 +244,7 @@ public final class MasterWindowController implements Initializable {
     @FXML
     private void disconnectHandler(MouseEvent event) {
         boolean okToProceed = ControllerUtils
-                .showConfirmDialog(
-                        StringConstants.OK_TO_DISCONNECT.toString());
+                .showConfirmDialog(StringConstants.OK_TO_DISCONNECT);
         if (okToProceed) {
             TreeItem selectedItem = getSelectedItem();
             DeviceValueObject device

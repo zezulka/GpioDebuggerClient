@@ -33,7 +33,7 @@ import javafx.util.Duration;
 import layouts.controllers.ControllerUtils;
 import layouts.controllers.MasterWindowController;
 
-import misc.StringConstants;
+import core.util.StringConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public final class App extends Application {
         stage.setOnCloseRequest((event) -> {
             if (NetworkManager.isAnyConnectionOpened()) {
                 if (ControllerUtils.showConfirmDialog(StringConstants
-                        .CLOSE_WHEN_DEVICES_ACTIVE.toString())) {
+                        .CLOSE_WHEN_DEVICES_ACTIVE)) {
                     NetworkManager.disconnectAll();
                 } else {
                     event.consume();

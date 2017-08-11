@@ -1,4 +1,4 @@
-package misc;
+package core.util;
 
 import java.io.File;
 
@@ -19,6 +19,8 @@ public enum StringConstants {
     CLOSE_WHEN_DEVICES_ACTIVE("Are you sure you want to close "
             + "the whole application? "
             + "All connections to devices will be closed."),
+    LISTENER_ACTIVE("This interrupt listener is still active. It is necessary"
+            + " to stop it before removing it. Okay to continue?"),
     OK_TO_DISCONNECT("Are you sure that you want "
             + "to disconnect from this device?"),
     PATH_TO_FXML_DIR(
