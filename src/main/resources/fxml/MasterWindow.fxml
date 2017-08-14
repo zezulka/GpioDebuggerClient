@@ -79,12 +79,22 @@
       </SplitPane>
         <ToolBar maxHeight="40.0" minHeight="40.0" minWidth="1000.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>
-            <ToggleButton fx:id="deviceTree" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" textAlignment="RIGHT" />
-                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" alignment="CENTER_RIGHT" blendMode="SRC_ATOP" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#connectToDeviceHandler" textAlignment="RIGHT" />
-            <Button id="disconnectButton" fx:id="disconnectButton" mnemonicParsing="false" onMouseClicked="#disconnectHandler" />
+            <ToggleButton id="deviceTree" fx:id="deviceTree" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Device Tree" textAlignment="RIGHT">
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor></ToggleButton>
+            <Label text="            " />
+                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" blendMode="SRC_ATOP" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#connectToDeviceHandler" text="Connect">
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor></Button>
+            <Button id="disconnectButton" fx:id="disconnectButton" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#disconnectHandler" text="Disconnect">
+               <cursor>
+                  <Cursor fx:constant="OPEN_HAND" />
+               </cursor></Button>
             </items>
          <cursor>
-            <Cursor fx:constant="OPEN_HAND" />
+            <Cursor fx:constant="DEFAULT" />
          </cursor>
         </ToolBar>
     </children>

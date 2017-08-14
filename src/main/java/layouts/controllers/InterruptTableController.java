@@ -24,7 +24,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
@@ -133,8 +132,7 @@ public final class InterruptTableController implements Initializable {
     private class RemoveRowButtonCell extends
             TableCell<InterruptValueObject, Void> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Images.REMOVE));
+        private final Button cellBtn = new Button(null, ImageViews.REMOVE);
 
         RemoveRowButtonCell() {
 
@@ -171,8 +169,7 @@ public final class InterruptTableController implements Initializable {
     private class StatePropertyButtonCell extends
             TableCell<InterruptValueObject, ListenerState> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Images.PLAY_BTN));
+        private final Button cellBtn = new Button(null, ImageViews.PLAY_BTN);
 
         StatePropertyButtonCell() {
             cellBtn.setPadding(Insets.EMPTY);
@@ -207,13 +204,13 @@ public final class InterruptTableController implements Initializable {
             switch (t) {
                 case NOT_RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Images.PLAY_BTN));
+                        cellBtn.setGraphic(ImageViews.PLAY_BTN);
                     });
                     break;
                 }
                 case RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Images.STOP_BTN));
+                        cellBtn.setGraphic(ImageViews.STOP_BTN);
                     });
                     break;
                 }

@@ -23,5 +23,14 @@
 }
 
 .tool-bar {
-    -fx-background-color: #3c3c3c;
+    -fx-background-color: #AAAAAA;
+}
+
+#deviceTree {
+    -fx-background-color: #FFFFFF;
+}
+
+#deviceTree:selected {
+    -fx-background-color: #000000;
+    -fx-text-fill: #FFFFFF;
 }
