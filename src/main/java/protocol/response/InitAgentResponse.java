@@ -21,7 +21,7 @@ public final class InitAgentResponse implements AgentResponse {
         connection.getDevice().setTimeConnected(LocalDateTime.now());
         connection.getDevice().setBoardType(boardType);
 
-        App.loadNewTab(connection.getDevice().getAddress(),
+        App.getInstance().loadNewTab(connection.getDevice().getAddress(),
                 connection.getDevice().getBoardType()
         );
     }

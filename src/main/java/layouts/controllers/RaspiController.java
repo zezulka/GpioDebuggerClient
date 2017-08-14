@@ -1,22 +1,23 @@
 package layouts.controllers;
 
-import core.gui.App;
 import core.net.NetworkManager;
+import java.net.InetAddress;
 
 import java.net.URL;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.RadioButton;
 
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,43 +32,57 @@ public final class RaspiController implements Initializable {
             = LoggerFactory.getLogger(RaspiController.class);
 
     @FXML
-    private RadioButton readRadioButton;
-    @FXML
     private Tab raspiTab;
+    @FXML
+    private Tab gpioTab;
+    @FXML
+    private GridPane gpioGridPane;
+    @FXML
+    private RadioButton writeRadioButton;
+    @FXML
+    private ToggleGroup op;
+    @FXML
+    private RadioButton readRadioButton;
+
+    private final InetAddress address;
+
+    public RaspiController(InetAddress address) {
+        if (address == null) {
+            throw new IllegalArgumentException("address cannot be null");
+        }
+        this.address = address;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         raspiTab.setClosable(false);
-    }
-
-    @FXML
-    protected void mouseClickedHandler(MouseEvent event) {
-        handleGpioButton(event);
-    }
-
-    @FXML
-    protected void keyPressedHandler(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-            handleGpioButton(event);
+        List<Node> children = gpioGridPane.getChildren();
+        for (Node node : children) {
+            if (node.getClass().equals(Button.class)) {
+                Button btn = (Button) node;
+                btn.setOnAction((event) -> {
+                    handleGpioButton(event);
+                });
+            }
         }
     }
 
-    private void handleGpioButton(InputEvent event) {
-        String op = readRadioButton.isSelected() ? "read" : "write";
-        sendRequest(event, "gpio:" + op + ":" + getButtonTitle(event));
+    private void handleGpioButton(ActionEvent event) {
+        String operation = readRadioButton.isSelected() ? "read" : "write";
+        sendRequest("gpio:" + operation + ":" + getButtonTitle(event));
         LOGGER.info(String.format("GPIO request sent: pin %s, operation: %s",
-                op,
+                operation,
                 getButtonTitle(event)));
     }
 
-    private String getButtonTitle(InputEvent event) {
+    private String getButtonTitle(ActionEvent event) {
         if (event == null) {
             return null;
         }
-        return ((Button) event.getSource()).getId();
+        return ((Button) event.getSource()).getId().split(":")[0];
     }
 
-    private void sendRequest(InputEvent event, String msg) {
-        NetworkManager.setMessageToSend(App.getIpFromCurrentTab(), msg);
+    private void sendRequest(String msg) {
+        NetworkManager.setMessageToSend(address, msg);
     }
 }

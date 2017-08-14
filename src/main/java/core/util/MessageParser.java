@@ -41,7 +41,7 @@ public final class MessageParser {
             throw new IllegalArgumentException("Agent message cannot be null.");
         }
         try {
-            AgentResponseFactory.of(connection, agentMessage).react();
+            AgentResponseFactory.of(agentMessage, connection).react();
         } catch (IllegalResponseException ex) {
             LOGGER.error(String.format(
                     "Agent response '%s' could not be recognized, error: %s",

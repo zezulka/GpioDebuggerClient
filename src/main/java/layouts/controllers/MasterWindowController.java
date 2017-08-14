@@ -32,7 +32,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.validator.routines.InetAddressValidator;
@@ -89,13 +88,13 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void initializeToolbar() {
-        initializeToolbarButton(disconnectButton, Images.DISCONNECT,
+        initializeToolbarButton(disconnectButton, ImageViews.DISCONNECT,
                 "Disconnects from device. "
                 + "\nDevice must be selected in the device tree and active.");
-        initializeToolbarButton(connectToDeviceButton, Images.CONNECT,
+        initializeToolbarButton(connectToDeviceButton, ImageViews.CONNECT,
                 "Connects to device. "
                 + "\nDevice must be selected in the device tree.");
-        initializeToolbarButton(deviceTree, Images.DEVICE_TREE,
+        initializeToolbarButton(deviceTree, ImageViews.DEVICE_TREE_SELECTED,
                 "Device tree browser.");
 
         initIndicator();
@@ -131,13 +130,22 @@ public final class MasterWindowController implements Initializable {
         devicesTab.maxWidthProperty()
                 .bind(rootSplitPane.widthProperty().multiply(threshold));
         deviceTree.selectedProperty()
-                .addListener((observable, oldValue, toggled) -> {
-                    final double dividerPos = toggled ? threshold : 1.0;
-                    devicesTab.maxWidthProperty().bind(rootSplitPane
-                            .widthProperty()
-                            .multiply(dividerPos));
-                    rootSplitPane.setDividerPositions(dividerPos);
+                .addListener((observable, oldValue, isSelected) -> {
+                    deviceTreeBtnListener(isSelected);
                 });
+    }
+
+    private void deviceTreeBtnListener(boolean isSelected) {
+        final double threshold = 0.7;
+        deviceTree.setGraphic(isSelected ? ImageViews.DEVICE_TREE_SELECTED
+                : ImageViews.DEVICE_TREE);
+        connectToDeviceButton.visibleProperty().set(isSelected);
+        disconnectButton.visibleProperty().set(isSelected);
+        final double dividerPos = isSelected ? threshold : 1.0;
+        devicesTab.maxWidthProperty().bind(rootSplitPane
+                .widthProperty()
+                .multiply(dividerPos));
+        rootSplitPane.setDividerPositions(dividerPos);
     }
 
     private void initIndicator() {
@@ -191,18 +199,18 @@ public final class MasterWindowController implements Initializable {
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
-    private void initializeToolbarButton(ButtonBase button, Image buttonImage,
-            String tooltipText) {
-        button.setGraphic(new ImageView(buttonImage));
+    private void initializeToolbarButton(ButtonBase button,
+            ImageView buttonImageView, String tooltipText) {
+        button.setGraphic(buttonImageView);
         Tooltip tooltip = new Tooltip(tooltipText);
         button.setTooltip(tooltip);
     }
 
     private void initializeDeviceTree() {
 
-        TreeItem root = new TreeItem("devices", new ImageView(Images.DEVICES));
-        TreeItem active = new TreeItem("alive", new ImageView(Images.ACTIVE));
-        TreeItem hist = new TreeItem("history", new ImageView(Images.HISTORY));
+        TreeItem root = new TreeItem("devices", ImageViews.DEVICES);
+        TreeItem active = new TreeItem("alive", ImageViews.ACTIVE);
+        TreeItem hist = new TreeItem("history", ImageViews.HISTORY);
         UserDataUtils
                 .getDevices()
                 .forEach((device)

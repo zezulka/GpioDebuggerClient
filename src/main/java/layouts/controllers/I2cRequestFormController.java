@@ -1,7 +1,6 @@
 package layouts.controllers;
-
-import core.gui.App;
 import core.net.NetworkManager;
+import java.net.InetAddress;
 
 import java.net.URL;
 
@@ -11,6 +10,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,7 +23,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import javafx.scene.input.MouseEvent;
 
 import javafx.scene.paint.Color;
 import static layouts.controllers.AbstractInterfaceFormController.HEXA_PREFIX;
@@ -66,12 +65,16 @@ public final class I2cRequestFormController
     private TextField byteArrayTextfield;
 
     private static final char SEPARATOR = ':';
-
+    private final InetAddress address;
     private static final Logger LOGGER
             = LoggerFactory.getLogger(I2cRequestFormController.class);
 
     private static final Pattern HEX_BYTE_REGEX_PATTERN
             = Pattern.compile(HEX_BYTE_REGEX);
+
+    public I2cRequestFormController(InetAddress address) {
+        this.address = address;
+    }
 
     /**
      * initialises the controller class.
@@ -101,6 +104,9 @@ public final class I2cRequestFormController
                                         .not())
                                 .otherwise(false))
         );
+        i2cRequestButton.setOnAction((event) -> {
+            sendI2cRequest(event);
+        });
         setComponentsDisableProperty(getSelectedOperation());
         operationList
                 .valueProperty()
@@ -183,16 +189,11 @@ public final class I2cRequestFormController
         }
     }
 
-    /**
-     *
-     * @param evt
-     */
-    @FXML
-    public void sendI2cRequest(MouseEvent evt) {
+    private void sendI2cRequest(ActionEvent evt) {
         String msg = gatherMessageFromForm();
         if (msg != null) {
             NetworkManager
-                    .setMessageToSend(App.getIpFromCurrentTab(), msg);
+                    .setMessageToSend(address, msg);
             I2cRequestValueObject request = getNewI2cRequestEntryFromForm();
             usedRequestsComboBox.getItems().add(request);
             UserDataUtils.addNewI2cRequest(request);

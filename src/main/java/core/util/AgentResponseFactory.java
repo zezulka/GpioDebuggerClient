@@ -32,8 +32,8 @@ public final class AgentResponseFactory {
     private AgentResponseFactory() {
     }
 
-    public static AgentResponse of(ConnectionValueObject connection,
-            String agentMessage) throws IllegalResponseException {
+    public static AgentResponse of(String agentMessage,
+            ConnectionValueObject connection) throws IllegalResponseException {
 
         final int typeElemIndex = 0;
         List<String> splitResponse = getMessageElems(agentMessage);
@@ -46,21 +46,21 @@ public final class AgentResponseFactory {
         splitResponse.remove(typeElemIndex);
         switch (type) {
             case INIT:
-                return init(connection, splitResponse);
+                return init(splitResponse, connection);
             case GPIO:
-                return gpio(splitResponse);
+                return gpio(splitResponse, connection);
             case SPI:
-                return spi(splitResponse);
+                return spi(splitResponse, connection);
             case I2C:
-                return i2c(splitResponse);
+                return i2c(splitResponse, connection);
             case INTR_GENERATED:
-                return interrupt(connection, splitResponse,
+                return interrupt(splitResponse, connection,
                         InterruptGeneratedAgentResponse.class);
             case INTR_STARTED:
-                return interrupt(connection, splitResponse,
+                return interrupt(splitResponse, connection,
                         InterruptListenerStartedAgentResponse.class);
             case INTR_STOPPED:
-                return interrupt(connection, splitResponse,
+                return interrupt(splitResponse, connection,
                         InterruptListenerStoppedAgentResponse.class);
             default:
                 throw new IllegalResponseException("Illegal response type.");
@@ -83,8 +83,8 @@ public final class AgentResponseFactory {
         return new ArrayList<>(Arrays.asList(splitResponse));
     }
 
-    private static AgentResponse init(ConnectionValueObject connection,
-            List<String> splitMessage) throws IllegalResponseException {
+    private static AgentResponse init(List<String> splitMessage,
+            ConnectionValueObject connection) throws IllegalResponseException {
         final int expectedElemSize = 1;
 
         if (splitMessage.size() != expectedElemSize) {
@@ -100,7 +100,8 @@ public final class AgentResponseFactory {
         }
     }
 
-    private static AgentResponse gpio(List<String> splitMessage)
+    private static AgentResponse gpio(List<String> splitMessage,
+            ConnectionValueObject connection)
             throws IllegalResponseException {
         final int expectedElemSize = 2;
 
@@ -114,13 +115,15 @@ public final class AgentResponseFactory {
         try {
             pin = RaspiClientPin.getPin(splitMessage.get(0));
             signal = Signal.valueOf(splitMessage.get(1));
-            return new GpioAgentResponse(signal, pin);
+            return new GpioAgentResponse(signal, pin,
+                    connection.getDevice().getAddress());
         } catch (IllegalArgumentException ex) {
             throw new IllegalResponseException("Illegal GPIO response.");
         }
     }
 
-    private static AgentResponse i2c(List<String> splitMessage)
+    private static AgentResponse i2c(List<String> splitMessage,
+            ConnectionValueObject connection)
             throws IllegalResponseException {
 
         final int expectedElemSize = 1;
@@ -134,10 +137,12 @@ public final class AgentResponseFactory {
                 || splitMessage.get(0).isEmpty()) {
             throw new IllegalResponseException("Illegal I2C response.");
         }
-        return new I2cAgentResponse(splitMessage.get(0));
+        return new I2cAgentResponse(splitMessage.get(0),
+                connection.getDevice().getAddress());
     }
 
-    private static AgentResponse spi(List<String> splitMessage)
+    private static AgentResponse spi(List<String> splitMessage,
+            ConnectionValueObject connection)
             throws IllegalResponseException {
 
         final int expectedElemSize = 1;
@@ -151,20 +156,21 @@ public final class AgentResponseFactory {
                 || splitMessage.get(0).isEmpty()) {
             throw new IllegalResponseException("Illegal SPI response.");
         }
-        return new SpiAgentResponse(splitMessage.get(0));
+        return new SpiAgentResponse(splitMessage.get(0),
+                connection.getDevice().getAddress());
     }
 
-    private static AgentResponse interrupt(ConnectionValueObject connection,
-            List<String> splitResponse,
+    private static AgentResponse interrupt(List<String> splitMessage,
+            ConnectionValueObject connection,
             Class<? extends InterruptAgentResponse> clazz)
             throws IllegalResponseException {
         try {
             ClientPin interruptPin
-                    = RaspiClientPin.getPin(splitResponse.get(0));
+                    = RaspiClientPin.getPin(splitMessage.get(0));
             InterruptType intrType
-                    = InterruptType.getType(splitResponse.get(1));
+                    = InterruptType.getType(splitMessage.get(1));
             LocalTime timeGenerated
-                    = LocalTime.parse(splitResponse.get(2),
+                    = LocalTime.parse(splitMessage.get(2),
                             MessageParser.FORMATTER);
             InterruptValueObject interrupt
                     = InterruptManager.getInterruptListener(

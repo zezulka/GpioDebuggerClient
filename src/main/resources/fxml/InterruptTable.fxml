@@ -22,7 +22,7 @@
 <?import javafx.scene.control.TableRow?>
 <?import javafx.scene.control.ComboBox?>
 
-<Tab closable="false" text="Interrupts" xmlns="http://javafx.com/javafx/8"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.InterruptTableController" id="interruptTab" fx:id="interruptTab">
+<Tab closable="false" text="Interrupts" xmlns="http://javafx.com/javafx/8"  xmlns:fx="http://javafx.com/fxml/1"  id="interruptTab" fx:id="interruptTab">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0">
             <children>

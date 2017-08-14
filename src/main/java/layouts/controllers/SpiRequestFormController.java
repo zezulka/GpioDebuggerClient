@@ -1,7 +1,7 @@
 package layouts.controllers;
 
-import core.gui.App;
 import core.net.NetworkManager;
+import java.net.InetAddress;
 
 import java.net.URL;
 
@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +22,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-import javafx.scene.input.MouseEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +49,8 @@ public final class SpiRequestFormController
     @FXML
     private TextField byteArrayTextfield;
 
+    private final InetAddress address;
+
     private static final char SEPARATOR = ':';
     /**
      * Highest possible index which is reasonable to set in BCM2835's CS
@@ -59,6 +61,10 @@ public final class SpiRequestFormController
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(SpiRequestFormController.class);
+
+    public SpiRequestFormController(InetAddress address) {
+        this.address = address;
+    }
 
     /**
      * Initializes the controller class.
@@ -74,6 +80,9 @@ public final class SpiRequestFormController
         addAllChipSelectIndexes();
         chipSelectList.getSelectionModel().selectFirst();
         operationList.getSelectionModel().selectFirst();
+        spiRequestButton.setOnAction((event) -> {
+            sendSpiRequest(event);
+        });
     }
 
     private void initUsedRequestsComboBox() {
@@ -119,12 +128,11 @@ public final class SpiRequestFormController
         this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
     }
 
-    @FXML
-    private void sendSpiRequest(MouseEvent event) {
+    private void sendSpiRequest(ActionEvent event) {
         StringBuilder msgToSend = getMessagePrefix();
         msgToSend = msgToSend.append(byteArrayTextfield.getText());
         NetworkManager
-                .setMessageToSend(App.getIpFromCurrentTab(),
+                .setMessageToSend(address,
                         msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
         usedRequestsComboBox.getItems().add(request);

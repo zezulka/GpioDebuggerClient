@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab text="I2C" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.I2cRequestFormController" id="i2cTab" fx:id="i2cTab">
+<Tab text="I2C" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="i2cTab" fx:id="i2cTab">
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
             <columnConstraints>
@@ -58,7 +58,7 @@
                     </font>
                 </Label>
                 <TextField id="lengthField" fx:id="lengthField" prefHeight="36.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" onMouseClicked="#sendI2cRequest" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <TextArea id="i2cTextArea" fx:id="i2cTextArea" editable="false" prefHeight="226.0" prefWidth="194.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" />

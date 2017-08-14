@@ -100,6 +100,9 @@ public final class NetworkManager {
 
     public static void setMessageToSend(InetAddress address,
             String messageToSend) {
+        if (address == null) {
+            throw new IllegalArgumentException("address cannot be null");
+        }
         ADDRESSES.get(address).setMessageToSend(messageToSend);
     }
 

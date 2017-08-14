@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab text="SPI" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.SpiRequestFormController" id="spiTab" fx:id="spiTab">
+<Tab text="SPI" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="spiTab" fx:id="spiTab">
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
             <columnConstraints>
@@ -45,7 +45,7 @@
                 </Label>
                 <ComboBox id="operationList" fx:id="operationList" prefHeight="25.0" prefWidth="277.0" GridPane.columnIndex="1" />
                 <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="25.0" prefWidth="279.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#sendSpiRequest" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.rowIndex="5"/>
                 <TextArea id="spiTextArea" fx:id="spiTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
                     <GridPane.margin>

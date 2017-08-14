@@ -101,8 +101,6 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         rootElement.setAttribute("fx:id", deviceName.toLowerCase() + "Tab");
         rootElement.setAttribute("xmlns", "http://javafx.com/javafx/8.0.111");
         rootElement.setAttribute("xmlns:fx", "http://javafx.com/fxml/1");
-
-        rootElement.setAttribute("fx:controller", getPathToController());
         return rootElement;
     }
 
@@ -238,10 +236,11 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         ClientPin currentPin = PinLayoutFactory.getInstance(type).
                 getPinFromIndex(index);
         button.setAttribute("mnemonicParsing", "false");
-        button.setAttribute("onMouseClicked", "#mouseClickedHandler");
-        button.setAttribute("onKeyPressed", "#keyPressedHandler");
         button.setAttribute("disable", Boolean.toString(!currentPin.isGpio()));
         button.setAttribute("text", currentPin.toString());
+        if (currentPin.isGpio()) {
+            button.setAttribute("fx:id", currentPin.getPinId());
+        }
         button.setAttribute("id",
                 currentPin.isGpio() ? currentPin.getPinId() : "nonselectable");
         button.setAttribute("GridPane.columnIndex",

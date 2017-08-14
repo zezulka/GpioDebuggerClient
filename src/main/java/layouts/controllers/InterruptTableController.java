@@ -1,8 +1,8 @@
 package layouts.controllers;
 
-import core.gui.App;
 import core.net.NetworkManager;
 import core.util.StringConstants;
+import java.net.InetAddress;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.util.converter.IntegerStringConverter;
 
 import org.slf4j.Logger;
@@ -66,6 +65,12 @@ public final class InterruptTableController implements Initializable {
     @FXML
     private TableColumn<InterruptValueObject, Void> removeRowBtn;
 
+    private final InetAddress address;
+
+    public InterruptTableController(InetAddress address) {
+        this.address = address;
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -76,14 +81,11 @@ public final class InterruptTableController implements Initializable {
         interruptTypeComboBox.getSelectionModel().selectFirst();
         pinComboBox.getSelectionModel().selectFirst();
         initCellValueFactory();
-        tableView.setItems(InterruptManager.getListeners(App.getLastAddress()));
+        tableView.setItems(InterruptManager.getListeners(address));
         tableView.selectionModelProperty().set(null);
         tableView.setEditable(true);
-        addNewInterruptListenerButton.setOnMouseClicked((event) -> {
-            InterruptManager.addInterruptListener(
-                    App.getIpFromCurrentTab(),
-                    getTempIvo()
-            );
+        addNewInterruptListenerButton.setOnMouseClicked((e) -> {
+            InterruptManager.addInterruptListener(address, getTempIvo());
         });
     }
 
@@ -133,8 +135,7 @@ public final class InterruptTableController implements Initializable {
     private class RemoveRowButtonCell extends
             TableCell<InterruptValueObject, Void> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Images.REMOVE));
+        private final Button cellBtn = new Button(null, ImageViews.REMOVE);
 
         RemoveRowButtonCell() {
 
@@ -171,8 +172,7 @@ public final class InterruptTableController implements Initializable {
     private class StatePropertyButtonCell extends
             TableCell<InterruptValueObject, ListenerState> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Images.PLAY_BTN));
+        private final Button cellBtn = new Button(null, ImageViews.PLAY_BTN);
 
         StatePropertyButtonCell() {
             cellBtn.setPadding(Insets.EMPTY);
@@ -207,13 +207,13 @@ public final class InterruptTableController implements Initializable {
             switch (t) {
                 case NOT_RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Images.PLAY_BTN));
+                        cellBtn.setGraphic(ImageViews.PLAY_BTN);
                     });
                     break;
                 }
                 case RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Images.STOP_BTN));
+                        cellBtn.setGraphic(ImageViews.STOP_BTN);
                     });
                     break;
                 }
@@ -242,9 +242,7 @@ public final class InterruptTableController implements Initializable {
             super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
-                NetworkManager
-                        .setMessageToSend(App.getIpFromCurrentTab(),
-                                msgToSend);
+                NetworkManager.setMessageToSend(address, msgToSend);
                 LOGGER.info(String.format("SPI request sent: %s", msgToSend));
             }
             return null;
