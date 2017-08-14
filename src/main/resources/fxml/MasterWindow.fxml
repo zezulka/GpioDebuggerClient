@@ -29,12 +29,12 @@
 
 <AnchorPane id="AnchorPane" cacheHint="SPEED" stylesheets="@../appStylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.MasterWindowController">
     <children>
-      <SplitPane id="rootSplitPane" fx:id="rootSplitPane" dividerPositions="0.7" focusTraversable="false" layoutY="42.0" prefHeight="758.0" prefWidth="1036.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-36.0" AnchorPane.topAnchor="42.0">
+      <SplitPane id="rootSplitPane" fx:id="rootSplitPane" dividerPositions="0.7" focusTraversable="false" layoutY="42.0" prefHeight="758.0" prefWidth="1012.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="42.0">
          <items>
               <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" style="-fx-background-color: white;" tabMaxHeight="20.0" />
-            <SplitPane dividerPositions="0.7" orientation="VERTICAL" SplitPane.resizableWithParent="false">
+            <SplitPane dividerPositions="0.7" minWidth="0.0" orientation="VERTICAL" SplitPane.resizableWithParent="false">
                <items>
-                  <TreeView id="devicesTree" fx:id="devicesTree" style="-fx-background-color: white;">
+                  <TreeView id="devicesTree" fx:id="devicesTree" minWidth="0.0" prefHeight="525.0" prefWidth="269.0" style="-fx-background-color: white;">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
@@ -50,7 +50,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField fx:id="ipAddress" alignment="CENTER" prefHeight="25.0" prefWidth="251.0" promptText="hostname or IP address..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <TextField fx:id="ipAddress" alignment="CENTER" minWidth="0.0" prefHeight="25.0" prefWidth="250.0" promptText="hostname or IP address..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin></TextField>

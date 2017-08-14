@@ -7,21 +7,21 @@
     -fx-faint-focus-color: transparent;
 }
 
-*.tab-label {
-    -fx-rotate: 270;
+.tab-pane .tab:selected
+{
+    -fx-background-color: #3c3c3c;
 }
 
-#raspiTab .tab-label {
-    -fx-rotate: 0;
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #EEEEEE;
 }
 
-.tab {
-    -fx-padding: 3em 0.5em 3em 0.5em;
+.tree-cell:selected {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color: #3c3c3c;
 }
 
-#nonselectable {
-    -fx-background-color: #000000;
-    -fx-text-fill : #ffffff;
-    -fx-opacity : 1.0;
+.tool-bar {
+    -fx-background-color: #3c3c3c;
 }
-

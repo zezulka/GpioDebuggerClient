@@ -139,6 +139,8 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         Element tab = doc.createElement("Tab");
         tab.setAttribute("closable", "false");
         tab.setAttribute("text", "GPIO");
+        tab.setAttribute("fx:id", "gpioTab");
+        tab.setAttribute("id", "gpioTab");
         tab.appendChild(createGpioContents());
         return tab;
     }
@@ -283,7 +285,7 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         stackPane.setAttribute("fx:id", "gpioStackPane");
         Element imageView = doc.createElement("ImageView");
         imageView.setAttribute("disable", "true");
-        imageView.setAttribute("fitHeight", "665x.0");
+        imageView.setAttribute("fitHeight", "665.0");
         imageView.setAttribute("fitWidth", "730.0");
         imageView.setAttribute("GridPane.columnSpan", "999");
         imageView.setAttribute("GridPane.halignment", "LEFT");
@@ -326,8 +328,11 @@ public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
         doc.normalizeDocument();
         DOMSource source = new DOMSource(doc);
         String pathToDevice =
-                StringConstants.PATH_TO_FXML_DIR + deviceName + FXML_EXT;
-        StreamResult result = new StreamResult(new File(pathToDevice));
+                StringConstants.PATH_TO_FXML_DIR + File.separator
+                + deviceName + FXML_EXT;
+        File fxmlDevice = new File(pathToDevice);
+        StreamResult result = new StreamResult(fxmlDevice);
+        System.out.println("Fxml path: " + fxmlDevice.getAbsolutePath());
 
         //transformer formatting magic... taken from StackOverflow
         transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "yes");

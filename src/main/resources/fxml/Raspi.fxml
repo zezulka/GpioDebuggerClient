@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?import javafx.geometry.*?><?import javafx.scene.web.*?><?import javafx.scene.image.*?><?import java.lang.*?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.scene.text.*?>
-<Tab xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.RaspiController" fx:id="raspiTab" id="raspiTab">
+<?import javafx.geometry.*?><?import javafx.scene.web.*?><?import javafx.scene.image.*?><?import java.lang.*?><?import javafx.scene.control.*?><?import javafx.scene.layout.*?><?import javafx.scene.text.*?><Tab xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.RaspiController" fx:id="raspiTab" id="raspiTab">
     <content>
         <TabPane side="RIGHT">
             <tabs>
-                <Tab closable="false" text="GPIO">
+                <Tab closable="false" fx:id="gpioTab" id="gpioTab" text="GPIO">
                     <content>
                         <GridPane cacheHint="SPEED" fx:id="gpioGridPane" layoutX="0.0" layoutY="0.0">
                             <columnConstraints>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -21,26 +22,30 @@
 <?import javafx.scene.control.TableRow?>
 <?import javafx.scene.control.ComboBox?>
 
-
-<Tab closable="false" text="Interrupts" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.InterruptTableController">
+<Tab closable="false" text="Interrupts" xmlns="http://javafx.com/javafx/8"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.InterruptTableController" id="interruptTab" fx:id="interruptTab">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0">
             <children>
-                <ComboBox id="interruptTypeComboBox" fx:id="interruptTypeComboBox" layoutX="70.0" layoutY="14.0" prefHeight="25.0" prefWidth="200.0" />
-                <ComboBox id="pinComboBox" fx:id="pinComboBox" layoutX="300.0" layoutY="14.0" prefHeight="25.0" prefWidth="200.0" />
-                <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="525.0" layoutY="14.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="167.0" text="Add new listener" />
-                <TableView id="tableView" fx:id="tableView" layoutX="8.0" layoutY="68.0" prefHeight="448.0" prefWidth="850.0">
+                <ComboBox id="interruptTypeComboBox" fx:id="interruptTypeComboBox" layoutX="14.0" layoutY="497.0" prefHeight="25.0" prefWidth="120.0" />
+                <ComboBox id="pinComboBox" fx:id="pinComboBox" layoutX="159.0" layoutY="497.0" prefHeight="25.0" prefWidth="120.0" />
+                <Button id="addNewInterruptListenerButton" fx:id="addNewInterruptListenerButton" layoutX="326.0" layoutY="497.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" text="Add new listener" />
+                <TableView id="tableView" fx:id="tableView" prefHeight="475.0" prefWidth="854.0">
                     <columns>
                         <TableColumn fx:id="pinName" editable="false" prefWidth="80.0" text="Pin Name" />
                         <TableColumn fx:id="interruptType" editable="false" prefWidth="67.0" text="Type" />
                         <TableColumn fx:id="timeAdded" editable="false" prefWidth="133.0" text="Time Added" />
-                        <TableColumn fx:id="numOfIntrs" editable="false" prefWidth="120.0" text="Nr. Interrupts" />
-                        <TableColumn fx:id="lastIntrTime" editable="false" prefWidth="180.0" text="Latest" />
+                        <TableColumn fx:id="numOfIntrs" editable="false" prefWidth="148.0" text="Nr. Interrupts" />
+                        <TableColumn fx:id="lastIntrTime" editable="false" prefWidth="152.0" text="Latest" />
                         <TableColumn id="state" fx:id="state" prefWidth="128.0" text="Control" />
-                        <TableColumn id="removeRowBtn" fx:id="removeRowBtn" editable="false" prefWidth="75.0" sortable="false" text="Remove" />
+                        <TableColumn id="removeRowBtn" fx:id="removeRowBtn" editable="false" prefWidth="145.0" sortable="false" text="Remove" />
                     </columns>
                 </TableView>
             </children>
+            <padding>
+                <Insets bottom="5.0" />
+            </padding>
         </AnchorPane>
     </content>
 </Tab>
+
+

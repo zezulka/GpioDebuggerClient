@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Tab text="I2C" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.I2cRequestFormController">
+<Tab text="I2C" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="layouts.controllers.I2cRequestFormController" id="i2cTab" fx:id="i2cTab">
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
             <columnConstraints>
