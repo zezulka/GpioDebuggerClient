@@ -86,10 +86,10 @@ public final class MasterWindowController implements Initializable {
         deviceTreeSwitch = new SwitchButton();
         toolBar.getItems().add(0, deviceTreeSwitch);
         connectionEstablishmentPending.addListener((o, old, pending) -> {
-            Platform.runLater(() ->
-            connectToDeviceButton
-                    .setText(pending ? "Connecting..." : "Connect"));
-            });
+            Platform.runLater(()
+                    -> connectToDeviceButton
+                            .setText(pending ? "Connecting..." : "Connect"));
+        });
         initializeToolbarButton(disconnectButton, ImageViews.DISCONNECT,
                 "Disconnects from device. "
                 + "\nDevice must be selected in the device tree and active.");
@@ -108,7 +108,8 @@ public final class MasterWindowController implements Initializable {
                             .getChildren();
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
-                childrenAllBranch.add(new TreeItem<>(newDevice));
+                childrenAllBranch
+                        .add((TreeItem) getTreeItemWithListener(newDevice));
                 UserDataUtils.addNewDeviceToFile(newDevice);
             }
         });
@@ -120,12 +121,11 @@ public final class MasterWindowController implements Initializable {
                                 .nextSibling() == null).not())
                         .or(deviceTreeVisible().not())
         );
-        disconnectButton.disableProperty().
-                bind(isDeviceBranchCorrect(
-                        (t) -> t.getParent()
-                                .getParent()
-                                .nextSibling() != null).not()
-                );
+        disconnectButton.disableProperty()
+                .bind(devicesTree
+                        .getRoot()
+                        .getChildren()
+                        .get(ACTIVE_BRANCH_INDEX).leafProperty());
         devicesTab.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldVal, newVal) -> currentTab = newVal);
         final double threshold = 0.7;
@@ -190,6 +190,7 @@ public final class MasterWindowController implements Initializable {
             TreeItem<Object> selectedItem = selectionModel.getSelectedItem();
 
             return !selectionModel.isEmpty()
+                    && selectedItem != null
                     && selectedItem.getValue() instanceof DeviceValueObject
                     && verifyFn.apply(selectedItem);
         }, devicesTree.getSelectionModel().selectedItemProperty());
@@ -217,6 +218,19 @@ public final class MasterWindowController implements Initializable {
         hist.setExpanded(true);
         root.getChildren().addAll(active, hist);
         root.setExpanded(true);
+        devicesTree.setOnMouseClicked((event) -> {
+            if (event.getClickCount() == 2) {
+                TreeItem sel
+                        = devicesTree.getSelectionModel().getSelectedItem();
+                if (sel.getValue() instanceof DeviceValueObject) {
+                    if (sel.getParent().getParent().nextSibling() == null) {
+                        connectToDeviceHandler(event);
+                    } else {
+                        disconnectHandler(event);
+                    }
+                }
+            }
+        });
         devicesTree.setRoot(root);
     }
 
@@ -267,13 +281,29 @@ public final class MasterWindowController implements Initializable {
         boolean okToProceed = ControllerUtils
                 .showConfirmDialog(StringConstants.OK_TO_DISCONNECT);
         if (okToProceed) {
-            TreeItem selectedItem = getSelectedItem();
-            DeviceValueObject device
-                    = (DeviceValueObject) selectedItem.getValue();
-            NetworkManager.disconnect(device.getAddress());
-            InterruptManager.clearAllListeners(device.getAddress());
-            device.disconnectedProperty().set(true);
-            App.removeTab(device.getAddress());
+            InetAddress selectedTabAddress = null;
+            try {
+                selectedTabAddress
+                        = InetAddress.getByName(devicesTab
+                                .getSelectionModel()
+                                .selectedItemProperty().get().getId());
+                NetworkManager.disconnect(selectedTabAddress);
+                InterruptManager.clearAllListeners(selectedTabAddress);
+                App.removeTab(selectedTabAddress);
+            } catch (UnknownHostException ex) {
+                LOGGER.debug("ip address / host not resolved.");
+                return;
+            }
+            TreeItem<Object> active = devicesTree.getRoot()
+                    .getChildren().get(ACTIVE_BRANCH_INDEX);
+            for (TreeItem<Object> item : active.getChildren()) {
+                String val = (String) item.getValue();
+                if (val.equals(selectedTabAddress.getHostAddress())) {
+                    DeviceValueObject device = (DeviceValueObject) item
+                            .getChildren().get(0).getValue();
+                    device.disconnectedProperty().set(true);
+                }
+            }
         }
     }
 
