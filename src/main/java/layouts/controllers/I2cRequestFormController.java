@@ -48,10 +48,6 @@ public final class I2cRequestFormController
     @FXML
     private ComboBox<Operation> operationList;
     @FXML
-    private Button addFieldButton;
-    @FXML
-    private Button removeFieldButton;
-    @FXML
     private TextField lengthField;
     @FXML
     private Label values;
@@ -144,7 +140,7 @@ public final class I2cRequestFormController
                 });
         usedRequestsComboBox.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
+                .addListener((obs, oldValue, newValue) -> {
                     lengthField.setText(String.valueOf(newValue.getLength()));
                     operationList
                             .getSelectionModel()

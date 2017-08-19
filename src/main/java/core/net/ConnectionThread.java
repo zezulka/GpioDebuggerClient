@@ -111,11 +111,7 @@ public final class ConnectionThread implements Runnable {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             Platform.runLater(() -> {
-                App.getDevicesTab()
-                        .getTabs()
-                        .remove(App.getTabFromInetAddress(connection
-                                .getDevice()
-                                .getAddress()));
+                App.removeTab(connection.getDevice().getAddress());
             });
             ControllerUtils.showInfoDialog(
                     String.format("Disconnected from address %s, device %s",

@@ -75,7 +75,7 @@ public final class MasterWindowController implements Initializable {
     private static final NetworkManager NETWORK_MANAGER
             = NetworkManager.getInstance();
 
-    private final BooleanProperty isConnectionEstablishmentPending
+    private final BooleanProperty connectionEstablishmentPending
             = new SimpleBooleanProperty(false);
 
     private static final int ALL_BRANCH_INDEX = 1;
@@ -115,10 +115,7 @@ public final class MasterWindowController implements Initializable {
                 UserDataUtils.addNewDeviceToFile(newDevice);
             }
         });
-        connectToDeviceButton.disableProperty().
-                bind(isDeviceBranchCorrect(
-                        (t) -> t.getParent().nextSibling() == null).not()
-                );
+        connectToDeviceButton.disableProperty().bind(connectionPending());
         disconnectButton.disableProperty().
                 bind(isDeviceBranchCorrect(
                         (t) -> t.getParent().nextSibling() != null).not()
@@ -133,6 +130,13 @@ public final class MasterWindowController implements Initializable {
                 .addListener((observable, oldValue, isSelected) -> {
                     deviceTreeBtnListener(isSelected);
                 });
+    }
+
+    private BooleanBinding connectionPending() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> connectionEstablishmentPending.get(),
+                connectionEstablishmentPending);
+        return Bindings.when(binding).then(true).otherwise(false);
     }
 
     private void deviceTreeBtnListener(boolean isSelected) {
@@ -257,6 +261,7 @@ public final class MasterWindowController implements Initializable {
     @FXML
     private void connectToDeviceHandler(MouseEvent event) {
         TreeItem device = getSelectedItem();
+        connectionEstablishmentPending.setValue(true);
         new Thread(new ConnectionWorker(device)).start();
     }
 
@@ -271,9 +276,7 @@ public final class MasterWindowController implements Initializable {
             NetworkManager.disconnect(device.getAddress());
             InterruptManager.clearAllListeners(device.getAddress());
             device.disconnectedProperty().set(true);
-            devicesTab
-                    .getTabs()
-                    .remove(App.getTabFromInetAddress(device.getAddress()));
+            App.removeTab(device.getAddress());
         }
     }
 
@@ -289,7 +292,7 @@ public final class MasterWindowController implements Initializable {
             this.device = (DeviceValueObject) selectedItem.getValue();
         }
 
-        private void informConnectingFailed() {
+        private void notifyConnectingFailed() {
             Platform.runLater(() -> {
                 ControllerUtils.showErrorDialog(String.format(
                         StringConstants.F_HOST_NOT_REACHABLE.toString(),
@@ -309,7 +312,7 @@ public final class MasterWindowController implements Initializable {
                             device.getHostName()));
                     return true;
                 } else {
-                    informConnectingFailed();
+                    notifyConnectingFailed();
                 }
             } catch (IOException ex) {
                 LOGGER.error(null, ex);
@@ -327,7 +330,7 @@ public final class MasterWindowController implements Initializable {
             } catch (InterruptedException | ExecutionException ex) {
                 LOGGER.error(null, ex);
             }
-            isConnectionEstablishmentPending.set(false);
+            connectionEstablishmentPending.set(false);
         }
     }
 }

@@ -60,9 +60,9 @@ public final class App extends Application {
     private static URL raspi;
     private static URL beagleBoneBlack;
     private static URL cubieboard;
-    private static FXMLLoader spiLoader;
-    private static FXMLLoader i2cLoader;
-    private static FXMLLoader interruptsLoader;
+    private static URL spi;
+    private static URL i2c;
+    private static URL intrs;
 
     private static final Set<TabAddressPair> TAB_ADDR_PAIRS = new HashSet<>();
 
@@ -135,9 +135,9 @@ public final class App extends Application {
         try {
             raspi = getPathToFxml("Raspi");
             masterWindow = getPathToFxml("MasterWindow");
-            i2cLoader = getFxmlLoaderFromPath("I2cRequestForm");
-            spiLoader = getFxmlLoaderFromPath("SpiRequestForm");
-            interruptsLoader = getFxmlLoaderFromPath("InterruptTable");
+            i2c = getPathToFxml("I2cRequestForm");
+            spi = getPathToFxml("SpiRequestForm");
+            intrs = getPathToFxml("InterruptTable");
         } catch (MalformedURLException ex) {
             LOGGER.error(null, ex);
             Platform.exit();
@@ -150,12 +150,7 @@ public final class App extends Application {
                 + File.separator + fxmlName + FXML_EXT);
     }
 
-    private FXMLLoader getFxmlLoaderFromPath(String fxmlName)
-            throws MalformedURLException {
-        return new FXMLLoader(getPathToFxml(fxmlName));
-    }
-
-    public static TabPane getDevicesTab() {
+    private static TabPane getDevicesTab() {
         return (TabPane) scene.lookup("#devicesTab");
     }
 
@@ -163,32 +158,25 @@ public final class App extends Application {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             FXMLLoader raspiLoader = new FXMLLoader(getUrlFromBoardType(type));
-            RaspiController raspiContr = new RaspiController(address);
-            raspiLoader.setController(raspiContr);
+            raspiLoader.setController(new RaspiController(address));
 
-            I2cRequestFormController i2cContr
-                    = new I2cRequestFormController(address);
-            i2cLoader.setController(i2cContr);
-
-            SpiRequestFormController spiContr
-                    = new SpiRequestFormController(address);
-            spiLoader.setController(spiContr);
-
-            InterruptTableController intrContr
-                    = new InterruptTableController(address);
-            interruptsLoader.setController(intrContr);
+            FXMLLoader i2cLoader = new FXMLLoader(i2c);
+            FXMLLoader spiLoader = new FXMLLoader(spi);
+            FXMLLoader intrsLoader = new FXMLLoader(intrs);
+            i2cLoader.setController(new I2cRequestFormController(address));
+            spiLoader.setController(new SpiRequestFormController(address));
+            intrsLoader.setController(new InterruptTableController(address));
 
             Tab pane = raspiLoader.load();
             pane.setId(address.getHostAddress());
             pane.setText(address.getHostAddress());
 
-
             // Load all tabs programatically since they were generated
             // dynamically
             TabPane inner = (TabPane) pane.getContent().lookup("#innerTabPane");
             inner.getTabs().addAll(i2cLoader.load(),
-                                   spiLoader.load(),
-                                   interruptsLoader.load());
+                    spiLoader.load(),
+                    intrsLoader.load());
 
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
             Platform.runLater(() -> {
@@ -212,12 +200,20 @@ public final class App extends Application {
 
     private static void updateTextArea(String lookupIdPrefix, String response,
             InetAddress source) {
-        TextArea ta
-                = ((TextArea) scene.lookup(lookupIdPrefix
+        Node n = getDevicesTab();
+
+        TabPane pane = (TabPane) n;
+
+        for (Tab t : pane.getTabs()) {
+            if (t.getId().equals(source.getHostAddress())) {
+                TextArea ta = ((TextArea) t.getContent().lookup(lookupIdPrefix
                         + ':' + source.getHostAddress()));
-        ta.setText(LocalTime.now().toString()
-                + '\n' + response
-                + '\n' + ta.getText());
+                ta.setText(LocalTime.now().toString()
+                        + '\n' + response
+                        + '\n' + ta.getText());
+                break;
+            }
+        }
     }
 
     public static void setPinButtonColourFromSignal(ClientPin pin,
@@ -252,12 +248,25 @@ public final class App extends Application {
         fadeTransition.play();
     }
 
-    public static Tab getTabFromInetAddress(InetAddress address) {
+    /**
+     *
+     * @param address
+     * @throws IllegalArgumentException if no tab has {@code address} associated
+     * to it
+     */
+    public static void removeTab(InetAddress address) {
+        TabAddressPair toRemove = null;
         for (TabAddressPair pair : TAB_ADDR_PAIRS) {
             if (pair.getAddress().equals(address)) {
-                return pair.getTab();
+                toRemove = pair;
+                break;
             }
         }
-        throw new IllegalArgumentException("no such address is registered");
+        if (toRemove == null) {
+            LOGGER.debug("no such Tab with this address exists: " + address);
+            throw new IllegalArgumentException();
+        }
+        toRemove.getTab().getTabPane().getTabs().remove(toRemove.getTab());
+        TAB_ADDR_PAIRS.remove(toRemove);
     }
 }
