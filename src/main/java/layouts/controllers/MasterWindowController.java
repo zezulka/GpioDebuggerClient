@@ -1,6 +1,7 @@
 package layouts.controllers;
 
 import core.gui.App;
+import core.gui.SwitchButton;
 import core.net.NetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -12,7 +13,6 @@ import java.util.function.Function;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
@@ -21,23 +21,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SplitPane;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import org.apache.commons.validator.routines.InetAddressValidator;
 
 import javafx.collections.ObservableList;
 import core.util.StringConstants;
+import javafx.scene.control.ToolBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,20 +51,17 @@ public final class MasterWindowController implements Initializable {
     private Button connectToDeviceButton;
     @FXML
     private TreeView<Object> devicesTree;
-    @FXML
-    private ToggleButton deviceTree;
+    private SwitchButton deviceTreeSwitch;
     @FXML
     private Button addNewDeviceButton;
     @FXML
     private TextField ipAddress;
     @FXML
-    private Label nowEnteringLabel;
-    @FXML
-    private Label indicationLabel;
-    @FXML
     private Button disconnectButton;
     @FXML
     private SplitPane rootSplitPane;
+    @FXML
+    private ToolBar toolBar;
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(MasterWindowController.class);
@@ -83,22 +78,24 @@ public final class MasterWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeToolbar();
         initializeDeviceTree();
+        initializeToolbar();
     }
 
     private void initializeToolbar() {
+        deviceTreeSwitch = new SwitchButton();
+        toolBar.getItems().add(0, deviceTreeSwitch);
+        connectionEstablishmentPending.addListener((o, old, pending) -> {
+            Platform.runLater(() ->
+            connectToDeviceButton
+                    .setText(pending ? "Connecting..." : "Connect"));
+            });
         initializeToolbarButton(disconnectButton, ImageViews.DISCONNECT,
                 "Disconnects from device. "
                 + "\nDevice must be selected in the device tree and active.");
         initializeToolbarButton(connectToDeviceButton, ImageViews.CONNECT,
                 "Connects to device. "
                 + "\nDevice must be selected in the device tree.");
-        initializeToolbarButton(deviceTree, ImageViews.DEVICE_TREE_SELECTED,
-                "Device tree browser.");
-
-        initIndicator();
-
         addNewDeviceButton.disableProperty()
                 .bind(ipAddress.textProperty().isEmpty());
         addNewDeviceButton.setOnAction((event) -> {
@@ -115,18 +112,27 @@ public final class MasterWindowController implements Initializable {
                 UserDataUtils.addNewDeviceToFile(newDevice);
             }
         });
-        connectToDeviceButton.disableProperty().bind(connectionPending());
+        connectToDeviceButton.disableProperty().bind(
+                connectionPending()
+                        .or(isDeviceBranchCorrect((t)
+                                -> t.getParent()
+                                .getParent()
+                                .nextSibling() == null).not())
+                        .or(deviceTreeVisible().not())
+        );
         disconnectButton.disableProperty().
                 bind(isDeviceBranchCorrect(
-                        (t) -> t.getParent().nextSibling() != null).not()
+                        (t) -> t.getParent()
+                                .getParent()
+                                .nextSibling() != null).not()
                 );
         devicesTab.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldVal, newVal) -> currentTab = newVal);
         final double threshold = 0.7;
-        deviceTree.setSelected(true);
+        deviceTreeSwitch.switchOnProperty().set(true);
         devicesTab.maxWidthProperty()
                 .bind(rootSplitPane.widthProperty().multiply(threshold));
-        deviceTree.selectedProperty()
+        deviceTreeSwitch.switchOnProperty()
                 .addListener((observable, oldValue, isSelected) -> {
                     deviceTreeBtnListener(isSelected);
                 });
@@ -139,10 +145,15 @@ public final class MasterWindowController implements Initializable {
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
+    private BooleanBinding deviceTreeVisible() {
+        BooleanBinding binding = Bindings.createBooleanBinding(()
+                -> devicesTree.getRoot().isExpanded(),
+                devicesTree.getRoot().expandedProperty());
+        return Bindings.when(binding).then(true).otherwise(false);
+    }
+
     private void deviceTreeBtnListener(boolean isSelected) {
         final double threshold = 0.7;
-        deviceTree.setGraphic(isSelected ? ImageViews.DEVICE_TREE_SELECTED
-                : ImageViews.DEVICE_TREE);
         connectToDeviceButton.visibleProperty().set(isSelected);
         disconnectButton.visibleProperty().set(isSelected);
         final double dividerPos = isSelected ? threshold : 1.0;
@@ -150,24 +161,6 @@ public final class MasterWindowController implements Initializable {
                 .widthProperty()
                 .multiply(dividerPos));
         rootSplitPane.setDividerPositions(dividerPos);
-    }
-
-    private void initIndicator() {
-        BooleanBinding tfNotEmpty = ipAddress.textProperty().isNotEmpty();
-        nowEnteringLabel.visibleProperty().bind(tfNotEmpty);
-        indicationLabel.visibleProperty().bind(tfNotEmpty);
-        indicationLabel.textProperty().bind(indicatorBinding());
-    }
-
-    private StringBinding indicatorBinding() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> ipTextfieldContainsIpAddress(), ipAddress.textProperty());
-        return Bindings.when(binding).then("IP address").otherwise("hostname");
-    }
-
-    private boolean ipTextfieldContainsIpAddress() {
-        return InetAddressValidator.getInstance()
-                .isValid(ipAddress.getText().trim());
     }
 
     private DeviceValueObject getNewDeviceFromUser() {
@@ -221,6 +214,7 @@ public final class MasterWindowController implements Initializable {
                         -> hist
                         .getChildren()
                         .add(getTreeItemWithListener(device)));
+        hist.setExpanded(true);
         root.getChildren().addAll(active, hist);
         root.setExpanded(true);
         devicesTree.setRoot(root);
@@ -228,13 +222,16 @@ public final class MasterWindowController implements Initializable {
 
     private TreeItem<DeviceValueObject>
             getTreeItemWithListener(DeviceValueObject obj) {
+        TreeItem itemLabel = new TreeItem(obj.getHostName());
+
         TreeItem<DeviceValueObject> treeItem = new TreeItem<>(obj);
         obj.disconnectedProperty().addListener((observable, before, now) -> {
             if (before.booleanValue() != now.booleanValue()) {
-                moveDeviceNodeToOtherBranch(treeItem);
+                moveDeviceNodeToOtherBranch(treeItem.getParent());
             }
         });
-        return treeItem;
+        itemLabel.getChildren().add(treeItem);
+        return itemLabel;
     }
 
     private static void moveDeviceNodeToOtherBranch(TreeItem item) {

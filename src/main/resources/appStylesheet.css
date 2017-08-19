@@ -1,6 +1,6 @@
 /* 
     Created on : 23-Jun-2017, 08:39:52
-    Author     : miloslav
+    Author     : Miloslav Zezulka, <zezulka95@gmail.com>
 */
 * {
     -fx-focus-color: transparent;
@@ -24,13 +24,4 @@
 
 .tool-bar {
     -fx-background-color: #AAAAAA;
-}
-
-#deviceTree {
-    -fx-background-color: #FFFFFF;
-}
-
-#deviceTree:selected {
-    -fx-background-color: #000000;
-    -fx-text-fill: #FFFFFF;
 }

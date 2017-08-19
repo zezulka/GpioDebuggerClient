@@ -66,7 +66,7 @@ public final class UserDataUtils {
         if (DEVICES.isDirty()) {
             try {
                 X_STREAM.toXML(DEVICES, new FileWriter(DEVICES_FILE));
-                LOGGER.info("New devices saved.");
+                LOGGER.info("New device info saved.");
             } catch (IOException ex) {
                 LOGGER.error("Could not save user data ", ex);
             }

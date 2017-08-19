@@ -23,12 +23,9 @@ public final class ImageViews {
     static final ImageView ACTIVE = getImageFromPath("active.png");
     static final ImageView DEVICES = getImageFromPath("devices.png");
     static final ImageView CONNECT = getImageFromPath("connect.png");
-    static final ImageView DEVICE_TREE = getImageFromPath("tree.png");
     static final ImageView HISTORY = getImageFromPath("history.png");
     static final ImageView REMOVE = getImageFromPath("remove.jpg");
     static final ImageView DISCONNECT = getImageFromPath("disconnect.png");
-    static final ImageView DEVICE_TREE_SELECTED =
-            getImageFromPath("tree-selected.png");
 
     private static ImageView getImageFromPath(String path) {
         return new ImageView(
