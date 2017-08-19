@@ -78,7 +78,7 @@
         <ToolBar id="toolBar" fx:id="toolBar" maxHeight="40.0" minHeight="40.0" minWidth="1000.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>
             <Label text="            " />
-                <Button id="connectToDeviceButton" fx:id="connectToDeviceButton" blendMode="SRC_ATOP" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#connectToDeviceHandler" text="Connect">
+                <Button id="connectBtn" fx:id="connectBtn" blendMode="SRC_ATOP" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#connectToDeviceHandler" text="Connect">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor></Button>

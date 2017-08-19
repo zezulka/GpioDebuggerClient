@@ -160,6 +160,7 @@ public final class App extends Application {
             FXMLLoader raspiLoader = new FXMLLoader(getUrlFromBoardType(type));
             raspiLoader.setController(new RaspiController(address));
 
+            // new FXMLLoader instance has to be loaded every single instance
             FXMLLoader i2cLoader = new FXMLLoader(i2c);
             FXMLLoader spiLoader = new FXMLLoader(spi);
             FXMLLoader intrsLoader = new FXMLLoader(intrs);
@@ -174,8 +175,7 @@ public final class App extends Application {
             // Load all tabs programatically since they were generated
             // dynamically
             TabPane inner = (TabPane) pane.getContent().lookup("#innerTabPane");
-            inner.getTabs().addAll(i2cLoader.load(),
-                    spiLoader.load(),
+            inner.getTabs().addAll(i2cLoader.load(), spiLoader.load(),
                     intrsLoader.load());
 
             TAB_ADDR_PAIRS.add(new TabAddressPair(pane, address));
@@ -198,50 +198,47 @@ public final class App extends Application {
         updateTextArea("#spiTextArea", response, source);
     }
 
-    private static void updateTextArea(String lookupIdPrefix, String response,
+    private static void updateTextArea(String idPrefix, String response,
             InetAddress source) {
-        Node n = getDevicesTab();
-
-        TabPane pane = (TabPane) n;
-
-        for (Tab t : pane.getTabs()) {
-            if (t.getId().equals(source.getHostAddress())) {
-                TextArea ta = ((TextArea) t.getContent().lookup(lookupIdPrefix
-                        + ':' + source.getHostAddress()));
-                ta.setText(LocalTime.now().toString()
-                        + '\n' + response
-                        + '\n' + ta.getText());
-                break;
-            }
-        }
+        Tab t = findTabByAddress(source);
+        TextArea ta = ((TextArea) t.getContent().lookup(idPrefix
+                + ':' + source.getHostAddress()));
+        ta.setText(LocalTime.now().toString()
+                + '\n' + response
+                + '\n' + ta.getText());
     }
 
     public static void setPinButtonColourFromSignal(ClientPin pin,
             Signal signal, InetAddress source) {
+        Tab t = findTabByAddress(source);
+        Button btn = (Button) t.getContent()
+                .lookup("#" + pin.getPinId());
+        btn.setStyle("");
+        String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
+        btn.setStyle("-fx-background-color: #" + color);
+
+        playFadeTransition(btn);
+    }
+
+    private static Tab findTabByAddress(InetAddress address) {
         Node n = getDevicesTab();
-
         TabPane pane = (TabPane) n;
-        for (Tab t : pane.getTabs()) {
-            if (t.getId().equals(source.getHostAddress())) {
-                Button btn = (Button) t.getContent()
-                        .lookup("#" + pin.getPinId());
-                btn.setStyle("");
-                String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
-                btn.setStyle("-fx-background-color: #" + color);
 
-                playFadeTransition(btn);
-                break;
+        for (Tab t : pane.getTabs()) {
+            if (t.getId().equals(address.getHostAddress())) {
+                return t;
             }
         }
+        throw new IllegalArgumentException("Address not found");
     }
 
     private static void playFadeTransition(Button btn) {
         final double startVal = 1.0f;
         final double endVal = 0.8f;
-        final int playDurationMilis = 500;
+        final int dur = 500;
+        final Duration transDuration = Duration.millis(dur);
 
-        FadeTransition fadeTransition
-                = new FadeTransition(Duration.millis(playDurationMilis), btn);
+        FadeTransition fadeTransition = new FadeTransition(transDuration, btn);
         fadeTransition.setFromValue(startVal);
         fadeTransition.setToValue(endVal);
         fadeTransition.setCycleCount(1);
