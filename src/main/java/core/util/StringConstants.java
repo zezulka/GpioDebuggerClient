@@ -17,12 +17,11 @@ public enum StringConstants {
     SERVER_READY("The system is ready to accept requests."),
     RESPONSE_WAIT("Waiting for server to response..."),
     CLOSE_WHEN_DEVICES_ACTIVE("Are you sure you want to close "
-            + "the whole application? "
+            + "the whole application?\n"
             + "All connections to devices will be closed."),
     LISTENER_ACTIVE("This interrupt listener is still active. It is necessary"
             + " to stop it before removing it. Okay to continue?"),
-    OK_TO_DISCONNECT("Are you sure that you want "
-            + "to disconnect from this device?"),
+    OK_TO_DISCONNECT("Really disconnect from this device?\n"),
     PATH_TO_FXML_DIR(
                 "src" + File.separator
                 + "main" + File.separator

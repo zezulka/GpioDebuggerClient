@@ -31,6 +31,7 @@ import javafx.util.Duration;
 import layouts.controllers.ControllerUtils;
 
 import core.util.StringConstants;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
 import layouts.controllers.I2cRequestFormController;
 import layouts.controllers.InterruptTableController;
@@ -217,7 +218,7 @@ public final class App extends Application {
         String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
         btn.setStyle("-fx-background-color: #" + color);
 
-        playFadeTransition(btn);
+        playAnimation(btn);
     }
 
     private static Tab findTabByAddress(InetAddress address) {
@@ -232,17 +233,26 @@ public final class App extends Application {
         throw new IllegalArgumentException("Address not found");
     }
 
-    private static void playFadeTransition(Button btn) {
+    private static void playAnimation(Button btn) {
         final double startVal = 1.0f;
-        final double endVal = 0.8f;
-        final int dur = 500;
+        final double endVal = 0.6f;
+        final int dur = 200;
         final Duration transDuration = Duration.millis(dur);
 
         FadeTransition fadeTransition = new FadeTransition(transDuration, btn);
         fadeTransition.setFromValue(startVal);
         fadeTransition.setToValue(endVal);
-        fadeTransition.setCycleCount(1);
+        fadeTransition.setCycleCount(2);
+        fadeTransition.setAutoReverse(true);
         fadeTransition.play();
+
+        TranslateTransition tt =
+                new TranslateTransition(Duration.millis(200), btn);
+        tt.setFromX(0f);
+        tt.setByX(10f);
+        tt.setCycleCount(2);
+        tt.setAutoReverse(true);
+        tt.playFromStart();
     }
 
     /**

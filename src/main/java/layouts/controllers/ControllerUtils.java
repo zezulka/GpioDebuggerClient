@@ -19,7 +19,7 @@ public final class ControllerUtils {
         Platform.runLater(() -> {
             Alert alert = new Alert(alertType);
             alert.setHeaderText(null);
-            alert.setResizable(true);
+            alert.setResizable(false);
             alert.setContentText(message);
             alert.getDialogPane()
                     .getChildren()
@@ -42,12 +42,23 @@ public final class ControllerUtils {
     /**
      * @return True if user confirmed the given action, false otherwise.
      */
-    public static boolean showConfirmDialog(StringConstants message) {
+    public static boolean showConfirmDialog(StringConstants message,
+            Object... other) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Please confirm");
+        StringBuilder wholeMessage = new StringBuilder(message.toString());
+        for (Object obj : other) {
+            wholeMessage.append(obj.toString());
+        }
         alert.setHeaderText(null);
-        alert.setResizable(true);
-        alert.setContentText(message.toString());
+        alert.setContentText(wholeMessage.toString());
+        alert.setResizable(false);
+        alert.getDialogPane()
+                .getChildren()
+                .stream()
+                .filter(node -> node instanceof Label)
+                .forEach(node -> ((Label) node)
+                .setMinHeight(Region.USE_PREF_SIZE));
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() != null && result.get().equals(ButtonType.OK);
     }

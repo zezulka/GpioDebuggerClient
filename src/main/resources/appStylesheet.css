@@ -25,3 +25,13 @@
 .tool-bar {
     -fx-background-color: #AAAAAA;
 }
+
+#nonselectable {
+    -fx-background-color: #000000;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: linear-gradient(#FFD166 0%, #BA994B 100%);
+}

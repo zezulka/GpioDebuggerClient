@@ -33,7 +33,7 @@
       <SplitPane id="rootSplitPane" fx:id="rootSplitPane" cache="true" dividerPositions="0.7" focusTraversable="false" layoutY="42.0" prefHeight="758.0" prefWidth="1012.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="42.0">
          <items>
               <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" style="-fx-background-color: white;" tabMaxHeight="20.0" />
-            <SplitPane dividerPositions="0.6759259259259259" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL">
+            <SplitPane id="controlPanel" fx:id="controlPanel" dividerPositions="0.7" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL">
                <items>
                   <TreeView id="devicesTree" fx:id="devicesTree" minWidth="0.0" prefHeight="525.0" prefWidth="269.0" style="-fx-background-color: white;">
                      <cursor>
@@ -43,7 +43,7 @@
                         <Insets />
                      </opaqueInsets>
                   </TreeView>
-                  <GridPane alignment="CENTER" prefHeight="223.0" prefWidth="195.0" style="-fx-background-color: grey;">
+                  <GridPane id="newDevicePane" fx:id="newDevicePane" alignment="CENTER" prefHeight="223.0" prefWidth="195.0" style="-fx-background-color: grey;">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="271.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="8.0" prefWidth="8.0" />

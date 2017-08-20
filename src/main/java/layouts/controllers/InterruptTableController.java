@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 
 import javafx.concurrent.Task;
 
@@ -24,7 +23,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.util.converter.IntegerStringConverter;
+import org.controlsfx.control.PopOver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +47,7 @@ public final class InterruptTableController implements Initializable {
     @FXML
     private ComboBox<InterruptType> interruptTypeComboBox;
     @FXML
-    private ComboBox<ClientPin> pinComboBox;
-    @FXML
-    private Button addNewInterruptListenerButton;
+    private Button pinButton;
     @FXML
     private TableColumn<InterruptValueObject, ClientPin> pinName;
     @FXML
@@ -66,6 +66,8 @@ public final class InterruptTableController implements Initializable {
     private TableColumn<InterruptValueObject, Void> removeRowBtn;
 
     private final InetAddress address;
+    private final PopOver pinPopup = new PopOver();
+    private final GridPane pinGridPane = new GridPane();
 
     public InterruptTableController(InetAddress address) {
         this.address = address;
@@ -78,15 +80,27 @@ public final class InterruptTableController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         addAllPins();
         addAllIntrTypes();
+        initPinGridPane();
+        pinPopup.animatedProperty().set(false);
+        pinPopup.autoFixProperty().set(true);
+        pinPopup.setTitle("GPIO pin selector");
         interruptTypeComboBox.getSelectionModel().selectFirst();
-        pinComboBox.getSelectionModel().selectFirst();
+        interruptTypeComboBox.setStyle("-fx-background-color: #FFD166;");
+        pinButton.setText("Select pin");
+        pinButton.setStyle("-fx-background-color: #FFD166;");
+        pinButton.setOnMouseClicked((event) -> {
+            if (pinPopup.isShowing()) {
+                pinPopup.hide();
+            } else {
+                final int offset = 45;
+
+                pinPopup.setArrowLocation(PopOver.ArrowLocation.LEFT_CENTER);
+                pinPopup.show(pinButton);
+            }
+        });
         initCellValueFactory();
         tableView.setItems(InterruptManager.getListeners(address));
         tableView.selectionModelProperty().set(null);
-        tableView.setEditable(true);
-        addNewInterruptListenerButton.setOnMouseClicked((e) -> {
-            InterruptManager.addInterruptListener(address, getTempIvo());
-        });
     }
 
     /**
@@ -94,21 +108,50 @@ public final class InterruptTableController implements Initializable {
      *
      * @return
      */
-    private InterruptValueObject getTempIvo() {
+    private InterruptValueObject getNewInterruptValueObject(ClientPin pin) {
         return new InterruptValueObject(
-                pinComboBox.getSelectionModel().getSelectedItem(),
+                pin,
                 interruptTypeComboBox.getSelectionModel().getSelectedItem()
         );
+    }
+
+    private void initPinGridPane() {
+        addAllPins();
+        pinPopup.setContentNode(pinGridPane);
     }
 
     private void addAllPins() {
         List<ClientPin> result = new ArrayList<>();
         for (ClientPin pin : RaspiClientPin.pins()) {
-            if (pin.isGpio()) {
-                result.add(pin);
-            }
+            PinButton btn = new PinButton(pin);
+            int pos = btn.pin.getPort() - 1;
+            pinGridPane.add(btn, pos % 2, pos / 2);
         }
-        pinComboBox.setItems(FXCollections.observableArrayList(result));
+    }
+
+    private class PinButton extends Button {
+
+        private final ClientPin pin;
+        private static final int WIDTH = 70;
+        private static final int HEIGHT = 30;
+
+        PinButton(ClientPin pin) {
+            super(pin.toString());
+            this.pin = pin;
+            setMnemonicParsing(false);
+            if (!pin.isGpio()) {
+                setStyle("-fx-background-color: #000000;"
+                        + "-fx-text-fill: #FFFFFF");
+                setDisable(true);
+                setOpacity(1.0);
+            }
+            setOnMouseClicked((event) -> {
+                InterruptManager.addInterruptListener(address,
+                        getNewInterruptValueObject(pin));
+                pinPopup.hide();
+            });
+            setPrefSize(WIDTH, HEIGHT);
+        }
     }
 
     private void addAllIntrTypes() {
@@ -135,7 +178,8 @@ public final class InterruptTableController implements Initializable {
     private class RemoveRowButtonCell extends
             TableCell<InterruptValueObject, Void> {
 
-        private final Button cellBtn = new Button(null, ImageViews.REMOVE);
+        private final Button cellBtn
+                = new Button(null, new ImageView(Graphics.REMOVE));
 
         RemoveRowButtonCell() {
 
@@ -172,7 +216,8 @@ public final class InterruptTableController implements Initializable {
     private class StatePropertyButtonCell extends
             TableCell<InterruptValueObject, ListenerState> {
 
-        private final Button cellBtn = new Button(null, ImageViews.PLAY_BTN);
+        private final Button cellBtn
+                = new Button(null, new ImageView(Graphics.PLAY_BTN));
 
         StatePropertyButtonCell() {
             cellBtn.setPadding(Insets.EMPTY);
@@ -207,13 +252,13 @@ public final class InterruptTableController implements Initializable {
             switch (t) {
                 case NOT_RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(ImageViews.PLAY_BTN);
+                        cellBtn.setGraphic(new ImageView(Graphics.PLAY_BTN));
                     });
                     break;
                 }
                 case RUNNING: {
                     Platform.runLater(() -> {
-                        cellBtn.setGraphic(ImageViews.STOP_BTN);
+                        cellBtn.setGraphic(new ImageView(Graphics.STOP_BTN));
                     });
                     break;
                 }

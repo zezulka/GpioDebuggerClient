@@ -36,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.collections.ObservableList;
 import core.util.StringConstants;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.GridPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,10 @@ public final class MasterWindowController implements Initializable {
     private SwitchButton deviceTreeSwitch;
     @FXML
     private TabPane devicesTab;
+    @FXML
+    private SplitPane controlPanel;
+    @FXML
+    private GridPane newDevicePane;
     @FXML
     private Button connectBtn;
     @FXML
@@ -97,6 +102,8 @@ public final class MasterWindowController implements Initializable {
         final double threshold = 0.7;
         devicesTab.maxWidthProperty()
                 .bind(rootSplitPane.widthProperty().multiply(threshold));
+        newDevicePane.minHeightProperty()
+                .bind(controlPanel.heightProperty().multiply(1 - threshold));
     }
 
     private void initDeviceTreeSwitch() {
@@ -109,7 +116,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void initConnectToDeviceBtn() {
-        initializeToolbarButton(connectBtn, ImageViews.CONNECT,
+        initializeToolbarButton(connectBtn, Graphics.CONNECT,
                 "Connects to device. "
                 + "\nDevice must be selected in the device tree.");
         connectBtn.disableProperty().bind(connectionPending()
@@ -121,7 +128,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void initDisconnectBtn() {
-        initializeToolbarButton(disconnectButton, ImageViews.DISCONNECT,
+        initializeToolbarButton(disconnectButton, Graphics.DISCONNECT,
                 "Disconnects from device. "
                 + "\nDevice must be selected in the device tree and active.");
         disconnectButton.disableProperty().bind(devicesTree
@@ -215,9 +222,9 @@ public final class MasterWindowController implements Initializable {
 
     private void initializeDeviceTree() {
 
-        TreeItem root = new TreeItem("devices", ImageViews.DEVICES);
-        TreeItem active = new TreeItem("alive", ImageViews.ACTIVE);
-        TreeItem hist = new TreeItem("history", ImageViews.HISTORY);
+        TreeItem root = new TreeItem("devices", Graphics.DEVICES);
+        TreeItem active = new TreeItem("alive", Graphics.ACTIVE);
+        TreeItem hist = new TreeItem("history", Graphics.HISTORY);
         UserDataUtils.getDevices().forEach((device)
                 -> hist.getChildren().add(getTreeItemWithListener(device)));
         hist.setExpanded(true);
@@ -314,10 +321,6 @@ public final class MasterWindowController implements Initializable {
                 device.disconnectedProperty().set(true);
             }
         });
-    }
-
-    public static Tab getCurrentTab() {
-        return MasterWindowController.currentTab;
     }
 
     private class ConnectionWorker extends Task<Boolean> {

@@ -110,14 +110,16 @@ public final class ConnectionThread implements Runnable {
         } else {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
-            Platform.runLater(() -> {
-                App.removeTab(connection.getDevice().getAddress());
-            });
-            ControllerUtils.showInfoDialog(
-                    String.format("Disconnected from address %s, device %s",
-                            connection.getDevice().getAddress(),
-                            connection.getDevice().getBoardType())
-            );
+            if (connection.getDevice().isDirty()) {
+                Platform.runLater(() -> {
+                    App.removeTab(connection.getDevice().getAddress());
+                });
+                ControllerUtils.showInfoDialog(
+                        String.format("Disconnected from address %s, device %s",
+                                connection.getDevice().getAddress(),
+                                connection.getDevice().getBoardType())
+                );
+            }
         }
     }
 
