@@ -237,6 +237,7 @@ public final class App extends Application {
         final double startVal = 1.0f;
         final double endVal = 0.6f;
         final int dur = 200;
+        final double shift = 10;
         final Duration transDuration = Duration.millis(dur);
 
         FadeTransition fadeTransition = new FadeTransition(transDuration, btn);
@@ -247,9 +248,9 @@ public final class App extends Application {
         fadeTransition.play();
 
         TranslateTransition tt =
-                new TranslateTransition(Duration.millis(200), btn);
+                new TranslateTransition(Duration.millis(dur), btn);
         tt.setFromX(0f);
-        tt.setByX(10f);
+        tt.setByX(shift);
         tt.setCycleCount(2);
         tt.setAutoReverse(true);
         tt.playFromStart();
