@@ -175,7 +175,8 @@ public final class AgentResponseFactory {
             InterruptValueObject interrupt
                     = InterruptManager.getInterruptListener(
                             connection.getDevice().getAddress(),
-                            new InterruptValueObject(interruptPin, intrType)
+                            interruptPin,
+                            intrType
                     );
             if (interrupt == null) {
                 throw new IllegalResponseException(
@@ -183,10 +184,11 @@ public final class AgentResponseFactory {
                                 + "and interrupt listener [pin=%s, type=%s]",
                                 connection, interruptPin, intrType));
             }
+            interrupt.setLastIntrTime(timeGenerated);
             return clazz
-                    .getConstructor(InterruptValueObject.class, LocalTime.class,
+                    .getConstructor(InterruptValueObject.class,
                             InetAddress.class)
-                    .newInstance(interrupt, timeGenerated,
+                    .newInstance(interrupt,
                             connection.getDevice().getAddress());
         } catch (IllegalArgumentException ex) {
             throw new IllegalResponseException("Illegal interrupt response.");

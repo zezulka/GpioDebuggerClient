@@ -318,6 +318,20 @@ public final class InterruptTableController implements Initializable {
         }
 
         @Override
+        protected void done() {
+            super.done();
+            synchronized (SYNC) {
+                try {
+                    // wait until InterruptListenerStartedAgentResponse sends
+                    // signal; please see InterruptListenerStoppedAgentResponse
+                    // for more information
+                    SYNC.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+
+        @Override
         protected String getMessagePrefix() {
             return "GPIO:INTR_START";
         }

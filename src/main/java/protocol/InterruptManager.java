@@ -43,19 +43,16 @@ public final class InterruptManager {
     }
 
     /**
-     *
-     * @param address
-     * @param object
      * @return null if no mapping to address/object combination exists,
      * InterruptValueObject instance otherwise
      */
     public static InterruptValueObject getInterruptListener(InetAddress address,
-            InterruptValueObject object) {
+            ClientPin pin, InterruptType type) {
         if (INTERRUPTS.get(address) == null) {
             return null;
         }
         for (InterruptValueObject obj : INTERRUPTS.get(address)) {
-            if (object.equals(obj)) {
+            if (obj.getClientPin().equals(pin) && obj.getType().equals(type)) {
                 return obj;
             }
         }
@@ -65,14 +62,15 @@ public final class InterruptManager {
     public static void updateInterruptListener(InetAddress destination,
             InterruptValueObject ivo) {
         List<InterruptValueObject> interrupts = INTERRUPTS.get(destination);
-        for (int i = 0; i < interrupts.size(); i++) {
-            InterruptValueObject curr = interrupts.get(i);
-            if (curr.equals(ivo)) {
-                interrupts.set(i, ivo);
-                return;
+        for (InterruptValueObject curr : INTERRUPTS.get(destination)) {
+            if ((ivo.getClientPin().equals(curr.getClientPin())
+                    && curr.getType().equals(InterruptType.BOTH)
+                    && curr.stateProperty().get().equals(ListenerState.RUNNING))
+                    || curr.equals(ivo)) {
+                curr.setLastIntrTime(ivo.lastIntrTimeProperty().get());
+                curr.incrementNumberOfInterrupts();
             }
         }
-        throw new IllegalArgumentException("illegal object");
     }
 
     public static void addInterruptListener(InetAddress destination,

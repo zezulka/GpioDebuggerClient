@@ -1,9 +1,9 @@
 package protocol.response;
 
 import java.net.InetAddress;
-import java.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import protocol.InterruptManager;
 import protocol.InterruptValueObject;
 import protocol.ListenerState;
 
@@ -14,17 +14,15 @@ public final class InterruptGeneratedAgentResponse
             = LoggerFactory.getLogger(InterruptGeneratedAgentResponse.class);
 
     public InterruptGeneratedAgentResponse(InterruptValueObject response,
-            LocalTime generatedAt, InetAddress address) {
-        super(response, generatedAt, address);
+            InetAddress address) {
+        super(response, address);
     }
 
     @Override
-    protected void modifyInterruptValueObjectImpl() {
+    public void react() {
         if (getResponse().stateProperty().get().equals(ListenerState.RUNNING)) {
-            final int newNumIntrs
-                    = getResponse().numOfIntrsProperty().get() + 1;
-            getResponse().numOfIntrsProperty().set(newNumIntrs);
-            getResponse().setLastIntrTime(getGeneratedAt());
+            InterruptManager
+                    .updateInterruptListener(getAddress(), getResponse());
         } else {
             LOGGER.debug("Message about interrupt has been received, "
                     + "but this listener is not active.");
