@@ -1,6 +1,5 @@
 package core.net;
 
-import core.gui.App;
 import core.util.MessageParser;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,7 +10,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import javafx.application.Platform;
-import layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.MasterWindowController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
@@ -112,7 +112,8 @@ public final class ConnectionThread implements Runnable {
             disconnect();
             if (connection.getDevice().isDirty()) {
                 Platform.runLater(() -> {
-                    App.removeTab(connection.getDevice().getAddress());
+                    MasterWindowController.getTabManager()
+                            .removeTab(connection.getDevice().getAddress());
                 });
                 ControllerUtils.showInfoDialog(
                         String.format("Disconnected from address %s, device %s",

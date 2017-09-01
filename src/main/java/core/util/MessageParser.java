@@ -2,7 +2,7 @@ package core.util;
 
 import core.net.ConnectionValueObject;
 import java.time.format.DateTimeFormatter;
-import layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package core.util;
 
+import gui.AgentUserPrivileges;
 import core.net.ConnectionValueObject;
 import java.net.InetAddress;
 import java.time.LocalTime;
@@ -85,16 +86,17 @@ public final class AgentResponseFactory {
 
     private static AgentResponse init(List<String> splitMessage,
             ConnectionValueObject connection) throws IllegalResponseException {
-        final int expectedElemSize = 1;
+        final int expectedElemSize = 2;
 
         if (splitMessage.size() != expectedElemSize) {
             throw new IllegalResponseException("expected elems: "
                     + expectedElemSize);
         }
         try {
-            BoardType boardType;
-            boardType = BoardType.parse(splitMessage.get(0));
-            return new InitAgentResponse(connection, boardType);
+            BoardType boardType = BoardType.parse(splitMessage.get(0));
+            AgentUserPrivileges privileges
+                    = AgentUserPrivileges.valueOf(splitMessage.get(1));
+            return new InitAgentResponse(connection, boardType, privileges);
         } catch (IllegalArgumentException e) {
             throw new IllegalResponseException(e);
         }

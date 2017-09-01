@@ -2,13 +2,12 @@ package protocol;
 
 import java.net.InetAddress;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.ControllerUtils;
 
 public final class InterruptManager {
 
@@ -61,7 +60,6 @@ public final class InterruptManager {
 
     public static void updateInterruptListener(InetAddress destination,
             InterruptValueObject ivo) {
-        List<InterruptValueObject> interrupts = INTERRUPTS.get(destination);
         for (InterruptValueObject curr : INTERRUPTS.get(destination)) {
             if ((ivo.getClientPin().equals(curr.getClientPin())
                     && curr.getType().equals(InterruptType.BOTH)

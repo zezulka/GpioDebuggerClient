@@ -1,17 +1,19 @@
 package core.util;
 
+import gui.AgentUserPrivileges;
 import java.io.File;
 
 /**
- * Prefix naming legend:
- *     F_ = formatter String
- *     ERR = String which should represent error message being displayed to the
- *           user
+ * Prefix naming legend: F_ = formatter String ERR = String which should
+ * represent error message being displayed to the user
  *
  * @author miloslav
  */
 public enum StringConstants {
 
+    USER_INFO_PARAM("UserInfo"),
+    GPIO_GROUP_USER_RESTR_ARG("--" + USER_INFO_PARAM
+            + '=' + AgentUserPrivileges.USER_IN_GPIO_GRP),
     CONNECTION_OK("Connection to server OK"),
     CONNECTION_NOK("I/O error while trying to communicate with server"),
     SERVER_READY("The system is ready to accept requests."),
@@ -23,16 +25,16 @@ public enum StringConstants {
             + " to stop it before removing it. Okay to continue?"),
     OK_TO_DISCONNECT("Really disconnect from this device?\n"),
     PATH_TO_FXML_DIR(
-                "src" + File.separator
-                + "main" + File.separator
-                + "resources" + File.separator
-                + "fxml"),
+            "src" + File.separator
+            + "main" + File.separator
+            + "resources" + File.separator
+            + "fxml"),
 
     F_HOST_NOT_REACHABLE("Host %s could not be reached."),
 
     ERR_NOT_CONNECTED("Connection has not been established with server."),
     ERR_CANNOT_CONNECT("Cannot connect to device.\nMake sure "
-                     + "agent is running on the specified address."),
+            + "agent is running on the specified address."),
     ERR_NO_BOARD("No device is currently binded to this session!"),
     ERR_NOT_BUTTON("The clicked entity is not of Button type, ignoring..."),
     ERR_ALREADY_CLOSED("Cannot close connection to server: already closed"),

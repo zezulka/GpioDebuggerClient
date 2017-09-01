@@ -1,5 +1,6 @@
 package core.util;
 
+import gui.AgentUserPrivileges;
 import core.net.ConnectionValueObject;
 import protocol.response.*;
 import java.net.InetAddress;
@@ -68,7 +69,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void happyScenarioInitResponse() {
         try {
-            assertThat(AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString(), connection)).isInstanceOf(InitAgentResponse.class);
+            assertThat(AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString()+ ':' + AgentUserPrivileges.ROOT_USER, connection)).isInstanceOf(InitAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -100,6 +101,11 @@ public class AgentResponseFactoryTest {
     @Test
     public void missingBoardType() {
         assertThatThrownBy(() -> AgentResponseFactory.of("INIT:", connection)).isInstanceOf(IllegalResponseException.class);
+    }
+
+    @Test
+    public void invalidAgentUserPrivileges() {
+        assertThatThrownBy(() -> AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString() + ":MISSING" , connection)).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test

@@ -12,36 +12,39 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import layouts.controllers.Operation;
+import gui.layouts.controllers.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class UserDataUtils {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("dd-MM, HH:mm");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("dd-MM, HH:mm");
 
     private static final char SEP_CHR = File.separatorChar;
     private static final XStream X_STREAM = new XStream(new DomDriver());
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(UserDataUtils.class);
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(UserDataUtils.class);
 
     private static final File DEVICES_FILE = new File("src" + SEP_CHR
             + "main" + SEP_CHR
             + "resources" + SEP_CHR + "devices.xml");
+
     private static final File I2C_FILE = new File("src" + SEP_CHR
             + "main" + SEP_CHR
             + "resources" + SEP_CHR + "i2c_requests.xml");
+
     private static final File SPI_FILE = new File("src" + SEP_CHR
             + "main" + SEP_CHR
             + "resources" + SEP_CHR + "spi_requests.xml");
 
     private static boolean setup = false;
-    private static final I2cRequests I2C_REQUESTS =
-            new I2cRequests(initI2cRequestsFromFile());
-    private static final SpiRequests SPI_REQUESTS =
-            new SpiRequests(initSpiRequestsFromFile());
-    private static final Devices DEVICES = new Devices(getDevicesFromFile());
+    private static final XStreamListWrapper<I2cRequestValueObject> I2C_REQUESTS
+            = new I2cRequests(initI2cRequestsFromFile());
+    private static final XStreamListWrapper<SpiRequestValueObject> SPI_REQUESTS
+            = new SpiRequests(initSpiRequestsFromFile());
+    private static final XStreamListWrapper<DeviceValueObject> DEVICES
+            = new Devices(getDevicesFromFile());
 
     private UserDataUtils() {
     }
@@ -86,17 +89,15 @@ public final class UserDataUtils {
         X_STREAM.alias("spiRequests", SpiRequests.class);
         X_STREAM.alias("devices", Devices.class);
 
-        X_STREAM.omitField(I2cRequests.class, "dirty");
-        X_STREAM.omitField(SpiRequests.class, "dirty");
-        X_STREAM.omitField(Devices.class, "dirty");
+        X_STREAM.omitField(XStreamListWrapper.class, "dirty");
         X_STREAM.omitField(DeviceValueObject.class, "dirty");
         X_STREAM.omitField(DeviceValueObject.class, "disconnected");
 
-        X_STREAM.addImplicitCollection(I2cRequests.class, "requests",
+        X_STREAM.addImplicitCollection(I2cRequests.class, "list",
                 I2cRequestValueObject.class);
-        X_STREAM.addImplicitCollection(SpiRequests.class, "requests",
+        X_STREAM.addImplicitCollection(SpiRequests.class, "list",
                 SpiRequestValueObject.class);
-        X_STREAM.addImplicitCollection(Devices.class, "devices",
+        X_STREAM.addImplicitCollection(Devices.class, "list",
                 DeviceValueObject.class);
     }
 
@@ -108,56 +109,58 @@ public final class UserDataUtils {
     }
 
     public static List<DeviceValueObject> getDevices() {
-       return DEVICES.getRequests();
-    }
-
-    private static List<DeviceValueObject> getDevicesFromFile() {
-        if (!DEVICES_FILE.exists()) {
-            return new ArrayList<>();
-        }
-        setupAliasesIfNecessary();
-        return ((Devices) X_STREAM.fromXML(DEVICES_FILE)).getRequests();
+        return DEVICES.getItems();
     }
 
     public static void addNewDeviceToFile(DeviceValueObject address) {
         if (!DEVICES.contains(address)) {
-            DEVICES.addNewRequest(address);
+            DEVICES.addNewItem(address);
         }
-    }
-
-    private static List<I2cRequestValueObject> initI2cRequestsFromFile() {
-        if (!I2C_FILE.exists()) {
-            return new ArrayList<>();
-        }
-        setupAliasesIfNecessary();
-        return ((I2cRequests) X_STREAM.fromXML(I2C_FILE)).getRequests();
     }
 
     public static ObservableList<I2cRequestValueObject> getI2cRequests() {
-        return FXCollections.observableArrayList(I2C_REQUESTS.getRequests());
+        return FXCollections.observableArrayList(I2C_REQUESTS.getItems());
     }
 
     public static void addNewI2cRequest(I2cRequestValueObject request) {
         if (!I2C_REQUESTS.contains(request)) {
-            I2C_REQUESTS.addNewRequest(request);
+            I2C_REQUESTS.addNewItem(request);
         }
     }
 
-    private static List<SpiRequestValueObject> initSpiRequestsFromFile() {
-        if (!SPI_FILE.exists()) {
+    private static <T> List<T> initItemsFromFile(File file) {
+        if (!file.exists()) {
             return new ArrayList<>();
         }
         setupAliasesIfNecessary();
-        return ((SpiRequests) X_STREAM.fromXML(SPI_FILE)).getRequests();
+        XStreamListWrapper requests
+                = (XStreamListWrapper) X_STREAM.fromXML(file);
+        // Due to crippled implementation of XStream, this has to be checked...
+        if (requests == null || requests.getItems() == null) {
+            return new ArrayList<>();
+        }
+        return requests.getItems();
+    }
+
+    private static List<SpiRequestValueObject> initSpiRequestsFromFile() {
+        return initItemsFromFile(SPI_FILE);
+    }
+
+    private static List<I2cRequestValueObject> initI2cRequestsFromFile() {
+        return initItemsFromFile(I2C_FILE);
+    }
+
+    private static List<DeviceValueObject> getDevicesFromFile() {
+        return initItemsFromFile(DEVICES_FILE);
     }
 
     public static ObservableList<SpiRequestValueObject> getSpiRequests() {
-        return FXCollections.observableArrayList(SPI_REQUESTS.getRequests());
+        return FXCollections.observableArrayList(SPI_REQUESTS.getItems());
     }
 
     public static void addNewSpiRequest(SpiRequestValueObject request) {
         if (!SPI_REQUESTS.contains(request)) {
-            SPI_REQUESTS.addNewRequest(request);
+            SPI_REQUESTS.addNewItem(request);
         }
     }
 }

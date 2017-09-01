@@ -1,7 +1,10 @@
 package protocol.response;
 
-import core.gui.App;
 import java.net.InetAddress;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import gui.layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.MasterWindowController;
 import protocol.ClientPin;
 import protocol.Signal;
 
@@ -20,6 +23,14 @@ public final class GpioAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        App.setPinButtonColourFromSignal(pin, signal, address);
+        Tab t = MasterWindowController
+                .getTabManager().findTabByAddress(address);
+        Button btn = (Button) t.getContent()
+                .lookup("#" + pin.getPinId());
+        btn.setStyle("");
+        String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
+        btn.setStyle("-fx-background-color: #" + color);
+
+        ControllerUtils.playButtonAnimation(btn);
     }
 }

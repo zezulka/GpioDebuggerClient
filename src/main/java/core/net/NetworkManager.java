@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import layouts.controllers.ControllerUtils;
+import gui.layouts.controllers.ControllerUtils;
 import core.util.StringConstants;
 
 import org.slf4j.Logger;

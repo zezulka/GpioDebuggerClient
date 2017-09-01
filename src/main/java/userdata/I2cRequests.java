@@ -1,31 +1,11 @@
 package userdata;
 
 import java.util.List;
-import javafx.collections.FXCollections;
 
-public final class I2cRequests {
-    private final List<I2cRequestValueObject> requests;
-    private boolean dirty;
+public final class I2cRequests
+        extends XStreamListWrapper<I2cRequestValueObject> {
 
-    public I2cRequests(List<I2cRequestValueObject> requests) {
-        this.requests = FXCollections.observableArrayList(requests);
-        this.dirty = false;
-    }
-
-    public List<I2cRequestValueObject> getRequests() {
-        return requests;
-    }
-
-    public void addNewRequest(I2cRequestValueObject request) {
-        this.dirty = true;
-        requests.add(request);
-    }
-
-    public boolean isDirty() {
-        return dirty;
-    }
-
-    public boolean contains(I2cRequestValueObject request) {
-        return requests.contains(request);
+    public I2cRequests(List<I2cRequestValueObject> list) {
+        super(list);
     }
 }

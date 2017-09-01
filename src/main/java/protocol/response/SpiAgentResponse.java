@@ -1,7 +1,10 @@
 package protocol.response;
 
-import core.gui.App;
 import java.net.InetAddress;
+import java.time.LocalTime;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TextArea;
+import gui.layouts.controllers.MasterWindowController;
 
 public final class SpiAgentResponse implements AgentResponse {
 
@@ -15,7 +18,17 @@ public final class SpiAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        App.displaySpiResponse(responseBody, address);
+        updateTextArea("#spiTextArea");
+    }
+
+    private void updateTextArea(String idPrefix) {
+        Tab t = MasterWindowController
+                .getTabManager().findTabByAddress(address);
+        TextArea ta = ((TextArea) t.getContent().lookup(idPrefix
+                + ':' + address.getHostAddress()));
+        ta.setText(LocalTime.now().toString()
+                + '\n' + responseBody
+                + '\n' + ta.getText());
     }
 
 }
