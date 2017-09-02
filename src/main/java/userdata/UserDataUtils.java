@@ -1,7 +1,9 @@
 package userdata;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,23 +22,9 @@ public final class UserDataUtils {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER
             = DateTimeFormatter.ofPattern("dd-MM, HH:mm");
-
-    private static final char SEP_CHR = File.separatorChar;
     private static final XStream X_STREAM = new XStream(new DomDriver());
     private static final Logger LOGGER
             = LoggerFactory.getLogger(UserDataUtils.class);
-
-    private static final File DEVICES_FILE = new File("src" + SEP_CHR
-            + "main" + SEP_CHR
-            + "resources" + SEP_CHR + "devices.xml");
-
-    private static final File I2C_FILE = new File("src" + SEP_CHR
-            + "main" + SEP_CHR
-            + "resources" + SEP_CHR + "i2c_requests.xml");
-
-    private static final File SPI_FILE = new File("src" + SEP_CHR
-            + "main" + SEP_CHR
-            + "resources" + SEP_CHR + "spi_requests.xml");
 
     private static boolean setup = false;
     private static final XStreamListWrapper<I2cRequestValueObject> I2C_REQUESTS
@@ -49,26 +37,33 @@ public final class UserDataUtils {
     private UserDataUtils() {
     }
 
-    public static void saveAllRequests() {
-        try {
-            setupAliasesIfNecessary();
-            if (I2C_REQUESTS.isDirty()) {
-                X_STREAM.toXML(I2C_REQUESTS, new FileWriter(I2C_FILE));
-                LOGGER.info("New I2C request templates saved.");
+    static <T> void saveCollectionsToAssociatedFiles(
+            XStreamListWrapper... colls) {
+
+        setupAliasesIfNecessary();
+        for (XStreamListWrapper col : colls) {
+            if (col.isDirty()) {
+                try {
+                    File f = col.getAssociatedFile();
+                    f.createNewFile();
+                    X_STREAM.toXML(col, new FileWriter(f));
+                    LOGGER.info("New data saved to: " + f);
+                } catch (IOException ex) {
+                    throw new XStreamException(ex);
+                }
             }
-            if (SPI_REQUESTS.isDirty()) {
-                X_STREAM.toXML(SPI_REQUESTS, new FileWriter(SPI_FILE));
-                LOGGER.info("New SPI request templates saved.");
-            }
-        } catch (IOException ex) {
-            LOGGER.error("Could not save user data ", ex);
         }
+    }
+
+    public static void saveAllRequests() {
+        saveCollectionsToAssociatedFiles(I2C_REQUESTS, SPI_REQUESTS);
     }
 
     public static void saveAllDevices() {
         if (DEVICES.isDirty()) {
             try {
-                X_STREAM.toXML(DEVICES, new FileWriter(DEVICES_FILE));
+                X_STREAM.toXML(DEVICES,
+                        new FileWriter(XmlUserdata.DEVICES_FILE));
                 LOGGER.info("New device info saved.");
             } catch (IOException ex) {
                 LOGGER.error("Could not save user data ", ex);
@@ -89,7 +84,7 @@ public final class UserDataUtils {
         X_STREAM.alias("spiRequests", SpiRequests.class);
         X_STREAM.alias("devices", Devices.class);
 
-        X_STREAM.omitField(XStreamListWrapper.class, "dirty");
+        X_STREAM.omitField(AbstractXStreamListWrapper.class, "dirty");
         X_STREAM.omitField(DeviceValueObject.class, "dirty");
         X_STREAM.omitField(DeviceValueObject.class, "disconnected");
 
@@ -112,55 +107,61 @@ public final class UserDataUtils {
         return DEVICES.getItems();
     }
 
-    public static void addNewDeviceToFile(DeviceValueObject address) {
-        if (!DEVICES.contains(address)) {
-            DEVICES.addNewItem(address);
-        }
-    }
-
     public static ObservableList<I2cRequestValueObject> getI2cRequests() {
         return FXCollections.observableArrayList(I2C_REQUESTS.getItems());
     }
 
-    public static void addNewI2cRequest(I2cRequestValueObject request) {
-        if (!I2C_REQUESTS.contains(request)) {
-            I2C_REQUESTS.addNewItem(request);
-        }
+    static <T> void addNewItemToCollection(T item,
+            XStreamListWrapper<T> collection) {
+        collection.addItem(item);
     }
 
-    private static <T> List<T> initItemsFromFile(File file) {
+    public static void addNewDeviceToFile(DeviceValueObject address) {
+        addNewItemToCollection(address, DEVICES);
+    }
+
+    public static void addNewI2cRequest(I2cRequestValueObject request) {
+        addNewItemToCollection(request, I2C_REQUESTS);
+    }
+
+    public static void addNewSpiRequest(SpiRequestValueObject request) {
+        addNewItemToCollection(request, SPI_REQUESTS);
+    }
+
+    static <T> List<T> initItemsFromFile(File file) {
         if (!file.exists()) {
             return new ArrayList<>();
         }
         setupAliasesIfNecessary();
-        XStreamListWrapper requests
-                = (XStreamListWrapper) X_STREAM.fromXML(file);
-        // Due to crippled implementation of XStream, this has to be checked...
-        if (requests == null || requests.getItems() == null) {
-            return new ArrayList<>();
+        // Uncaught exceptions might be thrown, deal with this in a sane way
+        // CannotResolveClassException - this is demonstrated
+        //     on uknown_collection.xml
+        try {
+            XStreamListWrapper requests
+                    = (XStreamListWrapper) X_STREAM.fromXML(file);
+            if (requests == null || requests.getItems() == null) {
+                return new ArrayList<>();
+            }
+            return requests.getItems();
+        } catch (CannotResolveClassException | NoClassDefFoundError ex) {
+            LOGGER.error("Corrupted file found: " + file.getAbsoluteFile());
+            throw new XStreamException(ex);
         }
-        return requests.getItems();
     }
 
     private static List<SpiRequestValueObject> initSpiRequestsFromFile() {
-        return initItemsFromFile(SPI_FILE);
+        return initItemsFromFile(XmlUserdata.SPI_FILE);
     }
 
     private static List<I2cRequestValueObject> initI2cRequestsFromFile() {
-        return initItemsFromFile(I2C_FILE);
+        return initItemsFromFile(XmlUserdata.I2C_FILE);
     }
 
     private static List<DeviceValueObject> getDevicesFromFile() {
-        return initItemsFromFile(DEVICES_FILE);
+        return initItemsFromFile(XmlUserdata.DEVICES_FILE);
     }
 
     public static ObservableList<SpiRequestValueObject> getSpiRequests() {
         return FXCollections.observableArrayList(SPI_REQUESTS.getItems());
-    }
-
-    public static void addNewSpiRequest(SpiRequestValueObject request) {
-        if (!SPI_REQUESTS.contains(request)) {
-            SPI_REQUESTS.addNewItem(request);
-        }
     }
 }

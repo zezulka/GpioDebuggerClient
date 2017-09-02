@@ -1,14 +1,17 @@
 package gui;
 
+import core.util.Feature;
+import gui.featureFactories.FxmlControllerFactory;
+import gui.featureFactories.FxmlLoaderFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import gui.layouts.controllers.ControllerUtils;
-import gui.layouts.controllers.I2cTabController;
-import gui.layouts.controllers.InterruptsTabController;
-import gui.layouts.controllers.SpiTabController;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import protocol.BoardType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,22 +22,20 @@ public final class RaspiTabLoader implements TabLoader {
             = LoggerFactory.getLogger(RaspiTabLoader.class);
 
     @Override
-    public Tab loadNewTab(InetAddress address, BoardType type) {
+    public Tab loadNewTab(InetAddress address, BoardType type,
+            Set<Feature> features) {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             FXMLLoader raspiLoader
                     = new FXMLLoader(ControllerUtils.getUrlFromBoardType(type));
             raspiLoader.setController(ControllerUtils
-                    .getControllerFromBoardType(type, address));
-
-            // new FXMLLoader instance has to be loaded every single instance
-            FXMLLoader gpioLoader = new FXMLLoader(ControllerUtils.GPIO);
-            FXMLLoader i2cLoader = new FXMLLoader(ControllerUtils.I2C);
-            FXMLLoader spiLoader = new FXMLLoader(ControllerUtils.SPI);
-            FXMLLoader intrsLoader = new FXMLLoader(ControllerUtils.INTRS);
-            i2cLoader.setController(new I2cTabController(address));
-            spiLoader.setController(new SpiTabController(address));
-            intrsLoader.setController(new InterruptsTabController(address));
+                    .getControllerFromBoardType(type));
+            List<FXMLLoader> loaders = new ArrayList<>();
+            for (Feature f : features) {
+                FXMLLoader loader = FxmlLoaderFactory.of(f);
+                loader.setController(FxmlControllerFactory.of(address, f));
+                loaders.add(loader);
+            }
 
             Tab pane = raspiLoader.load();
             pane.setId(address.getHostAddress());
@@ -43,9 +44,14 @@ public final class RaspiTabLoader implements TabLoader {
             // Load all tabs programatically since they were generated
             // dynamically
             TabPane inner = (TabPane) pane.getContent().lookup("#innerTabPane");
-            inner.getTabs().addAll(i2cLoader.load(), spiLoader.load(),
-                    intrsLoader.load(), gpioLoader.load());
-            App.getTabPane().getTabs().add(pane);
+            loaders.forEach((loader) -> {
+                try {
+                    inner.getTabs().add(loader.load());
+                } catch (IOException ex) {
+                    LOGGER.debug(null, ex);
+                    throw new RuntimeException(ex);
+                }
+            });
             LOGGER.debug("Load successful.");
             return pane;
         } catch (IOException ex) {

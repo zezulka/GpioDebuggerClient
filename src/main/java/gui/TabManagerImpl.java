@@ -16,12 +16,9 @@ public final class TabManagerImpl implements TabManager {
     private static final Logger LOGGER
             = LoggerFactory.getLogger(TabManagerImpl.class);
 
-    public TabManagerImpl() {
-    }
-
-    public void setTabPane(TabPane tabPane) {
-        if (this.tabPane != null) {
-            throw new IllegalArgumentException("tabPane already set");
+    public TabManagerImpl(TabPane tabPane) {
+        if (tabPane == null) {
+            throw new NullPointerException("tabPane cannot be null");
         }
         this.tabPane = tabPane;
     }

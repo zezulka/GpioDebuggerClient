@@ -3,6 +3,7 @@ package userdata;
 import gui.layouts.controllers.Operation;
 
 public final class I2cRequestValueObject {
+
     private final Operation operation;
     private final String slaveAddress;
     private final int length;

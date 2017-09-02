@@ -1,6 +1,5 @@
 package core.util;
 
-import gui.AgentUserPrivileges;
 import core.net.ConnectionValueObject;
 import protocol.response.*;
 import java.net.InetAddress;
@@ -13,10 +12,6 @@ import org.junit.Test;
 import protocol.*;
 import userdata.DeviceValueObject;
 
-/**
- *
- * @author miloslav
- */
 public class AgentResponseFactoryTest {
 
     private final ClientPin clientPin = RaspiClientPin.P1_3;
@@ -69,7 +64,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void happyScenarioInitResponse() {
         try {
-            assertThat(AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString()+ ':' + AgentUserPrivileges.ROOT_USER, connection)).isInstanceOf(InitAgentResponse.class);
+            assertThat(AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString()+ ':' + Feature.GPIO, connection)).isInstanceOf(InitAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -104,8 +99,8 @@ public class AgentResponseFactoryTest {
     }
 
     @Test
-    public void invalidAgentUserPrivileges() {
-        assertThatThrownBy(() -> AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString() + ":MISSING" , connection)).isInstanceOf(IllegalResponseException.class);
+    public void invalidFeatures() {
+        assertThatThrownBy(() -> AgentResponseFactory.of("INIT:" + connection.getDevice().getBoardType().toString() + ":HELLO WORLD" , connection)).isInstanceOf(IllegalResponseException.class);
     }
 
     @Test

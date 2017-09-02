@@ -72,7 +72,7 @@ public final class MasterWindowController implements Initializable {
             = LoggerFactory.getLogger(MasterWindowController.class);
     private static final NetworkManager NETWORK_MANAGER
             = NetworkManager.getInstance();
-    private static final TabManager MANAGER = new TabManagerImpl();
+    private static TabManager manager;
 
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
@@ -84,13 +84,14 @@ public final class MasterWindowController implements Initializable {
     }
 
     public static TabManager getTabManager() {
-        return MANAGER;
+        return manager;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initializeDeviceTree();
         initializeToolbar();
+        manager = new TabManagerImpl(devicesTab);
     }
 
     public TabPane getTabPane() {
@@ -314,7 +315,7 @@ public final class MasterWindowController implements Initializable {
                     .getSelectionModel().selectedItemProperty().get().getId());
             NetworkManager.disconnect(addrSelected);
             InterruptManager.clearAllListeners(addrSelected);
-            MANAGER.removeTab(addrSelected);
+            manager.removeTab(addrSelected);
         } catch (UnknownHostException ex) {
             LOGGER.debug("ip address / host not resolved.");
             return;

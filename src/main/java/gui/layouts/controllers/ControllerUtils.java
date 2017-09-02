@@ -1,11 +1,9 @@
 package gui.layouts.controllers;
 
-import gui.AgentUserPrivileges;
 import gui.RaspiTabLoader;
 import gui.TabLoader;
 import core.util.StringConstants;
 import java.io.File;
-import java.net.InetAddress;
 import java.net.URL;
 import java.util.Optional;
 import javafx.animation.FadeTransition;
@@ -37,7 +35,7 @@ public final class ControllerUtils {
     }
 
     // Should be extended to more devices when more devices are implemented
-    public static TabLoader getLoader(AgentUserPrivileges privileges) {
+    public static TabLoader getLoader() {
         return GPIO_TAB_LOADER;
     }
 
@@ -71,18 +69,17 @@ public final class ControllerUtils {
         }
     }
 
-    public static Object getControllerFromBoardType(BoardType type,
-            InetAddress address) {
+    public static Object getControllerFromBoardType(BoardType type) {
         switch (type) {
             case RASPBERRY_PI:
-                return new RaspiController(address);
+                return new RaspiController();
             default:
                 throw new UnsupportedOperationException();
         }
     }
 
     public static URL getPathToFxml(String fxmlName) {
-        return ClassLoader.getSystemClassLoader().getResource("fxml"
+        return ControllerUtils.class.getResource("/fxml"
                 + File.separator + fxmlName + FXML_EXT);
     }
 

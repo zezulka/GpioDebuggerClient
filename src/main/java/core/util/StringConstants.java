@@ -1,19 +1,15 @@
 package core.util;
 
-import gui.AgentUserPrivileges;
 import java.io.File;
 
 /**
  * Prefix naming legend: F_ = formatter String ERR = String which should
  * represent error message being displayed to the user
  *
- * @author miloslav
  */
 public enum StringConstants {
 
     USER_INFO_PARAM("UserInfo"),
-    GPIO_GROUP_USER_RESTR_ARG("--" + USER_INFO_PARAM
-            + '=' + AgentUserPrivileges.USER_IN_GPIO_GRP),
     CONNECTION_OK("Connection to server OK"),
     CONNECTION_NOK("I/O error while trying to communicate with server"),
     SERVER_READY("The system is ready to accept requests."),

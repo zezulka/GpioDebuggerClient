@@ -1,6 +1,5 @@
 package userdata;
 
-import gui.AgentUserPrivileges;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
@@ -9,7 +8,6 @@ import protocol.BoardType;
 
 public final class DeviceValueObject {
     private final InetAddress address;
-    private AgentUserPrivileges userInfo;
     private BoardType boardType;
     private LocalDateTime timeConnected;
     private BooleanProperty disconnected;
@@ -112,6 +110,4 @@ public final class DeviceValueObject {
         final DeviceValueObject other = (DeviceValueObject) obj;
         return address.equals(other.address);
     }
-
-
 }

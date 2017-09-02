@@ -22,11 +22,12 @@ import userdata.UserDataUtils;
 
 public final class App extends Application {
 
-
     private static final int WINDOW_HEIGHT = 800;
     private static final int WINDOW_WIDTH = 1000;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+
+    private Scene scene;
 
     private static TabPane tabPane;
 
@@ -35,8 +36,13 @@ public final class App extends Application {
     }
 
     @Override
+    public void init() throws Exception {
+        scene = loadScene();
+    }
+
+    @Override
     public void start(Stage stage) {
-        Scene loadedScene = loadScene();
+
         stage.setOnCloseRequest((event) -> {
             if (NetworkManager.isAnyConnectionOpened()) {
                 if (ControllerUtils.showConfirmDialog(
@@ -51,7 +57,7 @@ public final class App extends Application {
             stage.close();
             Platform.exit();
         });
-        stage.setScene(loadedScene);
+        stage.setScene(scene);
         stage.setMinHeight(WINDOW_HEIGHT);
         stage.setMinWidth(WINDOW_WIDTH);
         stage.setTitle("Debugger for RaspberryPi");

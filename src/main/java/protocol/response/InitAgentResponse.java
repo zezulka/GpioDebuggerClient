@@ -1,39 +1,40 @@
 package protocol.response;
 
-import gui.AgentUserPrivileges;
 import gui.TabAddressPair;
-import core.net.ConnectionValueObject;
+import core.util.Feature;
 import java.time.LocalDateTime;
 import javafx.scene.control.Tab;
 import gui.layouts.controllers.ControllerUtils;
 import gui.layouts.controllers.MasterWindowController;
+import java.util.Set;
 import protocol.BoardType;
+import userdata.DeviceValueObject;
 
 public final class InitAgentResponse implements AgentResponse {
 
-    private final ConnectionValueObject connection;
+    private final DeviceValueObject device;
     private final BoardType boardType;
-    private final AgentUserPrivileges privileges;
+    private final Set<Feature> features;
 
-    public InitAgentResponse(ConnectionValueObject connection,
-            BoardType boardType, AgentUserPrivileges privileges) {
-        this.connection = connection;
+    public InitAgentResponse(DeviceValueObject device,
+            BoardType boardType, Set<Feature> features) {
+        this.device = device;
         this.boardType = boardType;
-        this.privileges = privileges;
+        this.features = features;
     }
 
     @Override
     public void react() {
-        connection.getDevice().setTimeConnected(LocalDateTime.now());
-        connection.getDevice().setBoardType(boardType);
+        device.setTimeConnected(LocalDateTime.now());
+        device.setBoardType(boardType);
 
-        Tab loadedTab = ControllerUtils.getLoader(privileges).loadNewTab(
-                connection.getDevice().getAddress(),
-                connection.getDevice().getBoardType()
+        Tab loadedTab = ControllerUtils.getLoader().loadNewTab(
+                device.getAddress(),
+                device.getBoardType(),
+                features
         );
         MasterWindowController.getTabManager()
-                .addTab(new TabAddressPair(loadedTab,
-                        connection.getDevice().getAddress()));
+                .addTab(new TabAddressPair(loadedTab, device.getAddress()));
     }
 
 }

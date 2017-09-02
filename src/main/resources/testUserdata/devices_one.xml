@@ -1,0 +1,22 @@
+<userdata.MockedDevices>
+  <list class="com.sun.javafx.collections.ObservableListWrapper">
+    <changeBuilder>
+      <list class="com.sun.javafx.collections.ObservableListWrapper" reference="../.."/>
+      <changeLock>0</changeLock>
+      <addRemoveChanges/>
+    </changeBuilder>
+    <backingList>
+      <device>
+        <address class="java.net.Inet4Address" resolves-to="address" serialization="custom">
+          <address>
+            <default>
+              <address>170524682</address>
+              <family>2</family>
+            </default>
+          </address>
+        </address>
+        <boardType>RASPBERRY_PI</boardType>
+      </device>
+    </backingList>
+  </list>
+</userdata.MockedDevices>

@@ -1,12 +1,13 @@
 package core.util;
 
-import gui.AgentUserPrivileges;
 import core.net.ConnectionValueObject;
 import java.net.InetAddress;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import protocol.BoardType;
 import protocol.response.AgentResponse;
 import protocol.ClientPin;
@@ -94,9 +95,12 @@ public final class AgentResponseFactory {
         }
         try {
             BoardType boardType = BoardType.parse(splitMessage.get(0));
-            AgentUserPrivileges privileges
-                    = AgentUserPrivileges.valueOf(splitMessage.get(1));
-            return new InitAgentResponse(connection, boardType, privileges);
+            Set<Feature> features = new HashSet<>();
+            for (String feat : splitMessage.get(1).split("\\s+")) {
+                features.add(Feature.valueOf(feat));
+            }
+            return new InitAgentResponse(connection.getDevice(),
+                    boardType, features);
         } catch (IllegalArgumentException e) {
             throw new IllegalResponseException(e);
         }

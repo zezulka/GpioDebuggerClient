@@ -1,6 +1,5 @@
 package core.net;
 
-import gui.AgentUserPrivileges;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import userdata.DeviceValueObject;
@@ -14,7 +13,6 @@ public final class ConnectionValueObject {
     private final Selector selector;
     private final DeviceValueObject device;
     private final SocketChannel channel;
-    private AgentUserPrivileges privileges;
 
     public ConnectionValueObject(String messageToSend, Selector selector,
             SocketChannel channel, DeviceValueObject device) {
@@ -22,14 +20,6 @@ public final class ConnectionValueObject {
         this.selector = selector;
         this.channel = channel;
         this.device = device;
-    }
-
-    public void setPrivileges(AgentUserPrivileges privileges) {
-        this.privileges = privileges;
-    }
-
-    public AgentUserPrivileges getPrivileges() {
-        return privileges;
     }
 
     public void setMessageToSend(String messageToSend) {
