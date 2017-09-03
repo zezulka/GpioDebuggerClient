@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import gui.layouts.controllers.Operation;
 

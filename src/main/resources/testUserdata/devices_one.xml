@@ -1,4 +1,4 @@
-<userdata.MockedDevices>
+<gui.userdata.MockedDevices>
   <list class="com.sun.javafx.collections.ObservableListWrapper">
     <changeBuilder>
       <list class="com.sun.javafx.collections.ObservableListWrapper" reference="../.."/>
@@ -19,4 +19,4 @@
       </device>
     </backingList>
   </list>
-</userdata.MockedDevices>
+</gui.userdata.MockedDevices>

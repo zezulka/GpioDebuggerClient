@@ -18,7 +18,7 @@ import core.util.StringConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import userdata.DeviceValueObject;
+import gui.userdata.DeviceValueObject;
 
 /**
  *

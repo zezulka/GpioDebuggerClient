@@ -41,8 +41,8 @@ import javafx.scene.layout.GridPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
-import userdata.DeviceValueObject;
-import userdata.UserDataUtils;
+import gui.userdata.DeviceValueObject;
+import gui.userdata.UserDataUtils;
 
 public final class MasterWindowController implements Initializable {
 
@@ -239,6 +239,7 @@ public final class MasterWindowController implements Initializable {
         hist.setExpanded(true);
         root.getChildren().addAll(active, hist);
         root.setExpanded(true);
+        //devicesTree.setCellFactory();
         devicesTree.setOnMouseClicked((event) -> {
             if (event.getClickCount() == 2) {
                 doubleClickHandler(event);

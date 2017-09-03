@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import java.net.InetAddress;
 import java.time.LocalDateTime;
@@ -80,8 +80,8 @@ public final class DeviceValueObject {
     public String toString() {
         String ipAddress = address.getHostAddress();
         String hostname = getHostName();
-        String board = "Board type: " + getBoardType();
-        String lastConnection = "Last connection: " + getTimeConnectedStr();
+        String board = getBoardType().toString();
+        String lastConnection = getTimeConnectedStr();
 
         return  ipAddress + '\n'
                 + hostname + '\n'

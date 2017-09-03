@@ -2,7 +2,7 @@ package core.net;
 
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import userdata.DeviceValueObject;
+import gui.userdata.DeviceValueObject;
 
 /**
  *

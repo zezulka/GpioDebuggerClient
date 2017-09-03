@@ -1,5 +1,6 @@
 package core.util;
 
+import gui.feature.Feature;
 import core.net.ConnectionValueObject;
 import java.net.InetAddress;
 import java.time.LocalTime;

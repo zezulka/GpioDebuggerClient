@@ -1,9 +1,11 @@
-package userdata;
+package gui.userdata;
+
 
 import java.io.File;
 import java.util.List;
 
-public class MockedDevices extends AbstractXStreamListWrapper<DeviceValueObject> {
+public class MockedDevices
+        extends AbstractXStreamListWrapper<DeviceValueObject> {
 
     public MockedDevices(List<DeviceValueObject> list) {
         super(list);

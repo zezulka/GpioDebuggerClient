@@ -1,5 +1,6 @@
 package gui.layouts.controllers;
 
+import java.io.File;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,6 +19,8 @@ public final class Graphics {
     private Graphics() {
     }
 
+    private static final String GRAPICS_FOLDER = "graphics";
+
     static final Image STOP_BTN = getImageFromPath("stop-button.jpg");
     static final Image PLAY_BTN = getImageFromPath("play-button.jpg");
     static final Image REMOVE = getImageFromPath("remove.jpg");
@@ -28,13 +31,19 @@ public final class Graphics {
     static final ImageView DISCONNECT = getImageViewFromPath("disconnect.png");
 
     private static Image getImageFromPath(String path) {
-        return new Image(path, IMAGE_EDGE_LEN, IMAGE_EDGE_LEN, true, true);
+        return new Image(getPathToImage(path), IMAGE_EDGE_LEN,
+                IMAGE_EDGE_LEN, true, true);
     }
 
     private static ImageView getImageViewFromPath(String path) {
         return new ImageView(
-                new Image(path, IMAGE_EDGE_LEN, IMAGE_EDGE_LEN, true, true)
+                new Image(getPathToImage(path), IMAGE_EDGE_LEN,
+                        IMAGE_EDGE_LEN, true, true)
         );
+    }
+
+    private static String getPathToImage(String path) {
+        return GRAPICS_FOLDER + File.separator + path;
     }
 
 }

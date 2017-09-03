@@ -1,5 +1,6 @@
-package userdata;
+package gui.userdata;
 
+import gui.userdata.AbstractXStreamListWrapper;
 import java.io.File;
 import java.util.ArrayList;
 

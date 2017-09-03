@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import java.io.File;
 import java.util.List;
@@ -12,6 +12,6 @@ public final class SpiRequests
 
     @Override
     public File getAssociatedFile() {
-       return  XmlUserdata.SPI_FILE;
+       return XmlUserdata.SPI_FILE;
     }
 }

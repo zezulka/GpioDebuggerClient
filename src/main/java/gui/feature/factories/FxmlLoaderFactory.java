@@ -1,6 +1,6 @@
-package gui.featureFactories;
+package gui.feature.factories;
 
-import core.util.Feature;
+import gui.feature.Feature;
 import gui.layouts.controllers.ControllerUtils;
 import javafx.fxml.FXMLLoader;
 

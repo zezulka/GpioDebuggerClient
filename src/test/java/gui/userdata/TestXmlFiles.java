@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import java.io.File;
 

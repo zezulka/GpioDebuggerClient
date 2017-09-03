@@ -18,7 +18,7 @@ import gui.layouts.controllers.MasterWindowController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import userdata.UserDataUtils;
+import gui.userdata.UserDataUtils;
 
 public final class App extends Application {
 

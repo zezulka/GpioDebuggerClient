@@ -25,8 +25,8 @@ import javafx.scene.control.TextField;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import userdata.SpiRequestValueObject;
-import userdata.UserDataUtils;
+import gui.userdata.SpiRequestValueObject;
+import gui.userdata.UserDataUtils;
 
 /**
  * FXML Controller class

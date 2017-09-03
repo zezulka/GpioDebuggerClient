@@ -1,5 +1,6 @@
 package core.util;
 
+import gui.feature.Feature;
 import core.net.ConnectionValueObject;
 import protocol.response.*;
 import java.net.InetAddress;
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
 import org.junit.Test;
 import protocol.*;
-import userdata.DeviceValueObject;
+import gui.userdata.DeviceValueObject;
 
 public class AgentResponseFactoryTest {
 

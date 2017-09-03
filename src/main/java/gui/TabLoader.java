@@ -1,6 +1,6 @@
 package gui;
 
-import core.util.Feature;
+import gui.feature.Feature;
 import java.net.InetAddress;
 import java.util.Set;
 import javafx.scene.control.Tab;

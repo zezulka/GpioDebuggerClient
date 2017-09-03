@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import java.util.List;
 import javafx.collections.FXCollections;

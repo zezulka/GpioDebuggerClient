@@ -1,8 +1,8 @@
 package gui;
 
-import core.util.Feature;
-import gui.featureFactories.FxmlControllerFactory;
-import gui.featureFactories.FxmlLoaderFactory;
+import gui.feature.Feature;
+import gui.feature.factories.FxmlControllerFactory;
+import gui.feature.factories.FxmlLoaderFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import javafx.fxml.FXMLLoader;

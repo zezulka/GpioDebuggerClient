@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -20,58 +20,10 @@ import org.slf4j.LoggerFactory;
 
 public final class UserDataUtils {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER
-            = DateTimeFormatter.ofPattern("dd-MM, HH:mm");
-    private static final XStream X_STREAM = new XStream(new DomDriver());
-    private static final Logger LOGGER
-            = LoggerFactory.getLogger(UserDataUtils.class);
+    private static final XStream X_STREAM;
 
-    private static boolean setup = false;
-    private static final XStreamListWrapper<I2cRequestValueObject> I2C_REQUESTS
-            = new I2cRequests(initI2cRequestsFromFile());
-    private static final XStreamListWrapper<SpiRequestValueObject> SPI_REQUESTS
-            = new SpiRequests(initSpiRequestsFromFile());
-    private static final XStreamListWrapper<DeviceValueObject> DEVICES
-            = new Devices(getDevicesFromFile());
-
-    private UserDataUtils() {
-    }
-
-    static <T> void saveCollectionsToAssociatedFiles(
-            XStreamListWrapper... colls) {
-
-        setupAliasesIfNecessary();
-        for (XStreamListWrapper col : colls) {
-            if (col.isDirty()) {
-                try {
-                    File f = col.getAssociatedFile();
-                    f.createNewFile();
-                    X_STREAM.toXML(col, new FileWriter(f));
-                    LOGGER.info("New data saved to: " + f);
-                } catch (IOException ex) {
-                    throw new XStreamException(ex);
-                }
-            }
-        }
-    }
-
-    public static void saveAllRequests() {
-        saveCollectionsToAssociatedFiles(I2C_REQUESTS, SPI_REQUESTS);
-    }
-
-    public static void saveAllDevices() {
-        if (DEVICES.isDirty()) {
-            try {
-                X_STREAM.toXML(DEVICES,
-                        new FileWriter(XmlUserdata.DEVICES_FILE));
-                LOGGER.info("New device info saved.");
-            } catch (IOException ex) {
-                LOGGER.error("Could not save user data ", ex);
-            }
-        }
-    }
-
-    private static void initXStream() {
+    static {
+        X_STREAM = new XStream(new DomDriver());
         X_STREAM.alias("operation", Operation.class);
         X_STREAM.alias("address", InetAddress.class);
         X_STREAM.alias("lastTimeConnected", LocalDateTime.class);
@@ -96,11 +48,64 @@ public final class UserDataUtils {
                 DeviceValueObject.class);
     }
 
-    private static void setupAliasesIfNecessary() {
-        if (!setup) {
-            initXStream();
-            setup = true;
+    public static final DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("dd-MM, HH:mm");
+
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(UserDataUtils.class);
+
+    private static final XStreamListWrapper<I2cRequestValueObject> I2C_REQUESTS
+            = new I2cRequests(initI2cRequestsFromFile());
+    private static final XStreamListWrapper<SpiRequestValueObject> SPI_REQUESTS
+            = new SpiRequests(initSpiRequestsFromFile());
+    private static final XStreamListWrapper<DeviceValueObject> DEVICES
+            = new Devices(getDevicesFromFile());
+
+    private static void initXStream() {
+
+    }
+
+    private UserDataUtils() {
+    }
+
+    static <T> void saveCollectionsToAssociatedFiles(
+            XStreamListWrapper... colls) {
+
+        for (XStreamListWrapper col : colls) {
+            if (col.isDirty()) {
+                try {
+                    File f = col.getAssociatedFile();
+                    f.createNewFile();
+                    X_STREAM.toXML(col, new FileWriter(f));
+                    LOGGER.info("New data saved to: " + f);
+                } catch (IOException ex) {
+                    throw new XStreamException(ex);
+                }
+            }
         }
+    }
+
+    /**
+     * This could have indeed been used in saveCollections... method, but tests
+     * use this method and would have the unwanted side effect of creating a
+     * user data folder which is not necessary. Possible refactoring of this
+     * might be helpful.
+     */
+    private static void createUserDirIfNecessary() {
+        if (!XmlUserdata.USER_DATA_DIR.exists()
+                && !XmlUserdata.USER_DATA_DIR.mkdirs()) {
+            throw new RuntimeException("User directory could not be created.");
+        }
+    }
+
+    public static void saveAllRequests() {
+        createUserDirIfNecessary();
+        saveCollectionsToAssociatedFiles(I2C_REQUESTS, SPI_REQUESTS);
+    }
+
+    public static void saveAllDevices() {
+        createUserDirIfNecessary();
+        saveCollectionsToAssociatedFiles(DEVICES);
     }
 
     public static List<DeviceValueObject> getDevices() {
@@ -132,13 +137,12 @@ public final class UserDataUtils {
         if (!file.exists()) {
             return new ArrayList<>();
         }
-        setupAliasesIfNecessary();
         // Uncaught exceptions might be thrown, deal with this in a sane way
         // CannotResolveClassException - this is demonstrated
         //     on uknown_collection.xml
         try {
-            XStreamListWrapper requests
-                    = (XStreamListWrapper) X_STREAM.fromXML(file);
+            XStreamListWrapper<T> requests
+                    = (XStreamListWrapper<T>) X_STREAM.fromXML(file);
             if (requests == null || requests.getItems() == null) {
                 return new ArrayList<>();
             }

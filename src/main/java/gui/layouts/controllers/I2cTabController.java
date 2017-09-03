@@ -29,8 +29,8 @@ import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import userdata.I2cRequestValueObject;
-import userdata.UserDataUtils;
+import gui.userdata.I2cRequestValueObject;
+import gui.userdata.UserDataUtils;
 
 /**
  * FXML Controller class

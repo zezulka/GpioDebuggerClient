@@ -1,4 +1,4 @@
-package userdata;
+package gui.userdata;
 
 import com.thoughtworks.xstream.XStreamException;
 import java.io.File;
