@@ -110,7 +110,7 @@
                 </Label>
                 <ImageView GridPane.columnSpan="999" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="999" GridPane.valignment="BASELINE" GridPane.vgrow="ALWAYS" disable="true" fitHeight="665.0" fitWidth="730.0">
                     <image>
-                        <Image url="@../Raspi.png"/>
+                        <Image url="@../graphics/Raspi.png"/>
                     </image>
                 </ImageView>
             </children>
