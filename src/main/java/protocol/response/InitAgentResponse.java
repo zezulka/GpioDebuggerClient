@@ -6,18 +6,18 @@ import java.time.LocalDateTime;
 import javafx.scene.control.Tab;
 import gui.layouts.controllers.ControllerUtils;
 import gui.layouts.controllers.MasterWindowController;
-import java.util.Set;
 import protocol.BoardType;
 import gui.userdata.DeviceValueObject;
+import java.util.List;
 
 public final class InitAgentResponse implements AgentResponse {
 
     private final DeviceValueObject device;
     private final BoardType boardType;
-    private final Set<Feature> features;
+    private final List<Feature> features;
 
     public InitAgentResponse(DeviceValueObject device,
-            BoardType boardType, Set<Feature> features) {
+            BoardType boardType, List<Feature> features) {
         this.device = device;
         this.boardType = boardType;
         this.features = features;

@@ -10,8 +10,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import gui.layouts.controllers.ControllerUtils;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import protocol.BoardType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public final class RaspiTabLoader implements TabLoader {
 
     @Override
     public Tab loadNewTab(InetAddress address, BoardType type,
-            Set<Feature> features) {
+            Collection<Feature> features) {
         LOGGER.debug("Attempting to load " + type + " controller...");
         try {
             FXMLLoader raspiLoader

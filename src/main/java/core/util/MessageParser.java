@@ -42,6 +42,8 @@ public final class MessageParser {
         }
         try {
             AgentResponseFactory.of(agentMessage, connection).react();
+            LOGGER.debug(String
+                    .format("Received agent message: %s", agentMessage));
         } catch (IllegalResponseException ex) {
             LOGGER.error(String.format(
                     "Agent response '%s' could not be recognized, error: %s",
