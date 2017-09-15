@@ -82,9 +82,9 @@ public final class DeviceValueObject {
         String board = getBoardType().toString();
         String lastConnection = getTimeConnectedStr();
 
-        return  ipAddress + '\n'
-                + board + '\n'
-                + lastConnection;
+        return  ipAddress + " (IP address)\n"
+                + board + " (Board type)\n"
+                + lastConnection + " (Last connected)";
     }
 
     @Override
