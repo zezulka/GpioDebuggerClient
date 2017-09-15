@@ -36,13 +36,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.collections.ObservableList;
 import core.util.StringConstants;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.GridPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
 import gui.userdata.DeviceValueObject;
 import gui.userdata.UserDataUtils;
+import javafx.scene.layout.Pane;
 
 public final class MasterWindowController implements Initializable {
 
@@ -50,9 +50,7 @@ public final class MasterWindowController implements Initializable {
     @FXML
     private TabPane devicesTab;
     @FXML
-    private SplitPane controlPanel;
-    @FXML
-    private GridPane newDevicePane;
+    private Pane treePane;
     @FXML
     private Button connectBtn;
     @FXML
@@ -77,7 +75,7 @@ public final class MasterWindowController implements Initializable {
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
 
-    private static final int ALL_BRANCH_INDEX = 1;
+    private static final int HISTORY_BRANCH = 1;
     private static final int ACTIVE_BRANCH_INDEX = 0;
 
     public MasterWindowController() {
@@ -111,8 +109,6 @@ public final class MasterWindowController implements Initializable {
         final double threshold = 0.7;
         devicesTab.maxWidthProperty()
                 .bind(rootSplitPane.widthProperty().multiply(threshold));
-        newDevicePane.minHeightProperty()
-                .bind(controlPanel.heightProperty().multiply(1 - threshold));
     }
 
     private void initDeviceTreeSwitch() {
@@ -122,6 +118,16 @@ public final class MasterWindowController implements Initializable {
         deviceTreeSwitch.switchOnProperty().addListener((o, old, selected) -> {
             deviceTreeBtnListener(selected);
         });
+    }
+
+    private void deviceTreeBtnListener(boolean isSelected) {
+        final double threshold = 0.7;
+        connectBtn.visibleProperty().set(isSelected);
+        disconnectButton.visibleProperty().set(isSelected);
+        final double dividerPos = isSelected ? threshold : 1.0;
+        devicesTab.maxWidthProperty().bind(rootSplitPane.widthProperty()
+                .multiply(dividerPos));
+        rootSplitPane.setDividerPositions(dividerPos);
     }
 
     private void initConnectToDeviceBtn() {
@@ -150,16 +156,39 @@ public final class MasterWindowController implements Initializable {
                 .bind(ipAddress.textProperty().isEmpty());
         addNewDeviceButton.setOnAction((event) -> {
             DeviceValueObject newDevice = getNewDeviceFromUser();
-            ObservableList<TreeItem<Object>> childrenAllBranch
-                    = devicesTree
-                            .getRoot()
-                            .getChildren()
-                            .get(ALL_BRANCH_INDEX)
-                            .getChildren();
+            ObservableList<TreeItem<Object>> history = devicesTree
+                    .getRoot()
+                    .getChildren()
+                    .get(HISTORY_BRANCH)
+                    .getChildren();
+            ObservableList<TreeItem<Object>> active = devicesTree
+                    .getRoot()
+                    .getChildren()
+                    .get(ACTIVE_BRANCH_INDEX)
+                    .getChildren();
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
-                childrenAllBranch
-                        .add((TreeItem) getTreeItemWithListener(newDevice));
+                for (TreeItem<Object> obj : history) {
+                    DeviceValueObject dvo = (DeviceValueObject) obj
+                            .getChildren()
+                            .get(0).getValue();
+                    if (dvo.equals(newDevice)) {
+                        devicesTree.getSelectionModel()
+                                .select(obj.getChildren().get(0));
+                        return;
+                    }
+                }
+                for (TreeItem<Object> obj : active) {
+                    DeviceValueObject dvo = (DeviceValueObject) obj
+                            .getChildren()
+                            .get(0).getValue();
+                    if (dvo.equals(newDevice)) {
+                        devicesTree.getSelectionModel()
+                                .select(obj.getChildren().get(0));
+                        return;
+                    }
+                }
+                history.add((TreeItem) getTreeItemWithListener(newDevice));
                 UserDataUtils.addNewDeviceToFile(newDevice);
             }
         });
@@ -176,16 +205,6 @@ public final class MasterWindowController implements Initializable {
                 -> devicesTree.getRoot().isExpanded(),
                 devicesTree.getRoot().expandedProperty());
         return Bindings.when(binding).then(true).otherwise(false);
-    }
-
-    private void deviceTreeBtnListener(boolean isSelected) {
-        final double threshold = 0.7;
-        connectBtn.visibleProperty().set(isSelected);
-        disconnectButton.visibleProperty().set(isSelected);
-        final double dividerPos = isSelected ? threshold : 1.0;
-        devicesTab.maxWidthProperty().bind(rootSplitPane.widthProperty()
-                .multiply(dividerPos));
-        rootSplitPane.setDividerPositions(dividerPos);
     }
 
     private DeviceValueObject getNewDeviceFromUser() {
@@ -232,6 +251,7 @@ public final class MasterWindowController implements Initializable {
     private void initializeDeviceTree() {
 
         TreeItem root = new TreeItem("devices", Graphics.DEVICES);
+        root.setExpanded(true);
         TreeItem active = new TreeItem("alive", Graphics.ACTIVE);
         TreeItem hist = new TreeItem("history", Graphics.HISTORY);
         UserDataUtils.getDevices().forEach((device)

@@ -79,12 +79,10 @@ public final class DeviceValueObject {
     @Override
     public String toString() {
         String ipAddress = address.getHostAddress();
-        String hostname = getHostName();
         String board = getBoardType().toString();
         String lastConnection = getTimeConnectedStr();
 
         return  ipAddress + '\n'
-                + hostname + '\n'
                 + board + '\n'
                 + lastConnection;
     }
