@@ -22,7 +22,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.SpiRequestValueObject;
@@ -43,6 +42,8 @@ public final class SpiTabController
     private ComboBox<SpiRequestValueObject> usedRequestsComboBox;
     @FXML
     private TextField byteArrayTextfield;
+    @FXML
+    private ListView<String> byteArrayView;
 
     private final InetAddress address;
 
@@ -67,6 +68,12 @@ public final class SpiTabController
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initUsedRequestsComboBox();
+        byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
+            if (t1.length() % 2 == 0 || t1.length() < t.length()) {
+                byteArrayView.getItems().clear();
+                byteArrayView.getItems().addAll(getBytesFromUser(t1));
+            }
+        });
         spiRequestButton.disableProperty().bind(
                 super.hexValuesOnly(byteArrayTextfield).not()
         );

@@ -1,5 +1,7 @@
 package gui.layouts.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -27,6 +29,15 @@ public abstract class AbstractInterfaceFormController implements Initializable {
                         textfield.setText(newValue.replaceAll("[^\\d]", ""));
                     }
                 });
+    }
+
+    protected List<String> getBytesFromUser(String str) {
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < str.length() - 1; i += 2) {
+            String subStr = str.substring(i, i + 2);
+            result.add(subStr + "\n(" + Short.parseShort(subStr, 16) + ')');
+        }
+        return result;
     }
 
     protected final BooleanBinding hexValuesOnly(TextField textfield) {

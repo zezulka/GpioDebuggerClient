@@ -1,4 +1,5 @@
 package gui.layouts.controllers;
+
 import core.net.NetworkManager;
 import java.net.InetAddress;
 
@@ -23,7 +24,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-
 import javafx.scene.paint.Color;
 
 import org.slf4j.Logger;
@@ -31,6 +31,9 @@ import org.slf4j.LoggerFactory;
 
 import gui.userdata.I2cRequestValueObject;
 import gui.userdata.UserDataUtils;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.geometry.Orientation;
 
 public final class I2cTabController
         extends AbstractInterfaceFormController implements Initializable {
@@ -53,6 +56,8 @@ public final class I2cTabController
     private ComboBox<I2cRequestValueObject> usedRequestsComboBox;
     @FXML
     private TextField byteArrayTextfield;
+    @FXML
+    private ListView<String> byteArrayView;
 
     private static final char SEPARATOR = ':';
     private final InetAddress address;
@@ -76,6 +81,12 @@ public final class I2cTabController
     public void initialize(URL url, ResourceBundle rb) {
         super.addAllModes(operationList);
         initUserRequestsComboBox();
+        byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
+            if (t1.length() % 2 == 0 || t1.length() < t.length()) {
+                byteArrayView.getItems().clear();
+                byteArrayView.getItems().addAll(getBytesFromUser(t1));
+            }
+        });
         byteArrayTextfield.disableProperty()
                 .bind(operationList
                         .getSelectionModel()
