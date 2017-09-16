@@ -28,11 +28,6 @@ import org.slf4j.LoggerFactory;
 import gui.userdata.SpiRequestValueObject;
 import gui.userdata.UserDataUtils;
 
-/**
- * FXML Controller class
- *
- * @author miloslav
- */
 public final class SpiTabController
         extends AbstractInterfaceFormController implements Initializable {
 

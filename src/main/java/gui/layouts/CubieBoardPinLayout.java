@@ -1,9 +1,5 @@
 package gui.layouts;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class CubieBoardPinLayout extends AbstractPinLayout {
 
     private static final CubieBoardPinLayout INSTANCE

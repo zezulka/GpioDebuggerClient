@@ -4,10 +4,6 @@ import gui.App;
 import java.awt.EventQueue;
 import javafx.application.Application;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class Main {
 
     private Main() {

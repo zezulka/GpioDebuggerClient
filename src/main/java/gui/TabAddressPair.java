@@ -4,10 +4,6 @@ import java.net.InetAddress;
 import java.util.Objects;
 import javafx.scene.control.Tab;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final  class TabAddressPair {
     private final Tab tab;
     private final InetAddress address;

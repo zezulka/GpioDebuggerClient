@@ -24,10 +24,6 @@ import protocol.response.InterruptListenerStartedAgentResponse;
 import protocol.response.InterruptListenerStoppedAgentResponse;
 import protocol.response.SpiAgentResponse;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public final class AgentResponseFactory {
 
     private AgentResponseFactory() {

@@ -10,8 +10,6 @@ import protocol.BoardType;
  * Tool used for generating GUI (more specifically, this tool creates fxml
  * files representing user interface). DeviceXmlGenerator interface is used
  * for this purpose.
- *
- * @author Miloslav Zezulka, 2017
  */
 public final class GeneratorTool {
 

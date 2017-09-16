@@ -7,10 +7,6 @@ import javafx.fxml.Initializable;
 import java.util.ResourceBundle;
 import javafx.scene.control.Tab;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public final class RaspiController implements Initializable {
 
     @FXML

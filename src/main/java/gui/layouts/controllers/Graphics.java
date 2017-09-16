@@ -9,8 +9,6 @@ import javafx.scene.image.ImageView;
  * convenience of the code stored in wrapper ImageView classes if necessary. All
  * constants are package private because the only classes which should refer to
  * these system resources are controllers.
- *
- * @author Miloslav Zezulka
  */
 public final class Graphics {
 

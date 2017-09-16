@@ -1,9 +1,5 @@
 package core.util;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public class IllegalResponseException extends Exception  {
 
     public IllegalResponseException() {

@@ -2,10 +2,6 @@ package gui.layouts;
 
 import protocol.BoardType;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class PinLayoutFactory {
 
     private PinLayoutFactory() {

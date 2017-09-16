@@ -1,8 +1,7 @@
 package protocol;
 
 /**
- * Minimalistic signal representation
- * @author Miloslav Zezulka
+ * Minimalist signal representation
  */
 public enum Signal {
     HIGH(true), LOW(false);

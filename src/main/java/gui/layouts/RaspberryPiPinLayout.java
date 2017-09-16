@@ -3,10 +3,6 @@ package gui.layouts;
 import protocol.RaspiClientPin;
 import java.util.Arrays;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class RaspberryPiPinLayout extends AbstractPinLayout {
 
     private static final RaspberryPiPinLayout INSTANCE =

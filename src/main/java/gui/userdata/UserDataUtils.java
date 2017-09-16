@@ -61,10 +61,6 @@ public final class UserDataUtils {
     private static final XStreamListWrapper<DeviceValueObject> DEVICES
             = new Devices(getDevicesFromFile());
 
-    private static void initXStream() {
-
-    }
-
     private UserDataUtils() {
     }
 

@@ -1,9 +1,5 @@
 package protocol;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public enum ListenerState {
     RUNNING("running"),
     NOT_RUNNING("not running");

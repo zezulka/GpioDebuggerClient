@@ -7,10 +7,6 @@ import gui.layouts.controllers.ControllerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public final class MessageParser {
 
     private static final Logger LOGGER

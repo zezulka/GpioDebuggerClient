@@ -20,10 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.DeviceValueObject;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class NetworkManager {
 
     private static final Map<InetAddress, ConnectionThread> ADDRESSES

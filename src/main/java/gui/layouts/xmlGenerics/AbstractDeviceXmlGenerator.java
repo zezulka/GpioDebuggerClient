@@ -32,8 +32,6 @@ import org.w3c.dom.Node;
  * pins), this abstract class takes care of everything else. Gist of generation
  * : DOM tree representing resulting fxml is progressively built and then
  * written to file specified by extending class.
- *
- * @author Miloslav Zezulka
  */
 public abstract class AbstractDeviceXmlGenerator implements DeviceXmlGenerator {
 

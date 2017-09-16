@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 
 /**
  * Enum based on epoll kernel system call.
- * @author Miloslav Zezulka
  */
 public enum InterruptType {
     FALLING_EGDE("Falling"),

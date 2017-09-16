@@ -2,10 +2,6 @@ package gui.layouts.xmlGenerics;
 
 import protocol.BoardType;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public class RaspiXmlGenerator extends AbstractDeviceXmlGenerator {
 
     private static final int PIN_ROWS = 20;

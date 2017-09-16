@@ -1,9 +1,5 @@
 package protocol;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public interface ClientPin {
     /**
      * This identifier is used for client protocol messages and should be used

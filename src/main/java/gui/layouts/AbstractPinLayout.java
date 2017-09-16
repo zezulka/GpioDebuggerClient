@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public abstract class AbstractPinLayout implements PinLayout {
 
     private List<ClientPin> pins;

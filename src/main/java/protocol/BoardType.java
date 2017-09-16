@@ -1,9 +1,5 @@
 package protocol;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public enum BoardType {
     RASPBERRY_PI("Raspberry Pi"),
     BEAGLEBONEBLACK("BeagleBone Black"),

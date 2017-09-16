@@ -49,8 +49,4 @@ public abstract class AbstractXStreamListWrapper<T>
                 .map((device) -> ((DeviceValueObject) device).isDirty())
                 .reduce(false, (acc, curr) -> acc || curr);
     }
-
-    private boolean contains(T item) {
-        return list.contains(item);
-    }
 }

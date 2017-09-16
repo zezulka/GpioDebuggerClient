@@ -4,10 +4,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import gui.userdata.DeviceValueObject;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public final class ConnectionValueObject {
     private String messageToSend;
     private final Selector selector;

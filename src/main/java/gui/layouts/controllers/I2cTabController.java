@@ -32,11 +32,6 @@ import org.slf4j.LoggerFactory;
 import gui.userdata.I2cRequestValueObject;
 import gui.userdata.UserDataUtils;
 
-/**
- * FXML Controller class
- *
- * @author Miloslav Zezulka
- */
 public final class I2cTabController
         extends AbstractInterfaceFormController implements Initializable {
 

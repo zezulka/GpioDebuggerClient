@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 /**
  * Operations available for communicating with interfaces
  * available on the embedded device.
- * @author Miloslav Zezulka
  */
 public enum Operation {
     READ("read"),

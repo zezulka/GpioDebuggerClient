@@ -1,9 +1,5 @@
 package protocol;
 
-/**
- *
- * @author Miloslav Zezulka
- */
 public enum RaspiClientPin implements ClientPin {
     PWR_1("3.3V", 1),
     PWR_2("5V", 2),

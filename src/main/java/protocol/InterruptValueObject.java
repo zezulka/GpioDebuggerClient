@@ -9,10 +9,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-/**
- *
- * @author Miloslav Zezulka, 2017
- */
 public final class InterruptValueObject {
 
     private final ClientPin clientPin;
