@@ -18,10 +18,10 @@
     <content>
         <GridPane cacheHint="SPEED" fx:id="gpioGridPane" id="gpioGridPane" layoutX="0.0" layoutY="0.0">
             <columnConstraints>
-                <ColumnConstraints halignment="CENTER" prefWidth="280.0"/>
+                <ColumnConstraints halignment="CENTER" prefWidth="340.0"/>
                 <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
-                <ColumnConstraints halignment="LEFT" prefWidth="120.0"/>
-                <ColumnConstraints halignment="LEFT" prefWidth="120.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="30.0" prefHeight="30.0"/>
@@ -108,7 +108,7 @@
                         <Font name="SystemBold" size="15.0"/>
                     </font>
                 </Label>
-                <ImageView GridPane.columnSpan="999" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="999" GridPane.valignment="BASELINE" GridPane.vgrow="ALWAYS" disable="true" fitHeight="665.0" fitWidth="730.0">
+                <ImageView GridPane.columnSpan="999" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowSpan="999" GridPane.valignment="BASELINE" GridPane.vgrow="ALWAYS" disable="true" fitHeight="665.0" fitWidth="913.4">
                     <image>
                         <Image url="@../graphics/Raspi.png"/>
                     </image>

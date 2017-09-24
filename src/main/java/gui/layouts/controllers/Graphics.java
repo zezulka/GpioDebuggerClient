@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
  */
 public final class Graphics {
 
-    private static final int IMAGE_EDGE_LEN = 30;
+    private static final int IMAGE_EDGE_LEN = 25;
 
     private Graphics() {
     }
@@ -22,8 +22,8 @@ public final class Graphics {
     static final Image STOP_BTN = getImageFromPath("stop-button.jpg");
     static final Image PLAY_BTN = getImageFromPath("play-button.jpg");
     static final Image REMOVE = getImageFromPath("remove.jpg");
+    static final Image INFO = getImageFromPath("info.png", 20);
     static final ImageView ACTIVE = getImageViewFromPath("active.png");
-    static final ImageView DEVICES = getImageViewFromPath("devices.png");
     static final ImageView CONNECT = getImageViewFromPath("connect.png");
     static final ImageView HISTORY = getImageViewFromPath("history.png");
     static final ImageView DISCONNECT = getImageViewFromPath("disconnect.png");
@@ -32,12 +32,15 @@ public final class Graphics {
         return new Image(getPathToImage(path), IMAGE_EDGE_LEN,
                 IMAGE_EDGE_LEN, true, true);
     }
+    
+    private static Image getImageFromPath(String path, int edge) {
+        return new Image(getPathToImage(path), edge,
+                edge, true, true);
+    }
 
     private static ImageView getImageViewFromPath(String path) {
-        return new ImageView(
-                new Image(getPathToImage(path), IMAGE_EDGE_LEN,
-                        IMAGE_EDGE_LEN, true, true)
-        );
+        return new ImageView(new Image(getPathToImage(path), IMAGE_EDGE_LEN,
+                IMAGE_EDGE_LEN, true, true));
     }
 
     private static String getPathToImage(String path) {

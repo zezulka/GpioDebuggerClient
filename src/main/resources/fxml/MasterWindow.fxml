@@ -30,12 +30,12 @@
 
 <AnchorPane id="AnchorPane" cacheHint="SPEED" prefHeight="812.0" prefWidth="955.0" stylesheets="@../appStylesheet.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <SplitPane id="rootSplitPane" fx:id="rootSplitPane" cache="true" dividerPositions="0.7064128256513026" focusTraversable="false" layoutY="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
+      <SplitPane id="rootSplitPane" fx:id="rootSplitPane" cache="true" dividerPositions="0.75" focusTraversable="false" layoutY="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
          <items>
               <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" style="-fx-background-color: white;" tabMaxHeight="20.0" />
-            <BorderPane id="treePane" fx:id="treePane" prefHeight="768.0" prefWidth="289.0">
+            <BorderPane id="treePane" fx:id="treePane" maxWidth="1.7976931348623157E308" minWidth="0.0">
                <center>
-                  <TreeView id="devicesTree" fx:id="devicesTree" focusTraversable="false" minHeight="0.0" minWidth="0.0" prefHeight="705.0" prefWidth="262.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                  <TreeView id="devicesTree" fx:id="devicesTree" fixedCellSize="0.0" focusTraversable="false" maxWidth="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER_LEFT">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
@@ -44,10 +44,10 @@
                      </opaqueInsets>
                   </TreeView>
                </center>
-               <bottom>
-                  <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="91.0" prefWidth="289.0" BorderPane.alignment="CENTER">
+               <top>
+                  <BorderPane minHeight="0.0" minWidth="0.0" prefHeight="49.0" prefWidth="245.0" style="-fx-background-color: forestgreen;" BorderPane.alignment="CENTER">
                      <left>
-                        <TextField fx:id="ipAddress" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="25.0" prefWidth="192.0" promptText="hostname or IP address..." BorderPane.alignment="CENTER">
+                        <TextField fx:id="ipAddress" alignment="CENTER" minHeight="0.0" minWidth="0.0" prefHeight="25.0" prefWidth="160.0" promptText="hostname or IP..." BorderPane.alignment="CENTER">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -60,19 +60,28 @@
                            </opaqueInsets>
                         </Button>
                      </center>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
                   </BorderPane>
-               </bottom>
+               </top>
             </BorderPane>
          </items>
       </SplitPane>
         <ToolBar id="toolBar" fx:id="toolBar" maxHeight="40.0" minHeight="40.0" minWidth="1000.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>
             <Label text="            " />
-                <Button id="connectBtn" fx:id="connectBtn" blendMode="SRC_ATOP" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#connectToDeviceHandler" text="Connect">
+                <Button id="connectBtn" fx:id="connectBtn" blendMode="SRC_ATOP" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Connect">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor></Button>
-            <Button id="disconnectButton" fx:id="disconnectButton" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#disconnectHandler" text="Disconnect">
+            <Button id="disconnectButton" fx:id="disconnectButton" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" text="Disconnect">
                <cursor>
                   <Cursor fx:constant="OPEN_HAND" />
                </cursor></Button>

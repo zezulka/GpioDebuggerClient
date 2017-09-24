@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import protocol.BoardType;
 
 public final class DeviceValueObject {
+
     private final InetAddress address;
     private BoardType boardType;
     private LocalDateTime timeConnected;
@@ -16,6 +17,7 @@ public final class DeviceValueObject {
     /**
      * Constructor without BoardType input variable. If such constructor is
      * used, {@link BoardType.UNKNOWN} is used.
+     *
      * @param address
      */
     public DeviceValueObject(InetAddress address) {
@@ -82,9 +84,9 @@ public final class DeviceValueObject {
         String board = getBoardType().toString();
         String lastConnection = getTimeConnectedStr();
 
-        return  ipAddress + " (IP address)\n"
-                + board + " (Board type)\n"
-                + lastConnection + " (Last connected)";
+        return "IP: " + ipAddress + '\n'
+                + "Board: " + board + '\n'
+                + "Connected at: " + lastConnection;
     }
 
     @Override

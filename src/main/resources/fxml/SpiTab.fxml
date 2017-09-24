@@ -10,11 +10,10 @@
 
 <Tab text="SPI" closable="false" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="spiTab" fx:id="spiTab">
     <content>
-        <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="439.0" prefWidth="700.0">
+        <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="603.0" prefWidth="710.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="287.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="150.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
@@ -23,36 +22,47 @@
                 <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="260.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label text="Chip enable (index)" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                <Label text="Chip enable (index)" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                    <padding>
+                        <Insets right="15.0" />
+                    </padding>
+                </Label>
+                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="29.0" prefWidth="265.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="29.0" prefWidth="265.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="24.0" prefWidth="455.0" promptText="browse history of requests...." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                <Label text="Mode" GridPane.halignment="RIGHT">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
-                </Label>
-                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="31.0" prefWidth="500.0" promptText="browse history of requests...." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                <Label text="Mode">
-                    <font>
-                        <Font name="System Bold" size="15.0" />
-                    </font>
+                    <padding>
+                        <Insets right="15.0" />
+                    </padding>
                 </Label>
                 <ComboBox id="operationList" fx:id="operationList" prefHeight="0.0" prefWidth="229.0" GridPane.columnIndex="1" />
                 <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="4.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                 <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-                <TextArea id="spiTextArea" fx:id="spiTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TextArea>
-                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+                <TableView id="tableView" fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                    <columns>
+                        <TableColumn id="time" fx:id="time" prefWidth="75.0" text="Time" />
+                        <TableColumn id="bytes" fx:id="bytes" prefWidth="503.0" text="Received bytes" />
+                        <TableColumn id="view" fx:id="view" prefWidth="132.0" text="View" />
+                    </columns>
+                    <padding>
+                        <Insets top="10.0" />
+                    </padding>
+                </TableView>
                 
             </children>
         </GridPane>

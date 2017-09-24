@@ -26,6 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.SpiRequestValueObject;
 import gui.userdata.UserDataUtils;
+import java.time.LocalTime;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public final class SpiTabController
         extends AbstractInterfaceFormController implements Initializable {
@@ -44,6 +48,14 @@ public final class SpiTabController
     private TextField byteArrayTextfield;
     @FXML
     private ListView<String> byteArrayView;
+    @FXML
+    private TableView<SpiResponse> tableView;
+    @FXML
+    private TableColumn<SpiResponse, LocalTime> time;
+    @FXML
+    private TableColumn<SpiResponse, ListView<String>> bytes;
+    @FXML
+    private TableColumn<SpiResponse, Void> view;
 
     private final InetAddress address;
 
@@ -68,6 +80,8 @@ public final class SpiTabController
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initUsedRequestsComboBox();
+        time.setCellValueFactory(new PropertyValueFactory<>("time"));
+        bytes.setCellValueFactory(new PropertyValueFactory<>("bytes"));
         byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
             if (t1.length() % 2 == 0 || t1.length() < t.length()) {
                 byteArrayView.getItems().clear();

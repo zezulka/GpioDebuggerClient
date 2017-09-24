@@ -49,7 +49,7 @@ public final class UserDataUtils {
     }
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER
-            = DateTimeFormatter.ofPattern("dd-MM, HH:mm");
+            = DateTimeFormatter.ofPattern("dd.MM. HH:mm");
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(UserDataUtils.class);

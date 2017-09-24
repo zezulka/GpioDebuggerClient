@@ -31,11 +31,12 @@ public abstract class AbstractInterfaceFormController implements Initializable {
                 });
     }
 
-    protected List<String> getBytesFromUser(String str) {
+    protected final List<String> getBytesFromUser(String str) {
         List<String> result = new ArrayList<>();
+        final int hexa = 16;
         for (int i = 0; i < str.length() - 1; i += 2) {
             String subStr = str.substring(i, i + 2);
-            result.add(subStr + "\n(" + Short.parseShort(subStr, 16) + ')');
+            result.add(subStr + "\n(" + Short.parseShort(subStr, hexa) + ')');
         }
         return result;
     }

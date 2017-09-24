@@ -4,7 +4,6 @@ import java.io.File;
 
 public class TestXmlFiles {
 
-    private static final char SEP_CHR = File.separatorChar;
     private static final String XML_EXT = ".xml";
 
     static final File DEVICES_EMPTY
@@ -25,10 +24,9 @@ public class TestXmlFiles {
             = getTestFileFromRelativePath("empty_file");
 
     private static File getTestFileFromRelativePath(String relativePath) {
-        return new File("src" + SEP_CHR
-                + "main" + SEP_CHR
-                + "resources" + SEP_CHR
-                + "testUserdata" + SEP_CHR
+        return new File("src" + File.separator
+                + "test" + File.separator
+                + "resources" + File.separator
                 + relativePath + XML_EXT);
     }
 

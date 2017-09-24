@@ -31,9 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import gui.userdata.I2cRequestValueObject;
 import gui.userdata.UserDataUtils;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.geometry.Orientation;
 
 public final class I2cTabController
         extends AbstractInterfaceFormController implements Initializable {
