@@ -1,10 +1,9 @@
-Gpio debugger UI
+Gpio debugger client
 ================
 
 Introduction
 ------------
 This is the client part of a debugging tool based on *[bulldog library](https://github.com/SilverThings/bulldog "Bulldog")*. 
-To use it, simply install it via Maven.
 
 Functionality
 --------------
