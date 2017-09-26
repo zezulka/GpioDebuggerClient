@@ -8,10 +8,15 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.AlreadyConnectedException;
+import java.nio.channels.ConnectionPendingException;
+import java.nio.channels.UnresolvedAddressException;
+import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.Iterator;
 import javafx.application.Platform;
 import gui.layouts.controllers.ControllerUtils;
 import gui.layouts.controllers.MasterWindowController;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
@@ -162,11 +167,14 @@ public final class ConnectionThread implements Runnable {
         try {
             connection.getChannel().close();
         } catch (IOException ex) {
-            //ignore for the time being
+            LOGGER.error(null, ex);
+        } finally {
+            connection.getDevice().disconnectedProperty().set(true);
+            InterruptManager.clearAllListeners(connection
+                    .getDevice().getAddress());
+            NetworkManager.removeMapping(connection
+                    .getDevice().getAddress());
         }
-        connection.getDevice().disconnectedProperty().set(true);
-        InterruptManager.clearAllListeners(connection.getDevice().getAddress());
-        NetworkManager.removeMapping(connection.getDevice().getAddress());
     }
 
     private void write(SelectionKey key) throws IOException {
@@ -199,7 +207,9 @@ public final class ConnectionThread implements Runnable {
             connection.getDevice().disconnectedProperty().set(false);
             return true;
         } catch (IOException ex) {
-            LOGGER.error("Could not connect to server, reason: ", ex);
+            LOGGER.info('<' + ex.getClass().toString()
+                    + "> could not connect to server.");
+            LOGGER.error(null, ex);
             ControllerUtils
                     .showErrorDialog("Could not connect to server.");
             return false;
