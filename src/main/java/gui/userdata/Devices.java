@@ -1,6 +1,7 @@
 package gui.userdata;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class Devices
@@ -8,6 +9,11 @@ public final class Devices
 
     public Devices(List<DeviceValueObject> list) {
         super(list);
+    }
+
+    // empty constructor is declared only for convenience in test methods
+    Devices() {
+        super(new ArrayList<>());
     }
 
     @Override

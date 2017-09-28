@@ -15,13 +15,18 @@ public abstract class AbstractXStreamListWrapper<T>
     }
 
     @Override
+    public final boolean contains(T item) {
+        return list.contains(item);
+    }
+
+    @Override
     public final List<T> getItems() {
         return list;
     }
 
     @Override
     public final void addItem(T item) {
-        if (!list.contains(item)) {
+        if (!contains(item)) {
             this.dirty = true;
             list.add(item);
         }

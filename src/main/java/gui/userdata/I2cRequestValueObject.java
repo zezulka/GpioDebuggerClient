@@ -1,6 +1,7 @@
 package gui.userdata;
 
 import gui.layouts.controllers.Operation;
+import java.util.Objects;
 
 public final class I2cRequestValueObject {
 
@@ -44,4 +45,40 @@ public final class I2cRequestValueObject {
                 + ", length=" + length
                 + byteArray;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.operation);
+        hash = 13 * hash + Objects.hashCode(this.slaveAddress);
+        hash = 17 * hash + this.length;
+        hash = 19 * hash + Objects.hashCode(this.bytes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final I2cRequestValueObject other = (I2cRequestValueObject) obj;
+        if (this.length != other.length) {
+            return false;
+        }
+        if (!Objects.equals(this.slaveAddress, other.slaveAddress)) {
+            return false;
+        }
+        if (!Objects.equals(this.bytes, other.bytes)) {
+            return false;
+        }
+        return this.operation.equals(other.operation);
+    }
+
+
 }
