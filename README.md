@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zezulka/GpioDebuggerClient.svg?branch=master)](https://travis-ci.org/zezulka/GpioDebuggerClient)
+
 Gpio debugger client
 ================
 
