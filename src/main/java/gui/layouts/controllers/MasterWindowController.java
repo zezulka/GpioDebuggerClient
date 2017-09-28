@@ -412,12 +412,18 @@ public final class MasterWindowController implements Initializable {
     }
 
     private final class DeviceTreeCell extends TreeCell<DeviceValueObject> {
-        
+
+        private static final int PADDING_INSETS = 5;
+        private static final int HBOX_SPACING = 10;
+        private static final int COLUMN_CONSTRAINTS = 175;
+        private static final int FONT_SIZE = 14;
+        private static final int ROW_PADDING = 7;
+
         @Override
         protected void updateItem(DeviceValueObject device, boolean empty) {
             super.updateItem(device, empty);
             setDisclosureNode(null);
-            if(isEmpty() && empty) {
+            if (isEmpty() && empty) {
                 setGraphic(null);
                 setText(null);
                 return;
@@ -441,12 +447,12 @@ public final class MasterWindowController implements Initializable {
                 setGraphic(Graphics.HISTORY);
             }
             setText(labelStr);
-            paddingProperty().set(new Insets(5));
+            paddingProperty().set(new Insets(PADDING_INSETS));
         }
 
         private void updateNonEmpty(DeviceValueObject item) {
             if (item != null) {
-                HBox cellBox = new HBox(10);
+                HBox cellBox = new HBox(HBOX_SPACING);
                 Button button = new Button(null, new ImageView(Graphics.INFO));
                 button.setStyle("-fx-background-radius: 100");
                 button.setOnMouseClicked((event) -> {
@@ -476,7 +482,7 @@ public final class MasterWindowController implements Initializable {
                         p.add(timeLabel, 0, 2);
                         p.add(timeContent, 1, 2);
                         p.getColumnConstraints()
-                                .add(new ColumnConstraints(175));
+                                .add(new ColumnConstraints(COLUMN_CONSTRAINTS));
                         deviceInfo.setContentNode(p);
                         deviceInfo.setArrowLocation(
                                 PopOver.ArrowLocation.RIGHT_TOP);
@@ -491,12 +497,12 @@ public final class MasterWindowController implements Initializable {
         }
 
         private void setRowPadding(Label label) {
-            label.paddingProperty().set(new Insets(7));
+            label.paddingProperty().set(new Insets(ROW_PADDING));
         }
 
         private Label getDecoratedLabel(String text) {
             Text ipText = new Text(text);
-            ipText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+            ipText.setFont(Font.font("Verdana", FontWeight.BOLD, FONT_SIZE));
             Label result = new Label(null, ipText);
             setRowPadding(result);
             return result;

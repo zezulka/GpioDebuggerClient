@@ -8,10 +8,6 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.AlreadyConnectedException;
-import java.nio.channels.ConnectionPendingException;
-import java.nio.channels.UnresolvedAddressException;
-import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.Iterator;
 import javafx.application.Platform;
 import gui.layouts.controllers.ControllerUtils;
@@ -27,7 +23,7 @@ public final class ConnectionThread implements Runnable {
             = LoggerFactory.getLogger(ConnectionThread.class);
 
     private final ConnectionValueObject connection;
-    private static final NetworkManager MANAGER = NetworkManager.getInstance(); 
+    private static final NetworkManager MANAGER = NetworkManager.getInstance();
 
     public ConnectionThread(ConnectionValueObject connection) {
         this.connection = connection;

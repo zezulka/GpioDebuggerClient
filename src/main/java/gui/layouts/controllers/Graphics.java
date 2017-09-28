@@ -32,7 +32,7 @@ public final class Graphics {
         return new Image(getPathToImage(path), IMAGE_EDGE_LEN,
                 IMAGE_EDGE_LEN, true, true);
     }
-    
+
     private static Image getImageFromPath(String path, int edge) {
         return new Image(getPathToImage(path), edge,
                 edge, true, true);
