@@ -27,6 +27,7 @@ public final class ConnectionThread implements Runnable {
             = LoggerFactory.getLogger(ConnectionThread.class);
 
     private final ConnectionValueObject connection;
+    private static final NetworkManager MANAGER = NetworkManager.getInstance(); 
 
     public ConnectionThread(ConnectionValueObject connection) {
         this.connection = connection;
@@ -199,6 +200,7 @@ public final class ConnectionThread implements Runnable {
             );
             if (channel.isConnectionPending() && channel.finishConnect()) {
                 LOGGER.info("done connecting to server");
+                MANAGER.addNew(connection.getDevice().getAddress(), this);
             } else {
                 return false;
             }
