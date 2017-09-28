@@ -51,7 +51,7 @@ public final class NetworkManager {
         return ADDRESSES.get(ipAddress) != null;
     }
 
-    private void addNew(InetAddress address, ConnectionThread thread) {
+    void addNew(InetAddress address, ConnectionThread thread) {
         ADDRESSES.put(address, thread);
     }
 
@@ -89,7 +89,6 @@ public final class NetworkManager {
         ConnectionValueObject connection
                 = new ConnectionValueObject(null, selector, channel, device);
         ConnectionThread thread = new ConnectionThread(connection);
-        addNew(device.getAddress(), thread);
         new Thread(thread).start();
         return true;
     }

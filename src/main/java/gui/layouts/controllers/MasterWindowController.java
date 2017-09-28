@@ -417,6 +417,11 @@ public final class MasterWindowController implements Initializable {
         protected void updateItem(DeviceValueObject device, boolean empty) {
             super.updateItem(device, empty);
             setDisclosureNode(null);
+            if(isEmpty() && empty) {
+                setGraphic(null);
+                setText(null);
+                return;
+            }
             if (getTreeItem() != null && device == null) {
                 updateEmpty();
             } else {
