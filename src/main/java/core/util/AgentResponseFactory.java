@@ -17,7 +17,6 @@ import protocol.response.InterruptAgentResponse;
 import protocol.InterruptManager;
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
-import protocol.RaspiClientPin;
 import protocol.Signal;
 import protocol.response.InitAgentResponse;
 import protocol.response.InterruptGeneratedAgentResponse;
@@ -26,7 +25,7 @@ import protocol.response.InterruptListenerStoppedAgentResponse;
 import protocol.response.SpiAgentResponse;
 
 public final class AgentResponseFactory {
-    
+
     private AgentResponseFactory() {
     }
 

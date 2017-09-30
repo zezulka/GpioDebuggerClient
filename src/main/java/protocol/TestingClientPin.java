@@ -12,7 +12,7 @@ public enum TestingClientPin implements ClientPin {
     T_08("T_08", 8),
     T_09("T_09", 9),
     T_10("T_10", 10);
-    
+
     private final String id;
     private final int port;
 
@@ -49,5 +49,5 @@ public enum TestingClientPin implements ClientPin {
         }
         throw new IllegalArgumentException("pin not found");
     }
-    
+
 }
