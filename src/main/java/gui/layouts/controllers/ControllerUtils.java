@@ -1,6 +1,6 @@
 package gui.layouts.controllers;
 
-import gui.RaspiTabLoader;
+import gui.TabLoaderImpl;
 import gui.TabLoader;
 import core.util.StringConstants;
 import java.io.File;
@@ -15,21 +15,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
-import protocol.BoardType;
 
 public final class ControllerUtils {
 
     private static final String FXML_EXT = ".fxml";
-    private static final URL RASPI = getPathToFxml("Raspi");
+    private static final URL DEVICE = getPathToFxml("Device");
     public static final URL SPI = getPathToFxml("SpiTab");
     public static final URL I2C = getPathToFxml("I2cTab");
     public static final URL INTRS = getPathToFxml("InterruptsTab");
-    public static final URL GPIO = getPathToFxml("GpioTab");
+    public static final URL RASPI_GPIO = getPathToFxml("RaspiGpioTab");
+    public static final URL TESTING_GPIO = getPathToFxml("TestingGpioTab");
     public static final URL MASTER = getPathToFxml("MasterWindow");
-    private static URL beagleBoneBlack;
-    private static URL cubieboard;
 
-    public static final TabLoader GPIO_TAB_LOADER = new RaspiTabLoader();
+    public static final TabLoader GPIO_TAB_LOADER = new TabLoaderImpl();
 
     private ControllerUtils() {
     }
@@ -56,26 +54,12 @@ public final class ControllerUtils {
         });
     }
 
-    public static URL getUrlFromBoardType(BoardType type) {
-        switch (type) {
-            case RASPBERRY_PI:
-                return RASPI;
-            case BEAGLEBONEBLACK:
-                return beagleBoneBlack;
-            case CUBIEBOARD:
-                return cubieboard;
-            default:
-                throw new IllegalArgumentException("unsupported board type");
-        }
+    public static URL getBoardUrl() {
+        return DEVICE;
     }
 
-    public static Object getControllerFromBoardType(BoardType type) {
-        switch (type) {
-            case RASPBERRY_PI:
-                return new RaspiController();
-            default:
-                throw new UnsupportedOperationException();
-        }
+    public static Object getDeviceController() {
+        return new DeviceController();
     }
 
     public static URL getPathToFxml(String fxmlName) {

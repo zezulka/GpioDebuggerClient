@@ -10,6 +10,7 @@ import java.util.List;
 import protocol.BoardType;
 import protocol.response.AgentResponse;
 import protocol.ClientPin;
+import protocol.ClientPinFactory;
 import protocol.response.GpioAgentResponse;
 import protocol.response.I2cAgentResponse;
 import protocol.response.InterruptAgentResponse;
@@ -25,7 +26,7 @@ import protocol.response.InterruptListenerStoppedAgentResponse;
 import protocol.response.SpiAgentResponse;
 
 public final class AgentResponseFactory {
-
+    
     private AgentResponseFactory() {
     }
 
@@ -114,7 +115,7 @@ public final class AgentResponseFactory {
         ClientPin pin;
         Signal signal;
         try {
-            pin = RaspiClientPin.getPin(splitMessage.get(0));
+            pin = ClientPinFactory.getPin(splitMessage.get(0));
             signal = Signal.valueOf(splitMessage.get(1));
             return new GpioAgentResponse(signal, pin,
                     connection.getDevice().getAddress());
@@ -167,7 +168,7 @@ public final class AgentResponseFactory {
             throws IllegalResponseException {
         try {
             ClientPin interruptPin
-                    = RaspiClientPin.getPin(splitMessage.get(0));
+                    = ClientPinFactory.getPin(splitMessage.get(0));
             InterruptType intrType
                     = InterruptType.getType(splitMessage.get(1));
             LocalTime timeGenerated

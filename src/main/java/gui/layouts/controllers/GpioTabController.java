@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public final class GpioTabController implements Initializable {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(RaspiController.class);
+            = LoggerFactory.getLogger(DeviceController.class);
 
     @FXML
     private Tab gpioTab;

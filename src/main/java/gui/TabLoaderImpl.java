@@ -16,23 +16,22 @@ import protocol.BoardType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class RaspiTabLoader implements TabLoader {
+public final class TabLoaderImpl implements TabLoader {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(RaspiTabLoader.class);
+            = LoggerFactory.getLogger(TabLoaderImpl.class);
 
     @Override
     public Tab loadNewTab(InetAddress address, BoardType type,
             Collection<Feature> features) {
-        LOGGER.debug("Attempting to load " + type + " controller...");
+        LOGGER.debug("Attempting to load root controller...");
         try {
             FXMLLoader raspiLoader
-                    = new FXMLLoader(ControllerUtils.getUrlFromBoardType(type));
-            raspiLoader.setController(ControllerUtils
-                    .getControllerFromBoardType(type));
+                    = new FXMLLoader(ControllerUtils.getBoardUrl());
+            raspiLoader.setController(ControllerUtils.getDeviceController());
             List<FXMLLoader> loaders = new ArrayList<>();
             for (Feature f : features) {
-                FXMLLoader loader = FxmlLoaderFactory.of(f);
+                FXMLLoader loader = FxmlLoaderFactory.of(f, type);
                 loader.setController(FxmlControllerFactory.of(address, f));
                 loaders.add(loader);
             }

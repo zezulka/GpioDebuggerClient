@@ -7,7 +7,7 @@ import javafx.fxml.Initializable;
 import java.util.ResourceBundle;
 import javafx.scene.control.Tab;
 
-public final class RaspiController implements Initializable {
+public final class DeviceController implements Initializable {
 
     @FXML
     private Tab raspiTab;

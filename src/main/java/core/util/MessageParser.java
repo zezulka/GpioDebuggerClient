@@ -45,8 +45,7 @@ public final class MessageParser {
                     "Agent response '%s' could not be recognized, error: %s",
                     agentMessage, ex.getMessage())
             );
-            ControllerUtils
-                    .showInfoDialog(String.format(
+            ControllerUtils.showInfoDialog(String.format(
                             "Unrecognized message has been received: %s",
                             agentMessage)
                     );

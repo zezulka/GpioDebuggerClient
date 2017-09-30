@@ -41,7 +41,7 @@ import protocol.RaspiClientPin;
 public final class InterruptsTabController implements Initializable {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(RaspiController.class);
+            = LoggerFactory.getLogger(DeviceController.class);
     public static final Object SYNC = new Object();
 
     @FXML

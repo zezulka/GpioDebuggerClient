@@ -71,7 +71,7 @@ public enum RaspiClientPin implements ClientPin {
         return "GPIO" + gpioAddress;
     }
 
-    public static ClientPin getPin(String pinName) {
+    static ClientPin getPin(String pinName) {
         for (RaspiClientPin pin : RaspiClientPin.values()) {
             if (pin.id.equals(pinName)) {
                 return pin;

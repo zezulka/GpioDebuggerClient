@@ -4,6 +4,7 @@ public enum BoardType {
     RASPBERRY_PI("Raspberry Pi"),
     BEAGLEBONEBLACK("BeagleBone Black"),
     CUBIEBOARD("Cubieboard"),
+    TESTING("Testing board"),
     UNKNOWN("N/A");
 
     private final String name;

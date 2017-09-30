@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Tab closable="false" fx:id="gpioTab" id="gpioTab" text="GPIO" 
+     xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <GridPane cacheHint="SPEED" fx:id="gpioGridPane" id="gpioGridPane" layoutX="0.0" layoutY="0.0">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" prefWidth="100.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+                <RowConstraints minHeight="30.0" prefHeight="30.0"/>
+            </rowConstraints>
+            <children>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="T_01" id="T_01" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_01"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="1" fx:id="T_02" id="T_02" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_02"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="T_03" id="T_03" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_03"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="2" fx:id="T_04" id="T_04" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_04"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="T_05" id="T_05" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_05"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="3" fx:id="T_06" id="T_06" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_06"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="T_07" id="T_07" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_07"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="4" fx:id="T_08" id="T_08" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_08"/>
+                <Button GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="T_09" id="T_09" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_09"/>
+                <Button GridPane.columnIndex="2" GridPane.rowIndex="5" fx:id="T_10" id="T_10" mnemonicParsing="false" prefHeight="25" prefWidth="75" text="T_10"/>
+                <RadioButton GridPane.rowIndex="0" ellipsisString="W" fx:id="writeRadioButton" mnemonicParsing="false" text="WRITE">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="op"/>
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton GridPane.rowIndex="1" ellipsisString="R" fx:id="readRadioButton" mnemonicParsing="false" selected="true" text="READ" toggleGroup="$op"/>
+                <Label GridPane.columnIndex="3" GridPane.rowIndex="1" text="Legend:" textFill="#000000">
+                    <font>
+                        <Font name="SystemBold" size="15.0"/>
+                    </font>
+                </Label>
+                <Label GridPane.columnIndex="3" GridPane.rowIndex="2" text="HIGH" textFill="#55FF55">
+                    <font>
+                        <Font name="SystemBold" size="15.0"/>
+                    </font>
+                </Label>
+                <Label GridPane.columnIndex="3" GridPane.rowIndex="3" text="LOW" textFill="#FF5555">
+                    <font>
+                        <Font name="SystemBold" size="15.0"/>
+                    </font>
+                </Label>
+            </children>
+        </GridPane>
+    </content>
+</Tab>
