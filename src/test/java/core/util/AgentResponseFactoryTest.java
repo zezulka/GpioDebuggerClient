@@ -148,7 +148,7 @@ public class AgentResponseFactoryTest {
             InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
             assertThat(AgentResponseFactory.of("INTR_GENERATED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
-                    + mockedNow, connection)).isInstanceOf(InterruptAgentResponse.class);
+                    + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -160,7 +160,7 @@ public class AgentResponseFactoryTest {
             InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
             assertThat(AgentResponseFactory.of("INTR_STARTED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
-                    + mockedNow, connection)).isInstanceOf(InterruptAgentResponse.class);
+                    + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }
@@ -173,7 +173,7 @@ public class AgentResponseFactoryTest {
             InterruptManager.addInterruptListener(mockedAddress, object);
             assertThat(AgentResponseFactory.of("INTR_STOPPED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
-                    + mockedNow, connection)).isInstanceOf(InterruptAgentResponse.class);
+                    + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
         } catch (IllegalResponseException ex) {
             fail(ex.getMessage());
         }

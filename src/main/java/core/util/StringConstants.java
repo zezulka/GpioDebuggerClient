@@ -10,6 +10,10 @@ import java.io.File;
 public enum StringConstants {
 
     USER_INFO_PARAM("UserInfo"),
+    /**
+     * This string is sent from agent and signalises successful write operation.
+     */
+    WRITE_OK("Write OK"),
     CONNECTION_OK("Connection to server OK"),
     CONNECTION_NOK("I/O error while trying to communicate with server"),
     SERVER_READY("The system is ready to accept requests."),

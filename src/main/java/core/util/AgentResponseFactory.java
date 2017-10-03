@@ -13,7 +13,7 @@ import protocol.ClientPin;
 import protocol.ClientPinFactory;
 import protocol.response.GpioAgentResponse;
 import protocol.response.I2cAgentResponse;
-import protocol.response.InterruptAgentResponse;
+import protocol.response.AbstractInterruptAgentResponse;
 import protocol.InterruptManager;
 import protocol.InterruptType;
 import protocol.InterruptValueObject;
@@ -163,7 +163,7 @@ public final class AgentResponseFactory {
 
     private static AgentResponse interrupt(List<String> splitMessage,
             ConnectionValueObject connection,
-            Class<? extends InterruptAgentResponse> clazz)
+            Class<? extends AbstractInterruptAgentResponse> clazz)
             throws IllegalResponseException {
         try {
             ClientPin interruptPin

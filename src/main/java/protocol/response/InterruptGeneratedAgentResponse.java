@@ -8,7 +8,7 @@ import protocol.InterruptValueObject;
 import protocol.ListenerState;
 
 public final class InterruptGeneratedAgentResponse
-        extends InterruptAgentResponse {
+        extends AbstractInterruptAgentResponse {
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(InterruptGeneratedAgentResponse.class);

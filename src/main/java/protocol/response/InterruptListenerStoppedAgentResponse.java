@@ -8,10 +8,10 @@ import protocol.InterruptValueObject;
 import protocol.ListenerState;
 
 public final class InterruptListenerStoppedAgentResponse
-        extends InterruptAgentResponse implements AgentResponse {
+        extends AbstractInterruptAgentResponse {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(InterruptAgentResponse.class);
+            = LoggerFactory.getLogger(AbstractInterruptAgentResponse.class);
 
     public InterruptListenerStoppedAgentResponse(InterruptValueObject response,
            InetAddress address) {

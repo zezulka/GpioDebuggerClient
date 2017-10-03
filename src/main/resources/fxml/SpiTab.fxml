@@ -55,9 +55,8 @@
                 <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
                 <TableView id="tableView" fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                     <columns>
-                        <TableColumn id="time" fx:id="time" prefWidth="75.0" text="Time" />
-                        <TableColumn id="bytes" fx:id="bytes" prefWidth="503.0" text="Received bytes" />
-                        <TableColumn id="view" fx:id="view" prefWidth="132.0" text="View" />
+                        <TableColumn id="time" fx:id="time" prefWidth="100.0" text="Time" />
+                        <TableColumn id="bytes" fx:id="bytes" prefWidth="490.0" text="Received bytes" />
                     </columns>
                     <padding>
                         <Insets top="10.0" />
