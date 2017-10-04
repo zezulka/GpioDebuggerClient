@@ -30,7 +30,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 
-import javafx.collections.ObservableList;
 import core.util.StringConstants;
 import javafx.scene.control.ToolBar;
 
@@ -39,6 +38,8 @@ import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
 import gui.userdata.DeviceValueObject;
 import gui.userdata.UserDataUtils;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -176,42 +177,46 @@ public final class MasterWindowController implements Initializable {
                 .bind(ipAddress.textProperty().isEmpty());
         addNewDeviceButton.setOnAction((event) -> {
             DeviceValueObject newDevice = getNewDeviceFromUser();
-            ObservableList<TreeItem<DeviceValueObject>> history = devicesTree
-                    .getRoot()
-                    .getChildren()
-                    .get(HISTORY_BRANCH)
-                    .getChildren();
-            ObservableList<TreeItem<DeviceValueObject>> active = devicesTree
+            List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
+                    devicesTree
+                            .getRoot()
+                            .getChildren()
+                            .get(HISTORY_BRANCH)
+                            .getChildren()
+            );
+            children.addAll(new ArrayList<>(devicesTree
                     .getRoot()
                     .getChildren()
                     .get(ACTIVE_BRANCH_INDEX)
-                    .getChildren();
+                    .getChildren())
+            );
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
-                for (TreeItem<DeviceValueObject> obj : history) {
-                    DeviceValueObject dvo = obj
-                            .getChildren()
-                            .get(0).getValue();
-                    if (dvo.equals(newDevice)) {
-                        devicesTree.getSelectionModel()
-                                .select(obj.getChildren().get(0));
-                        return;
-                    }
+                if (checkWhetherDeviceAlreadyExists(children, newDevice)) {
+                    return;
                 }
-                for (TreeItem<DeviceValueObject> obj : active) {
-                    DeviceValueObject dvo = obj
-                            .getChildren()
-                            .get(0).getValue();
-                    if (dvo.equals(newDevice)) {
-                        devicesTree.getSelectionModel()
-                                .select(obj.getChildren().get(0));
-                        return;
-                    }
-                }
-                history.add(getTreeItemWithListener(newDevice));
+                devicesTree
+                        .getRoot()
+                        .getChildren()
+                        .get(HISTORY_BRANCH)
+                        .getChildren()
+                        .add(getTreeItemWithListener(newDevice));
                 UserDataUtils.addNewDeviceToFile(newDevice);
             }
         });
+    }
+
+    private boolean checkWhetherDeviceAlreadyExists(
+            List<TreeItem<DeviceValueObject>> children,
+            DeviceValueObject device) {
+        for (TreeItem<DeviceValueObject> child : children) {
+            DeviceValueObject dvo = child.getValue();
+            if (dvo.equals(device)) {
+                devicesTree.getSelectionModel().select(child);
+                return true;
+            }
+        }
+        return false;
     }
 
     private BooleanBinding connectionPending() {
