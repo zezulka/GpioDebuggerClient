@@ -30,22 +30,23 @@ public final class I2cAgentResponse implements AgentResponse {
     private void updateTextArea(String idPrefix) {
         Tab t = MasterWindowController
                 .getTabManager().findTabByAddress(address);
-        TableView<ByteArrayResponse> ta = 
-                ((TableView<ByteArrayResponse>) t.getContent()
-                .lookup(idPrefix + ':' + address.getHostAddress()));
+        TableView<ByteArrayResponse> ta
+                = ((TableView<ByteArrayResponse>) t.getContent()
+                        .lookup(idPrefix + ':' + address.getHostAddress()));
         Platform.runLater(() -> {
             List<String> viewItems;
-            if(responseBody.equals(StringConstants.WRITE_OK.toString())) {
+            if (responseBody.equals(StringConstants.WRITE_OK.toString())) {
                 viewItems = Arrays.asList(responseBody);
             } else {
                 viewItems = new ArrayList<>(Arrays
-                    .asList(responseBody.split(" ")));
+                        .asList(responseBody.split(" ")));
             }
-            ta.getItems().add(0, new ByteArrayResponse(LocalTime.now(), viewItems));
+            ta.getItems()
+                    .add(0, new ByteArrayResponse(LocalTime.now(), viewItems));
             refreshTable(ta);
         });
     }
-    
+
     private void refreshTable(TableView<ByteArrayResponse> ta) {
         final List<ByteArrayResponse> items = ta.getItems();
         if (items == null || items.isEmpty()) {

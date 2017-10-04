@@ -98,8 +98,8 @@ public final class I2cTabController
                 .forTableColumn(new StringConverter<List<String>>() {
                     @Override
                     public String toString(List<String> t) {
-                        if (t.size() == 1
-                                && t.get(0).equals(StringConstants.WRITE_OK.toString())) {
+                        if (t.size() == 1 && t.get(0)
+                                .equals(StringConstants.WRITE_OK.toString())) {
                             return StringConstants.WRITE_OK.toString();
                         }
                         final int hexaRadix = 16;
