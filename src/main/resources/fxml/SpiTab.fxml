@@ -51,9 +51,17 @@
                 <ComboBox id="operationList" fx:id="operationList" prefHeight="0.0" prefWidth="229.0" GridPane.columnIndex="1" />
                 <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="4.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-                <TableView id="tableView" fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </TextField>
+                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </ListView>
+                <TableView id="spiTableView" fx:id="spiTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
                     <columns>
                         <TableColumn id="time" fx:id="time" prefWidth="100.0" text="Time" />
                         <TableColumn id="bytes" fx:id="bytes" prefWidth="490.0" text="Received bytes" />
@@ -64,6 +72,9 @@
                 </TableView>
                 
             </children>
+            <padding>
+                <Insets right="10.0" />
+            </padding>
         </GridPane>
     </content>
 </Tab>

@@ -14,7 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import gui.userdata.SpiRequestValueObject;
 import gui.userdata.UserDataUtils;
 import java.time.LocalTime;
 import java.util.Arrays;
-import javafx.event.EventType;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -31,13 +29,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 
 public final class SpiTabController
-        extends AbstractInterfaceFormController implements Initializable {
+        extends AbstractInterfaceFormController {
 
     @FXML
     private Button spiRequestButton;
@@ -52,11 +49,11 @@ public final class SpiTabController
     @FXML
     private ListView<String> byteArrayView;
     @FXML
-    private TableView<SpiResponse> tableView;
+    private TableView<ByteArrayResponse> spiTableView;
     @FXML
-    private TableColumn<SpiResponse, LocalTime> time;
+    private TableColumn<ByteArrayResponse, LocalTime> time;
     @FXML
-    private TableColumn<SpiResponse, List<String>> bytes;
+    private TableColumn<ByteArrayResponse, List<String>> bytes;
 
     private final InetAddress address;
     private static final int FIXED_CELL_SIZE = 38;
@@ -132,8 +129,8 @@ public final class SpiTabController
         spiRequestButton.setOnAction((event) -> {
             sendSpiRequest(event);
         });
-        tableView.setFixedCellSize(FIXED_CELL_SIZE);
-        tableView.setEditable(true);
+        spiTableView.setFixedCellSize(FIXED_CELL_SIZE);
+        spiTableView.setEditable(true);
     }
 
     private void initUsedRequestsComboBox() {

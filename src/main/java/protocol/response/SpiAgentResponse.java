@@ -4,7 +4,7 @@ import core.util.StringConstants;
 import java.net.InetAddress;
 import javafx.scene.control.Tab;
 import gui.layouts.controllers.MasterWindowController;
-import gui.layouts.controllers.SpiResponse;
+import gui.layouts.controllers.ByteArrayResponse;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +24,13 @@ public final class SpiAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        updateTextArea("#tableView");
+        updateTextArea("#spiTableView");
     }
 
     private void updateTextArea(String idPrefix) {
         Tab t = MasterWindowController
                 .getTabManager().findTabByAddress(address);
-        TableView<SpiResponse> ta = ((TableView<SpiResponse>) t.getContent()
+        TableView<ByteArrayResponse> ta = ((TableView<ByteArrayResponse>) t.getContent()
                 .lookup(idPrefix + ':' + address.getHostAddress()));
         Platform.runLater(() -> {
             List<String> viewItems;
@@ -40,19 +40,19 @@ public final class SpiAgentResponse implements AgentResponse {
                 viewItems = new ArrayList<>(Arrays
                     .asList(responseBody.split(" ")));
             }
-            ta.getItems().add(0, new SpiResponse(LocalTime.now(), viewItems));
+            ta.getItems().add(0, new ByteArrayResponse(LocalTime.now(), viewItems));
             refreshTable(ta);
         });
 
     }
 
-    private void refreshTable(TableView<SpiResponse> ta) {
-        final List<SpiResponse> items = ta.getItems();
+    private void refreshTable(TableView<ByteArrayResponse> ta) {
+        final List<ByteArrayResponse> items = ta.getItems();
         if (items == null || items.isEmpty()) {
             return;
         }
 
-        final SpiResponse item = ta.getItems().get(0);
+        final ByteArrayResponse item = ta.getItems().get(0);
         items.remove(0);
         items.add(0, item);
     }
