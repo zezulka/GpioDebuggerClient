@@ -8,8 +8,9 @@ import javafx.collections.ObservableList;
  * available on the embedded device.
  */
 public enum Operation {
-    READ("read"),
-    WRITE("write");
+    READ("read only"),
+    WRITE("write only"),
+    WRITE_READ("write and read");
 
     private final String op;
 
@@ -19,14 +20,6 @@ public enum Operation {
 
     public String getOp() {
         return this.op;
-    }
-
-    public boolean isReadOperation() {
-        return this.equals(Operation.READ);
-    }
-
-    public boolean isWriteOperation() {
-        return this.equals(Operation.WRITE);
     }
 
     public static ObservableList<Operation> observableValues() {

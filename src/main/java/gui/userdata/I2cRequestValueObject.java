@@ -37,7 +37,7 @@ public final class I2cRequestValueObject {
     @Override
     public String toString() {
         String byteArray = "";
-        if (operation.isWriteOperation()) {
+        if (!operation.equals(Operation.READ)) {
             byteArray = ", bytes=" + bytes;
         }
         return "operation=" + operation

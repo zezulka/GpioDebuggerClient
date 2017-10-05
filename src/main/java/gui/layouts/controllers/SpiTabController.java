@@ -206,7 +206,7 @@ public final class SpiTabController
         return (new StringBuilder())
                 .append("SPI:")
                 .append(operationList
-                        .getSelectionModel().getSelectedItem().toString())
+                        .getSelectionModel().getSelectedItem().name())
                 .append(SEPARATOR)
                 .append(HEXA_PREFIX)
                 .append(chipSelectList.getSelectionModel().getSelectedItem())

@@ -134,19 +134,17 @@ public final class I2cTabController
                 .bind(operationList
                         .getSelectionModel()
                         .selectedItemProperty()
-                        .isNotEqualTo(Operation.WRITE));
+                        .isEqualTo(Operation.READ));
 
         operationList.getSelectionModel().selectFirst();
         i2cRequestButton.disableProperty().bind(
-                checkLengthFieldEmpty()
-                        .or(isHexaByte(slaveAddressField).not())
-                        .or(Bindings.when(operationList
-                                .getSelectionModel()
-                                .selectedItemProperty()
-                                .isEqualTo(Operation.WRITE))
-                                .then(super.hexValuesOnly(byteArrayTextfield)
-                                        .not())
-                                .otherwise(false))
+                Bindings.when(operationList
+                        .getSelectionModel()
+                        .selectedItemProperty()
+                        .isEqualTo(Operation.READ))
+                        .then(isHexaByte(slaveAddressField).not())
+                        .otherwise(super.hexValuesOnly(byteArrayTextfield)
+                                .not())
         );
         i2cRequestButton.setOnAction((event) -> {
             sendI2cRequest(event);
@@ -204,16 +202,15 @@ public final class I2cTabController
                 -> HEX_BYTE_REGEX_PATTERN
                         .matcher(textfield.getText()).matches(),
                 textfield.textProperty());
-        return Bindings.when(binding).then(true).otherwise(false);
+        return binding.and(checkLengthFieldNonEmpty());
     }
 
-    private BooleanBinding checkLengthFieldEmpty() {
+    private BooleanBinding checkLengthFieldNonEmpty() {
         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> getSelectedOperation().isReadOperation(),
-                operationList.getSelectionModel().selectedItemProperty());
+                -> lengthField.textProperty().isEmpty().not().get(),
+                lengthField.textProperty());
 
-        return Bindings.isEmpty(lengthField.textProperty())
-                .and(Bindings.when(binding).then(true).otherwise(false));
+        return binding;
     }
 
     private void setComponentsDisableProperty(Operation op) {
@@ -224,6 +221,7 @@ public final class I2cTabController
                 lengthField.setDisable(false);
                 break;
             }
+            case WRITE_READ:
             case WRITE: {
                 values.setTextFill(Color.BLACK);
                 length.setTextFill(Color.LIGHTGREY);
@@ -238,8 +236,7 @@ public final class I2cTabController
     private void sendI2cRequest(ActionEvent evt) {
         String msg = gatherMessageFromForm();
         if (msg != null) {
-            NetworkManager
-                    .setMessageToSend(address, msg);
+            NetworkManager.setMessageToSend(address, msg);
             I2cRequestValueObject request = getNewI2cRequestEntryFromForm();
             usedRequestsComboBox.getItems().add(request);
             UserDataUtils.addNewI2cRequest(request);
@@ -256,11 +253,10 @@ public final class I2cTabController
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
         Operation op = getSelectedOperation();
-        if (op.isReadOperation()) {
+        if (op.equals(Operation.READ)) {
             msgBuilder = msgBuilder.append(lengthField.getText().trim());
             LOGGER.info(String.format("I2c request form has now "
-                    + "submitted the following request:\n %s"
-                    + "",
+                    + "submitted the following request:\n %s",
                     msgBuilder.toString()));
             return msgBuilder.toString();
         }
@@ -275,14 +271,14 @@ public final class I2cTabController
      * @return length of either bytes being sent or length specified by user
      */
     private int getLengthRequestAttr(Operation op) {
-        if (op.isWriteOperation()) {
+        if (!op.equals(Operation.READ)) {
             return getByteArrayStr(op).length() / 2;
         }
         return Integer.parseUnsignedInt(lengthField.getText());
     }
 
     private String getByteArrayStr(Operation op) {
-        return op.isReadOperation() ? "" : byteArrayTextfield.getText();
+        return op.equals(Operation.READ) ? "" : byteArrayTextfield.getText();
     }
 
     @Override
@@ -292,7 +288,7 @@ public final class I2cTabController
 
         return msgBuilder
                 .append(SEPARATOR)
-                .append(selectedOp.toString())
+                .append(selectedOp.name())
                 .append(SEPARATOR)
                 .append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim())
