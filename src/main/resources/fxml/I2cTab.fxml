@@ -12,51 +12,63 @@
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" >
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="200.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" prefWidth="250.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" prefWidth="175.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" prefWidth="300.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="46.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="99.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="140.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="177.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="348.0" minHeight="69.0" prefHeight="348.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="260.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <ComboBox id="operationList" fx:id="operationList" prefHeight="25.0" prefWidth="200.0" promptText="select mode...." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="24.0" prefWidth="403.0" promptText="OR browse history of requests..." GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                <TextField id="slaveAddressField" fx:id="slaveAddressField" maxWidth="150.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                <Label text="Hexadecimal slave address" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                <ComboBox id="operationList" fx:id="operationList" prefHeight="25.0" prefWidth="321.0" promptText="select mode...." GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="25.0" prefWidth="528.0" promptText="use requests from history......" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+                <TextField id="slaveAddressField" fx:id="slaveAddressField" maxWidth="240.0" minWidth="-Infinity" prefHeight="25.0" prefWidth="156.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                <Label text="Hex slave address" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
+                    <padding>
+                        <Insets right="10.0" />
+                    </padding>
                 </Label>
-                <Label text="Mode">
+                <Label text="Mode" GridPane.halignment="RIGHT">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
+                    <padding>
+                        <Insets right="10.0" />
+                    </padding>
                 </Label>
-                <Label id="values" fx:id="values" contentDisplay="BOTTOM" focusTraversable="false" prefHeight="19.0" prefWidth="243.0" text="Hexadecimal values" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                <Label id="values" fx:id="values" contentDisplay="BOTTOM" focusTraversable="false" prefHeight="19.0" prefWidth="104.0" text="Hex values" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
+                    <padding>
+                        <Insets right="10.0" />
+                    </padding>
                 </Label>
-                <Label id="length" fx:id="length" text="Length" GridPane.rowIndex="2">
+                <Label id="length" fx:id="length" text="Length" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
+                    <padding>
+                        <Insets right="10.0" />
+                    </padding>
                 </Label>
-                <TextField id="lengthField" fx:id="lengthField" maxWidth="200.0" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="132.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="10.0" prefWidth="442.0" GridPane.columnSpan="2" GridPane.rowIndex="5" />
-                <TableView id="i2cTableView" fx:id="i2cTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                <TextField id="lengthField" fx:id="lengthField" maxWidth="249.0" prefHeight="20.0" prefWidth="249.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                <Button id="i2cRequestButton" fx:id="i2cRequestButton" layoutX="436.0" layoutY="447.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="10.0" prefWidth="442.0" GridPane.columnSpan="3" GridPane.rowIndex="4" />
+                <TableView id="i2cTableView" fx:id="i2cTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
                     <columns>
                         <TableColumn id="time" fx:id="time" prefWidth="139.0" text="Time" />
-                        <TableColumn id="bytes" fx:id="bytes" prefWidth="548.0" text="Received bytes" />
+                        <TableColumn id="bytes" fx:id="bytes" prefWidth="551.0" text="Received bytes" />
                     </columns>
                     <padding>
                         <Insets top="10.0" />

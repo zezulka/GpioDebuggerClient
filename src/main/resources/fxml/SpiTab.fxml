@@ -12,17 +12,16 @@
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="603.0" prefWidth="710.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" prefWidth="300.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="287.0" minWidth="10.0" prefWidth="150.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" prefWidth="250.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" prefWidth="175.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" prefWidth="300.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="25.0" vgrow="NEVER" />
-                <RowConstraints prefHeight="5.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
-                <RowConstraints prefHeight="25.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints prefHeight="260.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
@@ -31,40 +30,40 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                     <padding>
-                        <Insets right="15.0" />
+                        <Insets right="10.0" />
                     </padding>
                 </Label>
-                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="29.0" prefWidth="265.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="23.0" prefWidth="208.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="24.0" prefWidth="455.0" promptText="browse history of requests...." GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+                <ComboBox id="usedRequestsComboBox" fx:id="usedRequestsComboBox" prefHeight="24.0" prefWidth="455.0" promptText="use requests from history..." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                 <Label text="Mode" GridPane.halignment="RIGHT">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                     <padding>
-                        <Insets right="15.0" />
+                        <Insets right="10.0" />
                     </padding>
                 </Label>
-                <ComboBox id="operationList" fx:id="operationList" prefHeight="0.0" prefWidth="229.0" GridPane.columnIndex="1" />
-                <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="4.0" prefWidth="229.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                <ComboBox id="operationList" fx:id="operationList" prefHeight="25.0" prefWidth="182.0" GridPane.columnIndex="1" />
+                <ComboBox id="chipSelectList" fx:id="chipSelectList" prefHeight="25.0" prefWidth="170.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button id="spiRequestButton" fx:id="spiRequestButton" layoutX="436.0" layoutY="355.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="150.0" text="Send request" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                <TextField id="byteArrayTextfield" fx:id="byteArrayTextfield" prefHeight="25.0" prefWidth="403.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin>
                 </TextField>
-                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="42.0" prefWidth="700.0" GridPane.columnSpan="3" GridPane.rowIndex="3">
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin>
                 </ListView>
-                <TableView id="spiTableView" fx:id="spiTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+                <TableView id="spiTableView" fx:id="spiTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="5">
                     <columns>
-                        <TableColumn id="time" fx:id="time" prefWidth="100.0" text="Time" />
-                        <TableColumn id="bytes" fx:id="bytes" prefWidth="490.0" text="Received bytes" />
+                        <TableColumn id="time" fx:id="time" prefWidth="137.0" text="Time" />
+                        <TableColumn id="bytes" fx:id="bytes" prefWidth="550.0" text="Received bytes" />
                     </columns>
                     <padding>
                         <Insets top="10.0" />
