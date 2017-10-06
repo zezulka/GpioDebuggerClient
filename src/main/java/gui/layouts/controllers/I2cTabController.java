@@ -189,7 +189,14 @@ public final class I2cTabController
         usedRequestsComboBox.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldValue, newValue) -> {
-                    lengthField.setText(String.valueOf(newValue.getLength()));
+                    if (newValue.getOperation().equals(Operation.READ)) {
+                        lengthField.setText(String
+                                .valueOf(newValue.getLength()));
+                        byteArrayTextfield.setText("");
+                    } else {
+                        byteArrayTextfield.setText(newValue.getBytes());
+                        lengthField.setText("");
+                    }
                     operationList
                             .getSelectionModel()
                             .select(newValue.getOperation());

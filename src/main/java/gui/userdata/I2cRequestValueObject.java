@@ -36,13 +36,16 @@ public final class I2cRequestValueObject {
 
     @Override
     public String toString() {
+        String len = "";
         String byteArray = "";
         if (!operation.equals(Operation.READ)) {
             byteArray = ", bytes=" + bytes;
+        } else {
+            len = ", length=" + length;
         }
-        return "operation=" + operation
-                + ", slaveAddress=0x" + slaveAddress
-                + ", length=" + length
+        return "op=" + operation
+                + ", slave=0x" + slaveAddress
+                + len
                 + byteArray;
     }
 
@@ -79,6 +82,5 @@ public final class I2cRequestValueObject {
         }
         return this.operation.equals(other.operation);
     }
-
 
 }
