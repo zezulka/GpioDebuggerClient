@@ -98,7 +98,7 @@
                         <Font name="SystemBold" size="15.0"/>
                     </font>
                 </Label>
-                <Label GridPane.columnIndex="3" GridPane.rowIndex="2" text="HIGH" textFill="#55FF55">
+                <Label GridPane.columnIndex="3" GridPane.rowIndex="2" text="HIGH" textFill="#00AA00">
                     <font>
                         <Font name="SystemBold" size="15.0"/>
                     </font>

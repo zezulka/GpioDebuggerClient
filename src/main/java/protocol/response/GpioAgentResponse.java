@@ -28,7 +28,7 @@ public final class GpioAgentResponse implements AgentResponse {
         Button btn = (Button) t.getContent()
                 .lookup("#" + pin.getPinId());
         btn.setStyle("");
-        String color = signal.getBooleanValue() ? "55FF55" : "FF5555";
+        String color = signal.getBooleanValue() ? "00AA00" : "FF5555";
         btn.setStyle("-fx-background-color: #" + color);
 
         ControllerUtils.playButtonAnimation(btn);

@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -131,6 +132,10 @@ public final class SpiTabController
         });
         spiTableView.setFixedCellSize(FIXED_CELL_SIZE);
         spiTableView.setEditable(true);
+        spiTableView.setPlaceholder(new Label("No SPI data."));
+        byteArrayView.setPlaceholder(new Label(
+                "Enter byte array data in the text"
+                + " field above to see the visualization."));
     }
 
     private void initUsedRequestsComboBox() {

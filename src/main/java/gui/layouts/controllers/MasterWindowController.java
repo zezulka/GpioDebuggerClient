@@ -47,7 +47,6 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -58,8 +57,6 @@ public final class MasterWindowController implements Initializable {
     private SwitchButton deviceTreeSwitch;
     @FXML
     private TabPane devicesTab;
-    @FXML
-    private Pane treePane;
     @FXML
     private Button connectBtn;
     @FXML
@@ -104,10 +101,6 @@ public final class MasterWindowController implements Initializable {
         deviceInfo.setTitle("Device info");
         deviceInfo.setHeaderAlwaysVisible(true);
         deviceInfo.setAnimated(false);
-    }
-
-    public TabPane getTabPane() {
-        return devicesTab;
     }
 
     private void initializeToolbar() {

@@ -114,7 +114,8 @@ public final class I2cTabController
 
                     @Override
                     public List<String> fromString(String string) {
-                        if (string.equals(StringConstants.WRITE_OK)) {
+                        if (string.equals(StringConstants.WRITE_OK
+                                .toString())) {
                             return Arrays.asList("WRITE REQUEST");
                         }
                         List<String> result = new ArrayList<>();
@@ -162,6 +163,10 @@ public final class I2cTabController
         super.enforceNumericValuesOnly(lengthField);
         i2cTableView.setFixedCellSize(FIXED_CELL_SIZE);
         i2cTableView.setEditable(true);
+        i2cTableView.setPlaceholder(new Label("No IIC data."));
+        byteArrayView.setPlaceholder(new Label(
+                "Enter byte array data in the text"
+                + " field above to see the visualization."));
     }
 
     private void initUserRequestsComboBox() {

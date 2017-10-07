@@ -4,6 +4,7 @@ import gui.feature.Feature;
 import core.net.ConnectionValueObject;
 import java.net.InetAddress;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -191,6 +192,12 @@ public final class AgentResponseFactory {
                             InetAddress.class)
                     .newInstance(interrupt,
                             connection.getDevice().getAddress());
+        } catch (DateTimeParseException ex) {
+            // throw exception for the time being. sometimes the frequency
+            // of interrupts can be very high and the string received can
+            // consist of appended next message (interrupt)
+            throw new IllegalResponseException("Frequency of messages being"
+                    + "send is probably too high...");
         } catch (IllegalArgumentException ex) {
             throw new IllegalResponseException("Illegal interrupt response.");
         } catch (ReflectiveOperationException ex) {

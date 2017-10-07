@@ -33,7 +33,7 @@
                         <Insets right="10.0" />
                     </padding>
                 </Label>
-                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="23.0" prefWidth="208.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                <Label alignment="BOTTOM_CENTER" ellipsisString="add" prefHeight="23.0" prefWidth="200.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>

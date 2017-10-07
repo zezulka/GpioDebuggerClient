@@ -2,9 +2,13 @@
     Created on : 23-Jun-2017, 08:39:52
     Author     : Miloslav Zezulka, <zezulka95@gmail.com>
 */
-* {
+.tab, .table-view {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+}
+
+.tab-pane {
+  -fx-skin: "gui.CustomTabPaneSkin";
 }
 
 .tab-pane .tab:selected
