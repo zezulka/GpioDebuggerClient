@@ -77,12 +77,9 @@ public abstract class AbstractTabController implements Initializable {
                     .equals(StringConstants.WRITE_OK.toString())) {
                 return StringConstants.WRITE_OK.toString();
             }
-            final int hexaRadix = 16;
             StringBuilder b = new StringBuilder();
             for (String s : t) {
-                b.append(Integer.toHexString(Integer
-                        .parseInt(s, hexaRadix)))
-                        .append(' ');
+                b = b.append(s).append(' ');
             }
             return b.toString();
         }

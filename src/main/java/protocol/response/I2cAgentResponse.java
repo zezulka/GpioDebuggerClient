@@ -37,8 +37,10 @@ public final class I2cAgentResponse implements AgentResponse {
             if (responseBody.equals(StringConstants.WRITE_OK.toString())) {
                 viewItems = Arrays.asList(responseBody);
             } else {
-                viewItems = new ArrayList<>(Arrays
-                        .asList(responseBody.split(" ")));
+                viewItems = new ArrayList<>();
+                for (int i = 0; i < responseBody.length(); i += 2) {
+                    viewItems.add(responseBody.substring(i, i + 2));
+                }
             }
             ta.getItems()
                     .add(0, new ByteArrayResponse(LocalTime.now(), viewItems));

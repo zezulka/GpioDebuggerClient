@@ -120,8 +120,17 @@ public final class I2cTabController extends AbstractTabController {
                         .selectedItemProperty()
                         .isEqualTo(Operation.READ))
                         .then(isHexaByte(slaveAddressField).not())
-                        .otherwise(super.hexValuesOnly(byteArrayTextfield)
-                                .not())
+                        .otherwise(Bindings.when(
+                                operationList
+                                        .getSelectionModel()
+                                        .selectedItemProperty()
+                                        .isEqualTo(Operation.WRITE_READ))
+                                .then(hexValuesOnly(byteArrayTextfield)
+                                        .not()
+                                        .or(isHexaByte(slaveAddressField)
+                                                .not()))
+                                .otherwise(hexValuesOnly(byteArrayTextfield)
+                                        .not()))
         );
         requestButton.setOnAction((event) -> {
             sendI2cRequest(event);
@@ -179,22 +188,23 @@ public final class I2cTabController extends AbstractTabController {
                     };
                     return cell;
                 });
-        usedRequestsComboBox.getSelectionModel()
-                .selectedItemProperty()
+        usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldValue, newValue) -> {
                     if (newValue.getOperation().equals(Operation.READ)) {
                         lengthField.setText(String
                                 .valueOf(newValue.getLength()));
-                        byteArrayTextfield.setText("");
                     } else {
                         byteArrayTextfield.setText(newValue.getBytes());
-                        lengthField.setText("");
                     }
-                    operationList
-                            .getSelectionModel()
+                    operationList.getSelectionModel()
                             .select(newValue.getOperation());
                     slaveAddressField.setText(newValue.getSlaveAddress());
                 });
+    }
+
+    private void clearTextfields() {
+        byteArrayTextfield.clear();
+        lengthField.clear();
     }
 
     private BooleanBinding isHexaByte(TextField textfield) {
@@ -221,7 +231,12 @@ public final class I2cTabController extends AbstractTabController {
                 lengthField.setDisable(false);
                 break;
             }
-            case WRITE_READ:
+            case WRITE_READ: {
+                values.setTextFill(Color.BLACK);
+                length.setTextFill(Color.BLACK);
+                lengthField.setDisable(false);
+                break;
+            }
             case WRITE: {
                 values.setTextFill(Color.BLACK);
                 length.setTextFill(Color.LIGHTGREY);
