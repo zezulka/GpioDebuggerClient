@@ -3,7 +3,6 @@ package gui.layouts.controllers;
 import protocol.response.ByteArrayResponse;
 import gui.misc.Operation;
 import net.NetworkManager;
-import util.StringConstants;
 import java.net.InetAddress;
 
 import java.net.URL;
@@ -33,20 +32,17 @@ import org.slf4j.LoggerFactory;
 import gui.userdata.I2cRequestValueObject;
 import gui.userdata.xstream.XStreamUtils;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
 
-public final class I2cTabController
-        extends AbstractInterfaceFormController {
+public final class I2cTabController extends AbstractTabController {
 
     @FXML
-    private Button i2cRequestButton;
+    private Button requestButton;
     @FXML
     private TextField slaveAddressField;
     @FXML
@@ -66,9 +62,9 @@ public final class I2cTabController
     @FXML
     private TableView<ByteArrayResponse> i2cTableView;
     @FXML
-    private TableColumn<ByteArrayResponse, LocalTime> time;
+    private TableColumn<ByteArrayResponse, LocalTime> timeCol;
     @FXML
-    private TableColumn<ByteArrayResponse, List<String>> bytes;
+    private TableColumn<ByteArrayResponse, List<String>> bytesCol;
 
     private static final char SEPARATOR = ':';
     private static final int FIXED_CELL_SIZE = 38;
@@ -80,6 +76,7 @@ public final class I2cTabController
             = Pattern.compile(HEX_BYTE_REGEX);
 
     public I2cTabController(InetAddress address) {
+        Objects.requireNonNull(address, "address");
         this.address = address;
     }
 
@@ -91,56 +88,33 @@ public final class I2cTabController
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        super.addAllModes(operationList);
+        super.enforceHexValuesOnly(slaveAddressField);
+        super.enforceNumericValuesOnly(lengthField);
+        initOperationList();
         initUserRequestsComboBox();
-        time.setCellValueFactory(new PropertyValueFactory<>("time"));
-        bytes.setEditable(false);
-        bytes.setCellValueFactory(new PropertyValueFactory<>("bytes"));
-        bytes.setCellFactory(TextFieldTableCell
-                .forTableColumn(new StringConverter<List<String>>() {
-                    @Override
-                    public String toString(List<String> t) {
-                        if (t.size() == 1 && t.get(0)
-                                .equals(StringConstants.WRITE_OK.toString())) {
-                            return StringConstants.WRITE_OK.toString();
-                        }
-                        final int hexaRadix = 16;
-                        StringBuilder b = new StringBuilder();
-                        for (String s : t) {
-                            b.append(Integer.toHexString(Integer
-                                    .parseInt(s, hexaRadix)))
-                                    .append(' ');
-                        }
-                        return b.toString();
-                    }
+        initTableView();
+        initByteArrayTextfield();
+        initRequestButton();
+        setComponentsDisableProperty(getSelectedOperation());
+        byteArrayView.setPlaceholder(new Label(
+                "Enter byte array data in the text"
+                + " field above to see the visualization."));
+    }
 
-                    @Override
-                    public List<String> fromString(String string) {
-                        if (string.equals(StringConstants.WRITE_OK
-                                .toString())) {
-                            return Arrays.asList("WRITE REQUEST");
-                        }
-                        List<String> result = new ArrayList<>();
-                        for (String s : string.split(" ")) {
-                            result.add(s);
-                        }
-                        return result;
-                    }
-                }));
-        byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
-            if (t1.length() % 2 == 0 || t1.length() < t.length()) {
-                byteArrayView.getItems().clear();
-                byteArrayView.getItems().addAll(getBytesFromUser(t1));
-            }
-        });
-        byteArrayTextfield.disableProperty()
-                .bind(operationList
-                        .getSelectionModel()
-                        .selectedItemProperty()
-                        .isEqualTo(Operation.READ));
-
+    private void initOperationList() {
+        super.addAllModes(operationList);
         operationList.getSelectionModel().selectFirst();
-        i2cRequestButton.disableProperty().bind(
+        operationList.valueProperty()
+                .addListener((ObservableValue<? extends Operation> obs,
+                        Operation old, Operation newValue) -> {
+                    if (newValue != null) {
+                        setComponentsDisableProperty(newValue);
+                    }
+                });
+    }
+
+    private void initRequestButton() {
+        requestButton.disableProperty().bind(
                 Bindings.when(operationList
                         .getSelectionModel()
                         .selectedItemProperty()
@@ -149,26 +123,38 @@ public final class I2cTabController
                         .otherwise(super.hexValuesOnly(byteArrayTextfield)
                                 .not())
         );
-        i2cRequestButton.setOnAction((event) -> {
+        requestButton.setOnAction((event) -> {
             sendI2cRequest(event);
         });
-        setComponentsDisableProperty(getSelectedOperation());
-        operationList
-                .valueProperty()
-                .addListener((ObservableValue<? extends Operation> obs,
-                        Operation old, Operation newValue) -> {
-                    if (newValue != null) {
-                        setComponentsDisableProperty(newValue);
-                    }
-                });
-        super.enforceHexValuesOnly(slaveAddressField);
-        super.enforceNumericValuesOnly(lengthField);
+    }
+
+    private void initTableView() {
+        initTableViewColumns();
         i2cTableView.setFixedCellSize(FIXED_CELL_SIZE);
         i2cTableView.setEditable(true);
         i2cTableView.setPlaceholder(new Label("No IIC data."));
-        byteArrayView.setPlaceholder(new Label(
-                "Enter byte array data in the text"
-                + " field above to see the visualization."));
+    }
+
+    private void initByteArrayTextfield() {
+        byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
+            if (t1.length() % 2 == 0 || t1.length() < t.length()) {
+                byteArrayView.getItems().clear();
+                byteArrayView.getItems().addAll(getBytesFromUser(t1));
+            }
+        });
+        byteArrayTextfield.disableProperty().bind(operationList
+                .getSelectionModel()
+                .selectedItemProperty()
+                .isEqualTo(Operation.READ));
+
+    }
+
+    private void initTableViewColumns() {
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        bytesCol.setEditable(false);
+        bytesCol.setCellValueFactory(new PropertyValueFactory<>("bytes"));
+        bytesCol.setCellFactory(TextFieldTableCell.forTableColumn(
+                new AbstractTabController.BytesViewStringConverter()));
     }
 
     private void initUserRequestsComboBox() {

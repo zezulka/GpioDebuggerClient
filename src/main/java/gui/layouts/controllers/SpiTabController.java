@@ -3,7 +3,6 @@ package gui.layouts.controllers;
 import protocol.response.ByteArrayResponse;
 import gui.misc.Operation;
 import net.NetworkManager;
-import util.StringConstants;
 import java.net.InetAddress;
 
 import java.net.URL;
@@ -16,13 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import gui.userdata.SpiRequestValueObject;
 import gui.userdata.xstream.XStreamUtils;
 import java.time.LocalTime;
-import java.util.Arrays;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -34,13 +29,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
 
 public final class SpiTabController
-        extends AbstractInterfaceFormController {
+        extends AbstractTabController {
 
     @FXML
-    private Button spiRequestButton;
+    private Button requestButton;
     @FXML
     private ComboBox<Operation> operationList;
     @FXML
@@ -54,9 +48,9 @@ public final class SpiTabController
     @FXML
     private TableView<ByteArrayResponse> spiTableView;
     @FXML
-    private TableColumn<ByteArrayResponse, LocalTime> time;
+    private TableColumn<ByteArrayResponse, LocalTime> timeCol;
     @FXML
-    private TableColumn<ByteArrayResponse, List<String>> bytes;
+    private TableColumn<ByteArrayResponse, List<String>> bytesCol;
 
     private final InetAddress address;
     private static final int FIXED_CELL_SIZE = 38;
@@ -68,9 +62,6 @@ public final class SpiTabController
      */
     private static final int MAX_CS_INDEX = 2;
 
-    private static final Logger LOGGER
-            = LoggerFactory.getLogger(SpiTabController.class);
-
     public SpiTabController(InetAddress address) {
         this.address = address;
     }
@@ -80,64 +71,61 @@ public final class SpiTabController
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        super.enforceHexValuesOnly(byteArrayTextfield);
         initUsedRequestsComboBox();
-        time.setCellValueFactory(new PropertyValueFactory<>("time"));
-        bytes.setEditable(false);
-        bytes.setCellValueFactory(new PropertyValueFactory<>("bytes"));
-        bytes.setCellFactory(TextFieldTableCell
-                .forTableColumn(new StringConverter<List<String>>() {
-                    @Override
-                    public String toString(List<String> t) {
-                        if (t.size() == 1 && t.get(0)
-                                .equals(StringConstants.WRITE_OK.toString())) {
-                            return StringConstants.WRITE_OK.toString();
-                        }
-                        final int hexaRadix = 16;
-                        StringBuilder b = new StringBuilder();
-                        for (String s : t) {
-                            b.append(Integer.toHexString(Integer
-                                    .parseInt(s, hexaRadix)))
-                                    .append(' ');
-                        }
-                        return b.toString();
-                    }
-
-                    @Override
-                    public List<String> fromString(String string) {
-                        if (string.equals(StringConstants.WRITE_OK)) {
-                            return Arrays.asList("WRITE REQUEST");
-                        }
-                        List<String> result = new ArrayList<>();
-                        for (String s : string.split(" ")) {
-                            result.add(s);
-                        }
-                        return result;
-                    }
-                }));
-
+        initTableView();
+        initRequestButton();
+        initOperationList();
+        initChipSelectList();
+        byteArrayView.setPlaceholder(new Label(
+                "Enter byte array data in the text"
+                + " field above to see the visualization."));
         byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
             if (t1.length() % 2 == 0 || t1.length() < t.length()) {
                 byteArrayView.getItems().clear();
                 byteArrayView.getItems().addAll(getBytesFromUser(t1));
             }
         });
-        spiRequestButton.disableProperty().bind(
-                super.hexValuesOnly(byteArrayTextfield).not()
-        );
-        super.enforceHexValuesOnly(byteArrayTextfield);
-        super.addAllModes(operationList);
+    }
+
+    private void initChipSelectList() {
         addAllChipSelectIndexes();
         chipSelectList.getSelectionModel().selectFirst();
+    }
+
+    private void addAllChipSelectIndexes() {
+        List<Integer> ints = new ArrayList<>();
+        for (int i = 0; i < MAX_CS_INDEX; i++) {
+            ints.add(i);
+        }
+        this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
+    }
+
+    private void initOperationList() {
+        super.addAllModes(operationList);
         operationList.getSelectionModel().selectFirst();
-        spiRequestButton.setOnAction((event) -> {
-            sendSpiRequest(event);
-        });
+    }
+
+    private void initRequestButton() {
+        requestButton.disableProperty().bind(
+                super.hexValuesOnly(byteArrayTextfield).not());
+        requestButton.setOnAction((event) -> sendSpiRequest(event));
+    }
+
+    private void initTableView() {
+        initTableViewColumns();
         spiTableView.setFixedCellSize(FIXED_CELL_SIZE);
         spiTableView.setEditable(true);
         spiTableView.setPlaceholder(new Label("No SPI data."));
-        byteArrayView.setPlaceholder(new Label(
-                "Enter byte array data in the text"
-                + " field above to see the visualization."));
+    }
+
+    private void initTableViewColumns() {
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        bytesCol.setEditable(false);
+        bytesCol.setCellValueFactory(new PropertyValueFactory<>("bytes"));
+        bytesCol.setCellFactory(TextFieldTableCell.forTableColumn(
+                new AbstractTabController.BytesViewStringConverter()));
+
     }
 
     private void initUsedRequestsComboBox() {
@@ -162,9 +150,7 @@ public final class SpiTabController
                     };
                     return cell;
                 });
-        usedRequestsComboBox
-                .getSelectionModel()
-                .selectedItemProperty()
+        usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     chipSelectList
                             .getSelectionModel()
@@ -174,14 +160,6 @@ public final class SpiTabController
                             .select(newValue.getOperation());
                     byteArrayTextfield.setText(newValue.getBytes());
                 });
-    }
-
-    private void addAllChipSelectIndexes() {
-        List<Integer> ints = new ArrayList<>();
-        for (int i = 0; i < MAX_CS_INDEX; i++) {
-            ints.add(i);
-        }
-        this.chipSelectList.setItems(FXCollections.observableArrayList(ints));
     }
 
     private void sendSpiRequest(ActionEvent event) {

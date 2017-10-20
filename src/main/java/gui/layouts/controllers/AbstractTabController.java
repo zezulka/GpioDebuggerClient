@@ -2,6 +2,7 @@ package gui.layouts.controllers;
 
 import gui.misc.Operation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
@@ -10,8 +11,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
+import util.StringConstants;
 
-public abstract class AbstractInterfaceFormController implements Initializable {
+public abstract class AbstractTabController implements Initializable {
 
     protected static final String HEXA_PREFIX = "0x";
     protected static final String HEX_BYTE_REGEX = "^([0-9A-Fa-f])+$";
@@ -65,4 +68,32 @@ public abstract class AbstractInterfaceFormController implements Initializable {
     }
 
     protected abstract StringBuilder getMessagePrefix();
+
+    protected static final class BytesViewStringConverter
+            extends StringConverter<List<String>> {
+        @Override
+        public String toString(List<String> t) {
+            if (t.size() == 1 && t.get(0)
+                    .equals(StringConstants.WRITE_OK.toString())) {
+                return StringConstants.WRITE_OK.toString();
+            }
+            final int hexaRadix = 16;
+            StringBuilder b = new StringBuilder();
+            for (String s : t) {
+                b.append(Integer.toHexString(Integer
+                        .parseInt(s, hexaRadix)))
+                        .append(' ');
+            }
+            return b.toString();
+        }
+
+        @Override
+        public List<String> fromString(String string) {
+            if (string.equals(StringConstants.WRITE_OK
+                    .toString())) {
+                return Arrays.asList("WRITE REQUEST");
+            }
+            return new ArrayList<>(Arrays.asList(string.split(" ")));
+        }
+    }
 }
