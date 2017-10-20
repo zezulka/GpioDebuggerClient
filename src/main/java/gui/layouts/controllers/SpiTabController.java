@@ -1,7 +1,9 @@
 package gui.layouts.controllers;
 
-import core.net.NetworkManager;
-import core.util.StringConstants;
+import protocol.response.ByteArrayResponse;
+import gui.misc.Operation;
+import net.NetworkManager;
+import util.StringConstants;
 import java.net.InetAddress;
 
 import java.net.URL;
@@ -18,7 +20,7 @@ import javafx.fxml.FXML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.SpiRequestValueObject;
-import gui.userdata.UserDataUtils;
+import gui.userdata.xstream.XStreamUtils;
 import java.time.LocalTime;
 import java.util.Arrays;
 
@@ -139,7 +141,7 @@ public final class SpiTabController
     }
 
     private void initUsedRequestsComboBox() {
-        usedRequestsComboBox.setItems(UserDataUtils.getSpiRequests());
+        usedRequestsComboBox.setItems(XStreamUtils.getSpiRequests());
         usedRequestsComboBox
                 .setCellFactory((ListView<SpiRequestValueObject> param) -> {
                     final ListCell<SpiRequestValueObject> cell
@@ -190,7 +192,7 @@ public final class SpiTabController
                         msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
         usedRequestsComboBox.getItems().add(request);
-        UserDataUtils.addNewSpiRequest(request);
+        XStreamUtils.addNewSpiRequest(request);
     }
 
     private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {

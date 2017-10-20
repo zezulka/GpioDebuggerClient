@@ -1,7 +1,9 @@
 package gui.layouts.controllers;
 
-import core.net.NetworkManager;
-import core.util.StringConstants;
+import protocol.response.ByteArrayResponse;
+import gui.misc.Operation;
+import net.NetworkManager;
+import util.StringConstants;
 import java.net.InetAddress;
 
 import java.net.URL;
@@ -29,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gui.userdata.I2cRequestValueObject;
-import gui.userdata.UserDataUtils;
+import gui.userdata.xstream.XStreamUtils;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -170,7 +172,7 @@ public final class I2cTabController
     }
 
     private void initUserRequestsComboBox() {
-        usedRequestsComboBox.setItems(UserDataUtils.getI2cRequests());
+        usedRequestsComboBox.setItems(XStreamUtils.getI2cRequests());
         usedRequestsComboBox
                 .setCellFactory((ListView<I2cRequestValueObject> param) -> {
                     final ListCell<I2cRequestValueObject> cell
@@ -251,7 +253,7 @@ public final class I2cTabController
             NetworkManager.setMessageToSend(address, msg);
             I2cRequestValueObject request = getNewI2cRequestEntryFromForm();
             usedRequestsComboBox.getItems().add(request);
-            UserDataUtils.addNewI2cRequest(request);
+            XStreamUtils.addNewI2cRequest(request);
         }
     }
 

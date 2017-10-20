@@ -1,6 +1,6 @@
 package gui.layouts.controllers;
 
-import core.net.NetworkManager;
+import net.NetworkManager;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;

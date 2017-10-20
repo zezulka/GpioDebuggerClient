@@ -1,9 +1,10 @@
 package gui.layouts.controllers;
 
-import gui.TabManagerImpl;
+import gui.misc.Graphics;
+import gui.tab.loader.TabManagerImpl;
 import gui.SwitchButton;
-import gui.TabManager;
-import core.net.NetworkManager;
+import gui.tab.loader.TabManager;
+import net.NetworkManager;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
@@ -30,14 +31,14 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 
-import core.util.StringConstants;
+import util.StringConstants;
 import javafx.scene.control.ToolBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
 import gui.userdata.DeviceValueObject;
-import gui.userdata.UserDataUtils;
+import gui.userdata.xstream.XStreamUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -194,7 +195,7 @@ public final class MasterWindowController implements Initializable {
                         .get(HISTORY_BRANCH)
                         .getChildren()
                         .add(getTreeItemWithListener(newDevice));
-                UserDataUtils.addNewDeviceToFile(newDevice);
+                XStreamUtils.addNewDeviceToFile(newDevice);
             }
         });
     }
@@ -255,7 +256,7 @@ public final class MasterWindowController implements Initializable {
             t.getTreeItem().setExpanded(true);
         });
 
-        UserDataUtils.getDevices().forEach((device)
+        XStreamUtils.getDevices().forEach((device)
                 -> hist.getChildren().add(getTreeItemWithListener(device)));
         root.getChildren().addAll(active, hist);
         devicesTree.setCellFactory(e -> new DeviceTreeCell());

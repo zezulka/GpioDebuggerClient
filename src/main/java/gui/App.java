@@ -1,6 +1,6 @@
 package gui;
 
-import core.net.NetworkManager;
+import net.NetworkManager;
 
 import java.io.IOException;
 
@@ -12,13 +12,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import gui.layouts.controllers.ControllerUtils;
 
-import core.util.StringConstants;
+import util.StringConstants;
 import javafx.scene.control.TabPane;
 import gui.layouts.controllers.MasterWindowController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import gui.userdata.UserDataUtils;
+import gui.userdata.xstream.XStreamUtils;
 
 public final class App extends Application {
 
@@ -53,7 +53,7 @@ public final class App extends Application {
                     return;
                 }
             }
-            UserDataUtils.saveAllRequests();
+            XStreamUtils.saveAllRequests();
             stage.close();
             Platform.exit();
         });
@@ -67,7 +67,7 @@ public final class App extends Application {
     @Override
     public void stop() throws Exception {
         super.stop();
-        UserDataUtils.saveAllDevices();
+        XStreamUtils.saveAllDevices();
     }
 
     private Scene loadScene() {

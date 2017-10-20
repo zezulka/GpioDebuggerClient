@@ -1,7 +1,8 @@
 package gui.layouts.controllers;
 
-import core.net.NetworkManager;
-import core.util.StringConstants;
+import gui.misc.Graphics;
+import net.NetworkManager;
+import util.StringConstants;
 import java.net.InetAddress;
 import java.net.URL;
 import java.time.LocalTime;
@@ -34,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import protocol.ClientPin;
 import protocol.InterruptManager;
 import protocol.InterruptType;
-import protocol.InterruptValueObject;
+import gui.userdata.InterruptValueObject;
 import protocol.ListenerState;
 import protocol.RaspiClientPin;
 

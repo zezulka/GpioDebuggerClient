@@ -1,7 +1,11 @@
 package core.util;
 
+import gui.userdata.InterruptValueObject;
+import protocol.response.IllegalResponseException;
+import protocol.MessageParser;
+import protocol.response.util.AgentResponseFactory;
 import gui.feature.Feature;
-import core.net.ConnectionValueObject;
+import net.ConnectionValueObject;
 import protocol.response.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;

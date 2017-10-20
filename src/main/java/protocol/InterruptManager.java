@@ -1,5 +1,6 @@
 package protocol;
 
+import gui.userdata.InterruptValueObject;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import gui.layouts.controllers.ControllerUtils;
+import java.util.Objects;
 
 public final class InterruptManager {
 
@@ -25,10 +27,7 @@ public final class InterruptManager {
 
     public static ObservableList<InterruptValueObject>
             getListeners(InetAddress address) {
-
-        if (address == null) {
-            throw new IllegalArgumentException("address cannot be null");
-        }
+        Objects.requireNonNull(address, "address cannot be null");
         ObservableList<InterruptValueObject> list = INTERRUPTS.get(address);
         if (list == null) {
             list = FXCollections.observableArrayList();

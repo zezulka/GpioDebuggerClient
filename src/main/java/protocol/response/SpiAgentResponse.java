@@ -1,10 +1,9 @@
 package protocol.response;
 
-import core.util.StringConstants;
+import util.StringConstants;
 import java.net.InetAddress;
 import javafx.scene.control.Tab;
 import gui.layouts.controllers.MasterWindowController;
-import gui.layouts.controllers.ByteArrayResponse;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;

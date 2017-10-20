@@ -32,7 +32,7 @@
     <children>
       <SplitPane id="rootSplitPane" fx:id="rootSplitPane" cache="true" dividerPositions="0.75" focusTraversable="false" layoutY="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="42.0">
          <items>
-              <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" style="-fx-background-color: white;" tabMaxHeight="20.0" />
+              <TabPane id="devicesTab" fx:id="devicesTab" layoutX="221.0" layoutY="41.0" minHeight="0.0" minWidth="0.0" style="-fx-background-color: white;" tabMaxHeight="20.0" />
             <BorderPane id="treePane" fx:id="treePane" maxWidth="1.7976931348623157E308" minWidth="0.0">
                <center>
                   <TreeView id="devicesTree" fx:id="devicesTree" fixedCellSize="0.0" focusTraversable="false" maxWidth="1.7976931348623157E308" minWidth="0.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER_LEFT">

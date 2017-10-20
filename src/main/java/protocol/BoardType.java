@@ -23,9 +23,10 @@ public enum BoardType {
     }
 
     /**
-     * Parses string representing name of the Board.
-     * Naming is in accordance to bulldog library. This method is usually used
-     * for parsing the first received message from agent.
+     * Parses string representing name of the Board. Naming is in accordance to
+     * bulldog library. This method is usually used for parsing the first
+     * received message from agent.
+     *
      * @param name
      * @return
      */

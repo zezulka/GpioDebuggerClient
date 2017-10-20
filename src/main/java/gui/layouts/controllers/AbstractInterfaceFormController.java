@@ -1,5 +1,6 @@
 package gui.layouts.controllers;
 
+import gui.misc.Operation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

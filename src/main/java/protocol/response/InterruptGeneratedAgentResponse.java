@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
-import protocol.InterruptValueObject;
+import gui.userdata.InterruptValueObject;
 import protocol.ListenerState;
 
 public final class InterruptGeneratedAgentResponse

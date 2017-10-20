@@ -1,8 +1,8 @@
 package gui.layouts.controllers;
 
-import gui.TabLoaderImpl;
-import gui.TabLoader;
-import core.util.StringConstants;
+import gui.tab.loader.TabLoaderImpl;
+import gui.tab.loader.TabLoader;
+import util.StringConstants;
 import java.io.File;
 import java.net.URL;
 import java.util.Optional;

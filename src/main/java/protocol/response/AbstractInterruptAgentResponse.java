@@ -1,7 +1,7 @@
 package protocol.response;
 
 import java.net.InetAddress;
-import protocol.InterruptValueObject;
+import gui.userdata.InterruptValueObject;
 
 public abstract class AbstractInterruptAgentResponse implements AgentResponse {
 

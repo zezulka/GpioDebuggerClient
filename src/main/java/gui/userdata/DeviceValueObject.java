@@ -1,5 +1,6 @@
 package gui.userdata;
 
+import gui.userdata.xstream.XStreamUtils;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import javafx.beans.property.BooleanProperty;
@@ -66,7 +67,7 @@ public final class DeviceValueObject {
         if (timeConnected == null) {
             return "never";
         }
-        return timeConnected.format(UserDataUtils.DATE_TIME_FORMATTER);
+        return timeConnected.format(XStreamUtils.DATE_TIME_FORMATTER);
     }
 
     public void setTimeConnected(LocalDateTime ldt) {

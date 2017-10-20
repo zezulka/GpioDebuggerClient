@@ -48,7 +48,6 @@ public final class SwitchButton extends Label {
                 }
             }
         });
-
         switchedOn.set(false);
     }
 

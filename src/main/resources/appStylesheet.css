@@ -7,9 +7,9 @@
     -fx-faint-focus-color: transparent;
 }
 
-.tab-pane {
-  -fx-skin: "gui.CustomTabPaneSkin";
-}
+/*.tab-pane {
+  -fx-skin: "gui.layouts.controllers.MasterWindowController.CustomTabPaneSkin";
+}*/
 
 .tab-pane .tab:selected
 {

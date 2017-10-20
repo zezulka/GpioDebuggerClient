@@ -1,6 +1,6 @@
 package gui.userdata;
 
-import gui.layouts.controllers.Operation;
+import gui.misc.Operation;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Test;
 import org.junit.Before;

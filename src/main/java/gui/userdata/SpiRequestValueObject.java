@@ -1,6 +1,6 @@
 package gui.userdata;
 
-import gui.layouts.controllers.Operation;
+import gui.misc.Operation;
 import java.util.Objects;
 
 public final class SpiRequestValueObject {

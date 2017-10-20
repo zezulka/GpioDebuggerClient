@@ -1,6 +1,6 @@
 package protocol.response;
 
-import gui.TabAddressPair;
+import gui.tab.loader.TabAddressPair;
 import gui.feature.Feature;
 import java.time.LocalDateTime;
 import javafx.scene.control.Tab;
