@@ -62,8 +62,8 @@
                 </ListView>
                 <TableView id="spiTableView" fx:id="spiTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="5">
                     <columns>
-                        <TableColumn id="time" fx:id="time" prefWidth="137.0" text="Time" />
-                        <TableColumn id="bytes" fx:id="bytes" prefWidth="550.0" text="Received bytes" />
+                        <TableColumn id="timeCol" fx:id="timeCol" prefWidth="137.0" text="Time" />
+                        <TableColumn id="bytesCol" fx:id="bytesCol" prefWidth="550.0" text="Received bytes" />
                     </columns>
                     <padding>
                         <Insets top="10.0" />

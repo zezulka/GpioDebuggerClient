@@ -67,8 +67,8 @@
                 <ListView id="byteArrayView" fx:id="byteArrayView" orientation="HORIZONTAL" prefHeight="10.0" prefWidth="442.0" GridPane.columnSpan="3" GridPane.rowIndex="4" />
                 <TableView id="i2cTableView" fx:id="i2cTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="6">
                     <columns>
-                        <TableColumn id="time" fx:id="time" prefWidth="139.0" text="Time" />
-                        <TableColumn id="bytes" fx:id="bytes" prefWidth="551.0" text="Received bytes" />
+                        <TableColumn id="timeCol" fx:id="timeCol" prefWidth="139.0" text="Time" />
+                        <TableColumn id="bytesCol" fx:id="bytesCol" prefWidth="551.0" text="Received bytes" />
                     </columns>
                     <padding>
                         <Insets top="10.0" />
