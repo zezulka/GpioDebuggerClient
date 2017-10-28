@@ -40,7 +40,8 @@ public final class I2cRequestValueObject {
         String byteArray = "";
         if (!operation.equals(Operation.READ)) {
             byteArray = ", bytes=" + bytes;
-        } else {
+        } 
+        if(!operation.equals(Operation.WRITE)) {
             len = ", length=" + length;
         }
         return "op=" + operation

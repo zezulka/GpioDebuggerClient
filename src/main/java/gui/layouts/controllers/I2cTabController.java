@@ -190,10 +190,11 @@ public final class I2cTabController extends AbstractTabController {
                 });
         usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldValue, newValue) -> {
-                    if (newValue.getOperation().equals(Operation.READ)) {
+                    if (!newValue.getOperation().equals(Operation.WRITE)) {
                         lengthField.setText(String
                                 .valueOf(newValue.getLength()));
-                    } else {
+                    } 
+                    if(!newValue.getOperation().equals(Operation.READ)) {
                         byteArrayTextfield.setText(newValue.getBytes());
                     }
                     operationList.getSelectionModel()
@@ -268,15 +269,19 @@ public final class I2cTabController extends AbstractTabController {
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
         Operation op = getSelectedOperation();
-        if (op.equals(Operation.READ)) {
-            msgBuilder = msgBuilder.append(lengthField.getText().trim());
-            LOGGER.info(String.format("I2c request form has now "
-                    + "submitted the following request:\n %s",
-                    msgBuilder.toString()));
-            return msgBuilder.toString();
+        if (!op.equals(Operation.WRITE)) {
+            msgBuilder = msgBuilder
+                    .append(SEPARATOR)
+                    .append(lengthField.getText().trim());
         }
-        msgBuilder = msgBuilder.append(getByteArrayStr(op));
-        return msgBuilder.toString();
+        if (!op.equals(Operation.READ)) {
+            msgBuilder = msgBuilder
+                    .append(SEPARATOR)
+                    .append(getByteArrayStr(op));
+        }
+        String msg = msgBuilder.toString();
+        LOGGER.info(String.format("I2C request sent:\n %s", msg));
+        return msg;
     }
 
     /**
@@ -306,8 +311,7 @@ public final class I2cTabController extends AbstractTabController {
                 .append(selectedOp.name())
                 .append(SEPARATOR)
                 .append(HEXA_PREFIX)
-                .append(slaveAddressField.getText().trim())
-                .append(SEPARATOR);
+                .append(slaveAddressField.getText().trim());
     }
 
     private Operation getSelectedOperation() {
