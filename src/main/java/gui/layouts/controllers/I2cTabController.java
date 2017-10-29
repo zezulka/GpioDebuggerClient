@@ -193,8 +193,8 @@ public final class I2cTabController extends AbstractTabController {
                     if (!newValue.getOperation().equals(Operation.WRITE)) {
                         lengthField.setText(String
                                 .valueOf(newValue.getLength()));
-                    } 
-                    if(!newValue.getOperation().equals(Operation.READ)) {
+                    }
+                    if (!newValue.getOperation().equals(Operation.READ)) {
                         byteArrayTextfield.setText(newValue.getBytes());
                     }
                     operationList.getSelectionModel()
