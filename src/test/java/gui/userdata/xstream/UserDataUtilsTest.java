@@ -1,7 +1,5 @@
 package gui.userdata.xstream;
 
-import gui.userdata.xstream.XStreamUtils;
-import gui.userdata.xstream.XStreamListWrapper;
 import com.thoughtworks.xstream.XStreamException;
 import gui.userdata.DeviceValueObject;
 import gui.userdata.MockedDevices;
