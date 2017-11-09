@@ -12,8 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;
+import org.junit.Ignore;
 import protocol.BoardType;
 
+@Ignore
 public class UserDataUtilsTest {
 
     public UserDataUtilsTest() {

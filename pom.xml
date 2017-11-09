@@ -43,7 +43,7 @@
         <mvn.checkstyle.version>2.17</mvn.checkstyle.version>
         <xstream.version>1.4.10</xstream.version>
         <commons.io.version>2.6</commons.io.version>
-        <controlsfx.version>9.0.0</controlsfx.version>
+        <controlsfx.version>8.40.14</controlsfx.version>
         <loggingapis.version>2.9.1</loggingapis.version>
         <assertj.version>3.8.0</assertj.version>
         <mockito.version>2.11.0</mockito.version>
