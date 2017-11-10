@@ -23,6 +23,7 @@ public final class ConnectionThread implements Runnable {
             = LoggerFactory.getLogger(ConnectionThread.class);
 
     private final ConnectionValueObject connection;
+    private static final long SELECTOR_WAKEUP_TIMEOUT = 5000L;
     private static final NetworkManager MANAGER = NetworkManager.getInstance();
 
     public ConnectionThread(ConnectionValueObject connection) {
@@ -49,7 +50,7 @@ public final class ConnectionThread implements Runnable {
     private void iterateThroughRegisteredKeys() {
         try {
             while (true) {
-                connection.getSelector().select();
+                connection.getSelector().select(SELECTOR_WAKEUP_TIMEOUT);
                 if (!connection.getSelector().isOpen()) {
                     break;
                 }

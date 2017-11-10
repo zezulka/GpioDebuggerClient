@@ -1,0 +1,13 @@
+<gui.userdata.TestXStreamListWrapper>
+  <list class="com.sun.javafx.collections.ObservableListWrapper">
+    <changeBuilder>
+      <list class="com.sun.javafx.collections.ObservableListWrapper" reference="../.."/>
+      <changeLock>0</changeLock>
+      <addRemoveChanges/>
+    </changeBuilder>
+    <backingList>
+      <string>hello</string>
+      <string>world</string>
+    </backingList>
+  </list>
+</gui.userdata.TestXStreamListWrapper>
