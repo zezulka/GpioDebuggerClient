@@ -1,8 +1,7 @@
 package gui.layouts.controllers;
 
-import gui.tab.loader.TabLoaderImpl;
 import gui.tab.loader.TabLoader;
-import util.StringConstants;
+import gui.tab.loader.TabLoaderImpl;
 import java.io.File;
 import java.net.URL;
 import java.util.Optional;
@@ -15,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
+import util.StringConstants;
 
 public final class ControllerUtils {
 

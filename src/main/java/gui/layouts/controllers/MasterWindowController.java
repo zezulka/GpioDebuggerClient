@@ -159,8 +159,7 @@ public final class MasterWindowController implements Initializable {
     private BooleanBinding rootOrChildrenSelected(boolean desiredValue) {
         return Bindings.createBooleanBinding(() -> {
             TreeItem<DeviceValueObject> selectedItem = getSelectedItem();
-            return !(selectedItem != null
-                    && selectedItem.isLeaf()
+            return !(selectedItem != null && selectedItem.isLeaf()
                     && selectedItem.getParent().getParent() != null
                     && (selectedItem.getValue().disconnectedProperty()
                             .getValue() == desiredValue));
@@ -175,19 +174,14 @@ public final class MasterWindowController implements Initializable {
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
                 List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
-                        devicesTree.getRoot().getChildren()
-                                .get(HISTORY_BRANCH)
+                        devicesTree.getRoot().getChildren().get(HISTORY_BRANCH)
                                 .getChildren()
                 );
-                children.addAll(new ArrayList<>(devicesTree
-                        .getRoot()
-                        .getChildren()
-                        .get(ACTIVE_BRANCH_INDEX)
-                        .getChildren())
+                children.addAll(new ArrayList<>(devicesTree.getRoot()
+                        .getChildren().get(ACTIVE_BRANCH_INDEX).getChildren())
                 );
                 if (!deviceAlreadyExists(children, newDevice)) {
-                    devicesTree.getRoot().getChildren()
-                            .get(HISTORY_BRANCH)
+                    devicesTree.getRoot().getChildren().get(HISTORY_BRANCH)
                             .getChildren()
                             .add(getTreeItemWithListener(newDevice));
                     XStreamUtils.addNewDeviceToFile(newDevice);
@@ -432,7 +426,7 @@ public final class MasterWindowController implements Initializable {
         private void updateNonEmpty(DeviceValueObject item) {
             if (item != null) {
                 HBox cellBox = new HBox(HBOX_SPACING);
-                Button button = new Button(null, new ImageView(Graphics.INFO));
+                Button button = new Button(null, Graphics.info());
                 button.setStyle("-fx-background-radius: 100");
                 button.setOnMouseClicked((event) -> {
                     if (deviceInfo.isShowing()) {

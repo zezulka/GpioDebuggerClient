@@ -1,43 +1,37 @@
 package gui.layouts.controllers;
 
-import protocol.response.ByteArrayResponse;
 import gui.misc.Operation;
-import net.NetworkManager;
+import gui.userdata.I2cRequestValueObject;
+import gui.userdata.xstream.XStreamUtils;
+
 import java.net.InetAddress;
-
 import java.net.URL;
-
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
+import net.NetworkManager;
+import protocol.response.ByteArrayResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import gui.userdata.I2cRequestValueObject;
-import gui.userdata.xstream.XStreamUtils;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 
 public final class I2cTabController extends AbstractTabController {
 
@@ -121,8 +115,7 @@ public final class I2cTabController extends AbstractTabController {
                         .isEqualTo(Operation.READ))
                         .then(isHexaByte(slaveAddressField).not())
                         .otherwise(Bindings.when(
-                                operationList
-                                        .getSelectionModel()
+                                operationList.getSelectionModel()
                                         .selectedItemProperty()
                                         .isEqualTo(Operation.WRITE_READ))
                                 .then(hexValuesOnly(byteArrayTextfield)
@@ -132,9 +125,7 @@ public final class I2cTabController extends AbstractTabController {
                                 .otherwise(hexValuesOnly(byteArrayTextfield)
                                         .not()))
         );
-        requestButton.setOnAction((event) -> {
-            sendI2cRequest(event);
-        });
+        requestButton.setOnAction((event) -> sendI2cRequest());
     }
 
     private void initTableView() {
@@ -152,10 +143,8 @@ public final class I2cTabController extends AbstractTabController {
             }
         });
         byteArrayTextfield.disableProperty().bind(operationList
-                .getSelectionModel()
-                .selectedItemProperty()
+                .getSelectionModel().selectedItemProperty()
                 .isEqualTo(Operation.READ));
-
     }
 
     private void initTableViewColumns() {
@@ -203,11 +192,6 @@ public final class I2cTabController extends AbstractTabController {
                 });
     }
 
-    private void clearTextfields() {
-        byteArrayTextfield.clear();
-        lengthField.clear();
-    }
-
     private BooleanBinding isHexaByte(TextField textfield) {
         BooleanBinding binding = Bindings.createBooleanBinding(()
                 -> HEX_BYTE_REGEX_PATTERN
@@ -249,7 +233,7 @@ public final class I2cTabController extends AbstractTabController {
         }
     }
 
-    private void sendI2cRequest(ActionEvent evt) {
+    private void sendI2cRequest() {
         String msg = gatherMessageFromForm();
         if (msg != null) {
             NetworkManager.setMessageToSend(address, msg);
@@ -262,21 +246,18 @@ public final class I2cTabController extends AbstractTabController {
     private I2cRequestValueObject getNewI2cRequestEntryFromForm() {
         Operation op = getSelectedOperation();
         return new I2cRequestValueObject(op, slaveAddressField.getText(),
-                getLengthRequestAttr(op),
-                getByteArrayStr(op));
+                getLengthRequestAttr(op), getByteArrayStr(op));
     }
 
     private String gatherMessageFromForm() {
         StringBuilder msgBuilder = getMessagePrefix();
         Operation op = getSelectedOperation();
         if (!op.equals(Operation.WRITE)) {
-            msgBuilder = msgBuilder
-                    .append(SEPARATOR)
+            msgBuilder = msgBuilder.append(SEPARATOR)
                     .append(lengthField.getText().trim());
         }
         if (!op.equals(Operation.READ)) {
-            msgBuilder = msgBuilder
-                    .append(SEPARATOR)
+            msgBuilder = msgBuilder.append(SEPARATOR)
                     .append(getByteArrayStr(op));
         }
         String msg = msgBuilder.toString();
@@ -306,17 +287,12 @@ public final class I2cTabController extends AbstractTabController {
         StringBuilder msgBuilder = new StringBuilder("i2c");
         Operation selectedOp = getSelectedOperation();
 
-        return msgBuilder
-                .append(SEPARATOR)
-                .append(selectedOp.name())
-                .append(SEPARATOR)
-                .append(HEXA_PREFIX)
+        return msgBuilder.append(SEPARATOR).append(selectedOp.name())
+                .append(SEPARATOR).append(HEXA_PREFIX)
                 .append(slaveAddressField.getText().trim());
     }
 
     private Operation getSelectedOperation() {
-        return operationList
-                .getSelectionModel()
-                .getSelectedItem();
+        return operationList.getSelectionModel().getSelectedItem();
     }
 }

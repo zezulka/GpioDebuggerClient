@@ -1,6 +1,5 @@
 package gui.layouts.controllers;
 
-import net.NetworkManager;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,6 +12,8 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import net.NetworkManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,9 +50,7 @@ public final class GpioTabController implements Initializable {
         for (Node node : gpioGridPane.getChildren()) {
             if (node.getClass().equals(Button.class)) {
                 Button btn = (Button) node;
-                btn.setOnAction((event) -> {
-                    handleGpioButton(event);
-                });
+                btn.setOnAction(event -> handleGpioButton(event));
             }
         }
     }

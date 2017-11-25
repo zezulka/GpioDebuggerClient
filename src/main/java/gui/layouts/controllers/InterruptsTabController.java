@@ -1,22 +1,16 @@
 package gui.layouts.controllers;
 
 import gui.misc.Graphics;
-import net.NetworkManager;
-import util.StringConstants;
+import gui.userdata.InterruptValueObject;
 import java.net.InetAddress;
 import java.net.URL;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-
 import javafx.concurrent.Task;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
@@ -24,20 +18,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.converter.IntegerStringConverter;
-import org.controlsfx.control.PopOver;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import net.NetworkManager;
 import protocol.ClientPin;
 import protocol.InterruptManager;
 import protocol.InterruptType;
-import gui.userdata.InterruptValueObject;
 import protocol.ListenerState;
 import protocol.RaspiClientPin;
+import util.StringConstants;
+
+import org.controlsfx.control.PopOver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class InterruptsTabController implements Initializable {
 
@@ -122,7 +115,6 @@ public final class InterruptsTabController implements Initializable {
     }
 
     private void addAllPins() {
-        List<ClientPin> result = new ArrayList<>();
         for (ClientPin pin : RaspiClientPin.pins()) {
             PinButton btn = new PinButton(pin);
             int pos = btn.pin.getPort() - 1;
@@ -146,7 +138,7 @@ public final class InterruptsTabController implements Initializable {
                 setDisable(true);
                 setOpacity(1.0);
             }
-            setOnMouseClicked((event) -> {
+            setOnMouseClicked((e) -> {
                 InterruptManager.addInterruptListener(address,
                         getNewInterruptValueObject(pin));
                 pinPopup.hide();
@@ -165,12 +157,10 @@ public final class InterruptsTabController implements Initializable {
         timeAdded.setCellValueFactory(new PropertyValueFactory<>("timeAdded"));
         numOfIntrs
                 .setCellValueFactory(new PropertyValueFactory<>("numOfIntrs"));
-        numOfIntrs
-                .setCellFactory(TextFieldTableCell
-                        .forTableColumn(new IntegerStringConverter()));
-        lastIntrTime
-                .setCellValueFactory(
-                        new PropertyValueFactory<>("lastIntrTime"));
+        numOfIntrs.setCellFactory(TextFieldTableCell
+                .forTableColumn(new IntegerStringConverter()));
+        lastIntrTime.setCellValueFactory(
+                new PropertyValueFactory<>("lastIntrTime"));
         state.setCellValueFactory(new PropertyValueFactory<>("state"));
         state.setCellFactory(p -> new StatePropertyButtonCell());
         removeRowBtn.setCellFactory(p -> new RemoveRowButtonCell());
@@ -179,15 +169,11 @@ public final class InterruptsTabController implements Initializable {
     private class RemoveRowButtonCell extends
             TableCell<InterruptValueObject, Void> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Graphics.REMOVE));
+        private final Button cellBtn = new Button(null, Graphics.removeBtn());
 
         RemoveRowButtonCell() {
-
             cellBtn.setPadding(Insets.EMPTY);
-            cellBtn.setOnAction((event) -> {
-                buttonClickedListener();
-            });
+            cellBtn.setOnAction((event) -> buttonClickedListener());
         }
 
         private void buttonClickedListener() {
@@ -217,8 +203,7 @@ public final class InterruptsTabController implements Initializable {
     private class StatePropertyButtonCell extends
             TableCell<InterruptValueObject, ListenerState> {
 
-        private final Button cellBtn
-                = new Button(null, new ImageView(Graphics.PLAY_BTN));
+        private final Button cellBtn = new Button(null, Graphics.playBtn());
 
         StatePropertyButtonCell() {
             cellBtn.setPadding(Insets.EMPTY);
@@ -252,15 +237,14 @@ public final class InterruptsTabController implements Initializable {
             }
             switch (t) {
                 case NOT_RUNNING: {
-                    Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Graphics.PLAY_BTN));
-                    });
+                    Platform.runLater(()
+                            -> cellBtn.setGraphic(Graphics.playBtn())
+                    );
                     break;
                 }
                 case RUNNING: {
-                    Platform.runLater(() -> {
-                        cellBtn.setGraphic(new ImageView(Graphics.STOP_BTN));
-                    });
+                    Platform.runLater(()
+                            -> cellBtn.setGraphic(Graphics.stopBtn()));
                     break;
                 }
                 default:

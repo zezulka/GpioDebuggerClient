@@ -1,24 +1,19 @@
 package gui.layouts.controllers;
 
-import protocol.response.ByteArrayResponse;
 import gui.misc.Operation;
-import net.NetworkManager;
+import gui.userdata.SpiRequestValueObject;
+import gui.userdata.xstream.XStreamUtils;
+
 import java.net.InetAddress;
-
 import java.net.URL;
-
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-import gui.userdata.SpiRequestValueObject;
-import gui.userdata.xstream.XStreamUtils;
-import java.time.LocalTime;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -29,6 +24,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+
+import net.NetworkManager;
+import protocol.response.ByteArrayResponse;
 
 public final class SpiTabController
         extends AbstractTabController {
@@ -125,7 +123,6 @@ public final class SpiTabController
         bytesCol.setCellValueFactory(new PropertyValueFactory<>("bytes"));
         bytesCol.setCellFactory(TextFieldTableCell.forTableColumn(
                 new AbstractTabController.BytesViewStringConverter()));
-
     }
 
     private void initUsedRequestsComboBox() {
@@ -152,11 +149,9 @@ public final class SpiTabController
                 });
         usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
-                    chipSelectList
-                            .getSelectionModel()
+                    chipSelectList.getSelectionModel()
                             .select(newValue.getChipSelect());
-                    operationList
-                            .getSelectionModel()
+                    operationList.getSelectionModel()
                             .select(newValue.getOperation());
                     byteArrayTextfield.setText(newValue.getBytes());
                 });
@@ -165,9 +160,7 @@ public final class SpiTabController
     private void sendSpiRequest(ActionEvent event) {
         StringBuilder msgToSend = getMessagePrefix();
         msgToSend = msgToSend.append(byteArrayTextfield.getText());
-        NetworkManager
-                .setMessageToSend(address,
-                        msgToSend.toString());
+        NetworkManager.setMessageToSend(address, msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
         usedRequestsComboBox.getItems().add(request);
         XStreamUtils.addNewSpiRequest(request);
@@ -175,8 +168,7 @@ public final class SpiTabController
 
     private SpiRequestValueObject getNewSpiRequestEntryFromCurrentData() {
         Operation op = operationList.getSelectionModel().getSelectedItem();
-        return new SpiRequestValueObject(chipSelectList.getValue(),
-                op,
+        return new SpiRequestValueObject(chipSelectList.getValue(), op,
                 byteArrayTextfield.getText());
     }
 
@@ -188,12 +180,9 @@ public final class SpiTabController
      */
     @Override
     protected StringBuilder getMessagePrefix() {
-        return (new StringBuilder())
-                .append("SPI:")
-                .append(operationList
+        return (new StringBuilder()).append("SPI:").append(operationList
                         .getSelectionModel().getSelectedItem().name())
-                .append(SEPARATOR)
-                .append(HEXA_PREFIX)
+                .append(SEPARATOR).append(HEXA_PREFIX)
                 .append(chipSelectList.getSelectionModel().getSelectedItem())
                 .append(SEPARATOR);
     }
