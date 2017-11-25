@@ -81,7 +81,7 @@ public final class AgentResponseFactory {
         for (int i = 0; i < splitResponse.length; i++) {
             splitResponse[i] = splitResponse[i].trim();
         }
-        return Arrays.asList(splitResponse);
+        return new ArrayList<>(Arrays.asList(splitResponse));
     }
 
     private static AgentResponse init(List<String> splitMessage,
