@@ -1,32 +1,32 @@
 package protocol.response.util;
 
 import gui.feature.Feature;
-import net.ConnectionValueObject;
+import gui.userdata.InterruptValueObject;
 import java.net.InetAddress;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.ConnectionValueObject;
 import protocol.BoardType;
-import protocol.response.AgentResponse;
 import protocol.ClientPin;
 import protocol.ClientPinFactory;
-import protocol.response.GpioAgentResponse;
-import protocol.response.I2cAgentResponse;
-import protocol.response.AbstractInterruptAgentResponse;
 import protocol.InterruptManager;
 import protocol.InterruptType;
-import gui.userdata.InterruptValueObject;
+import protocol.MessageParser;
+import protocol.ResponseType;
 import protocol.Signal;
+import protocol.response.AbstractInterruptAgentResponse;
+import protocol.response.AgentResponse;
+import protocol.response.GpioAgentResponse;
+import protocol.response.I2cAgentResponse;
+import protocol.response.IllegalResponseException;
 import protocol.response.InitAgentResponse;
 import protocol.response.InterruptGeneratedAgentResponse;
 import protocol.response.InterruptListenerStartedAgentResponse;
 import protocol.response.InterruptListenerStoppedAgentResponse;
 import protocol.response.SpiAgentResponse;
-import protocol.response.IllegalResponseException;
-import protocol.MessageParser;
-import protocol.ResponseType;
 
 public final class AgentResponseFactory {
 
@@ -81,13 +81,12 @@ public final class AgentResponseFactory {
         for (int i = 0; i < splitResponse.length; i++) {
             splitResponse[i] = splitResponse[i].trim();
         }
-        return new ArrayList<>(Arrays.asList(splitResponse));
+        return Arrays.asList(splitResponse);
     }
 
     private static AgentResponse init(List<String> splitMessage,
             ConnectionValueObject connection) throws IllegalResponseException {
         final int expectedElemSize = 2;
-
         if (splitMessage.size() != expectedElemSize) {
             throw new IllegalResponseException("expected elems: "
                     + expectedElemSize);
@@ -109,12 +108,10 @@ public final class AgentResponseFactory {
             ConnectionValueObject connection)
             throws IllegalResponseException {
         final int expectedElemSize = 2;
-
         if (splitMessage.size() != expectedElemSize) {
             throw new IllegalResponseException("expected elems: "
                     + expectedElemSize);
         }
-
         ClientPin pin;
         Signal signal;
         try {
@@ -132,12 +129,6 @@ public final class AgentResponseFactory {
             throws IllegalResponseException {
 
         final int expectedElemSize = 1;
-
-        if (splitMessage.size() != expectedElemSize) {
-            throw new IllegalResponseException("expected elems: "
-                    + expectedElemSize);
-        }
-
         if (splitMessage.size() != expectedElemSize
                 || splitMessage.get(0).isEmpty()) {
             throw new IllegalResponseException("Illegal I2C response.");
@@ -151,12 +142,6 @@ public final class AgentResponseFactory {
             throws IllegalResponseException {
 
         final int expectedElemSize = 1;
-
-        if (splitMessage.size() != expectedElemSize) {
-            throw new IllegalResponseException("expected elems: "
-                    + expectedElemSize);
-        }
-
         if (splitMessage.size() != expectedElemSize
                 || splitMessage.get(0).isEmpty()) {
             throw new IllegalResponseException("Illegal SPI response.");
@@ -174,15 +159,12 @@ public final class AgentResponseFactory {
                     = ClientPinFactory.getPin(splitMessage.get(0));
             InterruptType intrType
                     = InterruptType.getType(splitMessage.get(1));
-            LocalTime timeGenerated
-                    = LocalTime.parse(splitMessage.get(2),
+            LocalTime timeGenerated = LocalTime.parse(splitMessage.get(2),
                             MessageParser.FORMATTER);
             InterruptValueObject interrupt
                     = InterruptManager.getInterruptListener(
                             connection.getDevice().getAddress(),
-                            interruptPin,
-                            intrType
-                    );
+                            interruptPin, intrType);
             if (interrupt == null) {
                 throw new IllegalResponseException(
                         String.format("No such combination of address '%s' "
@@ -190,10 +172,8 @@ public final class AgentResponseFactory {
                                 connection, interruptPin, intrType));
             }
             interrupt.setLastIntrTime(timeGenerated);
-            return clazz
-                    .getConstructor(InterruptValueObject.class,
-                            InetAddress.class)
-                    .newInstance(interrupt,
+            return clazz.getConstructor(InterruptValueObject.class,
+                            InetAddress.class).newInstance(interrupt,
                             connection.getDevice().getAddress());
         } catch (DateTimeParseException ex) {
             // throw exception for the time being. sometimes the frequency
@@ -207,5 +187,4 @@ public final class AgentResponseFactory {
             throw new RuntimeException(ex);
         }
     }
-
 }
