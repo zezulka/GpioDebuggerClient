@@ -19,11 +19,9 @@ import gui.layouts.controllers.MasterWindowController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.xstream.XStreamUtils;
+import props.AppPreferencesExtractor;
 
 public final class App extends Application {
-
-    private static final int WINDOW_HEIGHT = 800;
-    private static final int WINDOW_WIDTH = 1000;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
@@ -58,9 +56,9 @@ public final class App extends Application {
             Platform.exit();
         });
         stage.setScene(scene);
-        stage.setMinHeight(WINDOW_HEIGHT);
-        stage.setMinWidth(WINDOW_WIDTH);
-        stage.setTitle("Debugger for RaspberryPi");
+        stage.setMinHeight(AppPreferencesExtractor.screenResolution().height);
+        stage.setMinWidth(AppPreferencesExtractor.screenResolution().width);
+        stage.setTitle("GPIO debugger for RaspberryPi");
         stage.show();
     }
 

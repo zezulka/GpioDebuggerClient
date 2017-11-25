@@ -15,6 +15,7 @@ import gui.layouts.controllers.MasterWindowController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import props.AppPreferencesExtractor;
 import protocol.InterruptManager;
 
 public final class ConnectionThread implements Runnable {
@@ -191,7 +192,7 @@ public final class ConnectionThread implements Runnable {
             SocketChannel channel = connection.getChannel();
             channel.connect(
                     new InetSocketAddress(connection.getDevice().getAddress(),
-                            NetworkManager.DEFAULT_SOCK_PORT)
+                            AppPreferencesExtractor.defaultSocketPort())
             );
             if (channel.isConnectionPending() && channel.finishConnect()) {
                 LOGGER.info("done connecting to server");

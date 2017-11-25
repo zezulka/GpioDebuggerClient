@@ -1,5 +1,6 @@
-package misc;
+package props;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,7 +15,10 @@ public final class AppPreferencesExtractor {
     private static final Properties USER_PROPERTIES = new Properties();
     private static final Logger LOGGER
             = LoggerFactory.getLogger(AppPreferencesExtractor.class);
-    private static final boolean USER_PROPERTIES_AVAILABLE;
+    private static boolean userPropertiesAvailable = false;
+
+    //cached props
+    private static Dimension cachedScreenResolution = null;
 
     static {
         try {
@@ -32,12 +36,10 @@ public final class AppPreferencesExtractor {
                 + File.separator
                 + DEFAULT_PROPERTIES.getProperty("userdata.properties.name")
         );
-        if (!userPropertiesFile.exists()) {
-            USER_PROPERTIES_AVAILABLE = false;
-        } else {
+        if (userPropertiesFile.exists()) {
             try {
                 USER_PROPERTIES.load(new FileInputStream(userPropertiesFile));
-                USER_PROPERTIES_AVAILABLE = true;
+                userPropertiesAvailable = true;
             } catch (FileNotFoundException ex) {
                 // Should not happen, we already checked for this
                 throw new RuntimeException(ex);
@@ -74,6 +76,53 @@ public final class AppPreferencesExtractor {
     }
 
     /**
+     *
+     * @return Null if the property found is malformed and not a number, or
+     * boxed int representing value of the property
+     */
+    private static Integer parseNumber(String propertyName) {
+        String w = getProperty(propertyName);
+        if (w == null) {
+            return null;
+        }
+        try {
+            return Integer.valueOf(w);
+        } catch (NumberFormatException e) {
+            LOGGER.error(propertyName
+                    + " property is not numeric in the properties file");
+            return null;
+        }
+    }
+
+    private static Integer screenWidth() {
+        return parseNumber("graphics.window.width");
+    }
+
+    private static Integer screenHeight() {
+        return parseNumber("graphics.window.height");
+    }
+
+    public static Dimension screenResolution() {
+        if (cachedScreenResolution == null) {
+            Integer w = screenWidth();
+            Integer h = screenHeight();
+            if (w == null || h == null) {
+                throw new RuntimeException("Properties file is malformed.");
+            }
+            cachedScreenResolution = new Dimension(w, h);
+        }
+        return cachedScreenResolution;
+    }
+
+    public static Integer defaultSocketPort() {
+        return parseNumber("net.socketport");
+    }
+
+    public static Integer timeout() {
+        return parseNumber("net.timeout");
+    }
+
+    /**
      * Two property files can exist in the target file system: default (this
      * always exists, otherwise Exception is thrown in static initialiser of
      * this utility class) and one (optional) which contains user specified
@@ -83,7 +132,7 @@ public final class AppPreferencesExtractor {
      */
     private static String getProperty(String propertyName) {
         String result = null;
-        if (USER_PROPERTIES_AVAILABLE) {
+        if (userPropertiesAvailable) {
             result = USER_PROPERTIES.getProperty(propertyName);
         }
         if (result == null) {

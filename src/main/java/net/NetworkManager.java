@@ -25,10 +25,8 @@ public final class NetworkManager {
     private static final Map<InetAddress, ConnectionThread> ADDRESSES
             = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    public static final int DEFAULT_SOCK_PORT = 8088;
     public static final int BUFFER_SIZE = 1024;
     public static final int END_OF_STREAM = -1;
-    public static final int TIMEOUT = 5 * 1000;
     private static final NetworkManager INSTANCE = new NetworkManager();
 
     private NetworkManager() {

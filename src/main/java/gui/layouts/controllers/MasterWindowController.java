@@ -52,6 +52,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.controlsfx.control.PopOver;
+import props.AppPreferencesExtractor;
 
 public final class MasterWindowController implements Initializable {
 
@@ -383,7 +384,7 @@ public final class MasterWindowController implements Initializable {
             try {
                 connectingToDevice.setValue(true);
                 boolean isHostReachable = device.getAddress()
-                        .isReachable(NetworkManager.TIMEOUT);
+                        .isReachable(AppPreferencesExtractor.timeout());
                 if (isHostReachable) {
                     LOGGER.debug(String.format("Host %s is reachable",
                             device.getHostName()));

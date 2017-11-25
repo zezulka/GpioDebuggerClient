@@ -1,4 +1,4 @@
-package misc;
+package props;
 
 public final class SystemPropertiesExtractor {
 
