@@ -80,7 +80,7 @@ public final class MasterWindowController implements Initializable {
             = LoggerFactory.getLogger(MasterWindowController.class);
     private static final NetworkManager NETWORK_MANAGER
             = NetworkManager.getInstance();
-    private static TabManager manager;
+    private static TabManager manager = null;
 
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
