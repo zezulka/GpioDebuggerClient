@@ -1,58 +1,58 @@
 package gui.layouts.controllers;
 
-import gui.misc.Graphics;
-import gui.tab.loader.TabManagerImpl;
 import gui.SwitchButton;
+import gui.misc.Graphics;
 import gui.tab.loader.TabManager;
-import net.NetworkManager;
-import java.io.IOException;
+import gui.tab.loader.TabManagerImpl;
+import gui.userdata.DeviceValueObject;
+import gui.userdata.xstream.XStreamUtils;
+
 import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
-
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
-
-import util.StringConstants;
-import javafx.scene.control.ToolBar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import protocol.InterruptManager;
-import gui.userdata.DeviceValueObject;
-import gui.userdata.xstream.XStreamUtils;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
+import net.NetworkManager;
+import net.NetworkingUtils;
+import protocol.InterruptManager;
+import util.StringConstants;
+
 import org.controlsfx.control.PopOver;
-import props.AppPreferencesExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class MasterWindowController implements Initializable {
 
@@ -85,8 +85,10 @@ public final class MasterWindowController implements Initializable {
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
 
+    //local numeric constants for master controller
     private static final int HISTORY_BRANCH = 1;
     private static final int ACTIVE_BRANCH_INDEX = 0;
+    private static final double SPLIT_PANE_THRESHOLD = 0.75D;
 
     public MasterWindowController() {
     }
@@ -117,9 +119,8 @@ public final class MasterWindowController implements Initializable {
                     -> connectBtn.setText(pending ? "Connecting..." : "Connect")
             );
         });
-        final double threshold = 0.75;
-        devicesTab.maxWidthProperty()
-                .bind(rootSplitPane.widthProperty().multiply(threshold));
+        devicesTab.maxWidthProperty().bind(rootSplitPane.widthProperty()
+                .multiply(SPLIT_PANE_THRESHOLD));
     }
 
     private void initDeviceTreeSwitch() {
@@ -132,10 +133,9 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void deviceTreeBtnListener(boolean isSelected) {
-        final double threshold = 0.75;
         connectBtn.visibleProperty().set(isSelected);
         disconnectButton.visibleProperty().set(isSelected);
-        final double dividerPos = isSelected ? threshold : 1.0;
+        final double dividerPos = isSelected ? SPLIT_PANE_THRESHOLD : 1.0;
         devicesTab.maxWidthProperty().bind(rootSplitPane.widthProperty()
                 .multiply(dividerPos));
         rootSplitPane.setDividerPositions(dividerPos);
@@ -172,36 +172,31 @@ public final class MasterWindowController implements Initializable {
                 .bind(ipAddress.textProperty().isEmpty());
         addNewDeviceButton.setOnAction((event) -> {
             DeviceValueObject newDevice = getNewDeviceFromUser();
-            List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
-                    devicesTree
-                            .getRoot()
-                            .getChildren()
-                            .get(HISTORY_BRANCH)
-                            .getChildren()
-            );
-            children.addAll(new ArrayList<>(devicesTree
-                    .getRoot()
-                    .getChildren()
-                    .get(ACTIVE_BRANCH_INDEX)
-                    .getChildren())
-            );
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
-                if (checkWhetherDeviceAlreadyExists(children, newDevice)) {
-                    return;
-                }
-                devicesTree
+                List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
+                        devicesTree.getRoot().getChildren()
+                                .get(HISTORY_BRANCH)
+                                .getChildren()
+                );
+                children.addAll(new ArrayList<>(devicesTree
                         .getRoot()
                         .getChildren()
-                        .get(HISTORY_BRANCH)
-                        .getChildren()
-                        .add(getTreeItemWithListener(newDevice));
-                XStreamUtils.addNewDeviceToFile(newDevice);
+                        .get(ACTIVE_BRANCH_INDEX)
+                        .getChildren())
+                );
+                if (!deviceAlreadyExists(children, newDevice)) {
+                    devicesTree.getRoot().getChildren()
+                            .get(HISTORY_BRANCH)
+                            .getChildren()
+                            .add(getTreeItemWithListener(newDevice));
+                    XStreamUtils.addNewDeviceToFile(newDevice);
+                }
             }
         });
     }
 
-    private boolean checkWhetherDeviceAlreadyExists(
+    private boolean deviceAlreadyExists(
             List<TreeItem<DeviceValueObject>> children,
             DeviceValueObject device) {
         for (TreeItem<DeviceValueObject> child : children) {
@@ -221,15 +216,14 @@ public final class MasterWindowController implements Initializable {
     }
 
     private DeviceValueObject getNewDeviceFromUser() {
-        try {
-            InetAddress inetAddr = InetAddress.getByName(ipAddress.getText());
-            return new DeviceValueObject(inetAddr);
-        } catch (UnknownHostException ex) {
-            LOGGER.debug("Invalid IP address");
-            LOGGER.error(ex.getMessage());
+        String cand = ipAddress.getText();
+        InetAddress inetAddr = NetworkingUtils.getAddressFromHostname(cand);
+        if (inetAddr == null) {
+            LOGGER.debug("Could not resolve the following hostname: " + cand);
             ControllerUtils.showErrorDialog("Unknown hostname.");
+            return null;
         }
-        return null;
+        return new DeviceValueObject(inetAddr);
     }
 
     private void initializeToolbarButton(ButtonBase button,
@@ -240,21 +234,15 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void initializeDeviceTree() {
-
         TreeItem<DeviceValueObject> root = new TreeItem<>();
         TreeItem<DeviceValueObject> active = new TreeItem<>();
         TreeItem<DeviceValueObject> hist = new TreeItem<>();
-        root.setExpanded(true);
-        active.setExpanded(true);
-        hist.setExpanded(true);
-        root.addEventHandler(TreeItem.branchCollapsedEvent(), (t) -> {
-            t.getTreeItem().setExpanded(true);
-        });
-        active.addEventHandler(TreeItem.branchCollapsedEvent(), (t) -> {
-            t.getTreeItem().setExpanded(true);
-        });
-        hist.addEventHandler(TreeItem.branchCollapsedEvent(), (t) -> {
-            t.getTreeItem().setExpanded(true);
+        List<TreeItem<DeviceValueObject>> nodes
+                = Arrays.asList(root, active, hist);
+        nodes.forEach(node -> {
+            node.setExpanded(true);
+            node.addEventHandler(TreeItem.branchCollapsedEvent(),
+                    t -> t.getTreeItem().setExpanded(true));
         });
 
         XStreamUtils.getDevices().forEach((device)
@@ -341,24 +329,21 @@ public final class MasterWindowController implements Initializable {
 
     private void disconnect() {
         InetAddress addrSelected;
-        try {
-            addrSelected = InetAddress.getByName(devicesTab
-                    .getSelectionModel().selectedItemProperty().get().getId());
-            NetworkManager.disconnect(addrSelected);
-            InterruptManager.clearAllListeners(addrSelected);
-            manager.removeTab(addrSelected);
-        } catch (UnknownHostException ex) {
-            LOGGER.debug("unknown host");
-            return;
+        addrSelected = NetworkingUtils.getAddressFromHostname(devicesTab
+                .getSelectionModel().selectedItemProperty().get().getId());
+        NetworkManager.disconnect(addrSelected);
+        InterruptManager.clearAllListeners(addrSelected);
+        manager.removeTab(addrSelected);
+        if (addrSelected != null) {
+            TreeItem<DeviceValueObject> active = devicesTree.getRoot()
+                    .getChildren().get(ACTIVE_BRANCH_INDEX);
+            active.getChildren().forEach((item) -> {
+                DeviceValueObject val = item.getValue();
+                if (val.getAddress().equals(addrSelected)) {
+                    val.disconnectedProperty().set(true);
+                }
+            });
         }
-        TreeItem<DeviceValueObject> active = devicesTree.getRoot()
-                .getChildren().get(ACTIVE_BRANCH_INDEX);
-        active.getChildren().forEach((item) -> {
-            DeviceValueObject val = item.getValue();
-            if (val.getAddress().equals(addrSelected)) {
-                val.disconnectedProperty().set(true);
-            }
-        });
     }
 
     private class ConnectionWorker extends Task<Boolean> {
@@ -381,21 +366,15 @@ public final class MasterWindowController implements Initializable {
 
         @Override
         protected Boolean call() {
-            try {
-                connectingToDevice.setValue(true);
-                boolean isHostReachable = device.getAddress()
-                        .isReachable(AppPreferencesExtractor.timeout());
-                if (isHostReachable) {
-                    LOGGER.debug(String.format("Host %s is reachable",
-                            device.getHostName()));
-                    return true;
-                } else {
-                    notifyConnectingFailed();
-                }
-            } catch (IOException ex) {
-                LOGGER.error(null, ex);
+            connectingToDevice.setValue(true);
+            if (!NetworkingUtils.isReachable(device.getAddress())) {
+                notifyConnectingFailed();
+                return false;
             }
-            return false;
+            LOGGER.debug(String.format("Host %s is reachable",
+                    device.getHostName()));
+            return true;
+
         }
 
         @Override
