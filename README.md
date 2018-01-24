@@ -14,3 +14,7 @@ The debugging tool is now capable of:
 * sending I2C requests
 * sending SPI requests
 * registering interrupt listeners (not working properly yet, experimental)
+
+Running with OpenJDK on Linux
+------------
+Please make sure you have the `openjfx` package installed.
