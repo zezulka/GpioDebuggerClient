@@ -4,7 +4,7 @@ import util.StringConstants;
 import java.net.InetAddress;
 import java.time.LocalTime;
 import javafx.scene.control.Tab;
-import gui.layouts.controllers.MasterWindowController;
+import gui.controllers.MasterWindowController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

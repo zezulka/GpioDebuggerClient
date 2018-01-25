@@ -1,6 +1,6 @@
 package protocol;
 
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 import gui.userdata.InterruptValueObject;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

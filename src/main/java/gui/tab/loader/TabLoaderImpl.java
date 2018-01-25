@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

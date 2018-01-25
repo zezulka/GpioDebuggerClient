@@ -1,8 +1,6 @@
 package gui;
 
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -10,35 +8,28 @@ import javafx.scene.control.Label;
 public final class SwitchButton extends Label {
 
     private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(true);
-    private static final int BTN_EDGE_SIZE = 30;
+    private static final int BTN_HEIGHT = 30;
+    private static final int BTN_WIDTH = 20;
 
     public SwitchButton() {
         Button switchBtn = new Button();
-        switchBtn.setPrefWidth(BTN_EDGE_SIZE);
-        switchBtn.setPrefHeight(BTN_EDGE_SIZE);
+        switchBtn.setPrefWidth(BTN_WIDTH);
+        switchBtn.setPrefHeight(BTN_HEIGHT);
         switchBtn.setOnAction(t -> switchedOn.set(!switchedOn.get()));
-
         setGraphic(switchBtn);
 
-        switchedOn.addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov,
-                    Boolean t, Boolean t1) {
-                if (t1) {
-                    setText("Device tree: ON");
-                    setStyle("-fx-background-color: green; "
-                            + "-fx-text-fill:white;"
-                            + "-fx-padding: 0em 0em 0em 1em;"
-                    );
-                    setContentDisplay(ContentDisplay.RIGHT);
-                } else {
-                    setText("Device tree: OFF");
-                    setStyle("-fx-background-color: grey;"
-                            + "-fx-text-fill:black;"
-                            + "-fx-padding: 0em 1em 0em 0em;"
-                    );
-                    setContentDisplay(ContentDisplay.LEFT);
-                }
+        switchedOn.addListener((ignore, ignoreAnother, newState) -> {
+            if (newState) {
+
+                setStyle("-fx-background-color: green; "
+                        + "-fx-padding: 0em 0em 0em 4em;"
+                );
+                setContentDisplay(ContentDisplay.LEFT);
+            } else {
+                setStyle("-fx-background-color: grey;"
+                        + "-fx-padding: 0em 4em 0em 0em;"
+                );
+                setContentDisplay(ContentDisplay.RIGHT);
             }
         });
         switchedOn.set(false);

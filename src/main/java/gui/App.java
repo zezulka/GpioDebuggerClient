@@ -10,10 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 
 import util.StringConstants;
-import gui.layouts.controllers.MasterWindowController;
+import gui.controllers.MasterWindowController;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

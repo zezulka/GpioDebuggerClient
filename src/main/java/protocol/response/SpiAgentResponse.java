@@ -3,7 +3,7 @@ package protocol.response;
 import util.StringConstants;
 import java.net.InetAddress;
 import javafx.scene.control.Tab;
-import gui.layouts.controllers.MasterWindowController;
+import gui.controllers.MasterWindowController;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;

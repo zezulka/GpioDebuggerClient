@@ -1,6 +1,14 @@
 package net;
 
+import gui.controllers.ControllerUtils;
+import gui.controllers.MasterWindowController;
+import javafx.application.Platform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import props.AppPreferencesExtractor;
+import protocol.InterruptManager;
 import protocol.MessageParser;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -9,23 +17,14 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import javafx.application.Platform;
-import gui.layouts.controllers.ControllerUtils;
-import gui.layouts.controllers.MasterWindowController;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import props.AppPreferencesExtractor;
-import protocol.InterruptManager;
 
 public final class ConnectionThread implements Runnable {
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(ConnectionThread.class);
-
-    private final ConnectionValueObject connection;
     private static final long SELECTOR_WAKEUP_TIMEOUT = 5000L;
     private static final NetworkManager MANAGER = NetworkManager.getInstance();
+    private final ConnectionValueObject connection;
 
     public ConnectionThread(ConnectionValueObject connection) {
         this.connection = connection;
@@ -38,32 +37,15 @@ public final class ConnectionThread implements Runnable {
      * name of the device. If handshake message is valid (=parse completed
      * successfully), it then invokes appropriate method to switch to the given
      * scene which enables user to control the device the client connected to.
-     *
+     * <p>
      * While the agent is alive, this thread iterates through selection keys and
      * deals with them (this includes reading messages from input stream or
      * writing client messages to output stream).
      */
     @Override
     public void run() {
-        iterateThroughRegisteredKeys();
-    }
-
-    private void iterateThroughRegisteredKeys() {
         try {
-            while (true) {
-                connection.getSelector().select(SELECTOR_WAKEUP_TIMEOUT);
-                if (!connection.getSelector().isOpen()) {
-                    break;
-                }
-                Iterator<SelectionKey> keys = connection
-                        .getSelector()
-                        .selectedKeys()
-                        .iterator();
-                processSelectionKeys(keys);
-                if (!isAlive()) {
-                    break;
-                }
-            }
+            iterateThroughRegisteredKeys();
         } catch (IOException ex) {
             LOGGER.error(null, ex);
         } finally {
@@ -71,8 +53,26 @@ public final class ConnectionThread implements Runnable {
         }
     }
 
+    private void iterateThroughRegisteredKeys() throws IOException {
+        while (true) {
+            connection.getSelector().select(SELECTOR_WAKEUP_TIMEOUT);
+            if (!connection.getSelector().isOpen()) {
+                break;
+            }
+            Iterator<SelectionKey> keys = connection
+                    .getSelector()
+                    .selectedKeys()
+                    .iterator();
+            processSelectionKeys(keys);
+            if (!isAlive()) {
+                break;
+            }
+        }
+    }
+
     /**
      * Checks whether device on the supplied IP address is alive.
+     *
      * @return true if alive, false otherwise
      */
     private boolean isAlive() {
@@ -142,8 +142,9 @@ public final class ConnectionThread implements Runnable {
         } catch (IOException ex) {
             ControllerUtils.showErrorDialog(
                     "There has been an error reading message from agent."
-                    + "Either agent is not running on the IP supplied or "
-                    + "network connection failure has occured.\n"
+                            + "Either agent is not running on the IP "
+                            + "supplied or "
+                            + "network connection failure has occurred.\n"
             );
             LOGGER.error(ex.getLocalizedMessage());
             disconnect();
@@ -155,7 +156,6 @@ public final class ConnectionThread implements Runnable {
      * Causes manager to close all resources binded to the existing connection.
      * If connection has not been established, invocation of this method is a
      * no-op (regarding network resources).
-     *
      */
     public void disconnect() {
         cleanUpResources();
@@ -211,9 +211,8 @@ public final class ConnectionThread implements Runnable {
     }
 
     /**
-     *
      * @throws IllegalArgumentException if no connection to {@code ipAddress}
-     * exists.
+     *                                  exists.
      */
     private void cleanUpResources() {
         if (connection == null) {

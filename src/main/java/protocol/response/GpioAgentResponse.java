@@ -3,8 +3,8 @@ package protocol.response;
 import java.net.InetAddress;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
-import gui.layouts.controllers.ControllerUtils;
-import gui.layouts.controllers.MasterWindowController;
+import gui.controllers.ControllerUtils;
+import gui.controllers.MasterWindowController;
 import protocol.ClientPin;
 import protocol.Signal;
 

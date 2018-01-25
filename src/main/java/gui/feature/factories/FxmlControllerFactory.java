@@ -1,10 +1,10 @@
 package gui.feature.factories;
 
 import gui.feature.Feature;
-import gui.layouts.controllers.GpioTabController;
-import gui.layouts.controllers.I2cTabController;
-import gui.layouts.controllers.InterruptsTabController;
-import gui.layouts.controllers.SpiTabController;
+import gui.controllers.GpioTabController;
+import gui.controllers.I2cTabController;
+import gui.controllers.InterruptsTabController;
+import gui.controllers.SpiTabController;
 import java.net.InetAddress;
 import javafx.fxml.Initializable;
 

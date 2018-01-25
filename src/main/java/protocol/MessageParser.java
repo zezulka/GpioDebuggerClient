@@ -4,7 +4,7 @@ import protocol.response.IllegalResponseException;
 import protocol.response.util.AgentResponseFactory;
 import net.ConnectionValueObject;
 import java.time.format.DateTimeFormatter;
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

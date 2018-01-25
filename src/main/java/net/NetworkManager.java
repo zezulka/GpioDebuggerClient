@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 import util.StringConstants;
 
 import org.slf4j.Logger;
@@ -63,8 +63,7 @@ public final class NetworkManager {
     public boolean connectToDevice(DeviceValueObject device) {
         if (alreadyConnectedToAddress(device.getAddress())) {
             ControllerUtils
-                    .showErrorDialog(StringConstants.ERR_ALREADY_CONNECTED
-                            .toString());
+                    .showErrorDialog(StringConstants.ERR_ALREADY_CONNECTED);
             return false;
         }
         Selector selector;

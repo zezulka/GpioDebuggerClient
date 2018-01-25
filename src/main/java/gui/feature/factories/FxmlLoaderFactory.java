@@ -1,7 +1,7 @@
 package gui.feature.factories;
 
 import gui.feature.Feature;
-import gui.layouts.controllers.ControllerUtils;
+import gui.controllers.ControllerUtils;
 import javafx.fxml.FXMLLoader;
 import protocol.BoardType;
 

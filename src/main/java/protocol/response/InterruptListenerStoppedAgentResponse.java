@@ -1,7 +1,7 @@
 package protocol.response;
 
 import java.net.InetAddress;
-import gui.layouts.controllers.InterruptsTabController;
+import gui.controllers.InterruptsTabController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.InterruptValueObject;
