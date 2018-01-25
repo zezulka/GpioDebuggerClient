@@ -7,6 +7,6 @@ public enum ResponseType {
     INIT,
     INTR_STOPPED,
     INTR_STARTED,
-    INTR_GENERATED;
+    INTR_GENERATED
 
 }

@@ -10,7 +10,7 @@ public final class SpiRequestValueObject {
     private final String bytes;
 
     public SpiRequestValueObject(int chipSelect, Operation operation,
-            String bytes) {
+                                 String bytes) {
         this.chipSelect = chipSelect;
         this.operation = operation;
         this.bytes = bytes;
@@ -56,12 +56,8 @@ public final class SpiRequestValueObject {
             return false;
         }
         final SpiRequestValueObject other = (SpiRequestValueObject) obj;
-        if (this.chipSelect != other.chipSelect) {
-            return false;
-        }
-        if (!Objects.equals(this.bytes, other.bytes)) {
-            return false;
-        }
-        return this.operation.equals(other.operation);
+        return this.chipSelect == other.chipSelect
+                && Objects.equals(this.bytes, other.bytes)
+                && this.operation.equals(other.operation);
     }
 }

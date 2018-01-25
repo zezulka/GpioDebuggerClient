@@ -3,6 +3,14 @@ package gui.layouts.controllers;
 import gui.misc.Operation;
 import gui.userdata.SpiRequestValueObject;
 import gui.userdata.xstream.XStreamUtils;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import net.NetworkManager;
+import protocol.response.ByteArrayResponse;
 
 import java.net.InetAddress;
 import java.net.URL;
@@ -11,26 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-
-import net.NetworkManager;
-import protocol.response.ByteArrayResponse;
-
 public final class SpiTabController
         extends AbstractTabController {
 
+    private static final int FIXED_CELL_SIZE = 38;
+    private static final char SEPARATOR = ':';
+    /**
+     * Highest possible index which is reasonable to set in BCM2835's CS
+     * register, in the manual referred to as "SPI Master Control and Status"
+     * register.
+     */
+    private static final int MAX_CS_INDEX = 2;
+    private final InetAddress address;
     @FXML
     private Button requestButton;
     @FXML
@@ -50,16 +50,6 @@ public final class SpiTabController
     @FXML
     private TableColumn<ByteArrayResponse, List<String>> bytesCol;
 
-    private final InetAddress address;
-    private static final int FIXED_CELL_SIZE = 38;
-    private static final char SEPARATOR = ':';
-    /**
-     * Highest possible index which is reasonable to set in BCM2835's CS
-     * register, in the manual referred to as "SPI Master Control and Status"
-     * register.
-     */
-    private static final int MAX_CS_INDEX = 2;
-
     public SpiTabController(InetAddress address) {
         this.address = address;
     }
@@ -77,7 +67,7 @@ public final class SpiTabController
         initChipSelectList();
         byteArrayView.setPlaceholder(new Label(
                 "Enter byte array data in the text"
-                + " field above to see the visualization."));
+                        + " field above to see the visualization."));
         byteArrayTextfield.textProperty().addListener((ov, t, t1) -> {
             if (t1.length() % 2 == 0 || t1.length() < t.length()) {
                 byteArrayView.getItems().clear();
@@ -107,7 +97,7 @@ public final class SpiTabController
     private void initRequestButton() {
         requestButton.disableProperty().bind(
                 super.hexValuesOnly(byteArrayTextfield).not());
-        requestButton.setOnAction((event) -> sendSpiRequest(event));
+        requestButton.setOnAction(this::sendSpiRequest);
     }
 
     private void initTableView() {
@@ -128,24 +118,20 @@ public final class SpiTabController
     private void initUsedRequestsComboBox() {
         usedRequestsComboBox.setItems(XStreamUtils.getSpiRequests());
         usedRequestsComboBox
-                .setCellFactory((ListView<SpiRequestValueObject> param) -> {
-                    final ListCell<SpiRequestValueObject> cell
-                            = new ListCell<SpiRequestValueObject>() {
-                        {
-                            final int prefWidth = 150;
-                            super.setPrefWidth(prefWidth);
-                        }
+                .setCellFactory((ListView<SpiRequestValueObject> param) -> new ListCell<SpiRequestValueObject>() {
+                    {
+                        final int prefWidth = 150;
+                        super.setPrefWidth(prefWidth);
+                    }
 
-                        @Override
-                        public void updateItem(SpiRequestValueObject item,
-                                boolean empty) {
-                            super.updateItem(item, empty);
-                            if (item != null) {
-                                setText(item.toString());
-                            }
+                    @Override
+                    public void updateItem(SpiRequestValueObject item,
+                                           boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.toString());
                         }
-                    };
-                    return cell;
+                    }
                 });
         usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -175,13 +161,11 @@ public final class SpiTabController
     /**
      * Generates common prefix for all SPI requests:
      * "SPI:<MODE>:0x<CHIP_INDEX>:"
-     *
-     * @return
      */
     @Override
     protected StringBuilder getMessagePrefix() {
         return (new StringBuilder()).append("SPI:").append(operationList
-                        .getSelectionModel().getSelectedItem().name())
+                .getSelectionModel().getSelectedItem().name())
                 .append(SEPARATOR).append(HEXA_PREFIX)
                 .append(chipSelectList.getSelectionModel().getSelectedItem())
                 .append(SEPARATOR);

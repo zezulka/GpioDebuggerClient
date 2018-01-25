@@ -36,10 +36,6 @@ public final class InterruptManager {
         return INTERRUPTS.get(address);
     }
 
-    public static IntegerProperty getNumListeners() {
-        return NUM_LISTENERS;
-    }
-
     /**
      * @return null if no mapping to address/object combination exists,
      * InterruptValueObject instance otherwise
@@ -72,9 +68,7 @@ public final class InterruptManager {
 
     public static void addInterruptListener(InetAddress destination,
             InterruptValueObject ivo) {
-        if (INTERRUPTS.get(destination) == null) {
-            INTERRUPTS.put(destination, FXCollections.observableArrayList());
-        }
+        INTERRUPTS.computeIfAbsent(destination, k -> FXCollections.observableArrayList());
         if (!INTERRUPTS.get(destination).contains(ivo)) {
             NUM_LISTENERS.set(NUM_LISTENERS.get() + 1);
             INTERRUPTS.get(destination).add(ivo);
@@ -83,7 +77,7 @@ public final class InterruptManager {
         }
     }
 
-    public static boolean removeInterruptListener(InetAddress destination,
+ /*   public static boolean removeInterruptListener(InetAddress destination,
             InterruptValueObject ivo) {
         for (InterruptValueObject interrupt : INTERRUPTS.get(destination)) {
             if (interrupt.equals(ivo)) {
@@ -92,7 +86,7 @@ public final class InterruptManager {
             }
         }
         throw new IllegalArgumentException("InterruptValueObject not found");
-    }
+  }*/
 
     public static void clearAllListeners(InetAddress inetAddress) {
         INTERRUPTS.remove(inetAddress);

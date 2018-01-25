@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import gui.layouts.controllers.ControllerUtils;
 
 import util.StringConstants;
-import javafx.scene.control.TabPane;
 import gui.layouts.controllers.MasterWindowController;
 
 import org.slf4j.Logger;
@@ -23,18 +22,18 @@ import props.AppPreferencesExtractor;
 
 public final class App extends Application {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     private Scene scene;
 
-    private static TabPane tabPane;
+    //private static TabPane tabPane;
 
-    static TabPane getTabPane() {
-        return tabPane;
-    }
+    //static TabPane getTabPane() {
+    //    return tabPane;
+    //}
 
     @Override
-    public void init() throws Exception {
+    public void init() {
         scene = loadScene();
     }
 
@@ -58,7 +57,7 @@ public final class App extends Application {
         stage.setScene(scene);
         stage.setMinHeight(AppPreferencesExtractor.screenResolution().height);
         stage.setMinWidth(AppPreferencesExtractor.screenResolution().width);
-        stage.setTitle("GPIO debugger for RaspberryPi");
+        stage.setTitle("GPIO debugger for Raspberry Pi");
         stage.show();
     }
 
@@ -74,8 +73,8 @@ public final class App extends Application {
             FXMLLoader masterWindowLoader
                     = new FXMLLoader(ControllerUtils.MASTER);
             masterWindowLoader.setController(new MasterWindowController());
-            Parent newParent = (Parent) masterWindowLoader.load();
-            tabPane = (TabPane) newParent.lookup("#devicesTab");
+            Parent newParent = masterWindowLoader.load();
+            /*tabPane = (TabPane) */newParent.lookup("#devicesTab");
             LOGGER.debug("Load successful.");
             return new Scene(newParent);
         } catch (IOException ex) {

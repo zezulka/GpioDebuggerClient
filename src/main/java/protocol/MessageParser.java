@@ -28,9 +28,6 @@ public final class MessageParser {
      * INIT:[BOARD_TYPE] GPIO:[PIN_NUMBER]:[HIGH|LOW] SPI:[BYTE_IN_HEX]*
      * SPI:[WRITE_REQUEST_OK] I2C:[BYTE_IN_HEX]* [INTR_STOPPED | INTR_STARTED |
      * INTR_GENERATED] :[PIN_NAME]:[INTERRUPT_TYPE]:[TIME] [ILLEGAL_REQUEST]
-     *
-     * @param connection
-     * @param agentMessage
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
     public static void parseAgentMessage(ConnectionValueObject connection,

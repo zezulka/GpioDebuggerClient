@@ -21,10 +21,6 @@ public class UserDataUtilsTest {
     public UserDataUtilsTest() {
     }
 
-    @Before
-    public void init() {
-    }
-
     @After
     public void after() {
         if (TestXmlFiles.MISSING.exists()) {

@@ -1,12 +1,22 @@
 package core.util;
 
 import gui.userdata.InterruptValueObject;
-import protocol.response.IllegalResponseException;
+import protocol.BoardType;
+import protocol.ClientPin;
+import protocol.InterruptManager;
+import protocol.InterruptType;
 import protocol.MessageParser;
+import protocol.RaspiClientPin;
+import protocol.response.AbstractInterruptAgentResponse;
+import protocol.response.AgentResponse;
+import protocol.response.GpioAgentResponse;
+import protocol.response.I2cAgentResponse;
+import protocol.response.IllegalResponseException;
+import protocol.response.InitAgentResponse;
+import protocol.response.SpiAgentResponse;
 import protocol.response.util.AgentResponseFactory;
 import gui.feature.Feature;
 import net.ConnectionValueObject;
-import protocol.response.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
@@ -14,17 +24,21 @@ import java.time.Month;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
 import org.junit.Test;
-import protocol.*;
 import gui.userdata.DeviceValueObject;
 
 public class AgentResponseFactoryTest {
 
-    private final ClientPin clientPin = RaspiClientPin.P1_3;
-    private final InterruptType intrType = InterruptType.BOTH;
-    private final String mockedNow
-            = LocalDateTime.of(2000, Month.JANUARY, 1, 12, 0).format(MessageParser.FORMATTER);
+    private final ClientPin clientPin;
+    private final InterruptType intrType;
+    private final String mockedNow;
     private InetAddress mockedAddress;
     private ConnectionValueObject connection;
+
+    public AgentResponseFactoryTest() {
+        clientPin = RaspiClientPin.P1_3;
+        intrType = InterruptType.BOTH;
+        mockedNow = LocalDateTime.of(2000, Month.JANUARY, 1, 12, 0).format(MessageParser.FORMATTER);
+    }
 
     @Before
     public void clean() {

@@ -50,7 +50,7 @@ public final class GpioTabController implements Initializable {
         for (Node node : gpioGridPane.getChildren()) {
             if (node.getClass().equals(Button.class)) {
                 Button btn = (Button) node;
-                btn.setOnAction(event -> handleGpioButton(event));
+                btn.setOnAction(this::handleGpioButton);
             }
         }
     }

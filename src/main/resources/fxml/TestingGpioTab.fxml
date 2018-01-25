@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.web.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -16,7 +8,7 @@
 <Tab closable="false" fx:id="gpioTab" id="gpioTab" text="GPIO" 
      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <content>
-        <GridPane cacheHint="SPEED" fx:id="gpioGridPane" id="gpioGridPane" layoutX="0.0" layoutY="0.0">
+        <GridPane cacheHint="SPEED" fx:id="gpioGridPane" id="gpioGridPane">
             <columnConstraints>
                 <ColumnConstraints halignment="CENTER" prefWidth="100.0"/>
                 <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>

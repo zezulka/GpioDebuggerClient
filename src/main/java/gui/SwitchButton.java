@@ -3,8 +3,6 @@ package gui;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -18,12 +16,7 @@ public final class SwitchButton extends Label {
         Button switchBtn = new Button();
         switchBtn.setPrefWidth(BTN_EDGE_SIZE);
         switchBtn.setPrefHeight(BTN_EDGE_SIZE);
-        switchBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                switchedOn.set(!switchedOn.get());
-            }
-        });
+        switchBtn.setOnAction(t -> switchedOn.set(!switchedOn.get()));
 
         setGraphic(switchBtn);
 

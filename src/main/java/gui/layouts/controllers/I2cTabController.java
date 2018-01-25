@@ -3,6 +3,18 @@ package gui.layouts.controllers;
 import gui.misc.Operation;
 import gui.userdata.I2cRequestValueObject;
 import gui.userdata.xstream.XStreamUtils;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.paint.Color;
+import net.NetworkManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import protocol.response.ByteArrayResponse;
 
 import java.net.InetAddress;
 import java.net.URL;
@@ -12,29 +24,15 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.paint.Color;
-import net.NetworkManager;
-import protocol.response.ByteArrayResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class I2cTabController extends AbstractTabController {
 
+    private static final char SEPARATOR = ':';
+    private static final int FIXED_CELL_SIZE = 38;
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(I2cTabController.class);
+    private static final Pattern HEX_BYTE_REGEX_PATTERN
+            = Pattern.compile(HEX_BYTE_REGEX);
+    private final InetAddress address;
     @FXML
     private Button requestButton;
     @FXML
@@ -60,26 +58,11 @@ public final class I2cTabController extends AbstractTabController {
     @FXML
     private TableColumn<ByteArrayResponse, List<String>> bytesCol;
 
-    private static final char SEPARATOR = ':';
-    private static final int FIXED_CELL_SIZE = 38;
-    private final InetAddress address;
-    private static final Logger LOGGER
-            = LoggerFactory.getLogger(I2cTabController.class);
-
-    private static final Pattern HEX_BYTE_REGEX_PATTERN
-            = Pattern.compile(HEX_BYTE_REGEX);
-
     public I2cTabController(InetAddress address) {
         Objects.requireNonNull(address, "address");
         this.address = address;
     }
 
-    /**
-     * initialises the controller class.
-     *
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.enforceHexValuesOnly(slaveAddressField);
@@ -92,7 +75,7 @@ public final class I2cTabController extends AbstractTabController {
         setComponentsDisableProperty(getSelectedOperation());
         byteArrayView.setPlaceholder(new Label(
                 "Enter byte array data in the text"
-                + " field above to see the visualization."));
+                        + " field above to see the visualization."));
     }
 
     private void initOperationList() {
@@ -100,7 +83,7 @@ public final class I2cTabController extends AbstractTabController {
         operationList.getSelectionModel().selectFirst();
         operationList.valueProperty()
                 .addListener((ObservableValue<? extends Operation> obs,
-                        Operation old, Operation newValue) -> {
+                              Operation old, Operation newValue) -> {
                     if (newValue != null) {
                         setComponentsDisableProperty(newValue);
                     }
@@ -158,24 +141,20 @@ public final class I2cTabController extends AbstractTabController {
     private void initUserRequestsComboBox() {
         usedRequestsComboBox.setItems(XStreamUtils.getI2cRequests());
         usedRequestsComboBox
-                .setCellFactory((ListView<I2cRequestValueObject> param) -> {
-                    final ListCell<I2cRequestValueObject> cell
-                            = new ListCell<I2cRequestValueObject>() {
-                        {
-                            final int prefWidth = 150;
-                            super.setPrefWidth(prefWidth);
-                        }
+                .setCellFactory((ListView<I2cRequestValueObject> param) -> new ListCell<I2cRequestValueObject>() {
+                    {
+                        final int prefWidth = 150;
+                        super.setPrefWidth(prefWidth);
+                    }
 
-                        @Override
-                        public void updateItem(I2cRequestValueObject item,
-                                boolean empty) {
-                            super.updateItem(item, empty);
-                            if (item != null) {
-                                setText(item.toString());
-                            }
+                    @Override
+                    public void updateItem(I2cRequestValueObject item,
+                                           boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.toString());
                         }
-                    };
-                    return cell;
+                    }
                 });
         usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldValue, newValue) -> {
@@ -194,18 +173,17 @@ public final class I2cTabController extends AbstractTabController {
 
     private BooleanBinding isHexaByte(TextField textfield) {
         BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> HEX_BYTE_REGEX_PATTERN
+                        -> HEX_BYTE_REGEX_PATTERN
                         .matcher(textfield.getText()).matches(),
                 textfield.textProperty());
         return binding.and(checkLengthFieldNonEmpty());
     }
 
     private BooleanBinding checkLengthFieldNonEmpty() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> lengthField.textProperty().isEmpty().not().get(),
-                lengthField.textProperty());
 
-        return binding;
+        return Bindings.createBooleanBinding(()
+                        -> lengthField.textProperty().isEmpty().not().get(),
+                lengthField.textProperty());
     }
 
     private void setComponentsDisableProperty(Operation op) {

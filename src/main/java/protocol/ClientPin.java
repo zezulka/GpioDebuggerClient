@@ -8,7 +8,6 @@ public interface ClientPin {
      * should not be directly used as a label in user interface as more common
      * way of describing GPIO pins is via their GPIO address.
      *
-     * @return
      */
     String getPinId();
 
@@ -19,7 +18,6 @@ public interface ClientPin {
      * NonGPIO pins may use pin identifier instead as their reasonable name.
      *
      * @throws UnsupportedOperationException pin does not belong to GPIO group
-     * @return
      */
     String getGpioName();
 
@@ -30,8 +28,6 @@ public interface ClientPin {
 
     /**
      * Tells whether this pin belongs to GPIO pin group.
-     *
-     * @return
      */
     boolean isGpio();
 }

@@ -73,8 +73,6 @@ public final class ConnectionThread implements Runnable {
 
     /**
      * Checks whether device on the supplied IP address is alive.
-     *
-     * @param ipAddress
      * @return true if alive, false otherwise
      */
     private boolean isAlive() {
@@ -115,10 +113,8 @@ public final class ConnectionThread implements Runnable {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             if (connection.getDevice().isDirty()) {
-                Platform.runLater(() -> {
-                    MasterWindowController.getTabManager()
-                            .removeTab(connection.getDevice().getAddress());
-                });
+                Platform.runLater(() -> MasterWindowController.getTabManager()
+                        .removeTab(connection.getDevice().getAddress()));
                 ControllerUtils.showInfoDialog(
                         String.format("Disconnected from address %s, device %s",
                                 connection.getDevice().getAddress(),
@@ -240,8 +236,6 @@ public final class ConnectionThread implements Runnable {
     /**
      * Given message is stored in the appropriate variable and registers this
      * message in SocketChannel to be sent via output stream to agent.
-     *
-     * @param message
      */
     public void registerMessage(String message) {
         connection.setMessageToSend(message);

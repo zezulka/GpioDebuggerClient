@@ -38,7 +38,7 @@ public final class AgentResponseFactory {
 
         final int typeElemIndex = 0;
         List<String> splitResponse = getMessageElems(agentMessage);
-        ResponseType type = null;
+        ResponseType type;
         try {
             type = ResponseType.valueOf(splitResponse.get(typeElemIndex));
         } catch (IllegalArgumentException ex) {

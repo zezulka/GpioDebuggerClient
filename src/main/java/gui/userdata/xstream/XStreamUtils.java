@@ -141,7 +141,7 @@ public final class XStreamUtils {
         }
         // Uncaught exceptions might be thrown, deal with this in a sane way
         // CannotResolveClassException - this is demonstrated
-        //     on uknown_collection.xml
+        //     on unknown_collection.xml
         try {
             XStreamListWrapper<T> requests
                     = (XStreamListWrapper<T>) X_STREAM.fromXML(file);

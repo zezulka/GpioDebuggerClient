@@ -1,6 +1,7 @@
 package gui.userdata;
 
 import gui.misc.Operation;
+
 import java.util.Objects;
 
 public final class I2cRequestValueObject {
@@ -11,7 +12,7 @@ public final class I2cRequestValueObject {
     private final String bytes;
 
     public I2cRequestValueObject(Operation operation, String slaveAddress,
-            int length, String bytes) {
+                                 int length, String bytes) {
         this.operation = operation;
         this.slaveAddress = slaveAddress;
         this.length = length;
@@ -72,16 +73,10 @@ public final class I2cRequestValueObject {
             return false;
         }
         final I2cRequestValueObject other = (I2cRequestValueObject) obj;
-        if (this.length != other.length) {
-            return false;
-        }
-        if (!Objects.equals(this.slaveAddress, other.slaveAddress)) {
-            return false;
-        }
-        if (!Objects.equals(this.bytes, other.bytes)) {
-            return false;
-        }
-        return this.operation.equals(other.operation);
+        return this.length == other.length &&
+                Objects.equals(this.slaveAddress, other.slaveAddress) &&
+                Objects.equals(this.bytes, other.bytes) &&
+                this.operation.equals(other.operation);
     }
 
 }

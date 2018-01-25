@@ -42,8 +42,6 @@ public final class TabManagerImpl implements TabManager {
     }
 
     /**
-     *
-     * @param address
      * @throws IllegalArgumentException if no tab has {@code address} associated
      * to it
      */

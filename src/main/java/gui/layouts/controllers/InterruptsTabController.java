@@ -99,8 +99,6 @@ public final class InterruptsTabController implements Initializable {
 
     /**
      * Creates temporary InterruptValueObject from selected ComboBoxes.
-     *
-     * @return
      */
     private InterruptValueObject getNewInterruptValueObject(ClientPin pin) {
         return new InterruptValueObject(
@@ -268,7 +266,7 @@ public final class InterruptsTabController implements Initializable {
         }
 
         @Override
-        protected Void call() throws Exception {
+        protected Void call() {
             super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {

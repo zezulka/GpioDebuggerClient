@@ -17,9 +17,7 @@ public final class DeviceValueObject {
 
     /**
      * Constructor without BoardType input variable. If such constructor is
-     * used, {@link BoardType.UNKNOWN} is used.
-     *
-     * @param address
+     * used, BoardType.UNKNOWN is used.
      */
     public DeviceValueObject(InetAddress address) {
         this(address, BoardType.UNKNOWN);

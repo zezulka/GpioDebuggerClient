@@ -1,26 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableRow?>
-<?import javafx.scene.control.ComboBox?>
 
 <Tab closable="false" text="Interrupts" xmlns="http://javafx.com/javafx/8"  xmlns:fx="http://javafx.com/fxml/1"  id="interruptTab" fx:id="interruptTab">
     <content>
@@ -30,7 +12,7 @@
                 <Button id="pinButton" fx:id="pinButton" layoutX="159.0" layoutY="497.0" prefHeight="25.0" prefWidth="120.0" />
                 <TableView id="tableView" fx:id="tableView" prefHeight="475.0" prefWidth="854.0">
                     <columns>
-                        <TableColumn fx:id="pinName" editable="false" prefWidth="80.0" text="Pin Name" />
+                        <TableColumn fx:id="pinName" editable="false" text="Pin Name" />
                         <TableColumn fx:id="interruptType" editable="false" prefWidth="67.0" text="Type" />
                         <TableColumn fx:id="timeAdded" editable="false" prefWidth="133.0" text="Time Added" />
                         <TableColumn fx:id="numOfIntrs" editable="false" prefWidth="148.0" text="Nr. Interrupts" />

@@ -27,7 +27,7 @@ public final class ControllerUtils {
     public static final URL TESTING_GPIO = getPathToFxml("TestingGpioTab");
     public static final URL MASTER = getPathToFxml("MasterWindow");
 
-    public static final TabLoader GPIO_TAB_LOADER = new TabLoaderImpl();
+    private static final TabLoader GPIO_TAB_LOADER = new TabLoaderImpl();
 
     private ControllerUtils() {
     }
@@ -117,6 +117,6 @@ public final class ControllerUtils {
                 .forEach(node -> ((Label) node)
                 .setMinHeight(Region.USE_PREF_SIZE));
         Optional<ButtonType> result = alert.showAndWait();
-        return result.get() != null && result.get().equals(ButtonType.OK);
+        return result.get().equals(ButtonType.OK);
     }
 }

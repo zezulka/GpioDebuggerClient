@@ -90,9 +90,6 @@ public final class InterruptValueObject {
             return false;
         }
         final InterruptValueObject other = (InterruptValueObject) obj;
-        if (!Objects.equals(this.clientPin, other.clientPin)) {
-            return false;
-        }
-        return this.type.equals(other.type);
+        return Objects.equals(this.clientPin, other.clientPin) && this.type.equals(other.type);
     }
 }

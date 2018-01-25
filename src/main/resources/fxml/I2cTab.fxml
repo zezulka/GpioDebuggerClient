@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
-<Tab text="I2C" closable="false"  id="i2cTab" fx:id="i2cTab" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.Font?>
+<Tab text="I2C" closable="false" id="i2cTab" fx:id="i2cTab" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <content>
         <GridPane layoutX="14.0" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" >
             <columnConstraints>
@@ -45,7 +41,7 @@
                         <Insets right="10.0" />
                     </padding>
                 </Label>
-                <Label id="values" fx:id="values" contentDisplay="BOTTOM" focusTraversable="false" prefHeight="19.0" prefWidth="200.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                <Label id="values" fx:id="values" contentDisplay="BOTTOM" prefHeight="19.0" prefWidth="200.0" text="Bytes in hexadecimal" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>

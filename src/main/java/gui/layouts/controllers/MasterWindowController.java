@@ -6,17 +6,6 @@ import gui.tab.loader.TabManager;
 import gui.tab.loader.TabManagerImpl;
 import gui.userdata.DeviceValueObject;
 import gui.userdata.xstream.XStreamUtils;
-
-import java.net.InetAddress;
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
-
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -26,17 +15,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -44,19 +23,32 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import net.NetworkManager;
 import net.NetworkingUtils;
-import protocol.InterruptManager;
-import util.StringConstants;
-
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import protocol.InterruptManager;
+import util.StringConstants;
+
+import java.net.InetAddress;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public final class MasterWindowController implements Initializable {
 
-    private SwitchButton deviceTreeSwitch;
+    private static final Logger LOGGER
+            = LoggerFactory.getLogger(MasterWindowController.class);
+    private static final NetworkManager NETWORK_MANAGER
+            = NetworkManager.getInstance();
+    private static final int HISTORY_BRANCH = 1;
+    private static final int ACTIVE_BRANCH_INDEX = 0;
+    private static final double SPLIT_PANE_THRESHOLD = 0.75D;
+    private static TabManager manager = null;
+    private final PopOver deviceInfo = new PopOver();
+    private final BooleanProperty connectingToDevice
+            = new SimpleBooleanProperty(false);
     @FXML
     private TabPane devicesTab;
     @FXML
@@ -73,22 +65,6 @@ public final class MasterWindowController implements Initializable {
     private SplitPane rootSplitPane;
     @FXML
     private ToolBar toolBar;
-
-    private final PopOver deviceInfo = new PopOver();
-
-    private static final Logger LOGGER
-            = LoggerFactory.getLogger(MasterWindowController.class);
-    private static final NetworkManager NETWORK_MANAGER
-            = NetworkManager.getInstance();
-    private static TabManager manager = null;
-
-    private final BooleanProperty connectingToDevice
-            = new SimpleBooleanProperty(false);
-
-    //local numeric constants for master controller
-    private static final int HISTORY_BRANCH = 1;
-    private static final int ACTIVE_BRANCH_INDEX = 0;
-    private static final double SPLIT_PANE_THRESHOLD = 0.75D;
 
     public MasterWindowController() {
     }
@@ -114,22 +90,18 @@ public final class MasterWindowController implements Initializable {
         initAddNewDeviceBtn();
         connectBtn.setOnAction(t -> connectToDeviceHandler());
         disconnectButton.setOnAction(t -> disconnectHandler());
-        connectingToDevice.addListener((o, old, pending) -> {
-            Platform.runLater(()
-                    -> connectBtn.setText(pending ? "Connecting..." : "Connect")
-            );
-        });
+        connectingToDevice.addListener((o, old, pending) -> Platform.runLater(()
+                -> connectBtn.setText(pending ? "Connecting..." : "Connect")
+        ));
         devicesTab.maxWidthProperty().bind(rootSplitPane.widthProperty()
                 .multiply(SPLIT_PANE_THRESHOLD));
     }
 
     private void initDeviceTreeSwitch() {
-        deviceTreeSwitch = new SwitchButton();
+        SwitchButton deviceTreeSwitch = new SwitchButton();
         toolBar.getItems().add(0, deviceTreeSwitch);
         deviceTreeSwitch.switchOnProperty().set(true);
-        deviceTreeSwitch.switchOnProperty().addListener((o, old, selected) -> {
-            deviceTreeBtnListener(selected);
-        });
+        deviceTreeSwitch.switchOnProperty().addListener((o, old, selected) -> deviceTreeBtnListener(selected));
     }
 
     private void deviceTreeBtnListener(boolean isSelected) {
@@ -144,7 +116,7 @@ public final class MasterWindowController implements Initializable {
     private void initConnectToDeviceBtn() {
         initializeToolbarButton(connectBtn, Graphics.CONNECT,
                 "Connects to device. "
-                + "\nDevice must be selected in the device tree.");
+                        + "\nDevice must be selected in the device tree.");
         connectBtn.disableProperty()
                 .bind(connectionPending().or(rootOrChildrenSelected(true)));
     }
@@ -152,7 +124,7 @@ public final class MasterWindowController implements Initializable {
     private void initDisconnectBtn() {
         initializeToolbarButton(disconnectButton, Graphics.DISCONNECT,
                 "Disconnects from device. "
-                + "\nDevice must be selected in the device tree and active.");
+                        + "\nDevice must be selected in the device tree and active.");
         disconnectButton.disableProperty().bind(rootOrChildrenSelected(false));
     }
 
@@ -162,7 +134,7 @@ public final class MasterWindowController implements Initializable {
             return !(selectedItem != null && selectedItem.isLeaf()
                     && selectedItem.getParent().getParent() != null
                     && (selectedItem.getValue().disconnectedProperty()
-                            .getValue() == desiredValue));
+                    .getValue() == desiredValue));
         }, devicesTree.getSelectionModel().selectedItemProperty());
     }
 
@@ -204,8 +176,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private BooleanBinding connectionPending() {
-        BooleanBinding binding = Bindings.createBooleanBinding(()
-                -> connectingToDevice.get(), connectingToDevice);
+        BooleanBinding binding = Bindings.createBooleanBinding(connectingToDevice::get, connectingToDevice);
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
@@ -221,7 +192,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void initializeToolbarButton(ButtonBase button,
-            ImageView buttonImageView, String tooltipText) {
+                                         ImageView buttonImageView, String tooltipText) {
         button.setGraphic(buttonImageView);
         Tooltip tooltip = new Tooltip(tooltipText);
         button.setTooltip(tooltip);
@@ -253,7 +224,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private TreeItem<DeviceValueObject>
-            getTreeItemWithListener(DeviceValueObject obj) {
+    getTreeItemWithListener(DeviceValueObject obj) {
         TreeItem<DeviceValueObject> treeItem
                 = new TreeItem<>(obj, new Label(obj.getHostName()));
         obj.disconnectedProperty().addListener((observable, before, now) -> {
@@ -280,8 +251,6 @@ public final class MasterWindowController implements Initializable {
 
     /**
      * Returns selected item in the device tree.
-     *
-     * @return
      */
     private TreeItem<DeviceValueObject> getSelectedItem() {
         return devicesTree.getSelectionModel().getSelectedItem();
@@ -350,12 +319,10 @@ public final class MasterWindowController implements Initializable {
         }
 
         private void notifyConnectingFailed() {
-            Platform.runLater(() -> {
-                ControllerUtils.showErrorDialog(String.format(
-                        StringConstants.F_HOST_NOT_REACHABLE.toString(),
-                        device.getHostName())
-                );
-            });
+            Platform.runLater(() -> ControllerUtils.showErrorDialog(String.format(
+                    StringConstants.F_HOST_NOT_REACHABLE.toString(),
+                    device.getHostName())
+            ));
         }
 
         @Override

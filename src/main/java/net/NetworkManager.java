@@ -41,8 +41,6 @@ public final class NetworkManager {
      * method should enable application to prevent user from connecting to the
      * same device (to the same IP address, that is) twice.
      *
-     * @param ipAddress
-     * @return
      */
     private boolean alreadyConnectedToAddress(InetAddress ipAddress) {
         return ADDRESSES.get(ipAddress) != null;
@@ -61,9 +59,6 @@ public final class NetworkManager {
      * Thread instance is created, which iterates in infinite loop and scans for
      * selection keys (more information in run method). It is supposed that the
      * ipAddress supplied is valid and agent is alive on the specified address.
-     *
-     * @param device
-     * @return
      */
     public boolean connectToDevice(DeviceValueObject device) {
         if (alreadyConnectedToAddress(device.getAddress())) {
@@ -104,7 +99,7 @@ public final class NetworkManager {
 
     public static void disconnectAll() {
         Set<ConnectionThread> threads = new HashSet<>(ADDRESSES.values());
-        threads.forEach((thread) -> thread.disconnect());
+        threads.forEach(ConnectionThread::disconnect);
         ADDRESSES.clear();
     }
 
