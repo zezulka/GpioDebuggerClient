@@ -54,10 +54,10 @@ public final class I2cRequestValueObject {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.operation);
-        hash = 13 * hash + Objects.hashCode(this.slaveAddress);
-        hash = 17 * hash + this.length;
-        hash = 19 * hash + Objects.hashCode(this.bytes);
+        hash = 11 * hash + Objects.hashCode(operation);
+        hash = 13 * hash + Objects.hashCode(slaveAddress);
+        hash = 17 * hash + length;
+        hash = 19 * hash + Objects.hashCode(bytes);
         return hash;
     }
 
@@ -73,10 +73,10 @@ public final class I2cRequestValueObject {
             return false;
         }
         final I2cRequestValueObject other = (I2cRequestValueObject) obj;
-        return this.length == other.length &&
-                Objects.equals(this.slaveAddress, other.slaveAddress) &&
-                Objects.equals(this.bytes, other.bytes) &&
-                this.operation.equals(other.operation);
+        return length == other.length
+                && Objects.equals(slaveAddress, other.slaveAddress)
+                && Objects.equals(bytes, other.bytes)
+                && operation.equals(other.operation);
     }
 
 }

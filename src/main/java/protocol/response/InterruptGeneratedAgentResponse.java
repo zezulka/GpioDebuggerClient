@@ -22,7 +22,7 @@ public final class InterruptGeneratedAgentResponse
     public void react() {
         if (getResponse().stateProperty().get().equals(ListenerState.RUNNING)) {
             InterruptManager
-                    .updateInterruptListener(getAddress(), getResponse());
+                    .update(getAddress(), getResponse());
         } else {
             LOGGER.debug("Message about interrupt has been received, "
                     + "but this listener is not active.");

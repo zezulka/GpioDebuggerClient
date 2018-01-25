@@ -8,7 +8,6 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import org.junit.Before;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.After;

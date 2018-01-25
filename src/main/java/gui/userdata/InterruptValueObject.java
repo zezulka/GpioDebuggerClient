@@ -1,9 +1,5 @@
 package gui.userdata;
 
-import java.time.LocalTime;
-
-import java.util.Objects;
-
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -11,6 +7,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import protocol.ClientPin;
 import protocol.InterruptType;
 import protocol.ListenerState;
+
+import java.time.LocalTime;
+import java.util.Objects;
 
 public final class InterruptValueObject {
 
@@ -58,7 +57,7 @@ public final class InterruptValueObject {
         this.numOfIntrs.set(num);
     }
 
-    public void incrementNumberOfInterrupts() {
+    public void incrementIntrs() {
         setNumOfIntrs(this.numOfIntrs.get() + 1);
     }
 
@@ -90,6 +89,7 @@ public final class InterruptValueObject {
             return false;
         }
         final InterruptValueObject other = (InterruptValueObject) obj;
-        return Objects.equals(this.clientPin, other.clientPin) && this.type.equals(other.type);
+        return Objects.equals(this.clientPin, other.clientPin)
+                && this.type.equals(other.type);
     }
 }

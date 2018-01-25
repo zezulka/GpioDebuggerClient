@@ -7,7 +7,14 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
@@ -141,21 +148,23 @@ public final class I2cTabController extends AbstractTabController {
     private void initUserRequestsComboBox() {
         usedRequestsComboBox.setItems(XStreamUtils.getI2cRequests());
         usedRequestsComboBox
-                .setCellFactory((ListView<I2cRequestValueObject> param) -> new ListCell<I2cRequestValueObject>() {
-                    {
-                        final int prefWidth = 150;
-                        super.setPrefWidth(prefWidth);
-                    }
+                .setCellFactory(
+                        (ListView<I2cRequestValueObject> param)
+                                -> new ListCell<I2cRequestValueObject>() {
+                            {
+                                final int prefWidth = 150;
+                                super.setPrefWidth(prefWidth);
+                            }
 
-                    @Override
-                    public void updateItem(I2cRequestValueObject item,
-                                           boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            setText(item.toString());
-                        }
-                    }
-                });
+                            @Override
+                            public void updateItem(I2cRequestValueObject item,
+                                                   boolean empty) {
+                                super.updateItem(item, empty);
+                                if (item != null) {
+                                    setText(item.toString());
+                                }
+                            }
+                        });
         usedRequestsComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldValue, newValue) -> {
                     if (!newValue.getOperation().equals(Operation.WRITE)) {

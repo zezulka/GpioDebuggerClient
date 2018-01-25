@@ -15,7 +15,17 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -33,7 +43,12 @@ import util.StringConstants;
 
 import java.net.InetAddress;
 import java.net.URL;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
 public final class MasterWindowController implements Initializable {
@@ -75,17 +90,17 @@ public final class MasterWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeDeviceTree();
-        initializeToolbar();
+        initDeviceTree();
+        initToolbar();
         manager = new TabManagerImpl(devicesTab);
         deviceInfo.setTitle("Device info");
         deviceInfo.setHeaderAlwaysVisible(true);
         deviceInfo.setAnimated(false);
     }
 
-    private void initializeToolbar() {
+    private void initToolbar() {
         initDeviceTreeSwitch();
-        initConnectToDeviceBtn();
+        initConnectBtn();
         initDisconnectBtn();
         initAddNewDeviceBtn();
         connectBtn.setOnAction(t -> connectToDeviceHandler());
@@ -101,7 +116,8 @@ public final class MasterWindowController implements Initializable {
         SwitchButton deviceTreeSwitch = new SwitchButton();
         toolBar.getItems().add(0, deviceTreeSwitch);
         deviceTreeSwitch.switchOnProperty().set(true);
-        deviceTreeSwitch.switchOnProperty().addListener((o, old, selected) -> deviceTreeBtnListener(selected));
+        deviceTreeSwitch.switchOnProperty().addListener(
+                (o, old, selected) -> deviceTreeBtnListener(selected));
     }
 
     private void deviceTreeBtnListener(boolean isSelected) {
@@ -113,18 +129,16 @@ public final class MasterWindowController implements Initializable {
         rootSplitPane.setDividerPositions(dividerPos);
     }
 
-    private void initConnectToDeviceBtn() {
-        initializeToolbarButton(connectBtn, Graphics.CONNECT,
-                "Connects to device. "
-                        + "\nDevice must be selected in the device tree.");
+    private void initConnectBtn() {
+        initToolbarButton(connectBtn, Graphics.CONNECT,
+                StringConstants.TOOLTIP_HINT_CONNECT_BTN);
         connectBtn.disableProperty()
                 .bind(connectionPending().or(rootOrChildrenSelected(true)));
     }
 
     private void initDisconnectBtn() {
-        initializeToolbarButton(disconnectButton, Graphics.DISCONNECT,
-                "Disconnects from device. "
-                        + "\nDevice must be selected in the device tree and active.");
+        initToolbarButton(disconnectButton, Graphics.DISCONNECT,
+                StringConstants.TOOLTIP_HINT_DISCONNECT_BTN);
         disconnectButton.disableProperty().bind(rootOrChildrenSelected(false));
     }
 
@@ -142,7 +156,7 @@ public final class MasterWindowController implements Initializable {
         addNewDeviceButton.disableProperty()
                 .bind(ipAddress.textProperty().isEmpty());
         addNewDeviceButton.setOnAction((event) -> {
-            DeviceValueObject newDevice = getNewDeviceFromUser();
+            DeviceValueObject newDevice = createNewDevice();
             if (newDevice != null) {
                 ipAddress.textProperty().set("");
                 List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
@@ -176,11 +190,13 @@ public final class MasterWindowController implements Initializable {
     }
 
     private BooleanBinding connectionPending() {
-        BooleanBinding binding = Bindings.createBooleanBinding(connectingToDevice::get, connectingToDevice);
+        BooleanBinding binding =
+                Bindings.createBooleanBinding(connectingToDevice::get,
+                        connectingToDevice);
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
-    private DeviceValueObject getNewDeviceFromUser() {
+    private DeviceValueObject createNewDevice() {
         String cand = ipAddress.getText();
         InetAddress inetAddr = NetworkingUtils.getAddressFromHostname(cand);
         if (inetAddr == null) {
@@ -191,14 +207,15 @@ public final class MasterWindowController implements Initializable {
         return new DeviceValueObject(inetAddr);
     }
 
-    private void initializeToolbarButton(ButtonBase button,
-                                         ImageView buttonImageView, String tooltipText) {
+    private void initToolbarButton(ButtonBase button,
+                                   ImageView buttonImageView,
+                                   String tooltipText) {
         button.setGraphic(buttonImageView);
         Tooltip tooltip = new Tooltip(tooltipText);
         button.setTooltip(tooltip);
     }
 
-    private void initializeDeviceTree() {
+    private void initDeviceTree() {
         TreeItem<DeviceValueObject> root = new TreeItem<>();
         TreeItem<DeviceValueObject> active = new TreeItem<>();
         TreeItem<DeviceValueObject> hist = new TreeItem<>();
@@ -319,8 +336,8 @@ public final class MasterWindowController implements Initializable {
         }
 
         private void notifyConnectingFailed() {
-            Platform.runLater(() -> ControllerUtils.showErrorDialog(String.format(
-                    StringConstants.F_HOST_NOT_REACHABLE.toString(),
+            Platform.runLater(() -> ControllerUtils.showErrorDialog(
+                    String.format(StringConstants.F_HOST_NOT_REACHABLE,
                     device.getHostName())
             ));
         }

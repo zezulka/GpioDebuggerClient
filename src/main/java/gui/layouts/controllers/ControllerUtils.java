@@ -14,7 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
-import util.StringConstants;
 
 public final class ControllerUtils {
 
@@ -62,7 +61,7 @@ public final class ControllerUtils {
         return new DeviceController();
     }
 
-    public static URL getPathToFxml(String fxmlName) {
+    private static URL getPathToFxml(String fxmlName) {
         return ControllerUtils.class.getResource("/fxml"
                 + File.separator + fxmlName + FXML_EXT);
     }
@@ -99,11 +98,11 @@ public final class ControllerUtils {
     /**
      * @return True if user confirmed the given action, false otherwise.
      */
-    public static boolean showConfirmDialog(StringConstants message,
+    public static boolean showConfirmDialog(String message,
             Object... other) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Please confirm");
-        StringBuilder wholeMessage = new StringBuilder(message.toString());
+        StringBuilder wholeMessage = new StringBuilder(message);
         for (Object obj : other) {
             wholeMessage.append(obj.toString());
         }

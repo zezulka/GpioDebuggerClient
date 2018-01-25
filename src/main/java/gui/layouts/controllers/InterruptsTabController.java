@@ -137,7 +137,7 @@ public final class InterruptsTabController implements Initializable {
                 setOpacity(1.0);
             }
             setOnMouseClicked((e) -> {
-                InterruptManager.addInterruptListener(address,
+                InterruptManager.add(address,
                         getNewInterruptValueObject(pin));
                 pinPopup.hide();
             });
@@ -296,7 +296,7 @@ public final class InterruptsTabController implements Initializable {
 
     public final class StartInterruptsWorker extends AbstractInterruptsWorker {
 
-        public StartInterruptsWorker(InterruptValueObject selected) {
+        StartInterruptsWorker(InterruptValueObject selected) {
             super(selected, ListenerState.NOT_RUNNING);
         }
 
@@ -310,6 +310,7 @@ public final class InterruptsTabController implements Initializable {
                     // for more information
                     SYNC.wait();
                 } catch (InterruptedException e) {
+                    // ignore the exception
                 }
             }
         }
@@ -322,7 +323,7 @@ public final class InterruptsTabController implements Initializable {
 
     public class StopInterruptsWorker extends AbstractInterruptsWorker {
 
-        public StopInterruptsWorker(InterruptValueObject selected) {
+        StopInterruptsWorker(InterruptValueObject selected) {
             super(selected, ListenerState.RUNNING);
         }
 
@@ -335,7 +336,7 @@ public final class InterruptsTabController implements Initializable {
     public final class StopAndRemoveInterruptsWorker
             extends StopInterruptsWorker {
 
-        public StopAndRemoveInterruptsWorker(InterruptValueObject selected) {
+        StopAndRemoveInterruptsWorker(InterruptValueObject selected) {
             super(selected);
         }
 
@@ -348,6 +349,7 @@ public final class InterruptsTabController implements Initializable {
                     // signal; please see this class for more information
                     SYNC.wait();
                 } catch (InterruptedException e) {
+                    // ignore the exception
                 }
             }
             tableView.itemsProperty().get().remove(getSelectedIntr());

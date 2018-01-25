@@ -1,14 +1,15 @@
 package protocol;
 
+import gui.layouts.controllers.ControllerUtils;
 import gui.userdata.InterruptValueObject;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import gui.layouts.controllers.ControllerUtils;
+
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class InterruptManager {
@@ -21,12 +22,12 @@ public final class InterruptManager {
     private InterruptManager() {
     }
 
-    public static void clearAllInterruptListeners() {
+    public static void clearAll() {
         INTERRUPTS.clear();
     }
 
     public static ObservableList<InterruptValueObject>
-            getListeners(InetAddress address) {
+    getListeners(InetAddress address) {
         Objects.requireNonNull(address, "address cannot be null");
         ObservableList<InterruptValueObject> list = INTERRUPTS.get(address);
         if (list == null) {
@@ -40,8 +41,8 @@ public final class InterruptManager {
      * @return null if no mapping to address/object combination exists,
      * InterruptValueObject instance otherwise
      */
-    public static InterruptValueObject getInterruptListener(InetAddress address,
-            ClientPin pin, InterruptType type) {
+    public static InterruptValueObject get(InetAddress address,
+                                           ClientPin pin, InterruptType type) {
         if (INTERRUPTS.get(address) == null) {
             return null;
         }
@@ -53,22 +54,23 @@ public final class InterruptManager {
         return null;
     }
 
-    public static void updateInterruptListener(InetAddress destination,
-            InterruptValueObject ivo) {
+    public static void update(InetAddress destination,
+                              InterruptValueObject ivo) {
         for (InterruptValueObject curr : INTERRUPTS.get(destination)) {
             if ((ivo.getClientPin().equals(curr.getClientPin())
                     && curr.getType().equals(InterruptType.BOTH)
                     && curr.stateProperty().get().equals(ListenerState.RUNNING))
                     || curr.equals(ivo)) {
                 curr.setLastIntrTime(ivo.lastIntrTimeProperty().get());
-                curr.incrementNumberOfInterrupts();
+                curr.incrementIntrs();
             }
         }
     }
 
-    public static void addInterruptListener(InetAddress destination,
-            InterruptValueObject ivo) {
-        INTERRUPTS.computeIfAbsent(destination, k -> FXCollections.observableArrayList());
+    public static void add(InetAddress destination,
+                           InterruptValueObject ivo) {
+        INTERRUPTS.computeIfAbsent(destination,
+                k -> FXCollections.observableArrayList());
         if (!INTERRUPTS.get(destination).contains(ivo)) {
             NUM_LISTENERS.set(NUM_LISTENERS.get() + 1);
             INTERRUPTS.get(destination).add(ivo);
@@ -76,17 +78,6 @@ public final class InterruptManager {
             ControllerUtils.showErrorDialog("Listener already exists.");
         }
     }
-
- /*   public static boolean removeInterruptListener(InetAddress destination,
-            InterruptValueObject ivo) {
-        for (InterruptValueObject interrupt : INTERRUPTS.get(destination)) {
-            if (interrupt.equals(ivo)) {
-                NUM_LISTENERS.set(NUM_LISTENERS.get() - 1);
-                return INTERRUPTS.get(destination).remove(interrupt);
-            }
-        }
-        throw new IllegalArgumentException("InterruptValueObject not found");
-  }*/
 
     public static void clearAllListeners(InetAddress inetAddress) {
         INTERRUPTS.remove(inetAddress);

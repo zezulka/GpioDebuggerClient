@@ -42,7 +42,7 @@ public class AgentResponseFactoryTest {
 
     @Before
     public void clean() {
-        InterruptManager.clearAllInterruptListeners();
+        InterruptManager.clearAll();
         try {
             mockedAddress = InetAddress.getLocalHost();
             connection = new ConnectionValueObject("", null, null, new DeviceValueObject(mockedAddress, BoardType.RASPBERRY_PI));
@@ -163,7 +163,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void interruptGeneratedHappyScenario() {
         try {
-            InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
+            InterruptManager.add(mockedAddress, new InterruptValueObject(clientPin, intrType));
             assertThat(AgentResponseFactory.of("INTR_GENERATED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
@@ -175,7 +175,7 @@ public class AgentResponseFactoryTest {
     @Test
     public void interruptStartedHappyScenario() {
         try {
-            InterruptManager.addInterruptListener(mockedAddress, new InterruptValueObject(clientPin, intrType));
+            InterruptManager.add(mockedAddress, new InterruptValueObject(clientPin, intrType));
             assertThat(AgentResponseFactory.of("INTR_STARTED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
@@ -188,7 +188,7 @@ public class AgentResponseFactoryTest {
     public void interruptStoppedHappyScenario() {
         try {
             InterruptValueObject object = new InterruptValueObject(clientPin, intrType);
-            InterruptManager.addInterruptListener(mockedAddress, object);
+            InterruptManager.add(mockedAddress, object);
             assertThat(AgentResponseFactory.of("INTR_STOPPED:" + clientPin.getPinId()
                     + ':' + intrType.toString() + ':'
                     + mockedNow, connection)).isInstanceOf(AbstractInterruptAgentResponse.class);
