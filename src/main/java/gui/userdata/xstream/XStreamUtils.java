@@ -70,7 +70,7 @@ public final class XStreamUtils {
     private XStreamUtils() {
     }
 
-    static <T> void saveCollectionsToAssociatedFiles(
+    static void saveCollectionsToAssociatedFiles(
             XStreamListWrapper... colls) {
 
         for (XStreamListWrapper col : colls) {
@@ -118,7 +118,7 @@ public final class XStreamUtils {
         return FXCollections.observableArrayList(I2C_REQUESTS.getItems());
     }
 
-    static <T> void addNewItemToCollection(T item,
+    private static <T> void addNewItemToCollection(T item,
             XStreamListWrapper<T> collection) {
         collection.addItem(item);
     }
@@ -135,6 +135,10 @@ public final class XStreamUtils {
         addNewItemToCollection(request, SPI_REQUESTS);
     }
 
+    public static ObservableList<SpiRequestValueObject> getSpiRequests() {
+        return FXCollections.observableArrayList(SPI_REQUESTS.getItems());
+    }
+
     static <T> List<T> initItemsFromFile(File file) {
         if (!file.exists()) {
             return new ArrayList<>();
@@ -143,6 +147,8 @@ public final class XStreamUtils {
         // CannotResolveClassException - this is demonstrated
         //     on unknown_collection.xml
         try {
+            //Structure of the file is fixed, otherwise ClassCastException is caught and logged.
+            @SuppressWarnings("unchecked")
             XStreamListWrapper<T> requests
                     = (XStreamListWrapper<T>) X_STREAM.fromXML(file);
             if (requests == null || requests.getItems() == null) {
@@ -150,8 +156,11 @@ public final class XStreamUtils {
             }
             return requests.getItems();
         } catch (CannotResolveClassException | NoClassDefFoundError ex) {
-            LOGGER.error("Corrupted file found: " + file.getAbsoluteFile());
+            LOGGER.error("Corrupted file found: " + file.getAbsolutePath());
             throw new XStreamException(ex);
+        } catch(ClassCastException cce) {
+            LOGGER.error(String.format("User data file %s is corrupted.", file.getAbsolutePath()));
+            throw new RuntimeException(cce);
         }
     }
 
@@ -165,9 +174,5 @@ public final class XStreamUtils {
 
     private static List<DeviceValueObject> getDevicesFromFile() {
         return initItemsFromFile(XmlUserdata.DEVICES_FILE);
-    }
-
-    public static ObservableList<SpiRequestValueObject> getSpiRequests() {
-        return FXCollections.observableArrayList(SPI_REQUESTS.getItems());
     }
 }
