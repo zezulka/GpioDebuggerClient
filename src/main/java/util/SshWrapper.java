@@ -15,41 +15,43 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /* Wrapper to a SSH library which is capable of executing commands remotely */
-public class SshWrapper {
+public final class SshWrapper {
     private final SSHClient sshClient;
 
     public SshWrapper(SshData data) throws IOException {
         this.sshClient = new SSHClient();
         sshClient.loadKnownHosts();
         sshClient.connect(data.getIpaddress());
-        sshClient.auth(data.getUsername(), new AuthPassword(new PasswordFinder() {
+        sshClient.auth(data.getUsername(), new AuthPassword(
+                new PasswordFinder() {
 
-            @Override
-            public char[] reqPassword(Resource<?> resource) {
-                return data.getPassword().toCharArray();
-            }
+                    @Override
+                    public char[] reqPassword(Resource<?> resource) {
+                        return data.getPassword().toCharArray();
+                    }
 
-            @Override
-            public boolean shouldRetry(Resource<?> resource) {
-                return false;
-            }
-        }));
+                    @Override
+                    public boolean shouldRetry(Resource<?> resource) {
+                        return false;
+                    }
+                }));
     }
 
     public List<String> getRemoteCommandOutput(String command) {
-            List<String> result = new ArrayList<>();
-            try (Session session = sshClient.startSession()) {
-                final Session.Command cmd = session.exec(command);
-                BufferedReader br = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
-                String curr;
-                while((curr = br.readLine()) != null) {
-                    result.add(curr);
-                }
-                cmd.join(5, TimeUnit.SECONDS);
-            } catch(IOException ex) {
-                return new ArrayList<>();
+        List<String> result = new ArrayList<>();
+        try (Session session = sshClient.startSession()) {
+            final Session.Command cmd = session.exec(command);
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(cmd.getInputStream()));
+            String curr;
+            while ((curr = br.readLine()) != null) {
+                result.add(curr);
             }
-            return result;
+            cmd.join(5, TimeUnit.SECONDS);
+        } catch (IOException ex) {
+            return new ArrayList<>();
+        }
+        return result;
     }
 
     public void close() {
@@ -57,6 +59,7 @@ public class SshWrapper {
             sshClient.close();
         } catch (IOException e) {
             // nothing to do about it
+            // TODO - at least log it!
         }
     }
 }

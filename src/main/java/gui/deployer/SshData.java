@@ -2,12 +2,8 @@ package gui.deployer;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.omg.PortableInterceptor.ServerRequestInfo;
 
-/**
- * Simple placeholder class for the customer entered survey response.
- */
-public class SshData {
+public final class SshData {
     private StringProperty username = new SimpleStringProperty();
     private StringProperty ipAddress = new SimpleStringProperty();
     private StringProperty password = new SimpleStringProperty();
@@ -34,11 +30,11 @@ public class SshData {
         return remoteFile.get();
     }
 
-    private void bindProperty(StringProperty toBeBinded, StringProperty bounder) {
-        if(toBeBinded.isBound()) {
+    private void bindProperty(StringProperty binded, StringProperty bounder) {
+        if (binded.isBound()) {
             throw new IllegalStateException("this property is bound already!");
         }
-        toBeBinded.bind(bounder);
+        binded.bind(bounder);
     }
 
     public void bindUsername(StringProperty prop) {

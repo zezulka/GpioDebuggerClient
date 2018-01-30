@@ -1,4 +1,4 @@
 /**
- * Helper classes for XStream library.
+ * Helper classes for XStreamWrapper library.
  */
 package gui.userdata.xstream;

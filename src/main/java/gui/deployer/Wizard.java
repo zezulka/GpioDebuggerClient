@@ -2,17 +2,19 @@ package gui.deployer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
 import util.SshWrapper;
+
 import java.util.Objects;
 import java.util.Stack;
 
 /**
  * basic wizard infrastructure class
  */
-public class Wizard extends StackPane {
+public final class Wizard extends StackPane {
     private static final int UNDEFINED = -1;
-    private ObservableList<AbstractWizardPage> pages = FXCollections.observableArrayList();
+    private ObservableList<AbstractWizardPage> pages
+            = FXCollections.observableArrayList();
     private Stack<Integer> history = new Stack<>();
     private int curPageIdx = UNDEFINED;
     private SshWrapper sshWrapper;
@@ -23,22 +25,22 @@ public class Wizard extends StackPane {
         setStyle("-fx-padding: 10; -fx-background-color: cornsilk;");
     }
 
-    void nextPage() {
+    public void nextPage() {
         if (hasNextPage()) {
             navTo(curPageIdx + 1);
         }
     }
 
-    SshWrapper getSshWrapper() {
+    public SshWrapper getSshWrapper() {
         return sshWrapper;
     }
 
-    void setSshWrapper(SshWrapper sshWrapper) {
+    public void setSshWrapper(SshWrapper sshWrapper) {
         Objects.requireNonNull(sshWrapper);
         this.sshWrapper = sshWrapper;
     }
 
-    void priorPage() {
+    public void priorPage() {
         if (hasPriorPage()) {
             navTo(history.pop(), false);
         }
@@ -52,8 +54,10 @@ public class Wizard extends StackPane {
         return !history.isEmpty();
     }
 
-    void navTo(int nextPageIdx, boolean pushHistory) {
-        if (nextPageIdx < 0 || nextPageIdx >= pages.size()) return;
+    private void navTo(int nextPageIdx, boolean pushHistory) {
+        if (nextPageIdx < 0 || nextPageIdx >= pages.size()) {
+            return;
+        }
         if (curPageIdx != UNDEFINED) {
             if (pushHistory) {
                 history.push(curPageIdx);
@@ -64,10 +68,9 @@ public class Wizard extends StackPane {
         curPageIdx = nextPageIdx;
         getChildren().clear();
         getChildren().add(nextPage);
-        nextPage.manageButtons();
     }
 
-    void navTo(int nextPageIdx) {
+    private void navTo(int nextPageIdx) {
         navTo(nextPageIdx, true);
     }
 
@@ -84,8 +87,15 @@ public class Wizard extends StackPane {
                 );
     }
 
+    public void reset() {
+        navTo("IP address and username");
+        if (sshWrapper != null) {
+            sshWrapper.close();
+        }
+    }
+
     public void finish() {
-        if(sshWrapper != null) {
+        if (sshWrapper != null) {
             sshWrapper.close();
         }
     }

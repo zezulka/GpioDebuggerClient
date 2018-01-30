@@ -2,19 +2,17 @@ package gui.userdata.xstream;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import gui.misc.Operation;
 import gui.userdata.DeviceValueObject;
 import gui.userdata.Devices;
 import gui.userdata.I2cRequestValueObject;
@@ -26,40 +24,11 @@ import org.slf4j.LoggerFactory;
 
 public final class XStreamUtils {
 
-    private static final XStream X_STREAM;
-
-    static {
-        X_STREAM = new XStream(new DomDriver());
-        X_STREAM.alias("operation", Operation.class);
-        X_STREAM.alias("address", InetAddress.class);
-        X_STREAM.alias("lastTimeConnected", LocalDateTime.class);
-
-        X_STREAM.alias("i2cRequest", I2cRequestValueObject.class);
-        X_STREAM.alias("spiRequest", SpiRequestValueObject.class);
-        X_STREAM.alias("device", DeviceValueObject.class);
-
-        X_STREAM.alias("i2cRequests", I2cRequests.class);
-        X_STREAM.alias("spiRequests", SpiRequests.class);
-        X_STREAM.alias("devices", Devices.class);
-
-        X_STREAM.omitField(AbstractXStreamListWrapper.class, "dirty");
-        X_STREAM.omitField(DeviceValueObject.class, "dirty");
-        X_STREAM.omitField(DeviceValueObject.class, "disconnected");
-
-        X_STREAM.addImplicitCollection(I2cRequests.class, "list",
-                I2cRequestValueObject.class);
-        X_STREAM.addImplicitCollection(SpiRequests.class, "list",
-                SpiRequestValueObject.class);
-        X_STREAM.addImplicitCollection(Devices.class, "list",
-                DeviceValueObject.class);
-    }
-
     public static final DateTimeFormatter DATE_TIME_FORMATTER
             = DateTimeFormatter.ofPattern("dd.MM. HH:mm");
-
+    private static final XStream X_STREAM = XStreamWrapper.getInstance();
     private static final Logger LOGGER
             = LoggerFactory.getLogger(XStreamUtils.class);
-
     private static final XStreamListWrapper<I2cRequestValueObject> I2C_REQUESTS
             = new I2cRequests(initI2cRequestsFromFile());
     private static final XStreamListWrapper<SpiRequestValueObject> SPI_REQUESTS
@@ -118,8 +87,8 @@ public final class XStreamUtils {
         return FXCollections.observableArrayList(I2C_REQUESTS.getItems());
     }
 
-    private static <T> void addNewItemToCollection(T item,
-            XStreamListWrapper<T> collection) {
+    private static <T> void
+    addNewItemToCollection(T item, XStreamListWrapper<T> collection) {
         collection.addItem(item);
     }
 
@@ -143,11 +112,14 @@ public final class XStreamUtils {
         if (!file.exists()) {
             return new ArrayList<>();
         }
+        if (X_STREAM == null) {
+            throw new IllegalStateException("XStream must be initialized "
+                    + "prior to user data extraction");
+        }
         // Uncaught exceptions might be thrown, deal with this in a sane way
         // CannotResolveClassException - this is demonstrated
         //     on unknown_collection.xml
         try {
-            //Structure of the file is fixed, otherwise ClassCastException is caught and logged.
             @SuppressWarnings("unchecked")
             XStreamListWrapper<T> requests
                     = (XStreamListWrapper<T>) X_STREAM.fromXML(file);
@@ -158,8 +130,9 @@ public final class XStreamUtils {
         } catch (CannotResolveClassException | NoClassDefFoundError ex) {
             LOGGER.error("Corrupted file found: " + file.getAbsolutePath());
             throw new XStreamException(ex);
-        } catch(ClassCastException cce) {
-            LOGGER.error(String.format("User data file %s is corrupted.", file.getAbsolutePath()));
+        } catch (ClassCastException cce) {
+            LOGGER.error(String.format("User data file %s is corrupted.",
+                    file.getAbsolutePath()));
             throw new RuntimeException(cce);
         }
     }

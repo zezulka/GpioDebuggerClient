@@ -1,15 +1,11 @@
 package util;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-public class Unix {
+public final class Unix {
     private Unix() {
         /* do not instantiate this class  */
     }
 
     private static final String OS_NAME = "os.name";
-    private static final Path ETC_GROUP = Paths.get("/etc/group");
     private static final String USERNAME = System.getProperty("user.name");
     private static final String ROOT = "root";
 
