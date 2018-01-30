@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import core.SurveyWizard;
+import gui.deployer.Wizard;
 import gui.SwitchButton;
 import gui.misc.Graphics;
 import gui.tab.loader.TabManager;
@@ -101,7 +101,7 @@ public final class MasterWindowController implements Initializable {
         deviceInfo.setAnimated(false);
         deviceInfo.setDetachable(false);
         deployDialog.setTitle("Deploy agent remotely");
-        deployDialog.setContentNode(new SurveyWizard());
+        deployDialog.setContentNode(new Wizard());
         deployDialog.setHeaderAlwaysVisible(true);
     }
 
