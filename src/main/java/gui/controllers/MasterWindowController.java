@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import core.SurveyWizard;
 import gui.SwitchButton;
 import gui.misc.Graphics;
 import gui.tab.loader.TabManager;
@@ -61,6 +62,7 @@ public final class MasterWindowController implements Initializable {
     private static final int ACTIVE_BRANCH_INDEX = 0;
     private static TabManager manager = null;
     private final PopOver deviceInfo = new PopOver();
+    private final PopOver deployDialog = new PopOver();
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
     @FXML
@@ -77,6 +79,8 @@ public final class MasterWindowController implements Initializable {
     private TextField ipAddress;
     @FXML
     private Button disconnectButton;
+    @FXML
+    private Button deployButton;
     @FXML
     private ToolBar toolBar;
 
@@ -96,7 +100,15 @@ public final class MasterWindowController implements Initializable {
         deviceInfo.setHeaderAlwaysVisible(true);
         deviceInfo.setAnimated(false);
         deviceInfo.setDetachable(false);
+        deployDialog.setTitle("Deploy agent remotely");
+        deployDialog.setContentNode(new SurveyWizard());
+        deployDialog.setHeaderAlwaysVisible(true);
     }
+
+    public void cleanup() {
+
+    }
+
 
     private void initToolbar() {
         initDeviceTreeSwitch();
@@ -105,9 +117,19 @@ public final class MasterWindowController implements Initializable {
         initAddNewDeviceBtn();
         connectBtn.setOnAction(t -> connectToDeviceHandler());
         disconnectButton.setOnAction(t -> disconnectHandler());
+
         connectingToDevice.addListener((o, old, pending) -> Platform.runLater(()
                 -> connectBtn.setText(pending ? "Connecting..." : "Connect")
         ));
+        deployButton.setOnAction(e -> {
+            if (deployDialog.isShowing()) {
+                deployDialog.hide();
+            } else {
+                deployDialog.setArrowLocation(
+                        PopOver.ArrowLocation.BOTTOM_LEFT);
+                deployDialog.show(deployButton);
+            }
+        });
     }
 
     private void initDeviceTreeSwitch() {

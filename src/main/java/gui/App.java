@@ -26,12 +26,6 @@ public final class App extends Application {
 
     private Scene scene;
 
-    //private static TabPane tabPane;
-
-    //static TabPane getTabPane() {
-    //    return tabPane;
-    //}
-
     @Override
     public void init() {
         scene = loadScene();
@@ -74,7 +68,7 @@ public final class App extends Application {
                     = new FXMLLoader(ControllerUtils.MASTER);
             masterWindowLoader.setController(new MasterWindowController());
             Parent newParent = masterWindowLoader.load();
-            /*tabPane = (TabPane) */newParent.lookup("#devicesTab");
+            newParent.lookup("#devicesTab");
             LOGGER.debug("Load successful.");
             return new Scene(newParent);
         } catch (IOException ex) {

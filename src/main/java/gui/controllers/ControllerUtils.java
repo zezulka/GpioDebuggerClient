@@ -98,16 +98,11 @@ public final class ControllerUtils {
     /**
      * @return True if user confirmed the given action, false otherwise.
      */
-    public static boolean showConfirmDialog(String message,
-            Object... other) {
+    public static boolean showConfirmDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Please confirm");
-        StringBuilder wholeMessage = new StringBuilder(message);
-        for (Object obj : other) {
-            wholeMessage.append(obj.toString());
-        }
         alert.setHeaderText(null);
-        alert.setContentText(wholeMessage.toString());
+        alert.setContentText(message);
         alert.setResizable(false);
         alert.getDialogPane()
                 .getChildren()
