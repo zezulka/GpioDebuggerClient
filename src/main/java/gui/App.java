@@ -23,8 +23,7 @@ import props.AppPreferencesExtractor;
 public final class App extends Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-    private final MasterWindowController mwc = new MasterWindowController();
-
+    private MasterWindowController mwc = new MasterWindowController();
     private Scene scene;
 
     @Override

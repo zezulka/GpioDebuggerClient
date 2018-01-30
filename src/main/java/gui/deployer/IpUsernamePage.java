@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 class IpUsernamePage extends AbstractWizardPage {
 
-    private ProgressIndicator pi;
+    private ProgressIndicator pi = new ProgressIndicator();
 
     IpUsernamePage() {
         super("IP address and username");
@@ -39,16 +39,18 @@ class IpUsernamePage extends AbstractWizardPage {
         ComboBox<String> addrComboBox = new ComboBox<>();
         addrComboBox.setEditable(true);
         ObservableList<String> list = FXCollections.observableArrayList();
-        XStreamUtils.getDevices().forEach(deviceValueObject -> list.add(deviceValueObject.getHostName()));
+        XStreamUtils.getDevices().forEach(deviceValueObject
+                -> list.add(deviceValueObject.getHostName()));
         addrComboBox.setItems(list);
-        sshData.bindIpAddress(addrComboBox.editorProperty().get().textProperty());
+        SSH_DATA.bindIpAddress(addrComboBox.editorProperty()
+                .get().textProperty());
 
         Label l = new Label("Enter the IP address or hostname of the device:");
         l.setWrapText(true);
 
 
         TextField username = new TextField();
-        sshData.bindUsername(username.textProperty());
+        SSH_DATA.bindUsername(username.textProperty());
         Label l2 = new Label("Enter the username you " +
                 "want to authenticate with:");
         l.setWrapText(true);
@@ -59,7 +61,7 @@ class IpUsernamePage extends AbstractWizardPage {
         nextButton.setOnAction(e -> {
             try {
                 new Thread(new ConnectionWorker(this,
-                        InetAddress.getByName(sshData.getIpaddress())))
+                        InetAddress.getByName(SSH_DATA.getIpaddress())))
                         .start();
             } catch (IOException ie) {
                 // ok
@@ -87,7 +89,7 @@ class IpUsernamePage extends AbstractWizardPage {
 
         @Override
         protected Boolean call() {
-            pi.setVisible(true);
+            page.pi.setVisible(true);
             if (!NetworkingUtils.isReachable(ia)) {
                 notifyConnectingFailed();
                 return false;
@@ -98,7 +100,7 @@ class IpUsernamePage extends AbstractWizardPage {
 
         @Override
         protected void done() {
-            //page.getPi().setVisible(false);
+            page.pi.setVisible(false);
             try {
                 if (get()) {
                     Platform.runLater(() -> page.nextPage());

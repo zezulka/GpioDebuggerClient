@@ -12,15 +12,14 @@ import javafx.scene.layout.VBox;
  * basic wizard page class
  */
 abstract class AbstractWizardPage extends VBox {
-    protected Button priorButton = new Button("_Previous");
-    protected Button nextButton = new Button("N_ext");
-    protected Button finishButton = new Button("_Finish");
-    protected static final SshData sshData = new SshData();
+    Button priorButton = new Button("_Previous");
+    Button nextButton = new Button("N_ext");
+    Button finishButton = new Button("_Finish");
+    protected static final SshData SSH_DATA = new SshData();
 
     AbstractWizardPage(String title) {
         priorButton.setOnAction(event -> priorPage());
         nextButton.setOnAction(event -> nextPage());
-        //finishButton.setOnAction(event -> getWizard().finish());
         Label label = new Label(title);
         label.setStyle("-fx-font-weight: bold; -fx-padding: 0 0 5 0;");
         setId(title);
@@ -32,7 +31,7 @@ abstract class AbstractWizardPage extends VBox {
         getChildren().addAll(getContent(), spring, getButtons());
     }
 
-    private HBox getButtons() {
+    HBox getButtons() {
         Region spring = new Region();
         HBox.setHgrow(spring, Priority.ALWAYS);
         HBox buttonBar = new HBox(5);
@@ -43,11 +42,11 @@ abstract class AbstractWizardPage extends VBox {
 
     abstract Parent getContent();
 
-    private boolean hasNextPage() {
+    boolean hasNextPage() {
         return getWizard().hasNextPage();
     }
 
-    private boolean hasPriorPage() {
+    boolean hasPriorPage() {
         return getWizard().hasPriorPage();
     }
 

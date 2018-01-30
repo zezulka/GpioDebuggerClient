@@ -36,11 +36,12 @@ class AuthPage extends AbstractWizardPage {
         cert = new RadioButton("Certificate");
         passwd = new RadioButton("Password");
         options = new ToggleGroup();
-        Label l = new Label("Select authentication method for the user " + sshData.getUsername());
+        Label l = new Label("Select authentication method for the user " + SSH_DATA.getUsername());
         PasswordField pf = new PasswordField();
         l.setWrapText(true);
-        sshData.bindPassword(pf.textProperty());
-        nextButton.disableProperty().bind(passwd.selectedProperty().not().or(pf.textProperty().isEmpty()));
+        SSH_DATA.bindPassword(pf.textProperty());
+        nextButton.disableProperty().bind(passwd.selectedProperty().not()
+                .or(pf.textProperty().isEmpty()));
         nextButton.setOnAction(e -> {
             try {
                 if (getWizard().getSshWrapper() != null) {
@@ -48,7 +49,7 @@ class AuthPage extends AbstractWizardPage {
                 } else {
 
                 }
-                getWizard().setSshWrapper(new SshWrapper(sshData));
+                getWizard().setSshWrapper(new SshWrapper(SSH_DATA));
                 List<String> str = getWizard()
                         .getSshWrapper()
                         .getRemoteCommandOutput("netstat -tulnp 2> /dev/null | grep "
@@ -57,7 +58,7 @@ class AuthPage extends AbstractWizardPage {
                 if (str.size() == 1 && str.get(0).equals("1")) {
                     nextPage();
                     return;
-                } else if(str.size() == 1 && str.get(0).equals("0")) {
+                } else if (str.size() == 1 && str.get(0).equals("0")) {
                     ControllerUtils.showErrorDialog("Agent is already running.");
                 } else {
                     // netstat is not installed on the system, let's try another

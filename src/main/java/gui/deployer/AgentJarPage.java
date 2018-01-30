@@ -23,7 +23,7 @@ class AgentJarPage extends AbstractWizardPage {
         super("Select agent JAR");
         local.setToggleGroup(options);
         remote.setToggleGroup(options);
-        options.selectedToggleProperty().addListener((observableValue, oldToggle, newToggle) -> {
+        options.selectedToggleProperty().addListener((val, old, newv) -> {
             nextButton.setDisable(false);
         });
         nextButton.setVisible(false);
@@ -56,15 +56,18 @@ class AgentJarPage extends AbstractWizardPage {
 
         });
         availableRemote.setEditable(true);
-        finishButton.disableProperty().bind(availableRemote.getSelectionModel().selectedItemProperty().isNull());
+        finishButton.disableProperty().bind(availableRemote.getSelectionModel()
+                .selectedItemProperty().isNull());
         remote.setOnMouseClicked(e -> local.setText(localStr));
-        remote.setText("Remotely (either from available or custom)");
+        remote.setText("Remote");
         availableRemote.disableProperty().bind(remote.selectedProperty().not());
         Label l = new Label("Specify path to the agent JAR file:");
-        sshData.bindLocalFile(localFileLabel.textProperty());
-        sshData.bindRemoteFile(availableRemote.editorProperty().get().textProperty());
+        SSH_DATA.bindLocalFile(localFileLabel.textProperty());
+        SSH_DATA.bindRemoteFile(availableRemote.editorProperty()
+                .get().textProperty());
         finishButton.setOnAction(event -> {
-            String filePath = local.isSelected() ? sshData.getLocalFile() : sshData.getRemoteFile();
+            String filePath = local.isSelected() ? SSH_DATA.getLocalFile() :
+                    SSH_DATA.getRemoteFile();
             String cmdStr = "java -jar " + filePath;
             if (local.isSelected()) {
                 //cmdStr = "scp " + filePath + " " + sshCredentials + ":~ ; " + cmdStr;
