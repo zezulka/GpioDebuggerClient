@@ -21,12 +21,12 @@ public class SshWrapper {
     public SshWrapper(SshData data) throws IOException {
         this.sshClient = new SSHClient();
         sshClient.loadKnownHosts();
-        sshClient.connect(data.ipAddress.get());
-        sshClient.auth(data.username.get(), new AuthPassword(new PasswordFinder() {
+        sshClient.connect(data.getIpaddress());
+        sshClient.auth(data.getUsername(), new AuthPassword(new PasswordFinder() {
 
             @Override
             public char[] reqPassword(Resource<?> resource) {
-                return data.password.get().toCharArray();
+                return data.getPassword().toCharArray();
             }
 
             @Override

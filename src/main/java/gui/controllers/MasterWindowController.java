@@ -65,6 +65,8 @@ public final class MasterWindowController implements Initializable {
     private final PopOver deployDialog = new PopOver();
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
+    private final Wizard wiz = new Wizard();
+
     @FXML
     private TabPane devicesTab;
     @FXML
@@ -101,12 +103,12 @@ public final class MasterWindowController implements Initializable {
         deviceInfo.setAnimated(false);
         deviceInfo.setDetachable(false);
         deployDialog.setTitle("Deploy agent remotely");
-        deployDialog.setContentNode(new Wizard());
+        deployDialog.setContentNode(wiz);
         deployDialog.setHeaderAlwaysVisible(true);
     }
 
     public void cleanup() {
-
+        wiz.finish();
     }
 
 

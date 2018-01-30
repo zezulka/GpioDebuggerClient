@@ -13,14 +13,14 @@ import util.SshWrapper;
 import java.io.IOException;
 import java.util.List;
 
-class AuthPageAbstract extends AbstractWizardPage {
+class AuthPage extends AbstractWizardPage {
 
     private RadioButton none;
     private RadioButton cert;
     private RadioButton passwd;
     private ToggleGroup options;
 
-    AuthPageAbstract() {
+    AuthPage() {
         super("Authentication");
 
         none.setToggleGroup(options);
@@ -36,10 +36,10 @@ class AuthPageAbstract extends AbstractWizardPage {
         cert = new RadioButton("Certificate");
         passwd = new RadioButton("Password");
         options = new ToggleGroup();
-        Label l = new Label("Select authentication method for the user " + SshData.instance.username.get());
+        Label l = new Label("Select authentication method for the user " + sshData.getUsername());
         PasswordField pf = new PasswordField();
         l.setWrapText(true);
-        SshData.instance.password.bind(pf.textProperty());
+        sshData.bindPassword(pf.textProperty());
         nextButton.disableProperty().bind(passwd.selectedProperty().not().or(pf.textProperty().isEmpty()));
         nextButton.setOnAction(e -> {
             try {
@@ -48,7 +48,7 @@ class AuthPageAbstract extends AbstractWizardPage {
                 } else {
 
                 }
-                getWizard().setSshWrapper(new SshWrapper(SshData.instance));
+                getWizard().setSshWrapper(new SshWrapper(sshData));
                 List<String> str = getWizard()
                         .getSshWrapper()
                         .getRemoteCommandOutput("netstat -tulnp 2> /dev/null | grep "

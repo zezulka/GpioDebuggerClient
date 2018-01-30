@@ -18,7 +18,7 @@ public class Wizard extends StackPane {
     private SshWrapper sshWrapper;
 
     public Wizard() {
-        pages.addAll(new IpUsernamePageAbstract(), new AuthPageAbstract(), new AgentJarPageAbstract());
+        pages.addAll(new IpUsernamePage(), new AuthPage(), new AgentJarPage());
         navTo(0);
         setStyle("-fx-padding: 10; -fx-background-color: cornsilk;");
     }
@@ -85,7 +85,9 @@ public class Wizard extends StackPane {
     }
 
     public void finish() {
-        sshWrapper.close();
+        if(sshWrapper != null) {
+            sshWrapper.close();
+        }
     }
 }
 

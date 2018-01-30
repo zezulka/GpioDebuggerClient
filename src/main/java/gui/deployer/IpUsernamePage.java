@@ -21,18 +21,14 @@ import java.net.InetAddress;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-class IpUsernamePageAbstract extends AbstractWizardPage {
+class IpUsernamePage extends AbstractWizardPage {
 
     private ProgressIndicator pi;
 
-    IpUsernamePageAbstract() {
+    IpUsernamePage() {
         super("IP address and username");
         priorButton.setVisible(false);
         finishButton.setVisible(false);
-    }
-
-    ProgressIndicator getPi() {
-        return pi;
     }
 
     @Override
@@ -45,14 +41,14 @@ class IpUsernamePageAbstract extends AbstractWizardPage {
         ObservableList<String> list = FXCollections.observableArrayList();
         XStreamUtils.getDevices().forEach(deviceValueObject -> list.add(deviceValueObject.getHostName()));
         addrComboBox.setItems(list);
-        SshData.instance.ipAddress.bind(addrComboBox.editorProperty().get().textProperty());
+        sshData.bindIpAddress(addrComboBox.editorProperty().get().textProperty());
 
         Label l = new Label("Enter the IP address or hostname of the device:");
         l.setWrapText(true);
 
 
         TextField username = new TextField();
-        SshData.instance.username.bind(username.textProperty());
+        sshData.bindUsername(username.textProperty());
         Label l2 = new Label("Enter the username you " +
                 "want to authenticate with:");
         l.setWrapText(true);
@@ -63,7 +59,7 @@ class IpUsernamePageAbstract extends AbstractWizardPage {
         nextButton.setOnAction(e -> {
             try {
                 new Thread(new ConnectionWorker(this,
-                        InetAddress.getByName(SshData.instance.ipAddress.get())))
+                        InetAddress.getByName(sshData.getIpaddress())))
                         .start();
             } catch (IOException ie) {
                 // ok
@@ -75,9 +71,9 @@ class IpUsernamePageAbstract extends AbstractWizardPage {
     private class ConnectionWorker extends Task<Boolean> {
 
         private final InetAddress ia;
-        private IpUsernamePageAbstract page;
+        private IpUsernamePage page;
 
-        ConnectionWorker(IpUsernamePageAbstract page, InetAddress ia) {
+        ConnectionWorker(IpUsernamePage page, InetAddress ia) {
             Objects.requireNonNull(page, "page null");
             this.page = page;
             this.ia = ia;
@@ -91,7 +87,7 @@ class IpUsernamePageAbstract extends AbstractWizardPage {
 
         @Override
         protected Boolean call() {
-            page.getPi().setVisible(true);
+            pi.setVisible(true);
             if (!NetworkingUtils.isReachable(ia)) {
                 notifyConnectingFailed();
                 return false;

@@ -23,6 +23,7 @@ import props.AppPreferencesExtractor;
 public final class App extends Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private final MasterWindowController mwc = new MasterWindowController();
 
     private Scene scene;
 
@@ -45,6 +46,7 @@ public final class App extends Application {
                 }
             }
             XStreamUtils.saveAllRequests();
+            mwc.cleanup();
             stage.close();
             Platform.exit();
         });
@@ -66,7 +68,7 @@ public final class App extends Application {
         try {
             FXMLLoader masterWindowLoader
                     = new FXMLLoader(ControllerUtils.MASTER);
-            masterWindowLoader.setController(new MasterWindowController());
+            masterWindowLoader.setController(mwc);
             Parent newParent = masterWindowLoader.load();
             newParent.lookup("#devicesTab");
             LOGGER.debug("Load successful.");
