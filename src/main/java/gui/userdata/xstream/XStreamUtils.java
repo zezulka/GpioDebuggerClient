@@ -46,7 +46,9 @@ public final class XStreamUtils {
             if (col.isDirty()) {
                 try {
                     File f = col.getAssociatedFile();
-                    f.createNewFile();
+                    if (!f.createNewFile()) {
+                        throw new IOException("Could not create new file.");
+                    }
                     X_STREAM.toXML(col, new FileWriter(f));
                     LOGGER.info("New data saved to: " + f);
                 } catch (IOException ex) {

@@ -59,9 +59,8 @@ class AgentJarPage extends AbstractWizardPage {
         remote.setText("Remote");
         remote.setToggleGroup(options);
         options = new ToggleGroup();
-        options.selectedToggleProperty().addListener((val, old, newv) -> {
-            nextButton.setDisable(false);
-        });
+        options.selectedToggleProperty().addListener((val, old, newv) ->
+                nextButton.setDisable(false));
         local = new RadioButton("Local...");
         local.setOnMouseClicked(mouseEvent -> {
             File f = fc.showOpenDialog(new Stage());

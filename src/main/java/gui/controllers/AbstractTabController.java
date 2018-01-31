@@ -74,8 +74,8 @@ public abstract class AbstractTabController implements Initializable {
         @Override
         public String toString(List<String> t) {
             if (t.size() == 1 && t.get(0)
-                    .equals(StringConstants.WRITE_OK.toString())) {
-                return StringConstants.WRITE_OK.toString();
+                    .equals(StringConstants.WRITE_OK)) {
+                return StringConstants.WRITE_OK;
             }
             StringBuilder b = new StringBuilder();
             for (String s : t) {
@@ -86,8 +86,7 @@ public abstract class AbstractTabController implements Initializable {
 
         @Override
         public List<String> fromString(String string) {
-            if (string.equals(StringConstants.WRITE_OK
-                    .toString())) {
+            if (string.equals(StringConstants.WRITE_OK)) {
                 return Arrays.asList("WRITE REQUEST");
             }
             return new ArrayList<>(Arrays.asList(string.split(" ")));

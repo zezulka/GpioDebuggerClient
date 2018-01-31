@@ -104,7 +104,7 @@ class IpUsernamePage extends AbstractWizardPage {
         @Override
         protected Boolean call() {
             page.pi.setVisible(true);
-            if (!NetworkingUtils.isReachable(ia)) {
+            if (NetworkingUtils.isNotReachable(ia)) {
                 notifyConnectingFailed();
                 return false;
             }

@@ -366,7 +366,7 @@ public final class MasterWindowController implements Initializable {
         @Override
         protected Boolean call() {
             connectingToDevice.setValue(true);
-            if (!NetworkingUtils.isReachable(device.getAddress())) {
+            if (NetworkingUtils.isNotReachable(device.getAddress())) {
                 notifyConnectingFailed();
                 return false;
             }

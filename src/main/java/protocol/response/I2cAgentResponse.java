@@ -23,18 +23,19 @@ public final class I2cAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        updateTextArea("#i2cTableView");
+        updateTextArea();
     }
 
-    private void updateTextArea(String idPrefix) {
+    private void updateTextArea() {
         Tab t = MasterWindowController
                 .getTabManager().findTabByAddress(address);
-        TableView<ByteArrayResponse> ta
-                = ((TableView<ByteArrayResponse>) t.getContent()
-                        .lookup(idPrefix + ':' + address.getHostAddress()));
+        TableView<ByteArrayResponse> ta =
+                ((TableView<ByteArrayResponse>) t.getContent()
+                        .lookup("#i2cTableView" + ':'
+                                + address.getHostAddress()));
         Platform.runLater(() -> {
             List<String> viewItems;
-            if (responseBody.equals(StringConstants.WRITE_OK.toString())) {
+            if (responseBody.equals(StringConstants.WRITE_OK)) {
                 viewItems = Arrays.asList(responseBody);
             } else {
                 viewItems = new ArrayList<>();

@@ -32,11 +32,11 @@ public final class NetworkingUtils {
         }
     }
 
-    public static boolean isReachable(InetAddress address) {
+    public static boolean isNotReachable(InetAddress address) {
         try {
-            return address.isReachable(AppPreferencesExtractor.timeout());
+            return !address.isReachable(AppPreferencesExtractor.timeout());
         } catch (IOException e) {
-            return false;
+            return true;
         }
     }
 

@@ -22,8 +22,8 @@ public class UserDataUtilsTest {
 
     @After
     public void after() {
-        if (TestXmlFiles.MISSING.exists()) {
-            TestXmlFiles.MISSING.delete();
+        if (TestXmlFiles.MISSING.exists() && !TestXmlFiles.MISSING.delete()) {
+           fail("could not delete file...");
         }
     }
 
@@ -149,7 +149,7 @@ public class UserDataUtilsTest {
             throw new RuntimeException(ex);
         }
         DeviceValueObject dvo = new DeviceValueObject(address, BoardType.RASPBERRY_PI);
-        XStreamListWrapper wrapper = new MockedDevices(new ArrayList<>());
+        XStreamListWrapper<DeviceValueObject> wrapper = new MockedDevices(new ArrayList<>());
         wrapper.addItem(dvo);
         XStreamUtils.saveCollectionsToAssociatedFiles(wrapper);
     }

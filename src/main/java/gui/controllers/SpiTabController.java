@@ -151,7 +151,7 @@ public final class SpiTabController
                 });
     }
 
-    private void sendSpiRequest(ActionEvent event) {
+    private void sendSpiRequest(ActionEvent ignored) {
         StringBuilder msgToSend = getMessagePrefix();
         msgToSend = msgToSend.append(byteArrayTextfield.getText());
         NetworkManager.setMessageToSend(address, msgToSend.toString());

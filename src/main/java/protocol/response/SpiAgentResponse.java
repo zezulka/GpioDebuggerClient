@@ -1,13 +1,17 @@
 package protocol.response;
 
 import util.StringConstants;
+
 import java.net.InetAddress;
+
 import javafx.scene.control.Tab;
 import gui.controllers.MasterWindowController;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javafx.application.Platform;
 import javafx.scene.control.TableView;
 
@@ -23,18 +27,19 @@ public final class SpiAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        updateTextArea("#spiTableView");
+        updateTextArea();
     }
 
-    private void updateTextArea(String idPrefix) {
+    private void updateTextArea() {
         Tab t = MasterWindowController
                 .getTabManager().findTabByAddress(address);
         TableView<ByteArrayResponse> ta
                 = ((TableView<ByteArrayResponse>) t.getContent()
-                        .lookup(idPrefix + ':' + address.getHostAddress()));
+                .lookup("#spiTableView" + ':'
+                        + address.getHostAddress()));
         Platform.runLater(() -> {
             List<String> viewItems;
-            if (responseBody.equals(StringConstants.WRITE_OK.toString())) {
+            if (responseBody.equals(StringConstants.WRITE_OK)) {
                 viewItems = Arrays.asList(responseBody);
             } else {
                 viewItems = new ArrayList<>(Arrays
