@@ -1,8 +1,8 @@
 package gui.userdata.xstream;
 
 import java.io.File;
-import props.AppPreferencesExtractor;
-import props.SystemPropertiesExtractor;
+import properties.AppPreferencesExtractor;
+import properties.SystemPropertiesExtractor;
 
 public final class XmlUserdata {
 

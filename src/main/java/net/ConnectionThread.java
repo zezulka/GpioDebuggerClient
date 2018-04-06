@@ -5,7 +5,7 @@ import gui.controllers.MasterWindowController;
 import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import props.AppPreferencesExtractor;
+import properties.AppPreferencesExtractor;
 import protocol.InterruptManager;
 import protocol.MessageParser;
 

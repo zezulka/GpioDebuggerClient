@@ -1,4 +1,4 @@
-package props;
+package properties;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -17,7 +17,7 @@ public final class AppPreferencesExtractor {
             = LoggerFactory.getLogger(AppPreferencesExtractor.class);
     private static boolean userPropertiesAvailable = false;
 
-    //cached props
+    //cached properties
     private static Dimension cachedScreenResolution = null;
 
     static {
