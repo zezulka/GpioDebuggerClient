@@ -18,3 +18,5 @@ The debugging tool is now capable of:
 Running with OpenJDK on Linux
 ------------
 Please make sure you have the `openjfx` package installed.
+Alternatively, you can manually install javafx into the java home.
+For more information, please visit https://chriswhocodes.com/ .
