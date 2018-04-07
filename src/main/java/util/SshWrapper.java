@@ -3,6 +3,7 @@ package util;
 import gui.deployer.SshData;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 import net.schmizz.sshj.userauth.method.AuthPassword;
 import net.schmizz.sshj.userauth.password.PasswordFinder;
 import net.schmizz.sshj.userauth.password.Resource;
@@ -16,27 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public final class SshWrapper {
+public final class SshWrapper implements AutoCloseable {
     private final SSHClient sshClient;
+    private final SshData data;
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SshWrapper.class);
 
     public SshWrapper(SshData data) throws IOException {
-        this.sshClient = new SSHClient();
-        sshClient.loadKnownHosts();
-        sshClient.connect(data.getIpaddress());
-        sshClient.auth(data.getUsername(), new AuthPassword(
-                new PasswordFinder() {
-                    @Override
-                    public char[] reqPassword(Resource<?> resource) {
-                        return data.getPassword().toCharArray();
-                    }
-
-                    @Override
-                    public boolean shouldRetry(Resource<?> resource) {
-                        return false;
-                    }
-                }));
+        sshClient = new SSHClient();
+        sshClient.addHostKeyVerifier(new PromiscuousVerifier());
+        sshClient.connect(data.getInetAddress().getHostAddress());
+        sshClient.authPassword(data.getUsername(), new String(data.getPassword()));
+        this.data = data;
     }
 
     public List<String> getRemoteCommandOutput(String command) {
@@ -56,7 +48,9 @@ public final class SshWrapper {
         return result;
     }
 
+    @Override
     public void close() {
+        data.erasePassword();
         try {
             sshClient.close();
         } catch (IOException e) {

@@ -16,14 +16,14 @@
 <?import javafx.scene.text.Font?>
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-          minWidth="-Infinity" prefHeight="588.0" prefWidth="482.0"
+          minWidth="-Infinity" prefHeight="500.0" prefWidth="482.0"
           xmlns="http://javafx.com/javafx/8.0.60"
           xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="299.0"
-                           minWidth="10.0" prefWidth="232.0"/>
-        <ColumnConstraints fillWidth="false" maxWidth="250.0" minWidth="183.0"
-                           prefWidth="250.0"/>
+                           minWidth="10.0" prefWidth="184.0"/>
+        <ColumnConstraints fillWidth="false" maxWidth="298.0" minWidth="183.0"
+                           prefWidth="298.0"/>
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="20.0" vgrow="SOMETIMES"/>
@@ -47,14 +47,12 @@
                         vgrow="SOMETIMES"/>
         <RowConstraints maxHeight="197.0" minHeight="20.0" prefHeight="30.0"
                         vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="197.0" minHeight="20.0" prefHeight="30.0"
-                        vgrow="SOMETIMES"/>
         <RowConstraints minHeight="20.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
         <Button fx:id="deployBtn" mnemonicParsing="false" text="Deploy"
                 GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                GridPane.rowIndex="13"/>
+                GridPane.rowIndex="12"/>
         <Label text="IP address / hostname"/>
         <Label text="Remote username" GridPane.rowIndex="1"/>
         <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="200.0"
@@ -93,7 +91,7 @@
         </RadioButton>
         <Separator prefWidth="200.0" GridPane.columnSpan="2"
                    GridPane.rowIndex="7"/>
-        <PasswordField fx:id="passwdField" prefHeight="26.0" prefWidth="200.0"
+        <PasswordField fx:id="passwdField" prefHeight="26.0" prefWidth="276.0"
                        GridPane.columnIndex="1" GridPane.halignment="CENTER"
                        GridPane.rowIndex="5"/>
         <Label text="Debugger agent JAR location" GridPane.columnSpan="2"
@@ -103,7 +101,7 @@
             </font>
         </Label>
         <Separator prefWidth="200.0" GridPane.columnSpan="2"
-                   GridPane.rowIndex="12"/>
+                   GridPane.rowIndex="11"/>
         <RadioButton fx:id="localBtn" mnemonicParsing="false" text="Local..."
                      GridPane.rowIndex="9">
             <toggleGroup>
@@ -114,7 +112,7 @@
                      text="Remote (load on click)" toggleGroup="$jar"
                      GridPane.rowIndex="10"/>
         <Label fx:id="localJar" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
-        <ComboBox fx:id="remoteJar" prefHeight="26.0" prefWidth="185.0"
+        <ComboBox fx:id="remoteJar" prefHeight="26.0" prefWidth="276.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"
                   GridPane.rowIndex="10"/>
         <ProgressIndicator fx:id="ipProgress" nodeOrientation="RIGHT_TO_LEFT"
@@ -124,7 +122,7 @@
                 <Insets right="150.0"/>
             </GridPane.margin>
         </ProgressIndicator>
-        <ComboBox fx:id="addressField" prefHeight="26.0" prefWidth="185.0"
+        <ComboBox fx:id="addressField" prefHeight="26.0" prefWidth="200.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
     </children>
 </GridPane>

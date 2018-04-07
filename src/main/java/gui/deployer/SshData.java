@@ -1,59 +1,79 @@
 package gui.deployer;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.net.InetAddress;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public final class SshData {
-    private StringProperty username = new SimpleStringProperty();
-    private StringProperty ipAddress = new SimpleStringProperty();
-    private StringProperty password = new SimpleStringProperty();
-    private StringProperty localFile = new SimpleStringProperty();
-    private StringProperty remoteFile = new SimpleStringProperty();
+    private final String username;
+    private final InetAddress inetAddress;
+    private byte[] password;
+
+    public static class Builder {
+        private String username = null;
+        private InetAddress inetAddress = null;
+        private byte[] password = null;
+
+        public SshData build() {
+            Objects.requireNonNull(username, "Username was not set!");
+            Objects.requireNonNull(inetAddress, "IP address was not set!");
+            Objects.requireNonNull(password, "Password was not set!");
+            return new SshData(this);
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder inetAddress(InetAddress inetAddress) {
+            this.inetAddress = inetAddress;
+            return this;
+        }
+
+        public Builder password(byte[] password) {
+            this.password = password;
+            return this;
+        }
+    }
+
+    private SshData(Builder builder) {
+        this.username = builder.username;
+        this.inetAddress = builder.inetAddress;
+        this.password = builder.password;
+    }
 
     public String getUsername() {
-        return username.get();
+        return username;
     }
 
-    public String getIpaddress() {
-        return ipAddress.get();
+    public InetAddress getInetAddress() {
+        return inetAddress;
     }
 
-    public String getPassword() {
-        return password.get();
+    public byte[] getPassword() {
+        return password;
     }
 
-    public String getLocalFile() {
-        return localFile.get();
+    public void erasePassword() {
+        Arrays.fill(password, (byte) 0);
     }
 
-    public String getRemoteFile() {
-        return remoteFile.get();
-    }
-
-    private void bindProperty(StringProperty binded, StringProperty bounder) {
-        if (binded.isBound()) {
-            throw new IllegalStateException("this property is bound already!");
+    @Override
+    public String toString() {
+        String passwd = "N/A";
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            passwd = Arrays.toString(md.digest(password));
+        } catch (NoSuchAlgorithmException e) {
+            // swallow the exception and leave the passwd in the default state
         }
-        binded.bind(bounder);
-    }
-
-    public void bindUsername(StringProperty prop) {
-        bindProperty(username, prop);
-    }
-
-    public void bindIpAddress(StringProperty prop) {
-        bindProperty(ipAddress, prop);
-    }
-
-    public void bindPassword(StringProperty prop) {
-        bindProperty(password, prop);
-    }
-
-    public void bindLocalFile(StringProperty prop) {
-        bindProperty(localFile, prop);
-    }
-
-    public void bindRemoteFile(StringProperty prop) {
-        bindProperty(remoteFile, prop);
+        return "SshData{" +
+                "username='" + username + '\'' +
+                ", inetAddress=" + inetAddress +
+                ", password(SHA256)=" + passwd +
+                '}';
     }
 }

@@ -42,17 +42,17 @@ class AgentJarPage extends AbstractWizardPage {
         nextButton.setVisible(false);
         finishButton = new Button("Deploy");
         finishButton.setOnAction(event -> {
-            String filePath = local.isSelected() ? SSH_DATA.getLocalFile()
-                    : SSH_DATA.getRemoteFile();
-            String cmdStr = "java -jar " + filePath;
+            // String filePath = local.isSelected() ? SSH_DATA.getLocalFile()
+            //        : SSH_DATA.getRemoteFile();
+            //String cmdStr = "java -jar " + filePath;
             //TODO SCP
             /*if (local.isSelected()) {
 
             }*/
-            for (String s : getWizard().getSshWrapper()
-                    .getRemoteCommandOutput(cmdStr)) {
-                System.out.println(s);
-            }
+            //for (String s : getWizard().getSshWrapper()
+            //        .getRemoteCommandOutput(cmdStr)) {
+            //   System.out.println(s);
+            //}
         });
         remote = new RadioButton();
         remote.setOnMouseClicked(e -> local.setText("Local..."));
@@ -92,9 +92,9 @@ class AgentJarPage extends AbstractWizardPage {
                 .selectedItemProperty().isNull());
         remotePaths.disableProperty().bind(remote.selectedProperty().not());
         Label l = new Label("Specify path to the agent JAR file:");
-        SSH_DATA.bindLocalFile(locFile.textProperty());
-        SSH_DATA.bindRemoteFile(remotePaths.editorProperty()
-                .get().textProperty());
+        //SSH_DATA.bindLocalFile(locFile.textProperty());
+        //SSH_DATA.bindRemoteFile(remotePaths.editorProperty()
+        //.get().textProperty());
         l.setWrapText(true);
 
         return new VBox(5, l, new HBox(local, locFile), remote, remotePaths);

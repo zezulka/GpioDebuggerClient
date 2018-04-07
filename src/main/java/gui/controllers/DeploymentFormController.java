@@ -1,5 +1,6 @@
 package gui.controllers;
 
+import gui.deployer.SshData;
 import gui.userdata.xstream.XStreamUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -20,10 +21,14 @@ import javafx.stage.Stage;
 import net.NetworkingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.SshWrapper;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
+import java.sql.SQLOutput;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
@@ -92,9 +97,9 @@ public class DeploymentFormController implements Initializable {
                     event -> {
                         // continue with deployment only if IP is reachable,
                         // i.e. worker succeeded
-                        if (cw.getValue()) {
-                            System.out.println("HOORAY!");
-                        }
+                        //if (cw.getValue()) {
+                        //    System.out.println("HOORAY!");
+                        //}
                     });
             Thread t = new Thread(cw);
             t.start();
@@ -106,43 +111,63 @@ public class DeploymentFormController implements Initializable {
             localJar.setText(selectedPath);
             mwc.requestDeploymentDialogFocus();
         });
+        remoteBtn.setOnMouseClicked(e -> {
+            ReachabilityWorker cw = new ReachabilityWorker(this);
+            cw.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> {
+                InetAddress ia = cw.getValue();
+                if (ia != null) {
+                    SshData data = new SshData.Builder()
+                            .inetAddress(ia)
+                            .password(passwdField.getText().getBytes())
+                            .username(usernameField.getText())
+                            .build();
+                    LOGGER.debug(data.toString());
+                    try (SshWrapper wrapper = new SshWrapper(data)) {
+                        List<String> a = wrapper.getRemoteCommandOutput(
+                                "find ~ -maxdepth 1 -name \"*[A|a]gent*.jar\"");
+                        remoteJar.setItems(FXCollections.observableArrayList(a));
+                    } catch (IOException ioe) {
+                        LOGGER.debug("SSH connection creation failed.", ioe);
+                    }
+                }
+            });
+            new Thread(cw).start();
+        });
     }
 
-    private abstract class DeploymentWorker extends Task<Boolean> {
-        protected final DeploymentFormController controller;
+    private class ReachabilityWorker extends Task<InetAddress> {
+        private DeploymentFormController controller;
 
-        DeploymentWorker(DeploymentFormController controller) {
+        ReachabilityWorker(DeploymentFormController controller) {
             this.controller = controller;
         }
 
         @Override
-        public final Boolean get() {
-            try {
-                return super.get();
-            } catch (InterruptedException | ExecutionException e) {
-                return false;
+        protected InetAddress call() {
+            String ipString = controller.
+                    addressField.editorProperty().get().getText();
+            if (ipString.isEmpty()) {
+                return null;
             }
-        }
-    }
-
-    private class ReachabilityWorker extends DeploymentWorker {
-        ReachabilityWorker(DeploymentFormController controller) {
-            super(controller);
+            InetAddress ia = NetworkingUtils.getAddressFromHostname(ipString);
+            if (ia == null || NetworkingUtils.isNotReachable(ia)) {
+                return null;
+            }
+            return ia;
         }
 
         @Override
-        protected Boolean call() {
-            InetAddress ia = NetworkingUtils.getAddressFromHostname(controller.
-                    addressField.editorProperty().get().getText());
-            if (ia == null) {
-                return false;
+        public InetAddress get() {
+            try {
+                return super.get();
+            } catch (InterruptedException | ExecutionException e) {
+                return null;
             }
-            return !NetworkingUtils.isNotReachable(ia);
         }
 
         @Override
         protected void done() {
-            if (!get()) {
+            if (get() == null) {
                 controller.addressField.setBackground(new Background(
                         new BackgroundFill(Paint.valueOf("#FF2222"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
@@ -153,9 +178,11 @@ public class DeploymentFormController implements Initializable {
         }
     }
 
-    private class AuthenticationWorker extends DeploymentWorker {
+    private class AuthenticationWorker extends Task {
+        private DeploymentFormController controller;
+
         AuthenticationWorker(DeploymentFormController controller) {
-            super(controller);
+            this.controller = controller;
         }
 
         @Override

@@ -1,6 +1,5 @@
 package gui.controllers;
 
-import gui.deployer.Wizard;
 import gui.SwitchButton;
 import gui.misc.Graphics;
 import gui.tab.loader.TabManager;

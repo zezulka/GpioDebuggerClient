@@ -72,11 +72,11 @@ class IpUsernamePage extends AbstractWizardPage {
         XStreamUtils.getDevices().forEach(deviceValueObject
                 -> list.add(deviceValueObject.getHostName()));
         addrComboBox.setItems(list);
-        SSH_DATA.bindIpAddress(addrComboBox.editorProperty()
-                .get().textProperty());
+        //SSH_DATA.bindIpAddress(addrComboBox.editorProperty()
+        //        .get().textProperty());
         Label l = new Label("Enter the IP address or hostname of the device:");
         l.setWrapText(true);
-        SSH_DATA.bindUsername(username.textProperty());
+        //SSH_DATA.bindUsername(username.textProperty());
         Label l2 = new Label("Enter the username you "
                 + "want to authenticate with:");
         l.setWrapText(true);

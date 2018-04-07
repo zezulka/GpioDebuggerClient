@@ -52,8 +52,7 @@ class AuthPage extends AbstractWizardPage {
         nextButton.disableProperty().bind(passwd.selectedProperty().not()
                 .or(pf.textProperty().isEmpty()));
         nextButton.setOnAction(e -> {
-            try {
-                getWizard().setSshWrapper(new SshWrapper(SSH_DATA));
+            //getWizard().setSshWrapper(new SshWrapper(SSH_DATA));
                 List<String> str = getWizard().getSshWrapper()
                         .getRemoteCommandOutput(
                                 "netstat -tulnp 2> /dev/null | grep "
@@ -74,18 +73,16 @@ class AuthPage extends AbstractWizardPage {
                                     "ps aux | grep \"java -jar.*jar\" | wc -l");
                 }
                 ControllerUtils.showErrorDialog("Agent is already running.");
-            } catch (IOException ioe) {
-                // Swallow exception
-            }
         });
     }
 
     @Override
     protected Parent getContent() {
-        Label l = new Label("Select authentication method for the user "
-                + SSH_DATA.getUsername());
-        l.setWrapText(true);
-        SSH_DATA.bindPassword(pf.textProperty());
-        return new VBox(5, l, none, cert, passwd, pf);
+        //Label l = new Label("Select authentication method for the user "
+        //        + SSH_DATA.getUsername());
+        //l.setWrapText(true);
+        //SSH_DATA.bindPassword(pf.textProperty());
+        //return new VBox(5, l, none, cert, passwd, pf);
+        return null;
     }
 }

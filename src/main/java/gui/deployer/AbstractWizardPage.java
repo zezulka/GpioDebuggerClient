@@ -15,7 +15,7 @@ import java.util.List;
  */
 abstract class AbstractWizardPage extends VBox {
 
-    protected static final SshData SSH_DATA = new SshData();
+    //protected static final SshData SSH_DATA = new SshData();
     private final Button resetButton = new Button("⏮");
 
     AbstractWizardPage(String title) {
