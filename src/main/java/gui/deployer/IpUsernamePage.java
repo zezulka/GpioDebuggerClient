@@ -51,13 +51,13 @@ class IpUsernamePage extends AbstractWizardPage {
                 .getSelectionModel().selectedItemProperty().isNull()
                 .or(username.textProperty().isEmpty()));
         nextButton.setOnAction(e -> {
-            try {
-                new Thread(new ConnectionWorker(this,
-                        InetAddress.getByName(SSH_DATA.getIpaddress())))
-                        .start();
+            /*try {
+                //new Thread(new ConnectionWorker(this,
+                //        InetAddress.getByName(SSH_DATA.getIpaddress())))
+                //        .start();
             } catch (IOException ie) {
                 // ok
-            }
+            }*/
         });
     }
 
@@ -83,45 +83,5 @@ class IpUsernamePage extends AbstractWizardPage {
         return new VBox(5, l, new HBox(addrComboBox, pi), l2, username);
     }
 
-    private class ConnectionWorker extends Task<Boolean> {
 
-        private final InetAddress ia;
-        private IpUsernamePage page;
-
-        ConnectionWorker(IpUsernamePage page, InetAddress ia) {
-            Objects.requireNonNull(page, "page null");
-            this.page = page;
-            this.ia = ia;
-        }
-
-        private void notifyConnectingFailed() {
-            Platform.runLater(() -> ControllerUtils.showErrorDialog(
-                    String.format(StringConstants.F_HOST_NOT_REACHABLE,
-                            ia.getHostName())
-            ));
-        }
-
-        @Override
-        protected Boolean call() {
-            page.pi.setVisible(true);
-            if (NetworkingUtils.isNotReachable(ia)) {
-                notifyConnectingFailed();
-                return false;
-            }
-            return true;
-
-        }
-
-        @Override
-        protected void done() {
-            page.pi.setVisible(false);
-            try {
-                if (get()) {
-                    Platform.runLater(() -> page.nextPage());
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                //LOGGER.error(null, ex);
-            }
-        }
-    }
 }

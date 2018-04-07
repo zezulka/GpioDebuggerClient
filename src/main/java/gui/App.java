@@ -23,7 +23,6 @@ import properties.AppPreferencesExtractor;
 public final class App extends Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-    private MasterWindowController mwc = new MasterWindowController();
     private Scene scene;
 
     @Override
@@ -45,7 +44,6 @@ public final class App extends Application {
                 }
             }
             XStreamUtils.saveAllRequests();
-            mwc.cleanup();
             stage.close();
             Platform.exit();
         });
@@ -67,7 +65,7 @@ public final class App extends Application {
         try {
             FXMLLoader masterWindowLoader
                     = new FXMLLoader(ControllerUtils.MASTER);
-            masterWindowLoader.setController(mwc);
+            masterWindowLoader.setController(new MasterWindowController());
             Parent newParent = masterWindowLoader.load();
             newParent.lookup("#devicesTab");
             LOGGER.debug("Load successful.");

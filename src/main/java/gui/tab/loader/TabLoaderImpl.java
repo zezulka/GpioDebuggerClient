@@ -1,17 +1,20 @@
 package gui.tab.loader;
 
+import gui.controllers.*;
 import gui.feature.Feature;
-import gui.feature.factories.FxmlControllerFactory;
-import gui.feature.factories.FxmlLoaderFactory;
+
 import java.io.IOException;
 import java.net.InetAddress;
+
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import gui.controllers.ControllerUtils;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import protocol.BoardType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +26,7 @@ public final class TabLoaderImpl implements TabLoader {
 
     @Override
     public Tab loadNewTab(InetAddress address, BoardType type,
-            Collection<Feature> features) {
+                          Collection<Feature> features) {
         LOGGER.debug("Attempting to load root controller...");
         try {
             FXMLLoader raspiLoader
@@ -51,6 +54,62 @@ public final class TabLoaderImpl implements TabLoader {
         } catch (IOException ex) {
             LOGGER.error("Load failed.", ex);
             throw new RuntimeException(ex);
+        }
+    }
+
+    private static final class FxmlControllerFactory {
+        private FxmlControllerFactory() {// Do not instantiate factory class.
+        }
+
+        public static Initializable of(InetAddress address, Feature f) {
+            switch (f) {
+                case GPIO:
+                    return new GpioTabController(address);
+                case I2C:
+                    return new I2cTabController(address);
+                case INTERRUPTS:
+                    return new InterruptsTabController(address);
+                case SPI:
+                    return new SpiTabController(address);
+                default:
+                    throw new UnsupportedOperationException("unsupported");
+            }
+        }
+    }
+
+    private static final class FxmlLoaderFactory {
+        private FxmlLoaderFactory() { // Do not instantiate factory class.
+        }
+
+        public static FXMLLoader of(Feature f, BoardType type) {
+            switch (f) {
+                case GPIO:
+                    return GpioFxmlLoaderFactory.of(type);
+                case I2C:
+                    return new FXMLLoader(ControllerUtils.I2C);
+                case INTERRUPTS:
+                    return new FXMLLoader(ControllerUtils.INTRS);
+                case SPI:
+                    return new FXMLLoader(ControllerUtils.SPI);
+                default:
+                    throw new UnsupportedOperationException("unsupported");
+            }
+        }
+    }
+
+    private static final class GpioFxmlLoaderFactory {
+        private GpioFxmlLoaderFactory() { // Do not instantiate factory class.
+        }
+
+        public static FXMLLoader of(BoardType type) {
+            switch (type) {
+                case RASPBERRY_PI:
+                    return new FXMLLoader(ControllerUtils.RASPI_GPIO);
+                case TESTING:
+                    return new FXMLLoader(ControllerUtils.TESTING_GPIO);
+                default:
+                    throw new IllegalArgumentException("type");
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ public final class ControllerUtils {
     public static final URL RASPI_GPIO = getPathToFxml("RaspiGpioTab");
     public static final URL TESTING_GPIO = getPathToFxml("TestingGpioTab");
     public static final URL MASTER = getPathToFxml("MasterWindow");
+    public static final URL DEPLOYMENT_FORM = getPathToFxml("DeploymentForm");
 
     private static final TabLoader GPIO_TAB_LOADER = new TabLoaderImpl();
 

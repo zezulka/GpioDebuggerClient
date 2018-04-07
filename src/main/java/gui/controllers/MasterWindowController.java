@@ -14,6 +14,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import protocol.InterruptManager;
 import util.StringConstants;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 
@@ -65,7 +67,6 @@ public final class MasterWindowController implements Initializable {
     private final PopOver deployDialog = new PopOver();
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
-    private final Wizard wiz = new Wizard();
 
     @FXML
     private TabPane devicesTab;
@@ -86,9 +87,6 @@ public final class MasterWindowController implements Initializable {
     @FXML
     private ToolBar toolBar;
 
-    public MasterWindowController() {
-    }
-
     public static TabManager getTabManager() {
         return manager;
     }
@@ -99,18 +97,24 @@ public final class MasterWindowController implements Initializable {
         initToolbar();
         manager = new TabManagerImpl(devicesTab);
         deviceInfo.setTitle("Device info");
-        deviceInfo.setHeaderAlwaysVisible(true);
         deviceInfo.setAnimated(false);
         deviceInfo.setDetachable(false);
         deployDialog.setTitle("Deploy agent remotely");
-        deployDialog.setContentNode(wiz);
+        FXMLLoader formLoader = new FXMLLoader(ControllerUtils.DEPLOYMENT_FORM);
+        formLoader.setController(new DeploymentFormController(this));
+        try {
+            deployDialog.setContentNode(formLoader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        deviceInfo.setHeaderAlwaysVisible(true);
         deployDialog.setHeaderAlwaysVisible(true);
+        deployDialog.setConsumeAutoHidingEvents(true);
     }
 
-    public void cleanup() {
-        wiz.finish();
+    public void requestDeploymentDialogFocus() {
+        deployDialog.show(deployButton);
     }
-
 
     private void initToolbar() {
         initDeviceTreeSwitch();

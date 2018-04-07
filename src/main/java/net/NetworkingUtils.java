@@ -33,6 +33,7 @@ public final class NetworkingUtils {
     }
 
     public static boolean isNotReachable(InetAddress address) {
+        Objects.requireNonNull(address);
         try {
             return !address.isReachable(AppPreferencesExtractor.timeout());
         } catch (IOException e) {

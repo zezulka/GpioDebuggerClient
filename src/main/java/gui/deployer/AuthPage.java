@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import props.AppPreferencesExtractor;
+import properties.AppPreferencesExtractor;
 import util.SshWrapper;
 
 import java.io.IOException;
@@ -53,11 +53,6 @@ class AuthPage extends AbstractWizardPage {
                 .or(pf.textProperty().isEmpty()));
         nextButton.setOnAction(e -> {
             try {
-                //TODO
-                /*if (getWizard().getSshWrapper() != null) {
-                } else {
-
-                }*/
                 getWizard().setSshWrapper(new SshWrapper(SSH_DATA));
                 List<String> str = getWizard().getSshWrapper()
                         .getRemoteCommandOutput(
