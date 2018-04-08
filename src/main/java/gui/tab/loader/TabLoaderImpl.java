@@ -1,6 +1,10 @@
 package gui.tab.loader;
 
-import gui.controllers.*;
+import gui.controllers.ControllerUtils;
+import gui.controllers.GpioTabController;
+import gui.controllers.I2cTabController;
+import gui.controllers.InterruptsTabController;
+import gui.controllers.SpiTabController;
 import gui.misc.Feature;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
