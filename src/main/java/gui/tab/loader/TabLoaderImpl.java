@@ -1,23 +1,20 @@
 package gui.tab.loader;
 
 import gui.controllers.*;
-import gui.feature.Feature;
-
-import java.io.IOException;
-import java.net.InetAddress;
-
+import gui.misc.Feature;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import protocol.BoardType;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import protocol.BoardType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class TabLoaderImpl implements TabLoader {
 
@@ -58,7 +55,7 @@ public final class TabLoaderImpl implements TabLoader {
     }
 
     private static final class FxmlControllerFactory {
-        private FxmlControllerFactory() {// Do not instantiate factory class.
+        private FxmlControllerFactory() {  // Do not instantiate factory class.
         }
 
         public static Initializable of(InetAddress address, Feature f) {

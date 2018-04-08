@@ -1,10 +1,11 @@
 package gui.tab.loader;
 
-import gui.feature.Feature;
-import java.net.InetAddress;
-import java.util.Collection;
+import gui.misc.Feature;
 import javafx.scene.control.Tab;
 import protocol.BoardType;
+
+import java.net.InetAddress;
+import java.util.Collection;
 
 public interface TabLoader {
 

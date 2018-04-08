@@ -1,30 +1,21 @@
 package core.util;
 
+import gui.misc.Feature;
+import gui.userdata.DeviceValueObject;
 import gui.userdata.InterruptValueObject;
-import protocol.BoardType;
-import protocol.ClientPin;
-import protocol.InterruptManager;
-import protocol.InterruptType;
-import protocol.MessageParser;
-import protocol.RaspiClientPin;
-import protocol.response.AbstractInterruptAgentResponse;
-import protocol.response.AgentResponse;
-import protocol.response.GpioAgentResponse;
-import protocol.response.I2cAgentResponse;
-import protocol.response.IllegalResponseException;
-import protocol.response.InitAgentResponse;
-import protocol.response.SpiAgentResponse;
-import protocol.response.util.AgentResponseFactory;
-import gui.feature.Feature;
 import net.ConnectionValueObject;
+import org.junit.Before;
+import org.junit.Test;
+import protocol.*;
+import protocol.response.*;
+import protocol.response.util.AgentResponseFactory;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.Month;
+
 import static org.assertj.core.api.Assertions.*;
-import org.junit.Before;
-import org.junit.Test;
-import gui.userdata.DeviceValueObject;
 
 public class AgentResponseFactoryTest {
 

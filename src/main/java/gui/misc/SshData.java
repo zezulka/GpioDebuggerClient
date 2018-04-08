@@ -1,4 +1,4 @@
-package gui.deployer;
+package gui.misc;
 
 import java.net.InetAddress;
 import java.security.MessageDigest;
@@ -16,25 +16,25 @@ public final class SshData {
         private InetAddress inetAddress = null;
         private byte[] password = null;
 
-        public SshData build() {
+        public final SshData build() {
             Objects.requireNonNull(username, "Username was not set!");
             Objects.requireNonNull(inetAddress, "IP address was not set!");
             Objects.requireNonNull(password, "Password was not set!");
             return new SshData(this);
         }
 
-        public Builder username(String username) {
-            this.username = username;
+        public final Builder username(String value) {
+            this.username = value;
             return this;
         }
 
-        public Builder inetAddress(InetAddress inetAddress) {
-            this.inetAddress = inetAddress;
+        public final Builder inetAddress(InetAddress value) {
+            this.inetAddress = value;
             return this;
         }
 
-        public Builder password(byte[] password) {
-            this.password = password;
+        public final Builder password(byte[] value) {
+            this.password = value;
             return this;
         }
     }
@@ -70,10 +70,8 @@ public final class SshData {
         } catch (NoSuchAlgorithmException e) {
             // swallow the exception and leave the passwd in the default state
         }
-        return "SshData{" +
-                "username='" + username + '\'' +
-                ", inetAddress=" + inetAddress +
-                ", password(SHA256)=" + passwd +
-                '}';
+        return "SshData{" + "username='" + username + '\''
+                + ", inetAddress=" + inetAddress
+                + ", password(SHA256)=" + passwd + '}';
     }
 }

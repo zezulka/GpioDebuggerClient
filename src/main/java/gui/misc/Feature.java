@@ -1,4 +1,4 @@
-package gui.feature;
+package gui.misc;
 
 public enum Feature {
     GPIO,

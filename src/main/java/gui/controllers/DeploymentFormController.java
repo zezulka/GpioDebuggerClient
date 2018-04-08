@@ -1,6 +1,6 @@
 package gui.controllers;
 
-import gui.deployer.SshData;
+import gui.misc.SshData;
 import gui.userdata.xstream.XStreamUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -25,14 +25,15 @@ import util.SshWrapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URL;
-import java.sql.SQLOutput;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-public class DeploymentFormController implements Initializable {
+public final class DeploymentFormController implements Initializable {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DeploymentFormController.class);
     @FXML
@@ -78,6 +79,23 @@ public class DeploymentFormController implements Initializable {
         this.mwc = mwc;
     }
 
+    private RemoteCmdWorker agent(InetAddress ia, String command) {
+        return new RemoteCmdWorker(new SshData.Builder()
+                .inetAddress(ia)
+                .password(passwdField.getText().getBytes())
+                .username(usernameField.getText())
+                .build(), command);
+    }
+
+    private RemoteContinuousCmdWorker contAgent(InetAddress ia, String command,
+                                                OutputStream os) {
+        return new RemoteContinuousCmdWorker(new SshData.Builder()
+                .inetAddress(ia)
+                .password(passwdField.getText().getBytes())
+                .username(usernameField.getText())
+                .build(), command, os);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initFileChooser();
@@ -95,40 +113,36 @@ public class DeploymentFormController implements Initializable {
             ReachabilityWorker cw = new ReachabilityWorker(this);
             cw.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                     event -> {
-                        // continue with deployment only if IP is reachable,
-                        // i.e. worker succeeded
-                        //if (cw.getValue()) {
-                        //    System.out.println("HOORAY!");
-                        //}
+                        InetAddress ia = cw.getValue();
+                        if (ia != null && remoteBtn.isSelected()) {
+                            RemoteContinuousCmdWorker aw = contAgent(ia,
+                                    "java -jar " + jarPath.get(), System.out);
+                            new Thread(aw).start();
+                        }
                     });
             Thread t = new Thread(cw);
             t.start();
         });
         localBtn.setOnMouseClicked(event -> {
             File selected = fc.showOpenDialog(new Stage());
-            String selectedPath = selected == null ? null : selected.getAbsolutePath();
+            String selectedPath = selected == null ? null
+                    : selected.getAbsolutePath();
             jarPath.setValue(selectedPath);
             localJar.setText(selectedPath);
             mwc.requestDeploymentDialogFocus();
         });
+        remoteJar.getSelectionModel().selectedItemProperty()
+                .addListener((ign, ign2, n) -> jarPath.setValue(n));
         remoteBtn.setOnMouseClicked(e -> {
             ReachabilityWorker cw = new ReachabilityWorker(this);
-            cw.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event -> {
+            cw.setOnSucceeded(event -> {
                 InetAddress ia = cw.getValue();
                 if (ia != null) {
-                    SshData data = new SshData.Builder()
-                            .inetAddress(ia)
-                            .password(passwdField.getText().getBytes())
-                            .username(usernameField.getText())
-                            .build();
-                    LOGGER.debug(data.toString());
-                    try (SshWrapper wrapper = new SshWrapper(data)) {
-                        List<String> a = wrapper.getRemoteCommandOutput(
-                                "find ~ -maxdepth 1 -name \"*[A|a]gent*.jar\"");
-                        remoteJar.setItems(FXCollections.observableArrayList(a));
-                    } catch (IOException ioe) {
-                        LOGGER.debug("SSH connection creation failed.", ioe);
-                    }
+                    RemoteCmdWorker aw = agent(ia, "find ~ -maxdepth 1 -name "
+                            + "\"*[A|a]gent*.jar\"");
+                    aw.setOnSucceeded(ev -> remoteJar.setItems(
+                            FXCollections.observableArrayList(aw.getValue())));
+                    new Thread(aw).start();
                 }
             });
             new Thread(cw).start();
@@ -178,15 +192,47 @@ public class DeploymentFormController implements Initializable {
         }
     }
 
-    private class AuthenticationWorker extends Task {
-        private DeploymentFormController controller;
+    private class RemoteCmdWorker extends Task<List<String>> {
+        private String command;
+        private SshData data;
 
-        AuthenticationWorker(DeploymentFormController controller) {
-            this.controller = controller;
+        RemoteCmdWorker(SshData data, String command) {
+            this.data = data;
+            this.command = command;
         }
 
         @Override
-        protected Boolean call() {
+        protected List<String> call() {
+            LOGGER.debug(data.toString());
+            try (SshWrapper wrapper = new SshWrapper(data)) {
+                return wrapper.getRemoteCommandOutput(command);
+            } catch (IOException ioe) {
+                LOGGER.debug("SSH connection creation failed.", ioe);
+                return Collections.emptyList();
+            }
+        }
+    }
+
+    private class RemoteContinuousCmdWorker extends Task<Void> {
+        private String command;
+        private SshData data;
+        private OutputStream os;
+
+        RemoteContinuousCmdWorker(SshData data, String command,
+                                  OutputStream os) {
+            this.data = data;
+            this.command = command;
+            this.os = os;
+        }
+
+        @Override
+        protected Void call() {
+            LOGGER.debug(data.toString());
+            try (SshWrapper wrapper = new SshWrapper(data)) {
+                wrapper.getRemoteContinuousCommandOutput(command, os);
+            } catch (IOException ioe) {
+                LOGGER.debug("SSH connection creation failed.", ioe);
+            }
             return null;
         }
     }

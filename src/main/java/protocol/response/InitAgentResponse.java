@@ -1,13 +1,14 @@
 package protocol.response;
 
-import gui.tab.loader.TabAddressPair;
-import gui.feature.Feature;
-import java.time.LocalDateTime;
-import javafx.scene.control.Tab;
 import gui.controllers.ControllerUtils;
 import gui.controllers.MasterWindowController;
-import protocol.BoardType;
+import gui.misc.Feature;
+import gui.tab.loader.TabAddressPair;
 import gui.userdata.DeviceValueObject;
+import javafx.scene.control.Tab;
+import protocol.BoardType;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public final class InitAgentResponse implements AgentResponse {

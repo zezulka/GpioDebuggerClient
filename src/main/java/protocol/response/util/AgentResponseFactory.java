@@ -1,32 +1,17 @@
 package protocol.response.util;
 
-import gui.feature.Feature;
+import gui.misc.Feature;
 import gui.userdata.InterruptValueObject;
+import net.ConnectionValueObject;
+import protocol.*;
+import protocol.response.*;
+
 import java.net.InetAddress;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import net.ConnectionValueObject;
-import protocol.BoardType;
-import protocol.ClientPin;
-import protocol.ClientPinFactory;
-import protocol.InterruptManager;
-import protocol.InterruptType;
-import protocol.MessageParser;
-import protocol.ResponseType;
-import protocol.Signal;
-import protocol.response.AbstractInterruptAgentResponse;
-import protocol.response.AgentResponse;
-import protocol.response.GpioAgentResponse;
-import protocol.response.I2cAgentResponse;
-import protocol.response.IllegalResponseException;
-import protocol.response.InitAgentResponse;
-import protocol.response.InterruptGeneratedAgentResponse;
-import protocol.response.InterruptListenerStartedAgentResponse;
-import protocol.response.InterruptListenerStoppedAgentResponse;
-import protocol.response.SpiAgentResponse;
 
 public final class AgentResponseFactory {
 
