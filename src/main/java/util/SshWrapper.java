@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -50,21 +49,10 @@ public final class SshWrapper implements AutoCloseable {
     }
 
     /*
-     * Wait for numCollect lines of the output stream and collect them into
-     * the collection which is returned. Rest of the command output will then
-     * be written to the output stream provided as the function argument.
-     *
-     * If less than numCollect lines are outputted before reaching EOF,
-     * resulting collection will be smaller and nothing will be
-     * written to the output stream.
-     *
-     * @param numCollect the num collect
-     * @param command    the command
-     * @param os         the os
-     * @return the list
+     * Launch command and write its output to output stream provided as the
+     * function argument. This method is blocking.
      */
-    public List<String> scanAgentOutput(int numCollect, String command,
-                                        OutputStream os) {
+    public void launchRemoteCommand(String command, OutputStream os) {
         Objects.requireNonNull(os, "output stream");
         Objects.requireNonNull(command, "command");
         try (Session session = sshClient.startSession()) {
@@ -72,30 +60,12 @@ public final class SshWrapper implements AutoCloseable {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(cmd.getInputStream()));
             String curr;
-            List<String> result = new ArrayList<>();
             while ((curr = br.readLine()) != null) {
-                result.add(curr);
-                if (--numCollect == 0) {
-                    break;
-                }
+                os.write(("[AGENT]" + curr + '\n').getBytes());
             }
-            if (curr != null && numCollect == 0) {
-                new Thread(() -> {
-                    String innerCurr;
-                    try {
-                        while ((innerCurr = br.readLine()) != null) {
-                            os.write(("[AGENT]" + innerCurr + '\n').getBytes());
-                        }
-                        cmd.join();
-                    } catch (IOException ioe) {
-                        LOGGER.debug(ioe.getMessage());
-                    }
-                }).start();
-            }
-            return result;
+            cmd.join();
         } catch (IOException ex) {
             LOGGER.debug(ex.getMessage());
-            return Collections.emptyList();
         }
     }
 

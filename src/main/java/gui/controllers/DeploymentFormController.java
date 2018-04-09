@@ -100,9 +100,7 @@ public final class DeploymentFormController implements Initializable {
                 .build(), os);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        initFileChooser();
+    private void initRemoteDeploymentNodes() {
         Label l = new Label("Once you click on the \"Remote\" "
                 + "button, client will try to search for jar files located "
                 + "in the user home folder. Please note that you must fill in "
@@ -123,6 +121,28 @@ public final class DeploymentFormController implements Initializable {
         remoteBtn.disableProperty().bind(addressField.editorProperty().
                 get().textProperty().isEmpty()
                 .or(usernameField.textProperty().isEmpty()));
+        remoteJar.getSelectionModel().selectedItemProperty()
+                .addListener((ign, ign2, n) -> jarPath.setValue(n));
+        remoteBtn.setOnMouseClicked(e -> {
+            ReachabilityWorker cw = new ReachabilityWorker(this);
+            cw.setOnSucceeded(event -> {
+                InetAddress ia = cw.getValue();
+                if (ia != null) {
+                    RemoteCmdWorker aw = agent(ia, "find ~ -maxdepth 1 -name "
+                            + "\"*[A|a]gent*.jar\"");
+                    aw.setOnSucceeded(ev -> remoteJar.setItems(
+                            FXCollections.observableArrayList(aw.getValue())));
+                    new Thread(aw).start();
+                }
+            });
+            new Thread(cw).start();
+        });
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initFileChooser();
+        initRemoteDeploymentNodes();
         addressField.setEditable(true);
         ObservableList<String> list = FXCollections.observableArrayList();
         XStreamUtils.getDevices().forEach(deviceValueObject
@@ -153,22 +173,6 @@ public final class DeploymentFormController implements Initializable {
             jarPath.setValue(selectedPath);
             localJar.setText(selectedPath);
             mwc.requestDeploymentDialogFocus();
-        });
-        remoteJar.getSelectionModel().selectedItemProperty()
-                .addListener((ign, ign2, n) -> jarPath.setValue(n));
-        remoteBtn.setOnMouseClicked(e -> {
-            ReachabilityWorker cw = new ReachabilityWorker(this);
-            cw.setOnSucceeded(event -> {
-                InetAddress ia = cw.getValue();
-                if (ia != null) {
-                    RemoteCmdWorker aw = agent(ia, "find ~ -maxdepth 1 -name "
-                            + "\"*[A|a]gent*.jar\"");
-                    aw.setOnSucceeded(ev -> remoteJar.setItems(
-                            FXCollections.observableArrayList(aw.getValue())));
-                    new Thread(aw).start();
-                }
-            });
-            new Thread(cw).start();
         });
     }
 
@@ -236,12 +240,10 @@ public final class DeploymentFormController implements Initializable {
         }
     }
 
-    private class AgentWorker extends Task<Integer> {
+    private class AgentWorker extends Task<Void> {
         // Expect the command output to be the following:
         // first line:   [#] PID
-        // second line:  java -jar <JAR_NAME>
-        // the rest:     agent logger output
-        private final String command = "java -jar " + jarPath.get() + " & fg";
+        private final String command = "java -jar " + jarPath.get();
         private SshData data;
         private OutputStream os;
 
@@ -251,45 +253,18 @@ public final class DeploymentFormController implements Initializable {
         }
 
         @Override
-        protected Integer call() {
+        protected Void call() {
             LOGGER.debug(data.toString());
-            List<String> init = Collections.emptyList();
             try (SshWrapper wrapper = new SshWrapper(data)) {
-                init = wrapper.scanAgentOutput(0, command, os);
-                /*if(init.size() < 2) {
-                    return null;
-                }
-                String[] split = init.get(0).split(" ");
-                if(split.length != 2) {
-                    return null;
-                }*/
-                return 0;
-                //return Integer.getInteger(split[1]);
+                wrapper.launchRemoteCommand(command, os);
             } catch (IOException ioe) {
                 LOGGER.debug("SSH connection creation failed.", ioe);
-            } catch (NumberFormatException nfe) {
-                LOGGER.debug(String.format("Error while retrieving agent PID:"
-                        + " unexpected parse input: %s.", init));
             }
             return null;
         }
 
         @Override
         protected void done() {
-            try {
-                Integer pid = get();
-                if (pid == null) {
-                    LOGGER.debug("Could not retrieve agent PID.");
-                } else {
-                    MenuItem mi = new MenuItem(pid.toString());
-                    mi.setOnAction(e -> {
-                        System.out.println(data.getInetAddress().getHostAddress());
-                    });
-                    mwc.addNewAgent(mi);
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                LOGGER.debug(e.getMessage());
-            }
 
         }
     }

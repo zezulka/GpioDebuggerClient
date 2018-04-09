@@ -76,20 +76,6 @@ public final class MasterWindowController implements Initializable {
     private Button deployButton;
     @FXML
     private ToolBar toolBar;
-    @FXML
-    private MenuButton killMenuBtn;
-
-    public void addNewAgent(MenuItem mi) {
-        killMenuBtn.setDisable(false);
-        killMenuBtn.getItems().add(mi);
-    }
-
-    public void removeAgent(MenuItem mi) {
-        killMenuBtn.getItems().remove(mi);
-        if (killMenuBtn.getItems().isEmpty()) {
-            killMenuBtn.setDisable(true);
-        }
-    }
 
     public static TabManager getTabManager() {
         return manager;
