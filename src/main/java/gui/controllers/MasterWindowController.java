@@ -16,16 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
-import javafx.scene.control.Label;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -85,10 +76,25 @@ public final class MasterWindowController implements Initializable {
     private Button deployButton;
     @FXML
     private ToolBar toolBar;
+    @FXML
+    private MenuButton killMenuBtn;
+
+    public void addNewAgent(MenuItem mi) {
+        killMenuBtn.setDisable(false);
+        killMenuBtn.getItems().add(mi);
+    }
+
+    public void removeAgent(MenuItem mi) {
+        killMenuBtn.getItems().remove(mi);
+        if (killMenuBtn.getItems().isEmpty()) {
+            killMenuBtn.setDisable(true);
+        }
+    }
 
     public static TabManager getTabManager() {
         return manager;
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

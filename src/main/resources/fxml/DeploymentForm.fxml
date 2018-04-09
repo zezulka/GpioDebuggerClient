@@ -108,9 +108,8 @@
                 <ToggleGroup fx:id="jar"/>
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="remoteBtn" mnemonicParsing="false"
-                     text="Remote (load on click)" toggleGroup="$jar"
-                     GridPane.rowIndex="10"/>
+        <RadioButton fx:id="remoteBtn" mnemonicParsing="false" text="Remote"
+                     toggleGroup="$jar" GridPane.rowIndex="10"/>
         <Label fx:id="localJar" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
         <ComboBox fx:id="remoteJar" prefHeight="26.0" prefWidth="276.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"
@@ -124,5 +123,11 @@
         </ProgressIndicator>
         <ComboBox fx:id="addressField" prefHeight="26.0" prefWidth="200.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+        <Button fx:id="remoteHelpBtn" mnemonicParsing="false" text="?"
+                GridPane.halignment="LEFT" GridPane.rowIndex="10">
+            <GridPane.margin>
+                <Insets left="10.0"/>
+            </GridPane.margin>
+        </Button>
     </children>
 </GridPane>

@@ -11,14 +11,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -26,6 +19,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.NetworkingUtils;
+import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.SshWrapper;
@@ -71,9 +65,13 @@ public final class DeploymentFormController implements Initializable {
     private ComboBox<String> remoteJar;
     @FXML
     private ProgressIndicator ipProgress;
+    @FXML
+    private Button remoteHelpBtn;
+
     private StringProperty jarPath = new SimpleStringProperty(null);
     private FileChooser fc;
     private MasterWindowController mwc;
+    private PopOver remoteHelp = new PopOver();
 
     private void initFileChooser() {
         fc = new FileChooser();
@@ -94,18 +92,37 @@ public final class DeploymentFormController implements Initializable {
                 .build(), command);
     }
 
-    private RemoteContinuousCmdWorker contAgent(InetAddress ia, String command,
-                                                OutputStream os) {
-        return new RemoteContinuousCmdWorker(new SshData.Builder()
+    private AgentWorker contAgent(InetAddress ia, OutputStream os) {
+        return new AgentWorker(new SshData.Builder()
                 .inetAddress(ia)
                 .password(passwdField.getText().getBytes())
                 .username(usernameField.getText())
-                .build(), command, os);
+                .build(), os);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initFileChooser();
+        Label l = new Label("Once you click on the \"Remote\" "
+                + "button, client will try to search for jar files located "
+                + "in the user home folder. Please note that you must fill in "
+                + "the authentication data first.The list will then be "
+                + "available in the combo box.");
+        l.setPadding(new Insets(5));
+        l.setWrapText(true);
+        l.setPrefWidth(250);
+        remoteHelp.setContentNode(l);
+        remoteHelp.setArrowLocation(PopOver.ArrowLocation.BOTTOM_CENTER);
+        remoteHelpBtn.setOnAction(e -> {
+            if (remoteHelp.isShowing()) {
+                remoteHelp.hide();
+            } else {
+                remoteHelp.show(remoteHelpBtn);
+            }
+        });
+        remoteBtn.disableProperty().bind(addressField.editorProperty().
+                get().textProperty().isEmpty()
+                .or(usernameField.textProperty().isEmpty()));
         addressField.setEditable(true);
         ObservableList<String> list = FXCollections.observableArrayList();
         XStreamUtils.getDevices().forEach(deviceValueObject
@@ -122,8 +139,7 @@ public final class DeploymentFormController implements Initializable {
                     event -> {
                         InetAddress ia = cw.getValue();
                         if (ia != null && remoteBtn.isSelected()) {
-                            RemoteContinuousCmdWorker aw = contAgent(ia,
-                                    "java -jar " + jarPath.get(), System.out);
+                            AgentWorker aw = contAgent(ia, System.out);
                             new Thread(aw).start();
                         }
                     });
@@ -212,7 +228,7 @@ public final class DeploymentFormController implements Initializable {
         protected List<String> call() {
             LOGGER.debug(data.toString());
             try (SshWrapper wrapper = new SshWrapper(data)) {
-                return wrapper.getRemoteCommandOutput(command);
+                return wrapper.scanRemoteOutput(command);
             } catch (IOException ioe) {
                 LOGGER.debug("SSH connection creation failed.", ioe);
                 return Collections.emptyList();
@@ -220,27 +236,61 @@ public final class DeploymentFormController implements Initializable {
         }
     }
 
-    private class RemoteContinuousCmdWorker extends Task<Void> {
-        private String command;
+    private class AgentWorker extends Task<Integer> {
+        // Expect the command output to be the following:
+        // first line:   [#] PID
+        // second line:  java -jar <JAR_NAME>
+        // the rest:     agent logger output
+        private final String command = "java -jar " + jarPath.get() + " & fg";
         private SshData data;
         private OutputStream os;
 
-        RemoteContinuousCmdWorker(SshData data, String command,
-                                  OutputStream os) {
+        AgentWorker(SshData data, OutputStream os) {
             this.data = data;
-            this.command = command;
             this.os = os;
         }
 
         @Override
-        protected Void call() {
+        protected Integer call() {
             LOGGER.debug(data.toString());
+            List<String> init = Collections.emptyList();
             try (SshWrapper wrapper = new SshWrapper(data)) {
-                wrapper.getRemoteContinuousCommandOutput(command, os);
+                init = wrapper.scanAgentOutput(0, command, os);
+                /*if(init.size() < 2) {
+                    return null;
+                }
+                String[] split = init.get(0).split(" ");
+                if(split.length != 2) {
+                    return null;
+                }*/
+                return 0;
+                //return Integer.getInteger(split[1]);
             } catch (IOException ioe) {
                 LOGGER.debug("SSH connection creation failed.", ioe);
+            } catch (NumberFormatException nfe) {
+                LOGGER.debug(String.format("Error while retrieving agent PID:"
+                        + " unexpected parse input: %s.", init));
             }
             return null;
+        }
+
+        @Override
+        protected void done() {
+            try {
+                Integer pid = get();
+                if (pid == null) {
+                    LOGGER.debug("Could not retrieve agent PID.");
+                } else {
+                    MenuItem mi = new MenuItem(pid.toString());
+                    mi.setOnAction(e -> {
+                        System.out.println(data.getInetAddress().getHostAddress());
+                    });
+                    mwc.addNewAgent(mi);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                LOGGER.debug(e.getMessage());
+            }
+
         }
     }
 }
