@@ -1,7 +1,7 @@
 package net;
 
-import gui.controllers.ControllerUtils;
-import gui.controllers.MasterWindowController;
+import gui.controllers.Utils;
+import gui.controllers.MasterWindow;
 import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,9 +113,9 @@ public final class ConnectionThread implements Runnable {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             if (connection.getDevice().isDirty()) {
-                Platform.runLater(() -> MasterWindowController.getTabManager()
+                Platform.runLater(() -> MasterWindow.getTabManager()
                         .removeTab(connection.getDevice().getAddress()));
-                ControllerUtils.showInfoDialog(
+                Utils.showInfoDialog(
                         String.format("Disconnected from address %s, device %s",
                                 connection.getDevice().getAddress(),
                                 connection.getDevice().getBoardType())
@@ -140,7 +140,7 @@ public final class ConnectionThread implements Runnable {
             readBuffer.get(buff, 0, length);
             return (new String(buff).replaceAll("\0", ""));
         } catch (IOException ex) {
-            ControllerUtils.showErrorDialog(
+            Utils.showErrorDialog(
                     "There has been an error reading message from agent."
                             + "Either agent is not running on the IP "
                             + "supplied or "
@@ -204,7 +204,7 @@ public final class ConnectionThread implements Runnable {
             LOGGER.info('<' + ex.getClass().toString()
                     + "> could not connect to server.");
             LOGGER.error(null, ex);
-            ControllerUtils
+            Utils
                     .showErrorDialog("Could not connect to server.");
             return false;
         }

@@ -1,6 +1,6 @@
 package protocol;
 
-import gui.controllers.ControllerUtils;
+import gui.controllers.Utils;
 import gui.userdata.InterruptValueObject;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -75,7 +75,7 @@ public final class InterruptManager {
             NUM_LISTENERS.set(NUM_LISTENERS.get() + 1);
             INTERRUPTS.get(destination).add(ivo);
         } else {
-            ControllerUtils.showErrorDialog("Listener already exists.");
+            Utils.showErrorDialog("Listener already exists.");
         }
     }
 

@@ -1,7 +1,8 @@
 package protocol.response;
 
 import java.net.InetAddress;
-import gui.controllers.InterruptsTabController;
+
+import gui.controllers.InterruptsTab;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import gui.userdata.InterruptValueObject;
@@ -29,8 +30,8 @@ public final class InterruptListenerStoppedAgentResponse
         // object; worker Thread is interrupted and removes the appropriate
         // listener if user requested to remove listener when it was still
         // running; otherwise, nothing happens
-        synchronized (InterruptsTabController.SYNC) {
-            InterruptsTabController.SYNC.notify();
+        synchronized (InterruptsTab.SYNC) {
+            InterruptsTab.SYNC.notify();
         }
     }
 }

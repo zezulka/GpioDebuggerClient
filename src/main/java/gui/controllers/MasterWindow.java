@@ -16,7 +16,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
+import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -44,10 +53,10 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
-public final class MasterWindowController implements Initializable {
+public final class MasterWindow implements Initializable {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(MasterWindowController.class);
+            = LoggerFactory.getLogger(MasterWindow.class);
     private static final NetworkManager NETWORK_MANAGER
             = NetworkManager.getInstance();
     private static final int HISTORY_BRANCH = 1;
@@ -91,8 +100,8 @@ public final class MasterWindowController implements Initializable {
         deviceInfo.setAnimated(false);
         deviceInfo.setDetachable(false);
         deployDialog.setTitle("Deploy agent remotely");
-        FXMLLoader formLoader = new FXMLLoader(ControllerUtils.DEPLOYMENT_FORM);
-        formLoader.setController(new DeploymentFormController(this));
+        FXMLLoader formLoader = new FXMLLoader(Utils.DEPLOYMENT_FORM);
+        formLoader.setController(new DeploymentForm(this));
         try {
             deployDialog.setContentNode(formLoader.load());
         } catch (IOException e) {
@@ -216,7 +225,7 @@ public final class MasterWindowController implements Initializable {
         InetAddress inetAddr = NetworkingUtils.getAddressFromHostname(cand);
         if (inetAddr == null) {
             LOGGER.debug("Could not resolve the following hostname: " + cand);
-            ControllerUtils.showErrorDialog("Unknown hostname.");
+            Utils.showErrorDialog("Unknown hostname.");
             return null;
         }
         return new DeviceValueObject(inetAddr);
@@ -316,7 +325,7 @@ public final class MasterWindowController implements Initializable {
     }
 
     private void disconnectHandler() {
-        boolean okToProceed = ControllerUtils
+        boolean okToProceed = Utils
                 .showConfirmDialog(StringConstants.OK_TO_DISCONNECT);
         if (okToProceed) {
             disconnect();
@@ -352,7 +361,7 @@ public final class MasterWindowController implements Initializable {
         }
 
         private void notifyConnectingFailed() {
-            Platform.runLater(() -> ControllerUtils.showErrorDialog(
+            Platform.runLater(() -> Utils.showErrorDialog(
                     String.format(StringConstants.F_HOST_NOT_REACHABLE,
                     device.getHostName())
             ));

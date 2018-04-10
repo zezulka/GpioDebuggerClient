@@ -1,7 +1,7 @@
 package protocol.response;
 
-import gui.controllers.ControllerUtils;
-import gui.controllers.MasterWindowController;
+import gui.controllers.Utils;
+import gui.controllers.MasterWindow;
 import gui.misc.Feature;
 import gui.tab.loader.TabAddressPair;
 import gui.userdata.DeviceValueObject;
@@ -29,12 +29,12 @@ public final class InitAgentResponse implements AgentResponse {
         device.setTimeConnected(LocalDateTime.now());
         device.setBoardType(boardType);
 
-        Tab loadedTab = ControllerUtils.getLoader().loadNewTab(
+        Tab loadedTab = Utils.getLoader().loadNewTab(
                 device.getAddress(),
                 device.getBoardType(),
                 features
         );
-        MasterWindowController.getTabManager()
+        MasterWindow.getTabManager()
                 .addTab(new TabAddressPair(loadedTab, device.getAddress()));
     }
 

@@ -4,7 +4,8 @@ import protocol.response.IllegalResponseException;
 import protocol.response.util.AgentResponseFactory;
 import net.ConnectionValueObject;
 import java.time.format.DateTimeFormatter;
-import gui.controllers.ControllerUtils;
+
+import gui.controllers.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public final class MessageParser {
                     "Agent response '%s' could not be recognized, error: %s",
                     agentMessage, ex.getMessage())
             );
-            ControllerUtils.showInfoDialog(String.format(
+            Utils.showInfoDialog(String.format(
                     "Unrecognized message has been received: %s",
                     agentMessage)
             );

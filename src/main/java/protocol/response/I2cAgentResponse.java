@@ -4,7 +4,7 @@ import util.StringConstants;
 import java.net.InetAddress;
 import java.time.LocalTime;
 import javafx.scene.control.Tab;
-import gui.controllers.MasterWindowController;
+import gui.controllers.MasterWindow;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ public final class I2cAgentResponse implements AgentResponse {
     }
 
     private void updateTextArea() {
-        Tab t = MasterWindowController
+        Tab t = MasterWindow
                 .getTabManager().findTabByAddress(address);
         TableView<ByteArrayResponse> ta =
                 ((TableView<ByteArrayResponse>) t.getContent()

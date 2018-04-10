@@ -5,7 +5,7 @@ import util.StringConstants;
 import java.net.InetAddress;
 
 import javafx.scene.control.Tab;
-import gui.controllers.MasterWindowController;
+import gui.controllers.MasterWindow;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public final class SpiAgentResponse implements AgentResponse {
     }
 
     private void updateTextArea() {
-        Tab t = MasterWindowController
+        Tab t = MasterWindow
                 .getTabManager().findTabByAddress(address);
         TableView<ByteArrayResponse> ta
                 = ((TableView<ByteArrayResponse>) t.getContent()

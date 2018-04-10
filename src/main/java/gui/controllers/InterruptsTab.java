@@ -32,10 +32,10 @@ import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class InterruptsTabController implements Initializable {
+public final class InterruptsTab implements Initializable {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(DeviceController.class);
+            = LoggerFactory.getLogger(Device.class);
     public static final Object SYNC = new Object();
 
     @FXML
@@ -63,7 +63,7 @@ public final class InterruptsTabController implements Initializable {
     private final PopOver pinPopup = new PopOver();
     private final GridPane pinGridPane = new GridPane();
 
-    public InterruptsTabController(InetAddress address) {
+    public InterruptsTab(InetAddress address) {
         this.address = address;
     }
 
@@ -179,7 +179,7 @@ public final class InterruptsTabController implements Initializable {
                 tableView.itemsProperty().get().remove(ivo);
                 return;
             }
-            if (ControllerUtils
+            if (Utils
                     .showConfirmDialog(StringConstants.LISTENER_ACTIVE)) {
                 new Thread(new StopAndRemoveInterruptsWorker(ivo)).start();
             }

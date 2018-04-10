@@ -10,10 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import gui.controllers.ControllerUtils;
+import gui.controllers.Utils;
 
 import util.StringConstants;
-import gui.controllers.MasterWindowController;
+import gui.controllers.MasterWindow;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public final class App extends Application {
 
         stage.setOnCloseRequest((event) -> {
             if (NetworkManager.isAnyConnectionOpened()) {
-                if (ControllerUtils.showConfirmDialog(
+                if (Utils.showConfirmDialog(
                         StringConstants.CLOSE_WHEN_DEVICES_ACTIVE)) {
                     NetworkManager.disconnectAll();
                 } else {
@@ -64,8 +64,8 @@ public final class App extends Application {
         LOGGER.debug("Loading scene...");
         try {
             FXMLLoader masterWindowLoader
-                    = new FXMLLoader(ControllerUtils.MASTER);
-            masterWindowLoader.setController(new MasterWindowController());
+                    = new FXMLLoader(Utils.MASTER);
+            masterWindowLoader.setController(new MasterWindow());
             Parent newParent = masterWindowLoader.load();
             newParent.lookup("#devicesTab");
             LOGGER.debug("Load successful.");

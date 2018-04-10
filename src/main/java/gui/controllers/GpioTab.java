@@ -17,10 +17,10 @@ import net.NetworkManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class GpioTabController implements Initializable {
+public final class GpioTab implements Initializable {
 
     private static final Logger LOGGER
-            = LoggerFactory.getLogger(DeviceController.class);
+            = LoggerFactory.getLogger(Device.class);
 
     @FXML
     private Tab gpioTab;
@@ -35,7 +35,7 @@ public final class GpioTabController implements Initializable {
 
     private final InetAddress address;
 
-    public GpioTabController(InetAddress address) {
+    public GpioTab(InetAddress address) {
         if (address == null) {
             throw new IllegalArgumentException("address cannot be null");
         }

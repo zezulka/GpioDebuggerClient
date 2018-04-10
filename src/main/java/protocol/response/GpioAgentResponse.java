@@ -3,8 +3,8 @@ package protocol.response;
 import java.net.InetAddress;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
-import gui.controllers.ControllerUtils;
-import gui.controllers.MasterWindowController;
+import gui.controllers.Utils;
+import gui.controllers.MasterWindow;
 import protocol.ClientPin;
 import protocol.Signal;
 
@@ -23,7 +23,7 @@ public final class GpioAgentResponse implements AgentResponse {
 
     @Override
     public void react() {
-        Tab t = MasterWindowController
+        Tab t = MasterWindow
                 .getTabManager().findTabByAddress(address);
         Button btn = (Button) t.getContent()
                 .lookup("#" + pin.getPinId());
@@ -31,6 +31,6 @@ public final class GpioAgentResponse implements AgentResponse {
         String color = signal.getBooleanValue() ? "00AA00" : "FF5555";
         btn.setStyle("-fx-background-color: #" + color);
 
-        ControllerUtils.playButtonAnimation(btn);
+        Utils.playButtonAnimation(btn);
     }
 }

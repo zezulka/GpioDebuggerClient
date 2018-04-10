@@ -1,10 +1,10 @@
 package gui.tab.loader;
 
-import gui.controllers.ControllerUtils;
-import gui.controllers.GpioTabController;
-import gui.controllers.I2cTabController;
-import gui.controllers.InterruptsTabController;
-import gui.controllers.SpiTabController;
+import gui.controllers.Utils;
+import gui.controllers.GpioTab;
+import gui.controllers.I2CTab;
+import gui.controllers.InterruptsTab;
+import gui.controllers.SpiTab;
 import gui.misc.Feature;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,8 +31,8 @@ public final class TabLoaderImpl implements TabLoader {
         LOGGER.debug("Attempting to load root controller...");
         try {
             FXMLLoader raspiLoader
-                    = new FXMLLoader(ControllerUtils.getBoardUrl());
-            raspiLoader.setController(ControllerUtils.getDeviceController());
+                    = new FXMLLoader(Utils.getBoardUrl());
+            raspiLoader.setController(Utils.getDeviceController());
             List<FXMLLoader> loaders = new ArrayList<>();
             for (Feature f : features) {
                 FXMLLoader loader = FxmlLoaderFactory.of(f, type);
@@ -65,13 +65,13 @@ public final class TabLoaderImpl implements TabLoader {
         public static Initializable of(InetAddress address, Feature f) {
             switch (f) {
                 case GPIO:
-                    return new GpioTabController(address);
+                    return new GpioTab(address);
                 case I2C:
-                    return new I2cTabController(address);
+                    return new I2CTab(address);
                 case INTERRUPTS:
-                    return new InterruptsTabController(address);
+                    return new InterruptsTab(address);
                 case SPI:
-                    return new SpiTabController(address);
+                    return new SpiTab(address);
                 default:
                     throw new UnsupportedOperationException("unsupported");
             }
@@ -87,11 +87,11 @@ public final class TabLoaderImpl implements TabLoader {
                 case GPIO:
                     return GpioFxmlLoaderFactory.of(type);
                 case I2C:
-                    return new FXMLLoader(ControllerUtils.I2C);
+                    return new FXMLLoader(Utils.I2C);
                 case INTERRUPTS:
-                    return new FXMLLoader(ControllerUtils.INTRS);
+                    return new FXMLLoader(Utils.INTRS);
                 case SPI:
-                    return new FXMLLoader(ControllerUtils.SPI);
+                    return new FXMLLoader(Utils.SPI);
                 default:
                     throw new UnsupportedOperationException("unsupported");
             }
@@ -105,9 +105,9 @@ public final class TabLoaderImpl implements TabLoader {
         public static FXMLLoader of(BoardType type) {
             switch (type) {
                 case RASPBERRY_PI:
-                    return new FXMLLoader(ControllerUtils.RASPI_GPIO);
+                    return new FXMLLoader(Utils.RASPI_GPIO);
                 case TESTING:
-                    return new FXMLLoader(ControllerUtils.TESTING_GPIO);
+                    return new FXMLLoader(Utils.TESTING_GPIO);
                 default:
                     throw new IllegalArgumentException("type");
             }
