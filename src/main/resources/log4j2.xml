@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="WARN">
-  <appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="[ %d{HH:mm:ss.S} %-5level] %logger{36} - %msg%n"/>
-    </Console>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="[ %d{HH:mm:ss.S} %-5level] %logger{36} - %msg%n"/>
+        </Console>
+        <File name="File" fileName="logs/app.log">
+            <PatternLayout
+                    pattern="[ %d{yyyy-mm-dd HH:mm:ss.S} %-5level] %logger{36} - %msg%n"/>
+        </File>
+    </Appenders>
 
-    <File name="MyFile" fileName="logs/app.log">
-        <PatternLayout pattern="[ %d{yyyy-mm-dd HH:mm:ss.S} %-5level] %logger{36} - %msg%n"/>
-    </File>
-  </appenders>
 
-  <loggers>
-    <root level="all">
-      <appender-ref ref="Console"/>
-      <appender-ref ref="MyFile" level="error"/>
-    </root>
-  </loggers>
-</configuration>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+        <!-- Use this to control SSHJ logging verbosity -->
+        <Logger name="net.schmizz" level="INFO"/>
+        <Logger name="com.hierynomus" level="INFO"/>
+    </Loggers>
+</Configuration>

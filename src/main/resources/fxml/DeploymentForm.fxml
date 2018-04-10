@@ -45,14 +45,12 @@
                         vgrow="SOMETIMES"/>
         <RowConstraints maxHeight="197.0" minHeight="20.0" prefHeight="30.0"
                         vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="197.0" minHeight="20.0" prefHeight="30.0"
-                        vgrow="SOMETIMES"/>
         <RowConstraints minHeight="20.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
         <Button fx:id="deployBtn" mnemonicParsing="false" text="Deploy"
                 GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                GridPane.rowIndex="12"/>
+                GridPane.rowIndex="11"/>
         <Label text="IP address / hostname"/>
         <Label text="Remote username" GridPane.rowIndex="1"/>
         <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="200.0"
@@ -67,8 +65,8 @@
                 <Font name="System Bold" size="13.0"/>
             </font>
         </Label>
-        <RadioButton fx:id="noneBtn" mnemonicParsing="false" text="None (N/A)"
-                     GridPane.rowIndex="4">
+        <RadioButton fx:id="passwdBtn" mnemonicParsing="false" selected="true"
+                     text="Password" GridPane.rowIndex="4">
             <font>
                 <Font name="System Italic" size="13.0"/>
             </font>
@@ -76,44 +74,38 @@
                 <ToggleGroup fx:id="auth"/>
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="passwdBtn" mnemonicParsing="false" selected="true"
-                     text="Password" toggleGroup="$auth" GridPane.rowIndex="5">
-            <font>
-                <Font name="System Italic" size="13.0"/>
-            </font>
-        </RadioButton>
         <RadioButton fx:id="certBtn" mnemonicParsing="false"
-                     text="Certificate (N/A)" toggleGroup="$auth"
-                     GridPane.rowIndex="6">
+                     text="Certificate..." toggleGroup="$auth"
+                     GridPane.rowIndex="5">
             <font>
                 <Font name="System Italic" size="13.0"/>
             </font>
         </RadioButton>
         <Separator prefWidth="200.0" GridPane.columnSpan="2"
-                   GridPane.rowIndex="7"/>
+                   GridPane.rowIndex="6"/>
         <PasswordField fx:id="passwdField" prefHeight="26.0" prefWidth="276.0"
                        GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                       GridPane.rowIndex="5"/>
+                       GridPane.rowIndex="4"/>
         <Label text="Debugger agent JAR location" GridPane.columnSpan="2"
-               GridPane.halignment="CENTER" GridPane.rowIndex="8">
+               GridPane.halignment="CENTER" GridPane.rowIndex="7">
             <font>
                 <Font name="System Bold" size="13.0"/>
             </font>
         </Label>
         <Separator prefWidth="200.0" GridPane.columnSpan="2"
-                   GridPane.rowIndex="11"/>
+                   GridPane.rowIndex="10"/>
         <RadioButton fx:id="localBtn" mnemonicParsing="false" text="Local..."
-                     GridPane.rowIndex="9">
+                     GridPane.rowIndex="8">
             <toggleGroup>
                 <ToggleGroup fx:id="jar"/>
             </toggleGroup>
         </RadioButton>
         <RadioButton fx:id="remoteBtn" mnemonicParsing="false" text="Remote"
-                     toggleGroup="$jar" GridPane.rowIndex="10"/>
-        <Label fx:id="localJar" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                     toggleGroup="$jar" GridPane.rowIndex="9"/>
+        <Label fx:id="localJar" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
         <ComboBox fx:id="remoteJar" prefHeight="26.0" prefWidth="276.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                  GridPane.rowIndex="10"/>
+                  GridPane.rowIndex="9"/>
         <ProgressIndicator fx:id="ipProgress" nodeOrientation="RIGHT_TO_LEFT"
                            opacity="0.59" prefHeight="10.0" prefWidth="142.0"
                            visible="false" GridPane.halignment="CENTER">
@@ -124,10 +116,13 @@
         <ComboBox fx:id="addressField" prefHeight="26.0" prefWidth="200.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
         <Button fx:id="remoteHelpBtn" mnemonicParsing="false" text="?"
-                GridPane.halignment="LEFT" GridPane.rowIndex="10">
+                GridPane.halignment="LEFT" GridPane.rowIndex="9">
             <GridPane.margin>
                 <Insets left="10.0"/>
             </GridPane.margin>
         </Button>
+        <Label GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+        <Label fx:id="certLabel" GridPane.columnIndex="1"
+               GridPane.rowIndex="5"/>
     </children>
 </GridPane>

@@ -53,8 +53,6 @@ public final class DeploymentForm implements Initializable {
     @FXML
     private ToggleGroup auth;
     @FXML
-    private RadioButton noneBtn;
-    @FXML
     private RadioButton passwdBtn;
     @FXML
     private RadioButton certBtn;
@@ -74,16 +72,18 @@ public final class DeploymentForm implements Initializable {
     private ProgressIndicator ipProgress;
     @FXML
     private Button remoteHelpBtn;
+    @FXML
+    private Label certLabel;
 
     private StringProperty jarPath = new SimpleStringProperty(null);
-    private FileChooser fc;
+    private FileChooser jarFc;
     private MasterWindow mwc;
     private PopOver remoteHelp = new PopOver();
 
-    private void initFileChooser() {
-        fc = new FileChooser();
-        fc.setTitle("Choose agent JAR");
-        fc.getExtensionFilters().add(new FileChooser
+    private void initJarFileChooser() {
+        jarFc = new FileChooser();
+        jarFc.setTitle("Choose agent JAR");
+        jarFc.getExtensionFilters().add(new FileChooser
                 .ExtensionFilter("JAR archive (*.jar)", "*.jar"));
     }
 
@@ -148,7 +148,7 @@ public final class DeploymentForm implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initFileChooser();
+        initJarFileChooser();
         initRemoteDeploymentNodes();
         addressField.setEditable(true);
         ObservableList<String> list = FXCollections.observableArrayList();
@@ -174,7 +174,7 @@ public final class DeploymentForm implements Initializable {
             t.start();
         });
         localBtn.setOnMouseClicked(event -> {
-            File selected = fc.showOpenDialog(new Stage());
+            File selected = jarFc.showOpenDialog(new Stage());
             String selectedPath = selected == null ? null
                     : selected.getAbsolutePath();
             jarPath.setValue(selectedPath);
@@ -248,8 +248,6 @@ public final class DeploymentForm implements Initializable {
     }
 
     private class AgentWorker extends Task<Void> {
-        // Expect the command output to be the following:
-        // first line:   [#] PID
         private final String command = "java -jar " + jarPath.get();
         private SshData data;
         private OutputStream os;

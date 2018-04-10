@@ -26,8 +26,12 @@ public final class SshWrapper implements AutoCloseable {
         sshClient = new SSHClient();
         sshClient.addHostKeyVerifier(new PromiscuousVerifier());
         sshClient.connect(data.getInetAddress().getHostAddress());
-        sshClient.authPassword(data.getUsername(),
-                new String(data.getPassword()));
+        if (data.getPassword() == null || data.getPassword().length == 0) {
+            sshClient.authPublickey(data.getUsername());
+        } else {
+            sshClient.authPassword(data.getUsername(),
+                    new String(data.getPassword()));
+        }
         this.data = data;
     }
 
