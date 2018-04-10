@@ -3,6 +3,7 @@ package gui.userdata;
 import gui.userdata.xstream.XStreamUtils;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import protocol.BoardType;
@@ -28,7 +29,7 @@ public final class DeviceValueObject {
     }
 
     public DeviceValueObject(InetAddress address, BoardType device,
-            LocalDateTime timeConnected) {
+                             LocalDateTime timeConnected) {
         this.address = address;
         this.timeConnected = timeConnected;
         this.boardType = device;
@@ -79,13 +80,9 @@ public final class DeviceValueObject {
 
     @Override
     public String toString() {
-        String ipAddress = address.getHostAddress();
-        String board = getBoardType().toString();
-        String lastConnection = getTimeConnectedStr();
-
-        return "IP: " + ipAddress + '\n'
-                + "Board: " + board + '\n'
-                + "Connected at: " + lastConnection;
+        return "DeviceValueObject{" + "address=" + address
+                + ", boardType=" + boardType
+                + ", timeConnected=" + timeConnected;
     }
 
     @Override

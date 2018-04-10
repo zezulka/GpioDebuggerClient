@@ -47,11 +47,20 @@ public final class XStreamUtils {
                 try {
                     File f = col.getAssociatedFile();
                     if (!f.createNewFile()) {
-                        throw new IOException("Could not create new file.");
+                        LOGGER.debug(String.format("The file '%s' was not "
+                                        + "created because it already exists."
+                                        + "This is the expected behaviour.",
+                                col.getAssociatedFile()));
+                    } else {
+                        LOGGER.debug(String.format("Created new file '%s'.",
+                                col.getAssociatedFile()));
                     }
                     X_STREAM.toXML(col, new FileWriter(f));
                     LOGGER.info("New data saved to: " + f);
                 } catch (IOException ex) {
+                    LOGGER.error(String.format("IOException was thrown when "
+                                    + "saving collection to file '%s'.",
+                            col.getAssociatedFile()));
                     throw new XStreamException(ex);
                 }
             }
@@ -94,8 +103,9 @@ public final class XStreamUtils {
         collection.addItem(item);
     }
 
-    public static void addNewDeviceToFile(DeviceValueObject address) {
-        addNewItemToCollection(address, DEVICES);
+    public static void addNewDeviceToFile(DeviceValueObject device) {
+        LOGGER.debug(String.format("Adding new %s", device));
+        addNewItemToCollection(device, DEVICES);
     }
 
     public static void addNewI2cRequest(I2cRequestValueObject request) {
