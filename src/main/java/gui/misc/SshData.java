@@ -68,7 +68,8 @@ public final class SshData {
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
                 passwd = Arrays.toString(md.digest(password));
             } catch (NoSuchAlgorithmException e) {
-                // swallow the exception and leave the passwd in the default state
+                // swallow the exception and leave the passwd
+                // in the default state
             }
         }
         return "SshData{" + "username='" + username + '\''
