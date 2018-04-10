@@ -74,9 +74,8 @@
                 <ToggleGroup fx:id="auth"/>
             </toggleGroup>
         </RadioButton>
-        <RadioButton fx:id="certBtn" mnemonicParsing="false"
-                     text="Certificate..." toggleGroup="$auth"
-                     GridPane.rowIndex="5">
+        <RadioButton fx:id="keyBtn" mnemonicParsing="false" text="Key"
+                     toggleGroup="$auth" GridPane.rowIndex="5">
             <font>
                 <Font name="System Italic" size="13.0"/>
             </font>

@@ -55,7 +55,7 @@ public final class DeploymentForm implements Initializable {
     @FXML
     private RadioButton passwdBtn;
     @FXML
-    private RadioButton certBtn;
+    private RadioButton keyBtn;
     @FXML
     private PasswordField passwdField;
     @FXML
@@ -72,8 +72,6 @@ public final class DeploymentForm implements Initializable {
     private ProgressIndicator ipProgress;
     @FXML
     private Button remoteHelpBtn;
-    @FXML
-    private Label certLabel;
 
     private StringProperty jarPath = new SimpleStringProperty(null);
     private FileChooser jarFc;
@@ -91,20 +89,19 @@ public final class DeploymentForm implements Initializable {
         this.mwc = mwc;
     }
 
+    private SshData getSshWrapper(InetAddress ia) {
+        return new SshData.Builder().inetAddress(ia)
+                .password(keyBtn.isSelected() ? new byte[]{}
+                        : passwdField.getText().getBytes())
+                .username(usernameField.getText()).build();
+    }
+
     private RemoteCmdWorker agent(InetAddress ia, String command) {
-        return new RemoteCmdWorker(new SshData.Builder()
-                .inetAddress(ia)
-                .password(passwdField.getText().getBytes())
-                .username(usernameField.getText())
-                .build(), command);
+        return new RemoteCmdWorker(getSshWrapper(ia), command);
     }
 
     private AgentWorker contAgent(InetAddress ia, OutputStream os) {
-        return new AgentWorker(new SshData.Builder()
-                .inetAddress(ia)
-                .password(passwdField.getText().getBytes())
-                .username(usernameField.getText())
-                .build(), os);
+        return new AgentWorker(getSshWrapper(ia), os);
     }
 
     private void initRemoteDeploymentNodes() {
@@ -130,6 +127,9 @@ public final class DeploymentForm implements Initializable {
                 .or(usernameField.textProperty().isEmpty()));
         remoteJar.getSelectionModel().selectedItemProperty()
                 .addListener((ign, ign2, n) -> jarPath.setValue(n));
+        remoteJar.disableProperty().bind(addressField.editorProperty().get()
+                .textProperty().isEmpty()
+                .or(usernameField.textProperty().isEmpty()));
         remoteBtn.setOnMouseClicked(e -> {
             ReachabilityWorker cw = new ReachabilityWorker(this);
             cw.setOnSucceeded(event -> {
@@ -139,8 +139,13 @@ public final class DeploymentForm implements Initializable {
                             + "\"*[A|a]gent*.jar\"");
                     aw.setOnSucceeded(ev -> remoteJar.setItems(
                             FXCollections.observableArrayList(aw.getValue())));
+                    aw.setOnFailed(ev ->
+                            LOGGER.debug("Remote command execution failed."));
                     new Thread(aw).start();
                 }
+            });
+            cw.setOnFailed(event -> {
+                LOGGER.debug("Could not reach remote host.");
             });
             new Thread(cw).start();
         });

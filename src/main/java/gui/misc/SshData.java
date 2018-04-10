@@ -19,7 +19,6 @@ public final class SshData {
         public final SshData build() {
             Objects.requireNonNull(username, "Username was not set!");
             Objects.requireNonNull(inetAddress, "IP address was not set!");
-            Objects.requireNonNull(password, "Password was not set!");
             return new SshData(this);
         }
 
@@ -64,11 +63,13 @@ public final class SshData {
     @Override
     public String toString() {
         String passwd = "N/A";
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            passwd = Arrays.toString(md.digest(password));
-        } catch (NoSuchAlgorithmException e) {
-            // swallow the exception and leave the passwd in the default state
+        if (password.length > 0) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                passwd = Arrays.toString(md.digest(password));
+            } catch (NoSuchAlgorithmException e) {
+                // swallow the exception and leave the passwd in the default state
+            }
         }
         return "SshData{" + "username='" + username + '\''
                 + ", inetAddress=" + inetAddress

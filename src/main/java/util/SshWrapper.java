@@ -26,9 +26,13 @@ public final class SshWrapper implements AutoCloseable {
         sshClient = new SSHClient();
         sshClient.addHostKeyVerifier(new PromiscuousVerifier());
         sshClient.connect(data.getInetAddress().getHostAddress());
-        if (data.getPassword() == null || data.getPassword().length == 0) {
+        if (data.getPassword().length == 0) {
+            LOGGER.debug(String.format("Authenticating to %s via key pair.",
+                    data.getInetAddress().getHostAddress()));
             sshClient.authPublickey(data.getUsername());
         } else {
+            LOGGER.debug(String.format("Authenticating to %s via password.",
+                    data.getInetAddress().getHostAddress()));
             sshClient.authPassword(data.getUsername(),
                     new String(data.getPassword()));
         }
@@ -47,6 +51,7 @@ public final class SshWrapper implements AutoCloseable {
             }
             cmd.join(5, TimeUnit.SECONDS);
         } catch (IOException ex) {
+            LOGGER.debug(ex.getMessage());
             return new ArrayList<>();
         }
         return result;
