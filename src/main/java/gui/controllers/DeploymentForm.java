@@ -7,7 +7,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -96,12 +95,16 @@ public final class DeploymentForm implements Initializable {
                 .username(usernameField.getText()).build();
     }
 
-    private RemoteCmdWorker agent(InetAddress ia, String command) {
+    private RemoteCmdWorker remoteCmdWorker(InetAddress ia, String command) {
         return new RemoteCmdWorker(getSshWrapper(ia), command);
     }
 
-    private AgentWorker contAgent(InetAddress ia, OutputStream os) {
+    private AgentWorker agentWorker(InetAddress ia, OutputStream os) {
         return new AgentWorker(getSshWrapper(ia), os);
+    }
+
+    private CopyJarWorker copyJarWorker(InetAddress ia, OutputStream os) {
+        return new CopyJarWorker(getSshWrapper(ia), os);
     }
 
     private void initRemoteDeploymentNodes() {
@@ -122,21 +125,21 @@ public final class DeploymentForm implements Initializable {
                 remoteHelp.show(remoteHelpBtn);
             }
         });
-        remoteBtn.disableProperty().bind(addressField.editorProperty().
-                get().textProperty().isEmpty()
-                .or(usernameField.textProperty().isEmpty()));
         remoteJar.getSelectionModel().selectedItemProperty()
                 .addListener((ign, ign2, n) -> jarPath.setValue(n));
         remoteJar.disableProperty().bind(addressField.editorProperty().get()
                 .textProperty().isEmpty()
+                .or(usernameField.textProperty().isEmpty()));
+        remoteBtn.disableProperty().bind(addressField.editorProperty().
+                get().textProperty().isEmpty()
                 .or(usernameField.textProperty().isEmpty()));
         remoteBtn.setOnMouseClicked(e -> {
             ReachabilityWorker cw = new ReachabilityWorker(this);
             cw.setOnSucceeded(event -> {
                 InetAddress ia = cw.getValue();
                 if (ia != null) {
-                    RemoteCmdWorker aw = agent(ia, "find ~ -maxdepth 1 -name "
-                            + "\"*[A|a]gent*.jar\"");
+                    RemoteCmdWorker aw = remoteCmdWorker(ia, "find ~ -maxdepth "
+                            + "1 -name \"*[A|a]gent*.jar\"");
                     aw.setOnSucceeded(ev -> remoteJar.setItems(
                             FXCollections.observableArrayList(aw.getValue())));
                     aw.setOnFailed(ev ->
@@ -167,14 +170,25 @@ public final class DeploymentForm implements Initializable {
         deployBtn.setOnAction(e -> {
             ipProgress.setVisible(true);
             ReachabilityWorker cw = new ReachabilityWorker(this);
-            cw.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
-                    event -> {
-                        InetAddress ia = cw.getValue();
-                        if (ia != null && remoteBtn.isSelected()) {
-                            AgentWorker aw = contAgent(ia, System.out);
-                            new Thread(aw).start();
-                        }
-                    });
+            cw.setOnSucceeded(event -> {
+                InetAddress ia = cw.getValue();
+                if (ia != null) {
+                    if (localBtn.isSelected()) {
+                        CopyJarWorker cjw = copyJarWorker(ia, System.out);
+                        cjw.setOnSucceeded(a -> {
+                            if (cjw.getValue()) {
+                                AgentWorker aw = agentWorker(ia, System.out);
+                                new Thread(aw).start();
+                            }
+                        });
+                        new Thread(cjw).start();
+                    } else if (remoteBtn.isSelected()) {
+                        AgentWorker aw = agentWorker(ia, System.out);
+                        new Thread(aw).start();
+                    }
+                }
+
+            });
             Thread t = new Thread(cw);
             t.start();
         });
@@ -253,13 +267,15 @@ public final class DeploymentForm implements Initializable {
     }
 
     private class AgentWorker extends Task<Void> {
-        private final String command = "java -jar " + jarPath.get();
         private SshData data;
         private OutputStream os;
+        private String command;
 
         AgentWorker(SshData data, OutputStream os) {
             this.data = data;
             this.os = os;
+            String[] jarPathSplit = jarPath.get().split("/");
+            this.command = "java -jar " + jarPathSplit[jarPathSplit.length - 1];
         }
 
         @Override
@@ -276,6 +292,29 @@ public final class DeploymentForm implements Initializable {
         @Override
         protected void done() {
 
+        }
+    }
+
+    private class CopyJarWorker extends Task<Boolean> {
+        private final SshData data;
+        private final String jarPathStr = jarPath.get();
+        private final OutputStream os;
+
+        CopyJarWorker(SshData data, OutputStream os) {
+            this.data = data;
+            this.os = os;
+        }
+
+        @Override
+        protected Boolean call() {
+            LOGGER.debug(String.format("Copying JAR '%s' to remote host '%s'.",
+                    jarPathStr, data.getInetAddress().getHostAddress()));
+            try (SshWrapper wrapper = new SshWrapper(data)) {
+                return wrapper.uploadFileToRemoteServer(new File(jarPathStr));
+            } catch (IOException ioe) {
+                LOGGER.debug("SSH connection creation failed.", ioe);
+                return false;
+            }
         }
     }
 }

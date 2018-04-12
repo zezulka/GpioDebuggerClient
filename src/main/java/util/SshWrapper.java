@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -57,11 +58,24 @@ public final class SshWrapper implements AutoCloseable {
         return result;
     }
 
+    public boolean uploadFileToRemoteServer(File file) {
+        try {
+            sshClient.newSCPFileTransfer().upload(file.getAbsolutePath(),
+                    file.getName());
+            return true;
+        } catch (IOException e) {
+            LOGGER.debug(String.format("Could not upload file '%s' to remote "
+                            + "server '%s'.", file.getAbsolutePath(),
+                    data.getInetAddress()));
+            return false;
+        }
+    }
+
     /*
      * Launch command and write its output to output stream provided as the
      * function argument. This method is blocking.
      */
-    public void launchRemoteCommand(String command, OutputStream os) {
+    public boolean launchRemoteCommand(String command, OutputStream os) {
         Objects.requireNonNull(os, "output stream");
         Objects.requireNonNull(command, "command");
         try (Session session = sshClient.startSession()) {
@@ -73,8 +87,10 @@ public final class SshWrapper implements AutoCloseable {
                 os.write(("[AGENT]" + curr + '\n').getBytes());
             }
             cmd.join();
+            return true;
         } catch (IOException ex) {
             LOGGER.debug(ex.getMessage());
+            return false;
         }
     }
 
