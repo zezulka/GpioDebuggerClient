@@ -11,6 +11,9 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,7 +49,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -66,6 +68,8 @@ public final class MasterWindow implements Initializable {
     private final PopOver deployDialog = new PopOver();
     private final BooleanProperty connectingToDevice
             = new SimpleBooleanProperty(false);
+    private final ObservableList<DeviceValueObject> devices =
+            FXCollections.observableList(XStreamUtils.getDevices());
 
     @FXML
     private TabPane devicesTab;
@@ -90,6 +94,9 @@ public final class MasterWindow implements Initializable {
         return manager;
     }
 
+    ObservableList<DeviceValueObject> getDevices() {
+        return devices;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -176,41 +183,22 @@ public final class MasterWindow implements Initializable {
         }, devicesTree.getSelectionModel().selectedItemProperty());
     }
 
+    void addNewDevice(DeviceValueObject device) {
+        if (device != null) {
+            ipAddress.textProperty().set("");
+            if (!devices.contains(device)) {
+                device.setDirty(true);
+                devices.add(device);
+                XStreamUtils.addNewDeviceToFile(device);
+            }
+        }
+    }
+
     private void initAddNewDeviceBtn() {
         addNewDeviceButton.disableProperty()
                 .bind(ipAddress.textProperty().isEmpty());
-        addNewDeviceButton.setOnAction((event) -> {
-            DeviceValueObject newDevice = createNewDevice();
-            if (newDevice != null) {
-                ipAddress.textProperty().set("");
-                List<TreeItem<DeviceValueObject>> children = new ArrayList<>(
-                        devicesTree.getRoot().getChildren().get(HISTORY_BRANCH)
-                                .getChildren()
-                );
-                children.addAll(new ArrayList<>(devicesTree.getRoot()
-                        .getChildren().get(ACTIVE_BRANCH_INDEX).getChildren())
-                );
-                if (!deviceAlreadyExists(children, newDevice)) {
-                    devicesTree.getRoot().getChildren().get(HISTORY_BRANCH)
-                            .getChildren()
-                            .add(getTreeItemWithListener(newDevice));
-                    XStreamUtils.addNewDeviceToFile(newDevice);
-                }
-            }
-        });
-    }
-
-    private boolean deviceAlreadyExists(
-            List<TreeItem<DeviceValueObject>> children,
-            DeviceValueObject device) {
-        for (TreeItem<DeviceValueObject> child : children) {
-            DeviceValueObject dvo = child.getValue();
-            if (dvo.equals(device)) {
-                devicesTree.getSelectionModel().select(child);
-                return true;
-            }
-        }
-        return false;
+        addNewDeviceButton.setOnAction((event) ->
+                addNewDevice(createNewDeviceTextfield()));
     }
 
     private BooleanBinding connectionPending() {
@@ -220,7 +208,7 @@ public final class MasterWindow implements Initializable {
         return Bindings.when(binding).then(true).otherwise(false);
     }
 
-    private DeviceValueObject createNewDevice() {
+    private DeviceValueObject createNewDeviceTextfield() {
         String cand = ipAddress.getText();
         InetAddress inetAddr = NetworkingUtils.getAddressFromHostname(cand);
         if (inetAddr == null) {
@@ -250,9 +238,18 @@ public final class MasterWindow implements Initializable {
             node.addEventHandler(TreeItem.branchCollapsedEvent(),
                     t -> t.getTreeItem().setExpanded(true));
         });
-
-        XStreamUtils.getDevices().forEach((device)
-                -> hist.getChildren().add(getTreeItemWithListener(device)));
+        devices.addListener((ListChangeListener<DeviceValueObject>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    assert change.getAddedSize() == 1;
+                    DeviceValueObject newItem = change.getAddedSubList().get(0);
+                    hist.getChildren().add(getTreeItemWithListener(newItem));
+                    break;
+                }
+            }
+        });
+        devices.forEach(device -> hist.getChildren().add(
+                getTreeItemWithListener(device)));
         root.getChildren().addAll(active, hist);
         devicesTree.setCellFactory(e -> new DeviceTreeCell());
         devicesTree.setOnMouseClicked((event) -> {
@@ -363,7 +360,7 @@ public final class MasterWindow implements Initializable {
         private void notifyConnectingFailed() {
             Platform.runLater(() -> Utils.showErrorDialog(
                     String.format(StringConstants.F_HOST_NOT_REACHABLE,
-                    device.getHostName())
+                            device.getHostName())
             ));
         }
 

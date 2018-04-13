@@ -1,10 +1,12 @@
 package gui.controllers;
 
 import gui.misc.SshData;
+import gui.userdata.DeviceValueObject;
 import gui.userdata.xstream.XStreamUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -103,8 +105,8 @@ public final class DeploymentForm implements Initializable {
         return new AgentWorker(getSshWrapper(ia), os);
     }
 
-    private CopyJarWorker copyJarWorker(InetAddress ia, OutputStream os) {
-        return new CopyJarWorker(getSshWrapper(ia), os);
+    private CopyJarWorker copyJarWorker(InetAddress ia) {
+        return new CopyJarWorker(getSshWrapper(ia));
     }
 
     private void initRemoteDeploymentNodes() {
@@ -158,15 +160,24 @@ public final class DeploymentForm implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initJarFileChooser();
         initRemoteDeploymentNodes();
-        addressField.setEditable(true);
         ObservableList<String> list = FXCollections.observableArrayList();
         XStreamUtils.getDevices().forEach(deviceValueObject
                 -> list.add(deviceValueObject.getHostName()));
+        mwc.getDevices()
+                .addListener((ListChangeListener<DeviceValueObject>) c -> {
+                    while (c.next()) {
+                        if (c.wasAdded()) {
+                            assert c.getAddedSize() == 1;
+                            list.add(c.getAddedSubList().get(0).getHostName());
+                        }
+                    }
+                });
         addressField.setItems(list);
-        deployBtn.disableProperty().bind(
-                addressField.editorProperty().get().textProperty().isEmpty()
-                        .or(usernameField.textProperty().isEmpty())
-                        .or(jarPath.isEmpty()));
+        if (!list.isEmpty()) {
+            addressField.getSelectionModel().select(0);
+        }
+        deployBtn.disableProperty().bind(usernameField.textProperty().isEmpty()
+                .or(jarPath.isEmpty()));
         deployBtn.setOnAction(e -> {
             ipProgress.setVisible(true);
             ReachabilityWorker cw = new ReachabilityWorker(this);
@@ -174,7 +185,7 @@ public final class DeploymentForm implements Initializable {
                 InetAddress ia = cw.getValue();
                 if (ia != null) {
                     if (localBtn.isSelected()) {
-                        CopyJarWorker cjw = copyJarWorker(ia, System.out);
+                        CopyJarWorker cjw = copyJarWorker(ia);
                         cjw.setOnSucceeded(a -> {
                             if (cjw.getValue()) {
                                 AgentWorker aw = agentWorker(ia, System.out);
@@ -298,11 +309,9 @@ public final class DeploymentForm implements Initializable {
     private class CopyJarWorker extends Task<Boolean> {
         private final SshData data;
         private final String jarPathStr = jarPath.get();
-        private final OutputStream os;
 
-        CopyJarWorker(SshData data, OutputStream os) {
+        CopyJarWorker(SshData data) {
             this.data = data;
-            this.os = os;
         }
 
         @Override

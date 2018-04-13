@@ -1,57 +1,54 @@
 package gui.userdata;
 
 import gui.userdata.xstream.XStreamUtils;
+
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import net.AgentConnection;
 import protocol.BoardType;
 
-public final class DeviceValueObject {
+public final class Device {
 
     private final InetAddress address;
     private BoardType boardType;
     private LocalDateTime timeConnected;
-    private BooleanProperty disconnected;
     private boolean dirty = false;
+    private AgentConnection connection = null;
+    private BooleanProperty active;
 
     /**
      * Constructor without BoardType input variable. If such constructor is
      * used, BoardType.UNKNOWN is used.
      */
-    public DeviceValueObject(InetAddress address) {
+    public Device(InetAddress address) {
         this(address, BoardType.UNKNOWN);
     }
 
-    public DeviceValueObject(InetAddress address, BoardType device) {
+    public Device(InetAddress address, BoardType device) {
         this(address, device, null);
     }
 
-    public DeviceValueObject(InetAddress address, BoardType device,
-                             LocalDateTime timeConnected) {
+    public Device(InetAddress address, BoardType device,
+                  LocalDateTime timeConnected) {
         this.address = address;
         this.timeConnected = timeConnected;
         this.boardType = device;
+        this.active = new SimpleBooleanProperty(false);
+    }
+
+    public BooleanProperty activeProperty() {
+        return active;
     }
 
     public boolean isDirty() {
         return dirty;
     }
 
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
-    }
-
     public BoardType getBoardType() {
         return boardType;
-    }
-
-    public BooleanProperty disconnectedProperty() {
-        if (disconnected == null) {
-            disconnected = new SimpleBooleanProperty(true);
-        }
-        return disconnected;
     }
 
     public String getHostName() {
@@ -64,6 +61,10 @@ public final class DeviceValueObject {
 
     public LocalDateTime getTimeConnected() {
         return timeConnected;
+    }
+
+    public AgentConnection getConnection() {
+        return connection;
     }
 
     public String getTimeConnectedStr() {
@@ -82,9 +83,13 @@ public final class DeviceValueObject {
         this.boardType = boardType;
     }
 
+    public void setConnection(AgentConnection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public String toString() {
-        return "DeviceValueObject{" + "address=" + address
+        return "Device{" + "address=" + address
                 + ", boardType=" + boardType
                 + ", timeConnected=" + timeConnected;
     }
@@ -107,7 +112,7 @@ public final class DeviceValueObject {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DeviceValueObject other = (DeviceValueObject) obj;
+        final Device other = (Device) obj;
         return address.equals(other.address);
     }
 }

@@ -105,6 +105,7 @@ public final class XStreamUtils {
 
     public static void addNewDeviceToFile(DeviceValueObject device) {
         LOGGER.debug(String.format("Adding new %s", device));
+        device.setDirty(true);
         addNewItemToCollection(device, DEVICES);
     }
 
