@@ -300,13 +300,13 @@ public final class MasterWindow implements Initializable {
         if (selectedNode == null) {
             return;
         }
-        DeviceValueObject correspondingDevice;
+        DeviceValueObject device;
         if (selectedNode.isLeaf()) {
-            correspondingDevice = selectedNode.getValue();
+            device = selectedNode.getValue();
         } else {
-            correspondingDevice = selectedNode.getChildren().get(0).getValue();
+            device = selectedNode.getChildren().get(0).getValue();
         }
-        new Thread(new ConnectionWorker(correspondingDevice)).start();
+        new Thread(new ConnectionWorker(device)).start();
     }
 
     private void doubleClickHandler() {
@@ -327,6 +327,19 @@ public final class MasterWindow implements Initializable {
         if (okToProceed) {
             disconnect();
         }
+    }
+
+    void fire(InetAddress dvo) {
+        deployDialog.hide();
+        for (TreeItem<DeviceValueObject> i : devicesTree.getRoot()
+                .getChildren().get(HISTORY_BRANCH).getChildren()) {
+            if (dvo.equals(i.getValue().getAddress())) {
+                devicesTree.getSelectionModel().select(i);
+                new Thread(new ConnectionWorker(i.getValue())).start();
+                return;
+            }
+        }
+        throw new IllegalStateException("No device to select in tree view.");
     }
 
     private void disconnect() {

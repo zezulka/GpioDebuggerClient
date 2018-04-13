@@ -48,7 +48,7 @@ public final class DeploymentForm implements Initializable {
     @FXML
     private Button deployBtn;
     @FXML
-    private ComboBox<String> addressField;
+    private ComboBox<String> address;
     @FXML
     private TextField usernameField;
     @FXML
@@ -129,11 +129,11 @@ public final class DeploymentForm implements Initializable {
         });
         remoteJar.getSelectionModel().selectedItemProperty()
                 .addListener((ign, ign2, n) -> jarPath.setValue(n));
-        remoteJar.disableProperty().bind(addressField.editorProperty().get()
-                .textProperty().isEmpty()
+        remoteJar.disableProperty().bind(address.getSelectionModel()
+                .selectedItemProperty().isNull()
                 .or(usernameField.textProperty().isEmpty()));
-        remoteBtn.disableProperty().bind(addressField.editorProperty().
-                get().textProperty().isEmpty()
+        remoteBtn.disableProperty().bind(address.getSelectionModel()
+                .selectedItemProperty().isNull()
                 .or(usernameField.textProperty().isEmpty()));
         remoteBtn.setOnMouseClicked(e -> {
             ReachabilityWorker cw = new ReachabilityWorker(this);
@@ -172,9 +172,9 @@ public final class DeploymentForm implements Initializable {
                         }
                     }
                 });
-        addressField.setItems(list);
+        address.setItems(list);
         if (!list.isEmpty()) {
-            addressField.getSelectionModel().select(0);
+            address.getSelectionModel().select(0);
         }
         deployBtn.disableProperty().bind(usernameField.textProperty().isEmpty()
                 .or(jarPath.isEmpty()));
@@ -223,8 +223,8 @@ public final class DeploymentForm implements Initializable {
         @Override
         protected InetAddress call() {
             String ipString = controller.
-                    addressField.editorProperty().get().getText();
-            if (ipString.isEmpty()) {
+                    address.getSelectionModel().getSelectedItem();
+            if (ipString == null || ipString.isEmpty()) {
                 return null;
             }
             InetAddress ia = NetworkingUtils.getAddressFromHostname(ipString);
@@ -246,11 +246,11 @@ public final class DeploymentForm implements Initializable {
         @Override
         protected void done() {
             if (get() == null) {
-                controller.addressField.setBackground(new Background(
+                controller.address.setBackground(new Background(
                         new BackgroundFill(Paint.valueOf("#FF2222"),
                                 CornerRadii.EMPTY, Insets.EMPTY)));
             } else {
-                controller.addressField.setBackground(Background.EMPTY);
+                controller.address.setBackground(Background.EMPTY);
             }
             controller.ipProgress.setVisible(false);
         }
@@ -287,6 +287,9 @@ public final class DeploymentForm implements Initializable {
             this.os = os;
             String[] jarPathSplit = jarPath.get().split("/");
             this.command = "java -jar " + jarPathSplit[jarPathSplit.length - 1];
+            setOnSucceeded(e -> {
+                mwc.fire(data.getInetAddress());
+            });
         }
 
         @Override
@@ -298,11 +301,6 @@ public final class DeploymentForm implements Initializable {
                 LOGGER.debug("SSH connection creation failed.", ioe);
             }
             return null;
-        }
-
-        @Override
-        protected void done() {
-
         }
     }
 

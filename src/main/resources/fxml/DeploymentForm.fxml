@@ -112,7 +112,7 @@
                 <Insets right="150.0"/>
             </GridPane.margin>
         </ProgressIndicator>
-        <ComboBox fx:id="addressField" prefHeight="26.0" prefWidth="200.0"
+        <ComboBox fx:id="address" prefHeight="26.0" prefWidth="200.0"
                   GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
         <Button fx:id="remoteHelpBtn" mnemonicParsing="false" text="?"
                 GridPane.halignment="LEFT" GridPane.rowIndex="9">

@@ -1,6 +1,7 @@
 package util;
 
 import gui.misc.SshData;
+import javafx.application.Platform;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.connection.channel.direct.Session;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
@@ -82,11 +83,23 @@ public final class SshWrapper implements AutoCloseable {
             final Session.Command cmd = session.exec(command);
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(cmd.getInputStream()));
-            String curr;
-            while ((curr = br.readLine()) != null) {
-                os.write(("[AGENT]" + curr + '\n').getBytes());
+            String curr = br.readLine();
+            if (curr == null) {
+                return false;
             }
-            cmd.join();
+            os.write(("[AGENT]" + curr + '\n').getBytes());
+            //We read at least something -> do not wait forever and go ahead
+            Platform.runLater(() -> {
+                String next;
+                try {
+                    while ((next = br.readLine()) != null) {
+                        os.write(("[AGENT]" + next + '\n').getBytes());
+                    }
+                    cmd.join();
+                } catch (IOException ex) {
+                    LOGGER.debug(ex.getMessage());
+                }
+            });
             return true;
         } catch (IOException ex) {
             LOGGER.debug(ex.getMessage());
