@@ -61,9 +61,6 @@ public final class SpiTab
         this.address = address;
     }
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         super.enforceHexValuesOnly(byteArrayTextfield);
@@ -156,7 +153,9 @@ public final class SpiTab
         msgToSend = msgToSend.append(byteArrayTextfield.getText());
         NetworkManager.setMessageToSend(address, msgToSend.toString());
         SpiRequestValueObject request = getNewSpiRequestEntryFromCurrentData();
-        usedRequestsComboBox.getItems().add(request);
+        if (!usedRequestsComboBox.getItems().contains(request)) {
+            usedRequestsComboBox.getItems().add(request);
+        }
         XStreamUtils.addNewSpiRequest(request);
     }
 

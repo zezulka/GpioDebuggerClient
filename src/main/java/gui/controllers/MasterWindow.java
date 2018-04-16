@@ -386,18 +386,17 @@ public final class MasterWindow implements Initializable {
             }
             LOGGER.debug(String.format("Host %s is reachable",
                     device.getHostName()));
-            return true;
-
+            return NETWORK_MANAGER.connectToDevice(device);
         }
 
         @Override
         protected void done() {
             try {
-                if (get() && NETWORK_MANAGER.connectToDevice(device)) {
+                if (get()) {
                     devicesTree.refresh();
                 }
-            } catch (InterruptedException | ExecutionException ex) {
-                LOGGER.error(null, ex);
+            } catch (InterruptedException | ExecutionException e) {
+                LOGGER.debug(e.getMessage());
             }
             connectingToDevice.set(false);
         }

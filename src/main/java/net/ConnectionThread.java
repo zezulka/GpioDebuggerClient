@@ -113,8 +113,11 @@ public final class ConnectionThread implements Runnable {
             LOGGER.debug("disconnecting from agent...");
             disconnect();
             if (connection.getDevice().isDirty()) {
-                Platform.runLater(() -> MasterWindow.getTabManager()
-                        .removeTab(connection.getDevice().getAddress()));
+                if (MasterWindow.getTabManager().findTabByAddress(connection
+                        .getDevice().getAddress()) != null) {
+                    Platform.runLater(() -> MasterWindow.getTabManager()
+                            .removeTab(connection.getDevice().getAddress()));
+                }
                 Utils.showInfoDialog(
                         String.format("Disconnected from address %s, device %s",
                                 connection.getDevice().getAddress(),

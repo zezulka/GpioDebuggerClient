@@ -6,6 +6,7 @@ import gui.userdata.xstream.XStreamUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -109,13 +110,12 @@ public final class I2CTab extends AbstractTab {
                                         .selectedItemProperty()
                                         .isEqualTo(Operation.WRITE_READ))
                                 .then(hexValuesOnly(byteArrayTextfield)
-                                        .not()
-                                        .or(isHexaByte(slaveAddressField)
+                                        .not().or(isHexaByte(slaveAddressField)
                                                 .not()))
                                 .otherwise(hexValuesOnly(byteArrayTextfield)
                                         .not()))
         );
-        requestButton.setOnAction((event) -> sendI2cRequest());
+        requestButton.setOnAction(this::sendI2cRequest);
     }
 
     private void initTableView() {
@@ -220,12 +220,14 @@ public final class I2CTab extends AbstractTab {
         }
     }
 
-    private void sendI2cRequest() {
+    private void sendI2cRequest(ActionEvent ignored) {
         String msg = gatherMessageFromForm();
         if (msg != null) {
             NetworkManager.setMessageToSend(address, msg);
             I2cRequestValueObject request = getNewI2cRequestEntryFromForm();
-            usedRequestsComboBox.getItems().add(request);
+            if (!usedRequestsComboBox.getItems().contains(request)) {
+                usedRequestsComboBox.getItems().add(request);
+            }
             XStreamUtils.addNewI2cRequest(request);
         }
     }
