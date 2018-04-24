@@ -25,13 +25,5 @@ public final class InterruptListenerStoppedAgentResponse
                 getResponse().getClientPin().getGpioName(),
                 ListenerState.NOT_RUNNING));
         getResponse().setState(ListenerState.NOT_RUNNING);
-        // This block of code informs InterruptTableController that the
-        // listener has been successfully deregistered via synchronization
-        // object; worker Thread is interrupted and removes the appropriate
-        // listener if user requested to remove listener when it was still
-        // running; otherwise, nothing happens
-        synchronized (InterruptsTab.SYNC) {
-            InterruptsTab.SYNC.notify();
-        }
     }
 }

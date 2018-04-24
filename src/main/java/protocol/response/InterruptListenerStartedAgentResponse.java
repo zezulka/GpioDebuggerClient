@@ -1,6 +1,7 @@
 package protocol.response;
 
 import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
 import gui.controllers.InterruptsTab;
 import org.slf4j.Logger;
@@ -25,8 +26,5 @@ public final class InterruptListenerStartedAgentResponse
                 getResponse().getClientPin().getGpioName(),
                 ListenerState.RUNNING));
         getResponse().setState(ListenerState.RUNNING);
-        synchronized (InterruptsTab.SYNC) {
-            InterruptsTab.SYNC.notify();
-        }
     }
 }

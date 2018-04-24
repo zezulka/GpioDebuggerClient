@@ -31,13 +31,13 @@ public final class ConnectionThread implements Runnable {
     }
 
     /**
-     * Main loop of the application logic. An attempt is made to initialise this
+     * Main loop of the application logic. An attempt is made to initialize this
      * manager (singleton); if manager succeeded in connecting to the supplied
-     * IP address, it then tries to receive "handshake" message, which contains
-     * name of the device. If handshake message is valid (=parse completed
-     * successfully), it then invokes appropriate method to switch to the given
-     * scene which enables user to control the device the client connected to.
-     * <p>
+     * IP address, it then tries to receive the "handshake" message containing
+     * name of the device. If the handshake message is valid (=ok parse), it
+     * then invokes appropriate method to switch to the given scene which
+     * enables user to control the device the client connected to.
+     *
      * While the agent is alive, this thread iterates through selection keys and
      * deals with them (this includes reading messages from input stream or
      * writing client messages to output stream).
@@ -59,10 +59,8 @@ public final class ConnectionThread implements Runnable {
             if (!connection.getSelector().isOpen()) {
                 break;
             }
-            Iterator<SelectionKey> keys = connection
-                    .getSelector()
-                    .selectedKeys()
-                    .iterator();
+            Iterator<SelectionKey> keys = connection.getSelector()
+                    .selectedKeys().iterator();
             processSelectionKeys(keys);
             if (!isAlive()) {
                 break;

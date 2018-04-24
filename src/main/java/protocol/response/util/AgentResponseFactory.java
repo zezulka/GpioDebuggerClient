@@ -162,8 +162,7 @@ public final class AgentResponseFactory {
                     = InterruptType.getType(splitMessage.get(1));
             LocalTime timeGenerated = LocalTime.parse(splitMessage.get(2),
                             MessageParser.FORMATTER);
-            InterruptValueObject interrupt
-                    = InterruptManager.get(
+            InterruptValueObject interrupt = InterruptManager.getInterrupt(
                             connection.getDevice().getAddress(),
                             interruptPin, intrType);
             if (interrupt == null) {

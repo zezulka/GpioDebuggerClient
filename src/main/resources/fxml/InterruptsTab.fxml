@@ -17,7 +17,7 @@
                         <TableColumn fx:id="timeAdded" editable="false" prefWidth="133.0" text="Time Added" />
                         <TableColumn fx:id="numOfIntrs" editable="false" prefWidth="148.0" text="Nr. Interrupts" />
                         <TableColumn fx:id="lastIntrTime" editable="false" prefWidth="152.0" text="Latest" />
-                        <TableColumn id="state" fx:id="state" prefWidth="128.0" text="Control" />
+                        <TableColumn id="state" fx:id="state" prefWidth="128.0" text="Start/Stop" />
                         <TableColumn id="removeRowBtn" fx:id="removeRowBtn" editable="false" prefWidth="145.0" sortable="false" text="Remove" />
                     </columns>
                 </TableView>

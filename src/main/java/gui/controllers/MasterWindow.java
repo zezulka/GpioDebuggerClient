@@ -397,8 +397,9 @@ public final class MasterWindow implements Initializable {
                 }
             } catch (InterruptedException | ExecutionException e) {
                 LOGGER.debug(e.getMessage());
+            } finally {
+                connectingToDevice.set(false);
             }
-            connectingToDevice.set(false);
         }
     }
 

@@ -8,9 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public final class InterruptManager {
 
@@ -27,7 +25,7 @@ public final class InterruptManager {
     }
 
     public static ObservableList<InterruptValueObject>
-    getListeners(InetAddress address) {
+    getInterrupts(InetAddress address) {
         Objects.requireNonNull(address, "address cannot be null");
         ObservableList<InterruptValueObject> list = INTERRUPTS.get(address);
         if (list == null) {
@@ -41,8 +39,9 @@ public final class InterruptManager {
      * @return null if no mapping to address/object combination exists,
      * InterruptValueObject instance otherwise
      */
-    public static InterruptValueObject get(InetAddress address,
-                                           ClientPin pin, InterruptType type) {
+    public static InterruptValueObject getInterrupt(InetAddress address,
+                                                    ClientPin pin,
+                                                    InterruptType type) {
         if (INTERRUPTS.get(address) == null) {
             return null;
         }
@@ -67,8 +66,7 @@ public final class InterruptManager {
         }
     }
 
-    public static void add(InetAddress destination,
-                           InterruptValueObject ivo) {
+    public static void add(InetAddress destination, InterruptValueObject ivo) {
         INTERRUPTS.computeIfAbsent(destination,
                 k -> FXCollections.observableArrayList());
         if (!INTERRUPTS.get(destination).contains(ivo)) {

@@ -1,9 +1,6 @@
 package gui.userdata;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import protocol.ClientPin;
 import protocol.InterruptType;
 import protocol.ListenerState;
@@ -19,6 +16,7 @@ public final class InterruptValueObject {
     private final IntegerProperty numOfIntrs;
     private final ObjectProperty<ListenerState> state;
     private final ObjectProperty<LocalTime> lastIntrTime;
+    private final BooleanProperty destroy;
 
     public InterruptValueObject(ClientPin clientPin, InterruptType type) {
         this.clientPin = clientPin;
@@ -27,6 +25,7 @@ public final class InterruptValueObject {
         this.numOfIntrs = new SimpleIntegerProperty(0);
         this.lastIntrTime = new SimpleObjectProperty<>();
         this.state = new SimpleObjectProperty<>(ListenerState.NOT_RUNNING);
+        this.destroy = new SimpleBooleanProperty(false);
     }
 
     public ObjectProperty<ListenerState> stateProperty() {
@@ -49,6 +48,10 @@ public final class InterruptValueObject {
         return numOfIntrs;
     }
 
+    public BooleanProperty destroyProperty() {
+        return destroy;
+    }
+
     public ObjectProperty<LocalTime> lastIntrTimeProperty() {
         return lastIntrTime;
     }
@@ -67,6 +70,10 @@ public final class InterruptValueObject {
 
     public void setState(ListenerState state) {
         this.state.setValue(state);
+    }
+
+    public void destroy(){
+        this.destroy.setValue(true);
     }
 
     @Override

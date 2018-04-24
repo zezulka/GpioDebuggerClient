@@ -2,10 +2,12 @@ package gui.controllers;
 
 import gui.misc.Graphics;
 import gui.userdata.InterruptValueObject;
+
 import java.net.InetAddress;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -21,22 +23,19 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.util.converter.IntegerStringConverter;
 import net.NetworkManager;
-import protocol.ClientPin;
-import protocol.InterruptManager;
-import protocol.InterruptType;
-import protocol.ListenerState;
-import protocol.RaspiClientPin;
+import protocol.*;
 import util.StringConstants;
 
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.event.ChangeListener;
+
 public final class InterruptsTab implements Initializable {
 
     private static final Logger LOGGER
             = LoggerFactory.getLogger(Device.class);
-    public static final Object SYNC = new Object();
 
     @FXML
     private ComboBox<InterruptType> interruptTypeComboBox;
@@ -91,18 +90,27 @@ public final class InterruptsTab implements Initializable {
             }
         });
         initCellValueFactory();
-        tableView.setItems(InterruptManager.getListeners(address));
+        tableView.setItems(InterruptManager.getInterrupts(address));
         tableView.selectionModelProperty().set(null);
     }
 
     /**
-     * Creates temporary InterruptValueObject from selected ComboBoxes.
+     * Creates new InterruptValueObject from selected ComboBoxes.
      */
     private InterruptValueObject getNewInterruptValueObject(ClientPin pin) {
-        return new InterruptValueObject(
+        InterruptValueObject ivo = new InterruptValueObject(
                 pin,
                 interruptTypeComboBox.getSelectionModel().getSelectedItem()
         );
+        ivo.destroyProperty().addListener((ign, ignore, newState) -> {
+            if(newState) {
+                tableView.itemsProperty().get().remove(ivo);
+            } else {
+                throw new IllegalStateException("Cannot switch from destroyed " +
+                        "back to not destroyed.");
+            }
+        });
+        return ivo;
     }
 
     private void initPinGridPane() {
@@ -176,12 +184,9 @@ public final class InterruptsTab implements Initializable {
             InterruptValueObject ivo = (InterruptValueObject) getTableRow()
                     .getItem();
             if (ivo.stateProperty().get().equals(ListenerState.NOT_RUNNING)) {
-                tableView.itemsProperty().get().remove(ivo);
-                return;
-            }
-            if (Utils
-                    .showConfirmDialog(StringConstants.LISTENER_ACTIVE)) {
-                new Thread(new StopAndRemoveInterruptsWorker(ivo)).start();
+                ivo.destroy();
+            } else {
+                Utils.showErrorDialog(StringConstants.LISTENER_ACTIVE);
             }
         }
 
@@ -209,11 +214,17 @@ public final class InterruptsTab implements Initializable {
                 cellBtn.disableProperty().set(true);
                 switch (selected.stateProperty().get()) {
                     case NOT_RUNNING: {
-                        new Thread(new StartInterruptsWorker(selected)).start();
+                        new Thread(new AbstractInterruptWorker(selected,
+                                ListenerState.NOT_RUNNING) {
+                            @Override
+                            protected String getMessagePrefix() {
+                                return "GPIO:INTR_START";
+                            }
+                        }).start();
                         break;
                     }
                     case RUNNING: {
-                        new Thread(new StopInterruptsWorker(selected)).start();
+                        new Thread(new StopInterruptWorker(selected)).start();
                         break;
                     }
                     default:
@@ -244,7 +255,7 @@ public final class InterruptsTab implements Initializable {
                     break;
                 }
                 default:
-                    throw new RuntimeException("Uknown state.");
+                    throw new RuntimeException("Unknown state.");
             }
             if (!empty) {
                 setGraphic(cellBtn);
@@ -252,105 +263,54 @@ public final class InterruptsTab implements Initializable {
         }
     }
 
-    private abstract class AbstractInterruptsWorker extends Task<Void> {
+    private abstract class AbstractInterruptWorker extends Task<Void> {
 
-        private final InterruptValueObject selectedIntr;
+        private final InterruptValueObject interrupt;
 
         protected abstract String getMessagePrefix();
 
-        protected AbstractInterruptsWorker(InterruptValueObject selected,
-                ListenerState guardedState) {
-            this.selectedIntr = selected;
+        protected AbstractInterruptWorker(InterruptValueObject selected,
+                                          ListenerState guardedState) {
+            this.interrupt = selected;
         }
 
         @Override
         protected Void call() {
-            super.done();
             String msgToSend = gatherMessageFromSubmitted();
             if (msgToSend != null) {
                 NetworkManager.setMessageToSend(address, msgToSend);
-                LOGGER.info(String.format("SPI request sent: %s", msgToSend));
+                LOGGER.info(String.format("Request sent: %s", msgToSend));
             }
             return null;
         }
 
-        protected InterruptValueObject getSelectedIntr() {
-            return selectedIntr;
+        protected InterruptValueObject getInterrupt() {
+            return interrupt;
         }
 
         private String gatherMessageFromSubmitted() {
-            if (selectedIntr == null) {
+            if (interrupt == null) {
                 return null;
             }
             StringBuilder result = new StringBuilder(getMessagePrefix());
             result = result
                     .append(':')
-                    .append(selectedIntr.getClientPin().getPinId())
+                    .append(interrupt.getClientPin().getPinId())
                     .append(' ')
-                    .append(selectedIntr.getType());
+                    .append(interrupt.getType());
             return result.toString();
         }
     }
 
-    public final class StartInterruptsWorker extends AbstractInterruptsWorker {
+    private class StopInterruptWorker extends AbstractInterruptWorker {
 
-        StartInterruptsWorker(InterruptValueObject selected) {
-            super(selected, ListenerState.NOT_RUNNING);
-        }
-
-        @Override
-        protected void done() {
-            super.done();
-            synchronized (SYNC) {
-                try {
-                    // wait until InterruptListenerStartedAgentResponse sends
-                    // signal; please see InterruptListenerStoppedAgentResponse
-                    // for more information
-                    SYNC.wait();
-                } catch (InterruptedException e) {
-                    // ignore the exception
-                }
-            }
-        }
-
-        @Override
-        protected String getMessagePrefix() {
-            return "GPIO:INTR_START";
-        }
-    }
-
-    public class StopInterruptsWorker extends AbstractInterruptsWorker {
-
-        StopInterruptsWorker(InterruptValueObject selected) {
+        StopInterruptWorker(InterruptValueObject selected) {
             super(selected, ListenerState.RUNNING);
         }
 
         @Override
-        protected final String getMessagePrefix() {
+        protected String getMessagePrefix() {
             return "GPIO:INTR_STOP";
-        }
-    }
-
-    public final class StopAndRemoveInterruptsWorker
-            extends StopInterruptsWorker {
-
-        StopAndRemoveInterruptsWorker(InterruptValueObject selected) {
-            super(selected);
-        }
-
-        @Override
-        protected void done() {
-            super.done();
-            synchronized (SYNC) {
-                try {
-                    // wait until InterruptListenerStoppedAgentResponse sends
-                    // signal; please see this class for more information
-                    SYNC.wait();
-                } catch (InterruptedException e) {
-                    // ignore the exception
-                }
-            }
-            tableView.itemsProperty().get().remove(getSelectedIntr());
         }
     }
 }

@@ -21,8 +21,7 @@ public final class InterruptGeneratedAgentResponse
     @Override
     public void react() {
         if (getResponse().stateProperty().get().equals(ListenerState.RUNNING)) {
-            InterruptManager
-                    .update(getAddress(), getResponse());
+            InterruptManager.update(getAddress(), getResponse());
         } else {
             LOGGER.debug("Message about interrupt has been received, "
                     + "but this listener is not active.");
