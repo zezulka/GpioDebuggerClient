@@ -5,7 +5,7 @@ Gpio debugger client
 
 Introduction
 ------------
-This is the client part of a debugging tool based on *[bulldog library](https://github.com/SilverThings/bulldog "Bulldog")*. 
+This is the client part of a debugging tool based on *[bulldog library](https://github.com/SilverThings/bulldog "Bulldog")*. Client works only with Java 8. 
 
 Functionality
 --------------
