@@ -23,14 +23,16 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.util.converter.IntegerStringConverter;
 import net.NetworkManager;
-import protocol.*;
+import protocol.ClientPin;
+import protocol.InterruptManager;
+import protocol.InterruptType;
+import protocol.ListenerState;
+import protocol.RaspiClientPin;
 import util.StringConstants;
 
 import org.controlsfx.control.PopOver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.swing.event.ChangeListener;
 
 public final class InterruptsTab implements Initializable {
 
@@ -103,11 +105,11 @@ public final class InterruptsTab implements Initializable {
                 interruptTypeComboBox.getSelectionModel().getSelectedItem()
         );
         ivo.destroyProperty().addListener((ign, ignore, newState) -> {
-            if(newState) {
+            if (newState) {
                 tableView.itemsProperty().get().remove(ivo);
             } else {
-                throw new IllegalStateException("Cannot switch from destroyed " +
-                        "back to not destroyed.");
+                throw new IllegalStateException("Cannot switch from destroyed "
+                        + "back to not destroyed.");
             }
         });
         return ivo;

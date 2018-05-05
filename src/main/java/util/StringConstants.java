@@ -18,9 +18,9 @@ public final class StringConstants {
                     + "the whole application?\n"
                     + "All connections to devices will be closed.";
     public static final String LISTENER_ACTIVE =
-            "This interrupt listener is still active. " +
-                    "Please stop the listener before removing it from the " +
-                    "table.";
+            "This interrupt listener is still active. "
+                    + "Please stop the listener before removing it from the "
+                    + "table.";
     public static final String OK_TO_DISCONNECT =
             "Really disconnect from this device?\n";
     public static final String PATH_TO_FXML_DIR =

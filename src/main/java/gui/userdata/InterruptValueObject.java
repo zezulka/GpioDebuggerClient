@@ -1,6 +1,11 @@
 package gui.userdata;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import protocol.ClientPin;
 import protocol.InterruptType;
 import protocol.ListenerState;
@@ -72,7 +77,7 @@ public final class InterruptValueObject {
         this.state.setValue(state);
     }
 
-    public void destroy(){
+    public void destroy() {
         this.destroy.setValue(true);
     }
 
