@@ -27,5 +27,5 @@ to launch the client.
 Running with OpenJDK on Linux
 ------------
 Please make sure you have the `openjfx` package installed.
-Alternatively, you can manually install javafx into the java home.
+Alternatively, you can manually install OpenJFX into the Java home.
 For more information, please visit https://chriswhocodes.com/ .
