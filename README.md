@@ -13,7 +13,16 @@ The debugging tool is now capable of:
 * interfacing with GPIO pins (i.e. reading/writing signals on the pin)
 * sending I2C requests
 * sending SPI requests
-* registering interrupt listeners (not working properly yet, experimental)
+* registering interrupt listeners
+
+Installation
+------------
+You can either download the latest release from *[the releases on this repository](https://github.com/zezulka/GpioDebuggerClient/releases)* 
+or launch `mvn clean install` in the root directory of this project. The path to the
+assembled JAR file is target/GpioDebuggerClient-${version}-jar-with-dependencies.jar
+Issue the command `java -jar target/GpioDebuggerClient-${version}-jar-with-dependencies.jar` 
+(or if you downloaded the client from the releases, modify the path accordingly)
+to launch the client.
 
 Running with OpenJDK on Linux
 ------------
