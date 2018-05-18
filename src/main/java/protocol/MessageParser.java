@@ -1,8 +1,8 @@
 package protocol;
 
+import gui.userdata.DeviceValueObject;
 import protocol.response.IllegalResponseException;
 import protocol.response.util.AgentResponseFactory;
-import net.ConnectionValueObject;
 import java.time.format.DateTimeFormatter;
 
 import gui.controllers.Utils;
@@ -31,7 +31,7 @@ public final class MessageParser {
      * INTR_GENERATED] :[PIN_NAME]:[INTERRUPT_TYPE]:[TIME] [ILLEGAL_REQUEST]
      * @throws IllegalArgumentException {@code agentMessage} is null
      */
-    public static void parseAgentMessage(ConnectionValueObject connection,
+    public static void parseAgentMessage(DeviceValueObject connection,
             String agentMessage) {
         if (agentMessage == null) {
             throw new IllegalArgumentException("Agent message cannot be null.");

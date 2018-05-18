@@ -12,6 +12,7 @@ import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import gui.controllers.Utils;
@@ -78,19 +79,15 @@ public final class NetworkManager {
             LOGGER.error(null, ex);
             return false;
         }
-        ConnectionValueObject connection
-                = new ConnectionValueObject(null, selector, channel, device);
-        ConnectionThread thread = new ConnectionThread(connection);
+        ConnectionThread thread = new ConnectionThread(device);
         new Thread(thread).start();
         return true;
     }
 
-    public static void setMessageToSend(InetAddress address,
-            String messageToSend) {
-        if (address == null) {
-            throw new IllegalArgumentException("address cannot be null");
-        }
-        ADDRESSES.get(address).registerMessage(messageToSend);
+    public static void setMessageToSend(InetAddress address, String msg) {
+        Objects.requireNonNull(address, "address is null");
+        Objects.requireNonNull(msg, "message is null");
+        ADDRESSES.get(address).registerMessage(msg);
     }
 
     public static void disconnect(InetAddress address) {
