@@ -3,7 +3,6 @@ package gui.controllers;
 import gui.tab.loader.TabLoader;
 import gui.tab.loader.TabLoaderImpl;
 
-import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ public final class Utils {
 
     private static URL getPathToFxml(String fxmlName) {
         return Utils.class.getResource("/fxml"
-                + File.separator + fxmlName + FXML_EXT);
+                + "/" + fxmlName + FXML_EXT);
     }
 
     public static void playButtonAnimation(Button btn) {

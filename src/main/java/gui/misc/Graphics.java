@@ -1,6 +1,5 @@
 package gui.misc;
 
-import java.io.File;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -69,7 +68,7 @@ public final class Graphics {
     }
 
     private static String getPathToImage(String path) {
-        return GRAPICS_FOLDER + File.separator + path;
+        return GRAPICS_FOLDER + "/" + path;
     }
 
 }
